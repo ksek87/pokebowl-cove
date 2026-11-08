@@ -34,6 +34,30 @@ We are building a Pokémon search application on the Coveo platform, using conte
 - Stay within the crawl rate that pokemondb.net requests.
 - Consider latency and performance in every design and implementation decision. Measure a baseline first, then set targets from it.
 
+## Architecture
+
+- Use Node 24, as set in `.nvmrc`. Newer versions make npm install an old Atomic release.
+- Keep Coveo SDK code in `src/App.tsx` and `src/search/`.
+- Read environment values only in `src/main.tsx`, through `src/config.ts`.
+- Keep shared settings in `src/search/settings.ts`. It imports nothing, because browser tests import it.
+- Use Tailwind and shadcn/ui for our own interface code, and Atomic theme variables and CSS parts for Atomic components. Do not edit generated files in `src/components/ui` for style findings.
+- Route queries by search hub. Do not name a query pipeline in the application.
+- Associate models and Query Suggestions with the `pokebowl-search` pipeline.
+
+## Web development standards
+
+- Do not hardcode values that come from data or configuration. Never assume how many Types, Generations, results or other items exist. Derive them from the data.
+- Define each design and configuration value once, with a name, and reuse it. This covers colors, spacing, widths, breakpoints, page sizes and asset paths. Do not repeat literal values across files.
+- Do not make one value silently depend on another, such as a grid that only works with certain page sizes. Derive them from one shared setting.
+- Tests read shared settings or check behavior. They do not repeat configured values.
+- Ask the user before choosing product behavior, such as option lists, defaults and result order.
+- Check every interface change in a real browser, at the window widths the user cares about, before reporting it as done. Tests that mock components do not prove a page looks or works right.
+- Fix the cause of a layout problem. Do not stack overrides until one measurement passes.
+
+## Tooling
+
+- Hand fixes from Rerail scans to subagents, so the user can keep working and review the results afterwards.
+
 ## Evaluation
 
 - Create evals and benchmarks that measure how well the application works and prove that it works properly.

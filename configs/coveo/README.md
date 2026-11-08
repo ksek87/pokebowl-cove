@@ -5,7 +5,7 @@ Copies of the configuration applied in the Coveo Administration Console. The con
 | File | Contents | Format |
 |---|---|---|
 | `web-scraping.json` | Page exclusions and metadata selectors | Exact JSON pasted into the source's web scraping configuration |
-| `fields.json` | Index fields and their mapping rules | Our own record of the console settings, not a Coveo import format |
+| `fields.json` | Index fields, their mapping rules and options, including **Sort** on `pokemon_name` and `pokemon_number` | Our own record of the console settings, not a Coveo import format |
 | `fields-batch-create.json` | Detail-page fields | Request body for Coveo's batch field creation API |
 | `full-source.json` | Settings of the full Pokémon source | Our own record of the console settings, not a Coveo import format |
 | `extensions/reconstruct_body.py` | Pre-conversion extension that rewrites stat tables and type grids as sentences | Exact script pasted into the `pre-reconstruct-body` extension, which requests only **Original file** item data. Tests are in `test_reconstruct_body.py` |

@@ -14,7 +14,8 @@
   "fields": [
     {
       "name": "pokemon_name",
-      "mapping": "%[pokemon_name]"
+      "mapping": "%[pokemon_name]",
+      "sortable": true
     },
     {
       "name": "pokemon_type",
@@ -32,7 +33,8 @@
     },
     {
       "name": "pokemon_number",
-      "mapping": "%[pokemon_number]"
+      "mapping": "%[pokemon_number]",
+      "sortable": true
     },
     {
       "name": "pokemon_species",

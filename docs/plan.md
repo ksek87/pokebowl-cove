@@ -8,6 +8,30 @@ The finished work is presented to a panel of Coveo experts in a 45-minute sessio
 
 **Target completion:** Friday, November 13, 2026.
 
+## Status against the assessment requirements
+
+The assessment defines four tiers of required work and a panel presentation. A tier item may be skipped only with a justification.
+
+| Tier | Requirement | Status | Tickets |
+|---|---|---|---|
+| Essential | Access the Coveo organization | Done | |
+| Essential | Install Atomic or Headless locally | Done | PC-20 |
+| Essential | Index only the individual Pokémon pages | Done, 1,028 items verified | PC-14 |
+| Essential | Connect the local search page to Coveo | Done | PC-20 |
+| Essential | Filter by Pokémon Type | Done | PC-22 |
+| Essential | Filter by Pokémon Generation | Done | PC-22 |
+| Essential | Show each Pokémon's picture in results | Done | PC-21 |
+| Intermediate | Host the code on GitHub and share the link | Code is on GitHub; not yet shared | PC-31 |
+| Intermediate | Host the search application | Not started | PC-30 |
+| Advanced | Generative answers with Relevance Generative Answering | Not started; the index is ready | PC-61, PC-62 |
+| Advanced | Preload a Query Suggestions model for type-ahead | Not started | PC-50, PC-51 |
+| Advanced | Pokémon detail page | Not started | PC-70 |
+| Advanced | Technical deep dive presentation | Not started | PC-100 |
+| Advanced | Enterprise customer value presentation | Not started | PC-102 |
+| Bonus | Passage Retrieval: at minimum, understand it and hold a point of view | Not started; access must be requested | PC-02, PC-80 to PC-83 |
+
+Evals, performance baselines and interface polish are our own additions and are not assessment requirements. They support the presentation.
+
 ## How we work
 
 - Work is organized into epics and tickets. Each epic has its own branch and is tracked through one or more pull requests.
@@ -25,8 +49,8 @@ The work is compressed into two blocks and runs in parallel wherever possible. W
 | Block | Tickets | Notes |
 |---|---|---|
 | 1. While the full crawl runs | PC-02, PC-20 to PC-22, PC-30, PC-40, PC-70 | Built against the single-Pokémon source, so none of it needs the full index |
-| 2. Once the full crawl finishes | PC-14, PC-60, PC-61, PC-50, PC-41, PC-42, PC-23 | PC-60 comes first, because a body text fix requires another crawl and must happen before any model builds |
-| 3. Final day | PC-51, PC-62, PC-63, PC-43, PC-44, PC-80 to PC-83, PC-90, PC-91, PC-100 to PC-103, PC-31 | Business value work comes last |
+| 2. Once the full crawl finishes | PC-14, PC-60, PC-61, PC-50, PC-41, PC-42, PC-23, PC-75, PC-76, PC-79 | PC-60 comes first, because a body text fix requires another crawl and must happen before any model builds |
+| 3. Final day | PC-51, PC-62, PC-63, PC-43, PC-44, PC-77, PC-78, PC-80 to PC-83, PC-90, PC-91, PC-100 to PC-103, PC-31 | Business value work comes last |
 
 If Passage Retrieval access has not arrived, write PC-83 and add PC-82 only if access arrives later. If time runs short, drop the stretch goal.
 
@@ -132,7 +156,7 @@ The crawl stays within the site's requested rate of one page every 2 seconds.
 
 - [x] Only individual Pokémon pages are indexed
 - [x] Item count is 1,028: 1,025 numbered Pokémon and 3 new Generation 10 Pokémon without numbers
-- [ ] A sample of items matches the expected field values (waiting for the rebuild that populates the detail fields)
+- [x] A sample of items matches the expected field values
 
 ---
 
@@ -308,6 +332,58 @@ Owner: Agent · Estimate: 2 h · Depends on: PC-21
 - [ ] Components are built test-first using shadcn/ui and Tailwind
 - [ ] Unknown Pokémon show a clear not-found state
 - [ ] New Pokémon with unknown numbers or empty stats display cleanly
+
+---
+
+## Epic 7a: Interface design and polish
+
+**Branch:** `feature/ui-polish`
+
+The first search interface uses Atomic's default look and is unstyled. The application is shown live to a panel, so it needs a deliberate, finished design. Atomic components are styled through theme variables and CSS parts.
+
+### PC-75: Agree the visual direction
+
+Owner: Both· Depends on: PC-22
+
+- [x] Layout, colour, type and tone agreed before styling starts
+- [x] Direction recorded in `docs/architecture.md`
+
+### PC-76: Polish the search page
+
+Owner: Agent· Depends on: PC-75
+
+- [x] Header and page layout are designed, with no browser default styling
+- [x] Result cards have consistent, correctly sized pictures and show name, number, Type and Generation
+- [x] Type is shown with clear visual badges
+- [x] Facets, search box, summary and pagination match the design
+- [ ] Loading, no-results and error states are designed
+- [x] Layout works on desktop window widths, with every row of results filled (phone optimization dropped at the user's request)
+
+### PC-79: Move custom interface code to Tailwind and shadcn/ui
+
+Owner: Agent · Depends on: PC-76
+
+Tailwind and shadcn/ui are the approved tools for our own interface code. The first polish pass used hand-written CSS and a native dropdown instead, which went against that decision. Atomic's own components stay on Atomic theme variables and CSS parts, because Atomic uses Shadow DOM.
+
+- [x] Header, result cards, Type badges and the page-size control use Tailwind and shadcn/ui
+- [x] Result cards render correctly inside Atomic's Shadow DOM
+- [ ] Overrides of Atomic's page layout are reduced to what the documentation supports
+- [x] Browser tests and a visual check pass at desktop widths
+
+### PC-77: Polish the remaining experiences
+
+Owner: Agent· Depends on: PC-75, PC-62, PC-70
+
+- [ ] Generated answers, type-ahead and the detail page match the search page design
+- [ ] The bonus feature matches the design, if it is built
+
+### PC-78: Review quality across the application
+
+Owner: Both· Depends on: PC-76, PC-77
+
+- [ ] Reviewed in a real browser by the user, with screenshots at each width
+- [ ] Keyboard use, focus states, colour contrast and image alt text checked
+- [ ] Page load is measured against PC-43 so polish does not harm performance
 
 ---
 

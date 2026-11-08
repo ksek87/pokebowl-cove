@@ -1,5 +1,5 @@
 [
-  { "name": "pokemon_number", "type": "STRING", "description": "National Pokédex number", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
+  { "name": "pokemon_number", "type": "STRING", "description": "National Pokédex number", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": true, "mergeWithLexicon": false },
   { "name": "pokemon_species", "type": "STRING", "description": "Species label", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
   { "name": "pokemon_height", "type": "STRING", "description": "Height of the base form", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
   { "name": "pokemon_weight", "type": "STRING", "description": "Weight of the base form", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
