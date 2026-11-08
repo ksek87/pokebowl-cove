@@ -24,6 +24,10 @@
         "path": "ul.list-nav"
       },
       {
+        "type": "CSS",
+        "path": "a[href='#main']"
+      },
+      {
         "type": "XPATH",
         "path": "//*[@id='dex-moves']/following-sibling::*"
       }

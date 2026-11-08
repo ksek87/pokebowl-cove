@@ -25,7 +25,7 @@ The finished work is presented to a panel of Coveo experts in a 45-minute sessio
 | 1. Foundation | PC-03 to PC-05 | Can run alongside stage 2 |
 | 2. Index | PC-10 to PC-14 | Every later stage depends on correct data |
 | 3. Search | PC-20 to PC-23, PC-30, PC-31 | Can start against the single-Pokémon source |
-| 4. Models and evals | PC-40 to PC-43, PC-50, PC-51, PC-60 to PC-63 | Start PC-50 as soon as search works, because its data must exist before the model can build |
+| 4. Models and evals | PC-40 to PC-43, PC-50, PC-51, PC-60 to PC-64 | Start PC-50 as soon as search works, because its data must exist before the model can build |
 | 5. Detail page and bonus | PC-70, PC-80 to PC-83 | PC-70 can run in parallel with stage 4 |
 | 6. Wrap-up | PC-44, PC-90, PC-91, PC-100 to PC-103 | Business value work comes last |
 
@@ -110,10 +110,10 @@ This source lets us test configuration without waiting for a full crawl.
 Owner: You, guided by Agent · Estimate: 2 h · Depends on: PC-11, PC-12
 
 - [x] Web scraping configuration applied to the test source
-- [ ] Page clutter is removed from the indexed body
+- [x] Page clutter is removed from the indexed body
 - [x] Type, Generation and image fields are populated
 - [x] Detail-page fields are populated
-- [ ] Results match PC-11, and the final configuration is documented
+- [x] Results match PC-11, and the final configuration is documented
 
 ### PC-14: Run and verify the full crawl
 
@@ -282,6 +282,18 @@ Owner: Both · Estimate: 45 min · Depends on: PC-62
 
 - [ ] RGA reporting is configured
 - [ ] Configuration is tuned using PC-44 results
+
+### PC-64: Spike on body text parsing
+
+Owner: Both · Estimate: 1 h, plus a full rebuild if the extraction changes · Depends on: PC-44
+
+Some page content loses its meaning when flattened into body text, and some adds noise. We will use eval results to decide how to handle it so that the information remains complete and usable, rather than simply removing it.
+
+- [ ] Evaluate the Type defenses grid, which loses the link between each value and its attacking type
+- [ ] Evaluate the unlabelled stat minimum and maximum columns
+- [ ] Evaluate the stat range explanation, "Additional artwork" labels and Local № lists
+- [ ] Decide what to parse properly, keep or remove, and record the decision in `docs/architecture.md`
+- [ ] Apply any change and compare eval results before and after
 
 ---
 

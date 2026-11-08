@@ -17,7 +17,9 @@
 
 A Pokémon search application built on the [Coveo](https://www.coveo.com/) platform. It indexes the individual Pokémon pages on [pokemondb.net](https://pokemondb.net/) so that users can find Pokémon by searching and by filtering on Type and Generation.
 
-**Status:** early development. The application scaffold, tests and continuous integration are in place. The Coveo connection and search interface are not built yet.
+**Status:** early development. The application scaffold, tests and continuous integration are in place, and Coveo extraction has been validated on a single test page. The full crawl, Coveo connection and search interface are not finished yet.
+
+Coveo settings are recorded in [configs/coveo](configs/coveo/).
 
 ## Planned features
 
