@@ -1,15 +1,38 @@
 [
   {
     "name": "pokemon-pages",
-    "for": { "urls": [".*"] },
+    "for": {
+      "urls": [
+        ".*"
+      ]
+    },
     "exclude": [
-      { "type": "CSS", "path": "header" },
-      { "type": "CSS", "path": "footer" },
-      { "type": "CSS", "path": "nav" },
-      { "type": "CSS", "path": "ul.list-nav" },
-      { "type": "XPATH", "path": "//*[@id='dex-moves']/following-sibling::*" }
+      {
+        "type": "CSS",
+        "path": "header"
+      },
+      {
+        "type": "CSS",
+        "path": "footer"
+      },
+      {
+        "type": "CSS",
+        "path": "nav"
+      },
+      {
+        "type": "CSS",
+        "path": "ul.list-nav"
+      },
+      {
+        "type": "XPATH",
+        "path": "//*[@id='dex-moves']/following-sibling::*"
+      }
     ],
     "metadata": {
+      "pokemon_name": {
+        "type": "XPATH",
+        "path": "//h1/text()"
+      },
       "pokemon_type": {
         "type": "XPATH",
         "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Type']/following-sibling::td/a/text()"
@@ -21,6 +44,54 @@
       "pokemon_image": {
         "type": "XPATH",
         "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//img/@src"
+      },
+      "pokemon_number": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[contains(normalize-space(),'National')]/following-sibling::td/strong/text()"
+      },
+      "pokemon_species": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Species']/following-sibling::td/text()"
+      },
+      "pokemon_height": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Height']/following-sibling::td/text()"
+      },
+      "pokemon_weight": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Weight']/following-sibling::td/text()"
+      },
+      "pokemon_abilities": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Abilities']/following-sibling::td//a/text()"
+      },
+      "pokemon_hp": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='HP']/following-sibling::td[1]//text()"
+      },
+      "pokemon_attack": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Attack']/following-sibling::td[1]//text()"
+      },
+      "pokemon_defense": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Defense']/following-sibling::td[1]//text()"
+      },
+      "pokemon_sp_atk": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Sp. Atk']/following-sibling::td[1]//text()"
+      },
+      "pokemon_sp_def": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Sp. Def']/following-sibling::td[1]//text()"
+      },
+      "pokemon_speed": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Speed']/following-sibling::td[1]//text()"
+      },
+      "pokemon_total": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Total']/following-sibling::td[1]//text()"
       }
     }
   }

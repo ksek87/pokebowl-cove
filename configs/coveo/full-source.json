@@ -1,0 +1,21 @@
+{
+  "name": "pokemondb-pokemon",
+  "type": "Sitemap",
+  "sitemapUrls": [
+    "https://pokemondb.net/static/sitemaps/pokemondb.xml"
+  ],
+  "includeAllNonExcludedPages": true,
+  "exclusions": [
+    {
+      "condition": "matches regex rule",
+      "value": "^(?!https:\\/\\/pokemondb\\.net\\/static\\/sitemaps\\/pokemondb\\.xml$|https:\\/\\/pokemondb\\.net\\/pokedex\\/(?!all$|national$|shiny$)[a-z0-9-]+$).*$"
+    }
+  ],
+  "timeBetweenRequestsMs": 2000,
+  "executeJavaScript": false,
+  "contentVisibility": "everyone",
+  "webScraping": "web-scraping.json",
+  "jsonParameters": {
+    "performFieldMappingUsingAllOrigins": true
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "defaults": {
+    "type": "String",
+    "searchOperator": true,
+    "displayableInResults": true,
+    "facetGenerator": false,
+    "sortable": false,
+    "freeTextSearch": false,
+    "ranking": false,
+    "stemming": false,
+    "useCache": false,
+    "applyTo": "All items (common)"
+  },
+  "fields": [
+    {
+      "name": "pokemon_name",
+      "mapping": "%[pokemon_name]"
+    },
+    {
+      "name": "pokemon_type",
+      "mapping": "%[pokemon_type]",
+      "multiValueFacet": true
+    },
+    {
+      "name": "pokemon_generation",
+      "mapping": "%[pokemon_generation]",
+      "facet": true
+    },
+    {
+      "name": "pokemon_image",
+      "mapping": "%[pokemon_image]"
+    },
+    {
+      "name": "pokemon_number",
+      "mapping": "%[pokemon_number]"
+    },
+    {
+      "name": "pokemon_species",
+      "mapping": "%[pokemon_species]"
+    },
+    {
+      "name": "pokemon_height",
+      "mapping": "%[pokemon_height]"
+    },
+    {
+      "name": "pokemon_weight",
+      "mapping": "%[pokemon_weight]"
+    },
+    {
+      "name": "pokemon_abilities",
+      "mapping": "%[pokemon_abilities]",
+      "multiValueFacet": true
+    },
+    {
+      "name": "pokemon_hp",
+      "mapping": "%[pokemon_hp]"
+    },
+    {
+      "name": "pokemon_attack",
+      "mapping": "%[pokemon_attack]"
+    },
+    {
+      "name": "pokemon_defense",
+      "mapping": "%[pokemon_defense]"
+    },
+    {
+      "name": "pokemon_sp_atk",
+      "mapping": "%[pokemon_sp_atk]"
+    },
+    {
+      "name": "pokemon_sp_def",
+      "mapping": "%[pokemon_sp_def]"
+    },
+    {
+      "name": "pokemon_speed",
+      "mapping": "%[pokemon_speed]"
+    },
+    {
+      "name": "pokemon_total",
+      "mapping": "%[pokemon_total]"
+    }
+  ]
+}

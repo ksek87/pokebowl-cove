@@ -12,5 +12,8 @@
   "timeBetweenRequestsMs": 2000,
   "executeJavaScript": false,
   "contentVisibility": "everyone",
-  "webScraping": "web-scraping.json"
+  "webScraping": "web-scraping.json",
+  "jsonParameters": {
+    "performFieldMappingUsingAllOrigins": true
+  }
 }

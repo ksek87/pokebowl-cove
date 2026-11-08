@@ -93,7 +93,7 @@ Owner: Both · Estimate: 45 min
 
 Owner: Both · Estimate: 30 min · Depends on: PC-10
 
-- [ ] Expected title, Type, Generation and image written down for a few Pokémon, including Charizard, whose Mega form has a different Type (Charizard done)
+- [x] Expected title, Type, Generation and image written down for a few Pokémon, including Charizard, whose Mega form has a different Type (see `docs/indexing-expected-results.md`)
 - [x] List of URLs that must not be indexed, such as moves and list pages
 
 ### PC-12: Create a single-Pokémon test source
@@ -109,9 +109,10 @@ This source lets us test configuration without waiting for a full crawl.
 
 Owner: You, guided by Agent · Estimate: 2 h · Depends on: PC-11, PC-12
 
-- [ ] Web scraping configuration applied to the test source (in progress)
+- [x] Web scraping configuration applied to the test source
 - [ ] Page clutter is removed from the indexed body
-- [ ] Type, Generation and image fields are populated
+- [x] Type, Generation and image fields are populated
+- [x] Detail-page fields are populated
 - [ ] Results match PC-11, and the final configuration is documented
 
 ### PC-14: Run and verify the full crawl
@@ -296,6 +297,7 @@ Owner: Agent · Estimate: 2 h · Depends on: PC-21
 - [ ] Each result links to a page with a shareable URL
 - [ ] Components are built test-first using shadcn/ui and Tailwind
 - [ ] Unknown Pokémon show a clear not-found state
+- [ ] New Pokémon with unknown numbers or empty stats display cleanly
 
 ---
 

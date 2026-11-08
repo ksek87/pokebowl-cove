@@ -10,9 +10,11 @@ We are building a Pokémon search application on the Coveo platform, using conte
 - Discuss architectural decisions and tradeoffs with the user before acting on them. The user makes the final decision.
 - Build understanding before making decisions. Keep discussion at the level the user is working at, and do not jump ahead into details or planning.
 - Base Coveo guidance on the current Coveo documentation, not on memory. Say so when something could not be confirmed.
+- Read the relevant Coveo documentation in full before giving any platform instruction or diagnosing any failure. When a step does not work, find the cause in the documentation before asking the user to retry anything. Never have the user repeat steps to test a guess.
 - Cite the relevant Coveo documentation whenever discussing or recording the reasoning and tradeoffs behind a Coveo decision, and separate what the documentation states from our own inference.
 - The user makes all changes in the Coveo platform, with the agent's guidance, unless the user instructs otherwise.
 - Clearly flag every action the user must take personally, such as work in the Coveo console, and guide them through it step by step.
+- Prefer a Coveo API over the console when a task would otherwise repeat a manual step. Record which API was used and why in `docs/architecture.md`, and keep the request body in `configs/`.
 
 ## Scope
 
