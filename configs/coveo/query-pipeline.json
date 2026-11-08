@@ -1,0 +1,25 @@
+{
+  "pipeline": "pokebowl-search",
+  "description": "Queries from the Pokémon search app and its evals.",
+  "useCase": "Website",
+  "condition": "Search Hub contains pokebowl-",
+  "filterRules": [
+    {
+      "queryParameter": "cq",
+      "expression": "@source==\"pokemondb-pokemon\"",
+      "condition": null,
+      "description": "Limit the Pokémon search app to the full source",
+      "purpose": "The test source pokemondb-test-charizard is kept for configuration testing, so the application must not return it."
+    }
+  ],
+  "defaultPipeline": "Left with no condition and no filter rule, as a general catch-all.",
+  "appliedThrough": "Administration Console: Query Pipelines",
+  "verified": {
+    "date": "2026-11-08",
+    "method": "Search API query on the pokebowl-search hub with maximumAge 0",
+    "reportedPipeline": "pokebowl-search",
+    "totalResults": 1028,
+    "testSourceResults": 0,
+    "generation1Count": 151
+  }
+}

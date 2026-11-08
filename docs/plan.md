@@ -20,16 +20,15 @@ The finished work is presented to a panel of Coveo experts in a 45-minute sessio
 
 ## Sequence
 
-| Stage | Tickets | Notes |
-|---|---|---|
-| 1. Foundation | PC-03 to PC-05 | Can run alongside stage 2 |
-| 2. Index | PC-10 to PC-15 | Every later stage depends on correct data |
-| 3. Search | PC-20 to PC-23, PC-30, PC-31 | Can start against the single-Pokémon source |
-| 4. Models and evals | PC-40 to PC-43, PC-50, PC-51, PC-60 to PC-63 | Start PC-50 as soon as search works, because its data must exist before the model can build |
-| 5. Detail page and bonus | PC-70, PC-80 to PC-83 | PC-70 can run in parallel with stage 4 |
-| 6. Wrap-up | PC-44, PC-90, PC-91, PC-100 to PC-103 | Business value work comes last |
+The work is compressed into two blocks and runs in parallel wherever possible. Work with a waiting time, such as Coveo's response or a model build, starts as early as it can.
 
-If time runs short, reduce the bonus to PC-83 and drop the stretch goal.
+| Block | Tickets | Notes |
+|---|---|---|
+| 1. While the full crawl runs | PC-02, PC-20 to PC-22, PC-30, PC-40, PC-70 | Built against the single-Pokémon source, so none of it needs the full index |
+| 2. Once the full crawl finishes | PC-14, PC-60, PC-61, PC-50, PC-41, PC-42, PC-23 | PC-60 comes first, because a body text fix requires another crawl and must happen before any model builds |
+| 3. Final day | PC-51, PC-62, PC-63, PC-43, PC-44, PC-80 to PC-83, PC-90, PC-91, PC-100 to PC-103, PC-31 | Business value work comes last |
+
+If Passage Retrieval access has not arrived, write PC-83 and add PC-82 only if access arrives later. If time runs short, drop the stretch goal.
 
 ---
 
@@ -46,7 +45,7 @@ Owner: Agent · Estimate: done
 
 ### PC-02: Request Passage Retrieval access
 
-Owner: You · Estimate: 5 min · Send on Monday, November 9
+Owner: You · Estimate: 5 min · Send as soon as possible
 
 Passage Retrieval must be enabled by Coveo before the bonus work can start.
 
@@ -58,7 +57,7 @@ Passage Retrieval must be enabled by Coveo before the bonus work can start.
 Owner: Agent · Estimate: 30 min
 
 - [x] React, TypeScript and Vite application runs locally
-- [ ] Coveo values load from local environment variables
+- [x] Coveo values load from local environment variables
 
 ### PC-04: Add test tooling
 
@@ -131,9 +130,9 @@ Owner: You, guided by Agent · Estimate: 1 h, plus about 40 min of crawl time ·
 
 The crawl stays within the site's requested rate of one page every 2 seconds.
 
-- [ ] Only individual Pokémon pages are indexed
-- [ ] Item count is 1,028: 1,025 numbered Pokémon and 3 new Generation 10 Pokémon without numbers
-- [ ] A sample of items matches the expected field values
+- [x] Only individual Pokémon pages are indexed
+- [x] Item count is 1,028: 1,025 numbered Pokémon and 3 new Generation 10 Pokémon without numbers
+- [ ] A sample of items matches the expected field values (waiting for the rebuild that populates the detail fields)
 
 ---
 
@@ -145,28 +144,28 @@ The crawl stays within the site's requested rate of one page every 2 seconds.
 
 Owner: Both · Estimate: 30 min · Depends on: PC-03, PC-12
 
-- [ ] Search-only API key created and stored locally
-- [ ] Atomic search interface returns results from our organization
+- [x] Search-only API key created and stored locally
+- [x] Atomic search interface returns results from our organization
 
 ### PC-21: Display results with pictures
 
 Owner: Agent · Estimate: 1 h · Depends on: PC-13, PC-20
 
-- [ ] Each result shows the Pokémon's name and picture
-- [ ] A missing image does not break the result
+- [x] Each result shows the Pokémon's name and picture
+- [x] A missing image does not break the result
 
 ### PC-22: Add Type and Generation facets
 
 Owner: Agent · Estimate: 45 min · Depends on: PC-13, PC-20
 
-- [ ] Type facet filters results correctly
-- [ ] Generation facet filters results correctly
+- [x] Type facet filters results correctly
+- [x] Generation facet filters results correctly
 
 ### PC-23: Add browser tests for search
 
 Owner: Agent · Estimate: 45 min · Depends on: PC-21, PC-22
 
-- [ ] Playwright covers searching, filtering and viewing a result
+- [ ] Playwright covers searching, filtering and viewing a result (filtering and viewing are covered, searching is not)
 
 ---
 
@@ -269,15 +268,15 @@ Owner: Both · Estimate: 30 min · Depends on: PC-14
 
 Generated answers use only an item's body text, so that text must be clean and meaningful.
 
-- [ ] Sample item bodies reviewed
-- [ ] Extraction adjusted if needed
+- [x] Sample item bodies reviewed
+- [x] Extraction adjusted if needed (no change was needed)
 
 ### PC-61: Create and associate the models
 
 Owner: You, guided by Agent · Estimate: 45 min, plus model build time · Depends on: PC-60
 
-- [ ] Semantic Encoder and Relevance Generative Answering (RGA) models use the same content
-- [ ] Both models are associated with the same query pipeline
+- [ ] Semantic Encoder and Relevance Generative Answering (RGA) models use the same content, limited to the full source
+- [ ] Both models are associated with the `pokebowl-search` query pipeline
 
 ### PC-62: Add generated answers to the application
 

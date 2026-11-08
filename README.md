@@ -17,7 +17,7 @@
 
 A Pokémon search application built on the [Coveo](https://www.coveo.com/) platform. It indexes the individual Pokémon pages on [pokemondb.net](https://pokemondb.net/) so that users can find Pokémon by searching and by filtering on Type and Generation.
 
-**Status:** in development. The application scaffold, tests and continuous integration are in place. Coveo crawling, field extraction and body text reconstruction are validated on a test page, and the full crawl of 1,028 Pokémon is being verified. The search interface is not built yet.
+**Status:** in development. The content is indexed in Coveo, and the search interface shows results with pictures and filters by Type and Generation. Generated answers, type-ahead, the detail page and hosting are still to come.
 
 ## How content is indexed
 
@@ -46,7 +46,7 @@ Coveo settings are recorded in [configs/coveo](configs/coveo/), and the reasonin
 
 ## Getting started
 
-You need Node.js 24 or later. Python 3 is needed only to run the extension's tests.
+You need Node.js 24, as set in `.nvmrc`. Newer versions make npm install an old Atomic release. Python 3 is needed only to run the extension's tests.
 
 ```sh
 npm install
@@ -64,7 +64,8 @@ Add your Coveo organization ID and search-only API key to `.env`. Never commit t
 | Command | Purpose |
 |---|---|
 | `npm run dev` | Start the local development server |
-| `npm test` | Run the tests |
+| `npm test` | Run the unit tests |
+| `npm run test:e2e` | Run the browser tests against Coveo. Needs the values in `.env` |
 | `npm run build` | Type-check and build for production |
 | `npm run preview` | Serve the production build locally |
 | `.venv/bin/pytest configs/coveo/extensions` | Run the Coveo extension's tests |
