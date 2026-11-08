@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+coverage/
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+
+# Assessment materials, kept out of the repository
+challenge-docs/
+
+# Local tool settings
+.claude/settings.local.json
+
+# Logs and OS files
+*.log
+.DS_Store
