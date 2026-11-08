@@ -11,7 +11,7 @@ const SEARCH_API_KEY = 'VITE_COVEO_SEARCH_API_KEY';
 export function readCoveoConfig(env: Env): CoveoConfig {
   const missing = [ORGANIZATION_ID, SEARCH_API_KEY].filter((name) => !env[name]);
 
-  if (missing.length > 0) {
+  if (missing.length) {
     throw new Error(`Missing environment variables: ${missing.join(', ')}`);
   }
 

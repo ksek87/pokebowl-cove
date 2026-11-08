@@ -1,67 +1,125 @@
 import {
+  AtomicBreadbox,
+  AtomicDidYouMean,
   AtomicFacet,
   AtomicFacetManager,
   AtomicLayoutSection,
   AtomicNoResults,
+  AtomicPager,
   AtomicQueryError,
   AtomicQuerySummary,
+  AtomicRefineToggle,
   AtomicResultList,
   AtomicSearchBox,
   AtomicSearchInterface,
   AtomicSearchLayout,
+  AtomicSortDropdown,
+  AtomicSortExpression,
 } from '@coveo/atomic-react';
-import { buildSearchEngine } from '@coveo/headless';
-import { useMemo } from 'react';
-import type { CoveoConfig } from './config';
-import { toEngineConfiguration } from './search/engine';
-import { POKEMON_RESULT_FIELDS, PokemonResult } from './search/PokemonResult';
+import { buildSearchEngine, type Result } from '@coveo/headless';
+import { type CSSProperties, type JSX, useEffect, useMemo } from 'react';
+import type { CoveoConfig } from './config.ts';
+import { toEngineConfiguration } from './search/engine.ts';
+import { showAllWhenCleared } from './search/showAllWhenCleared.ts';
+import { POKEMON_RESULT_FIELDS, PokemonResult } from './search/PokemonResult.tsx';
+import { ResultsPerPage } from './search/ResultsPerPage.tsx';
+import {
+  FACET_VALUE_LIMIT,
+  NAME_SORT,
+  POKEBALL_IMAGE,
+  POKEDEX_SORT,
+  RESULT_COLUMNS,
+} from './search/settings.ts';
+import { PokedexLookupNotice } from './search/PokedexLookupNotice.tsx';
 
-export function App({ config }: { config: CoveoConfig }) {
+const GRID_SETTINGS = {
+  '--result-columns-narrow': RESULT_COLUMNS.narrow,
+  '--result-columns-wide': RESULT_COLUMNS.wide,
+} as CSSProperties;
+
+function renderResult(result: Result): JSX.Element {
+  return <PokemonResult result={result} />;
+}
+
+export function App({ config }: { config: CoveoConfig }): JSX.Element {
   const engine = useMemo(
     () => buildSearchEngine({ configuration: toEngineConfiguration(config) }),
     [config],
   );
 
+  useEffect(() => showAllWhenCleared(engine), [engine]);
+
   return (
     <>
-      <h1>Pokémon Search</h1>
-      <AtomicSearchInterface engine={engine} fieldsToInclude={POKEMON_RESULT_FIELDS}>
-        <AtomicSearchLayout>
-          <AtomicLayoutSection section="search">
-            <AtomicSearchBox />
-          </AtomicLayoutSection>
-          <AtomicLayoutSection section="facets">
-            <AtomicFacetManager>
-              <AtomicFacet
-                field="pokemon_type"
-                label="Type"
-                sortCriteria="alphanumeric"
-                numberOfValues={18}
-              />
-              <AtomicFacet
-                field="pokemon_generation"
-                label="Generation"
-                sortCriteria="alphanumericNatural"
-                numberOfValues={10}
-              />
-            </AtomicFacetManager>
-          </AtomicLayoutSection>
-          <AtomicLayoutSection section="main">
-            <AtomicLayoutSection section="status">
-              <AtomicQuerySummary />
+      <header className="flex flex-col items-center px-(--size-gutter) pt-10 pb-4 text-center">
+        <a
+          className="group flex items-center gap-3 rounded-2xl text-inherit no-underline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-ring"
+          data-slot="home-link"
+          href="/"
+          aria-label="Go to the home page"
+        >
+          <img
+            className="size-11 transition-transform duration-200 group-hover:-rotate-20 motion-reduce:transition-none motion-reduce:group-hover:rotate-0"
+            src={POKEBALL_IMAGE}
+            alt=""
+          />
+          <h1 className="text-5xl/14 font-black tracking-tight">Pokémon Search</h1>
+        </a>
+      </header>
+      <main className="mx-auto min-h-screen max-w-(--size-content)" style={GRID_SETTINGS}>
+        <AtomicSearchInterface engine={engine} fieldsToInclude={POKEMON_RESULT_FIELDS}>
+          <AtomicSearchLayout>
+            <AtomicLayoutSection section="search">
+              <AtomicSearchBox />
             </AtomicLayoutSection>
-            <AtomicLayoutSection section="results">
-              <AtomicResultList
-                display="grid"
-                imageSize="large"
-                template={() => <PokemonResult />}
-              />
-              <AtomicNoResults />
-              <AtomicQueryError />
+            <AtomicLayoutSection section="facets">
+              <AtomicFacetManager>
+                <AtomicFacet
+                  field="pokemon_type"
+                  label="Type"
+                  sortCriteria="alphanumeric"
+                  numberOfValues={FACET_VALUE_LIMIT}
+                  withSearch={false}
+                />
+                <AtomicFacet
+                  field="pokemon_generation"
+                  label="Generation"
+                  sortCriteria="alphanumericNatural"
+                  numberOfValues={FACET_VALUE_LIMIT}
+                  withSearch={false}
+                />
+              </AtomicFacetManager>
             </AtomicLayoutSection>
-          </AtomicLayoutSection>
-        </AtomicSearchLayout>
-      </AtomicSearchInterface>
+            <AtomicLayoutSection section="main">
+              <AtomicLayoutSection section="status">
+                <AtomicBreadbox />
+              <PokedexLookupNotice engine={engine} />
+              <AtomicDidYouMean />
+                <AtomicQuerySummary />
+              <AtomicSortDropdown>
+                <AtomicSortExpression label="Best match" expression="relevancy" />
+                <AtomicSortExpression label="Pokédex number" expression={POKEDEX_SORT} />
+                <AtomicSortExpression label="Name A to Z" expression={NAME_SORT} />
+              </AtomicSortDropdown>
+              <ResultsPerPage engine={engine} />
+                <AtomicRefineToggle />
+              </AtomicLayoutSection>
+              <AtomicLayoutSection section="results">
+                <AtomicResultList
+                  display="grid"
+                  imageSize="none"
+                  template={renderResult}
+                />
+                <AtomicNoResults />
+                <AtomicQueryError />
+              </AtomicLayoutSection>
+              <AtomicLayoutSection section="pagination">
+                <AtomicPager />
+              </AtomicLayoutSection>
+            </AtomicLayoutSection>
+          </AtomicSearchLayout>
+        </AtomicSearchInterface>
+      </main>
     </>
   );
 }
