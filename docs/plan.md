@@ -57,15 +57,15 @@ Passage Retrieval must be enabled by Coveo before the bonus work can start.
 
 Owner: Agent · Estimate: 30 min
 
-- [ ] React, TypeScript and Vite application runs locally
+- [x] React, TypeScript and Vite application runs locally
 - [ ] Coveo values load from local environment variables
 
 ### PC-04: Add test tooling
 
 Owner: Agent · Estimate: 30 min · Depends on: PC-03
 
-- [ ] Vitest and React Testing Library run with `npm test`
-- [ ] One sample test proves the setup works
+- [x] Vitest and React Testing Library run with `npm test`
+- [x] One sample test proves the setup works
 
 ### PC-05: Add continuous integration
 
