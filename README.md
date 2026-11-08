@@ -25,10 +25,18 @@ A Coveo Sitemap source reads the site's sitemap and keeps only individual Pokém
 
 Coveo settings are recorded in [configs/coveo](configs/coveo/), and the reasoning is in the [architecture document](docs/architecture.md).
 
-## Planned features
+## Features
+
+Built:
 
 - Search results with each Pokémon's picture
 - Type and Generation filters
+- Pokédex order on the home page and a sort control
+- Exact Pokédex lookup for number-only searches
+- Query correction
+
+Planned:
+
 - AI-generated answers from the indexed content
 - Type-ahead search suggestions
 - A detail page for each Pokémon

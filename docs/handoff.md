@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: November 8, 2026 at 5:53 PM EST. Update this file, including the time, before ending a work session.
+Last updated: November 8, 2026 at 6:27 PM EST. Update this file, including the time, before ending a work session.
 
 ## Read first
 
@@ -16,7 +16,7 @@ The work is compressed into two days. Target completion is Friday, November 13, 
 
 | Area | State |
 |---|---|
-| Git | PR #2 (indexing) is merged. PR #3 (`feature/search-app`) is open with CI passing. `feature/ui-polish` branches from it and its work is uncommitted. |
+| Git | PRs #1, #2 and #3 are merged and their branches are deleted. `feature/ui-polish` holds two commits not yet on `main`, and no PR is open for it. |
 | Assessment tiers | Essential is complete. Intermediate, Advanced and Bonus are not. |
 | Index | PC-14 is verified at 1,028 items. The body review (PC-60) passed. |
 | Query routing | Dedicated `pokebowl-search` pipeline, condition Search Hub contains `pokebowl-`, filtered to `pokemondb-pokemon`. No Coveo project was created; it is optional. |
@@ -26,8 +26,9 @@ The work is compressed into two days. Target completion is Friday, November 13, 
 ## Next actions
 
 1. **Advanced work, in order of waiting time:** PC-61 models and PC-50 analytics first, because they build in the background, then PC-51, PC-62 and PC-70.
-2. **PC-30 hosting and PC-31 sharing,** which complete the Intermediate tier.
-3. Associate all models and Query Suggestions with the `pokebowl-search` pipeline, not `default`. The eval search hub must contain `pokebowl-`.
+2. **PC-30 hosting on Vercel, chosen by the user, and PC-31 sharing,** which complete the Intermediate tier.
+3. Subagents are on hold until the user says otherwise. Candidates are PC-70, PC-40 and PC-41, PC-83 and the PC-76 states.
+4. Associate all models and Query Suggestions with the `pokebowl-search` pipeline, not `default`. The eval search hub must contain `pokebowl-`.
 
 ## Recent decisions
 

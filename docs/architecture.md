@@ -101,6 +101,7 @@ flowchart TD
 | Browser access | Anonymous search API key with the `pokebowl-search` search hub | [Search application connection](#search-application-connection) |
 | Runtime | Node 24 | [Search application connection](#search-application-connection) |
 | Application content | Dedicated `pokebowl-search` pipeline filters to the full source, and the test source is kept | [Limiting the application to the full source](#limiting-the-application-to-the-full-source) |
+| Hosting | Vercel | [Hosting](#hosting) |
 | Repeated platform work | Coveo APIs in place of repeated console steps | [Use of Coveo APIs](#use-of-coveo-apis) |
 | Eval reference data | Sampled from pokemondb.net and verified by hand | [Eval reference data](#eval-reference-data) |
 
@@ -331,3 +332,7 @@ Three behaviors are added on top of Coveo's default relevance search.
 **Coveo documentation:** [Modify requests and responses](https://docs.coveo.com/en/atomic/latest/usage/atomic-modify-requests-responses/) describes the request hook, and advises limiting it to search requests and coding defensively. It recommends the Headless advanced query action for setting `aq`, without giving a reason. [Ensure that your search interfaces contain standard components](https://docs.coveo.com/en/mc2g0332/) covers query correction and sorting. [Manage fields](https://docs.coveo.com/en/1833/) states that the Sort option needs no rebuild, though a delay may occur.
 
 **Our own inference:** we use the request hook despite that recommendation, because the lookup must also clear the text query in the same request, and the advanced query action cannot do that. The search box and analytics keep the text the person typed.
+
+## Hosting
+
+**Decision: host the application on Vercel.** It connects to the GitHub repository, deploys when changes merge, and needs little setup for a static Vite application. The rejected alternative was Netlify, which offers similar deployment features. The application is a static page that calls Coveo from the browser, so it needs no server. The Coveo organization ID and the search-only key are set as build variables in Vercel, and they reach the browser by design.

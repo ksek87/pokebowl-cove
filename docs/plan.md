@@ -46,11 +46,16 @@ Evals, performance baselines and interface polish are our own additions and are 
 
 The work is compressed into two blocks and runs in parallel wherever possible. Work with a waiting time, such as Coveo's response or a model build, starts as early as it can.
 
-| Block | Tickets | Notes |
+| Order | Tickets | Notes |
 |---|---|---|
-| 1. While the full crawl runs | PC-02, PC-20 to PC-22, PC-30, PC-40, PC-70 | Built against the single-Pokémon source, so none of it needs the full index |
-| 2. Once the full crawl finishes | PC-14, PC-60, PC-61, PC-50, PC-41, PC-42, PC-23, PC-75, PC-76, PC-79 | PC-60 comes first, because a body text fix requires another crawl and must happen before any model builds |
-| 3. Final day | PC-51, PC-62, PC-63, PC-43, PC-44, PC-77, PC-78, PC-80 to PC-83, PC-90, PC-91, PC-100 to PC-103, PC-31 | Business value work comes last |
+| Done | PC-03, PC-04, PC-10 to PC-15, PC-20 to PC-23, PC-60, PC-75 | The index and the search application work |
+| 1. Finish the interface pass | PC-76, PC-79 | Merge `feature/ui-polish` first, so later branches start from it |
+| 2. Start work with waiting time | PC-61, PC-50, PC-51 | Models build in the background |
+| 3. Complete the Intermediate tier | PC-30, PC-31 | Hosting also unblocks PC-43 |
+| 4. Build in parallel | PC-70, PC-40 to PC-42, PC-83 | Independent of each other |
+| 5. Finish generated answers | PC-62, PC-63, PC-44, PC-77 | Depends on the models |
+| 6. Bonus | PC-80 to PC-82 | Depends on Coveo enabling access |
+| 7. Wrap up | PC-43, PC-78, PC-90, PC-91, PC-100 to PC-103 | Business value work comes last |
 
 If Passage Retrieval access has not arrived, write PC-83 and add PC-82 only if access arrives later. If time runs short, drop the stretch goal.
 
@@ -189,7 +194,7 @@ Owner: Agent · Estimate: 45 min · Depends on: PC-13, PC-20
 
 Owner: Agent · Estimate: 45 min · Depends on: PC-21, PC-22
 
-- [ ] Playwright covers searching, filtering and viewing a result (filtering and viewing are covered, searching is not)
+- [x] Playwright covers searching, filtering and viewing a result
 
 ---
 
@@ -201,7 +206,7 @@ Owner: Agent · Estimate: 45 min · Depends on: PC-21, PC-22
 
 Owner: Both · Estimate: 45 min · Depends on: PC-21
 
-- [ ] Hosting provider chosen and recorded in `docs/architecture.md`
+- [x] Hosting provider chosen and recorded in `docs/architecture.md`
 - [ ] Application is publicly reachable and returns results
 - [ ] Merges deploy automatically
 
