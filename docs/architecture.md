@@ -14,8 +14,9 @@ flowchart TD
     subgraph INGEST["Coveo indexing"]
         SOURCE["Coveo Sitemap source"]
         FILTERS["URL filtering<br/>keeps only Pokémon pages"]
-        SCRAPE["Content extraction<br/>removes page clutter, captures metadata"]
-        MAP["Mappings<br/>metadata to fields"]
+        SCRAPE["Web scraping<br/>removes page clutter, extracts 16 metadata values"]
+        EXT["Pre-conversion extension<br/>rewrites stat tables and type grids as sentences"]
+        MAP["Automatic mapping<br/>metadata to same-named fields"]
     end
 
     subgraph INDEX["Coveo index"]
@@ -52,7 +53,8 @@ flowchart TD
     OTHER -. "excluded" .-> FILTERS
     SOURCE --> FILTERS
     FILTERS --> SCRAPE
-    SCRAPE --> MAP
+    SCRAPE --> EXT
+    EXT --> MAP
     MAP --> ITEMS
     MAP --> FIELDS
 
@@ -83,6 +85,21 @@ flowchart TD
     SEED -. "preload data" .-> ANALYTICS
     ANALYTICS -->|"trains"| QS
 ```
+
+## Decision summary
+
+| Decision | Choice | Details |
+|---|---|---|
+| Search interface | Atomic React, revisited if too limiting | [Search interface](#search-interface-atomic-react) |
+| Technology | TypeScript, with Python only for the Coveo extension | [Technology stack](#technology-stack) |
+| Content scope | All 1,028 individual Pokémon pages, including incomplete new Pokémon | [Content scope](#content-scope) |
+| Ingestion | Coveo Sitemap source with URL rules | [Coveo source](#coveo-source-sitemap) |
+| Alternate forms | One item per Pokémon, with fields from the base form and all forms in the body | [One item per Pokémon](#one-item-per-pokémon) |
+| Field extraction | XPath web scraping selectors scoped to the first form tab | [Web scraping](#web-scraping-and-fields) |
+| Body text | Pre-conversion extension rewrites tables as sentences | [Body text reconstruction](#body-text-reconstruction) |
+| Field mapping | Automatic mapping through `performFieldMappingUsingAllOrigins` | [Field mapping](#field-mapping) |
+| Repeated platform work | Coveo APIs in place of repeated console steps | [Use of Coveo APIs](#use-of-coveo-apis) |
+| Eval reference data | Sampled from pokemondb.net and verified by hand | [Eval reference data](#eval-reference-data) |
 
 ## Decisions
 
@@ -165,6 +182,28 @@ The source `pokemondb-test-charizard` indexes one page so that configuration can
 | Web scraping | [`web-scraping.json`](../configs/coveo/web-scraping.json) | Removes page navigation and sections from Moves onward, and extracts 16 metadata values from the page's first form tab. | [Web scraping configuration](https://docs.coveo.com/en/mc1f3573/) and [RGA content requirements](https://docs.coveo.com/en/nb6a0008/). Which sections to remove is our own choice. |
 | `performFieldMappingUsingAllOrigins` | True | Maps scraped metadata to fields with the same name. See Field mapping below. | [Add a Web source](https://docs.coveo.com/en/malf0160/), verified on our Sitemap test source |
 | Content visibility | Everyone | The content is public and the application has no user sign-in. | Our own decision |
+| Extension | `pre-reconstruct-body` | Makes tables readable in the body. See Body text reconstruction below. | [Apply an extension](https://docs.coveo.com/en/1936/) |
+
+### Full source configuration
+
+The source `pokemondb-pokemon` is a duplicate of the test source and differs only in its exclusion rule, recorded in [`full-source.json`](../configs/coveo/full-source.json). Coveo's documentation recommends duplicating a source when two sources are similar, but does not list exactly what is copied, so each setting is checked after duplication.
+
+The rule excludes every URL except the sitemap and pages directly under `/pokedex/`, then excludes the `all`, `national` and `shiny` list pages. We tested it against all 12,923 sitemap URLs. It keeps exactly the 1,025 Pokémon on the National Pokédex list and the 3 new Pokémon, and removes all moves and list pages.
+
+### Web scraping and fields
+
+[`web-scraping.json`](../configs/coveo/web-scraping.json) removes site navigation, the "Skip to main content" link, the Contents list and everything from the Moves section onward. It also extracts 16 metadata values, each stored in a field of the same name.
+
+| Purpose | Fields |
+|---|---|
+| Search page | `pokemon_name`, `pokemon_type` (multi-value facet), `pokemon_generation` (facet), `pokemon_image` |
+| Detail page | `pokemon_number`, `pokemon_species`, `pokemon_height`, `pokemon_weight`, `pokemon_abilities` (multi-value), `pokemon_hp`, `pokemon_attack`, `pokemon_defense`, `pokemon_sp_atk`, `pokemon_sp_def`, `pokemon_speed`, `pokemon_total` |
+
+Selectors for Type, image and detail values read only the first form tab, so Mega forms cannot contaminate base-form values. All fields are strings. Stats are displayed rather than sorted, and Coveo requires non-string fields to be sortable. Stats are separate fields because a single list could lose order or repeated values. `pokemon_name` exists because the page title contains extra text that would look poor in results.
+
+Field settings are in [`fields.json`](../configs/coveo/fields.json). Ranking and stemming are off because Coveo states that they have a significant performance cost. Free text search and caching are off because these values also appear in the body or have few distinct values. We can change this if evals show a need.
+
+**Coveo documentation:** [Manage fields](https://docs.coveo.com/en/1833/) and [Web scraping configuration](https://docs.coveo.com/en/mc1f3573/). The rule against contaminating base-form values and the reasoning for separate stat fields are our own.
 
 ### Use of Coveo APIs
 
@@ -176,7 +215,7 @@ When a platform task would repeat the same manual step, we use a Coveo API inste
 
 The first four fields (`pokemon_name`, `pokemon_type`, `pokemon_generation` and `pokemon_image`) were created in the console.
 
-### Body text clean-up
+### Body text reconstruction
 
 A Pokémon page contains valuable information in layouts that do not survive being flattened into text. A type effectiveness grid becomes a row of numbers such as `½ 2 2 ¼` with no attacking types, and a stat row becomes `78 266 360` with no labels. Generated answers read only the body text, in chunks of about 250 words, so this information would be lost or misleading.
 
@@ -200,7 +239,7 @@ Web scraping continues to remove site navigation and everything from the Moves s
 
 **Costs and safeguards**
 
-The extension adds Python to the project and runs for every item. Coveo limits each extension to about 5 seconds per item. The slowest of our five sample pages took 224 ms locally. It is applied with **Skip extension** on error, so a failure leaves an item indexed with its original body and does not lose it.
+The extension adds Python to the project and runs for every item. Coveo limits each extension to about 5 seconds per item. The slowest of our five sample pages took 224 ms locally. It is applied with **Skip extension** on error, so a failure leaves an item indexed with its original body and does not lose it. The extension is named `pre-reconstruct-body`, requests only the **Original file** item data and is applied at the **Pre-conversion** stage to all items. It was verified in Coveo on the test source: the Charizard body contains the rewritten sentences for all three forms, and all 16 fields still populate.
 
 **Coveo documentation:** [Modifying item bodies](https://docs.coveo.com/en/2749/) states that changing `documentdata` in a pre-conversion script is "always preferable". [Add a body mapping](https://docs.coveo.com/en/1847/) describes how a mapping overrides the body, and [Python modules available to extensions](https://docs.coveo.com/en/116/) lists BeautifulSoup. [RGA content requirements](https://docs.coveo.com/en/nb6a0008/) states that only the body is embedded. [Indexing pipeline extension overview](https://docs.coveo.com/en/1556/) describes stages and timeouts. Coveo does not document whether the stream a pre-conversion script receives is the original page or the scraped page, so the script also removes navigation and the Moves section in case they are still present.
 
@@ -220,6 +259,6 @@ The cost is that users cannot filter by alternate form. We considered separate i
 
 ### Generation extraction
 
-Each page states the Generation in a dedicated tag within its introduction, for example "introduced in Generation 1". We read it with a web scraping selector. This avoids an indexing pipeline extension, which would add a moving part without providing any benefit here.
+Each page states the Generation in a dedicated tag within its introduction, for example "introduced in Generation 1". We read it with a web scraping selector, because a selector is enough to capture a value that is already isolated in the page.
 
 **Coveo documentation:** [Web scraping configuration](https://docs.coveo.com/en/mc1f3573/) describes CSS and XPath 1.0 selectors for extracting metadata, and states that extracted metadata needs fields and mappings before it can be used. The selector was verified on the test source.

@@ -122,8 +122,8 @@ Owner: Both · Estimate: 1.5 h · Depends on: PC-13
 Type effectiveness grids and stat tables lose their meaning when flattened into text. A pre-conversion indexing pipeline extension rewrites them as sentences so they are useful to search and generated answers.
 
 - [x] Extension built test-first and verified on saved sample pages
-- [ ] Extension added in Coveo and applied to the test source
-- [ ] Charizard's body contains the rewritten sentences and all 16 fields still populate
+- [x] Extension added in Coveo and applied to the test source
+- [x] Charizard's body contains the rewritten sentences and all 16 fields still populate
 
 ### PC-14: Run and verify the full crawl
 

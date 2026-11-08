@@ -17,9 +17,13 @@
 
 A Pokémon search application built on the [Coveo](https://www.coveo.com/) platform. It indexes the individual Pokémon pages on [pokemondb.net](https://pokemondb.net/) so that users can find Pokémon by searching and by filtering on Type and Generation.
 
-**Status:** early development. The application scaffold, tests and continuous integration are in place, and Coveo extraction has been validated on a single test page. The full crawl, Coveo connection and search interface are not finished yet.
+**Status:** in development. The application scaffold, tests and continuous integration are in place. Coveo crawling, field extraction and body text reconstruction are validated on a test page, and the full crawl of 1,028 Pokémon is being verified. The search interface is not built yet.
 
-Coveo settings are recorded in [configs/coveo](configs/coveo/).
+## How content is indexed
+
+A Coveo Sitemap source reads the site's sitemap and keeps only individual Pokémon pages. Web scraping removes page navigation and extracts 16 fields, such as Type, Generation and base stats. A Python indexing pipeline extension then rewrites stat tables and type effectiveness grids as readable sentences, so that they work for search and generated answers.
+
+Coveo settings are recorded in [configs/coveo](configs/coveo/), and the reasoning is in the [architecture document](docs/architecture.md).
 
 ## Planned features
 
@@ -36,16 +40,21 @@ Coveo settings are recorded in [configs/coveo](configs/coveo/).
 |---|---|
 | Application | React, TypeScript and Vite |
 | Search interface | Coveo Atomic React |
-| Tests | Vitest and React Testing Library |
+| Coveo indexing extension | Python |
+| Tests | Vitest, React Testing Library and pytest |
 | Continuous integration | GitHub Actions |
 
 ## Getting started
 
-You need Node.js 24 or later.
+You need Node.js 24 or later. Python 3 is needed only to run the extension's tests.
 
 ```sh
 npm install
 cp .env.example .env
+
+# Optional, for the Coveo extension's tests
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt
 ```
 
 Add your Coveo organization ID and search-only API key to `.env`. Never commit this file, and never use an API key with broader permissions in a `VITE_` variable, because those values are included in the browser bundle.
@@ -58,8 +67,11 @@ Add your Coveo organization ID and search-only API key to `.env`. Never commit t
 | `npm test` | Run the tests |
 | `npm run build` | Type-check and build for production |
 | `npm run preview` | Serve the production build locally |
+| `.venv/bin/pytest configs/coveo/extensions` | Run the Coveo extension's tests |
 
 ## Documentation
 
 - [Architecture and decisions](docs/architecture.md)
 - [Project plan](docs/plan.md)
+- [Indexing expected results](docs/indexing-expected-results.md)
+- [Coveo configuration](configs/coveo/README.md)

@@ -13,6 +13,9 @@
   "executeJavaScript": false,
   "contentVisibility": "everyone",
   "webScraping": "web-scraping.json",
+  "extensions": [
+    { "name": "pre-reconstruct-body", "stage": "Pre-conversion", "actionOnError": "Skip extension", "applyTo": "All items (common)" }
+  ],
   "jsonParameters": {
     "performFieldMappingUsingAllOrigins": true
   }

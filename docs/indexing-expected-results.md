@@ -14,6 +14,16 @@ Each image is expected at `https://img.pokemondb.net/artwork/<url-name>.jpg`, fo
 
 Browt has no base stats yet, so its stat fields are expected to be empty.
 
+## Body text
+
+Tables must be rewritten as readable sentences. For Charizard, the body must include:
+
+- `Charizard base stats: HP: base 78, ranging from 266 to 360 at level 100.`
+- `Charizard takes 4x damage from Rock.`
+- `Mega Charizard X takes 2x damage from Ground, Rock and Dragon.`
+
+The body must not include site navigation, type effectiveness grids, unlabelled stat ranges or the Moves section and anything after it.
+
 ## Full crawl
 
 The full source must contain exactly 1,028 items: 1,025 numbered Pokémon and the Generation 10 Pokémon `browt`, `gecqua` and `pombon`. These must not be indexed:
