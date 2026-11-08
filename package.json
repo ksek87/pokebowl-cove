@@ -4,19 +4,26 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=24"
+    "node": "^24.11.0"
   },
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "copy:atomic": "mkdir -p public && cp -r node_modules/@coveo/atomic-react/dist/assets node_modules/@coveo/atomic-react/dist/lang public/",
+    "predev": "npm run copy:atomic",
+    "prebuild": "npm run copy:atomic",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@coveo/atomic-react": "^3.11.50",
+    "@coveo/headless": "^3.58.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^26.6.6",
