@@ -4,6 +4,10 @@
 
 We are building a Pokémon search application on the Coveo platform, using content indexed from pokemondb.net. The work is a technical assessment and will be presented to Coveo experts, so every important choice must be explainable and defensible.
 
+## Starting a session
+
+- Read `docs/handoff.md` before starting work, and update it before ending a session.
+
 ## Working together
 
 - Do not write code or create files until the user asks for it.

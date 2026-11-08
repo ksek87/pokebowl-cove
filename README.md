@@ -73,5 +73,6 @@ Add your Coveo organization ID and search-only API key to `.env`. Never commit t
 
 - [Architecture and decisions](docs/architecture.md)
 - [Project plan](docs/plan.md)
+- [Session handoff](docs/handoff.md)
 - [Indexing expected results](docs/indexing-expected-results.md)
 - [Coveo configuration](configs/coveo/README.md)
