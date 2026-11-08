@@ -101,6 +101,7 @@ flowchart TD
 | Browser access | Anonymous search API key with the `pokebowl-search` search hub | [Search application connection](#search-application-connection) |
 | Runtime | Node 24 | [Search application connection](#search-application-connection) |
 | Application content | Dedicated `pokebowl-search` pipeline filters to the full source, and the test source is kept | [Limiting the application to the full source](#limiting-the-application-to-the-full-source) |
+| Hosting | Vercel | [Hosting](#hosting) |
 | Repeated platform work | Coveo APIs in place of repeated console steps | [Use of Coveo APIs](#use-of-coveo-apis) |
 | Eval reference data | Sampled from pokemondb.net and verified by hand | [Eval reference data](#eval-reference-data) |
 
@@ -250,7 +251,7 @@ The extension adds Python to the project and runs for every item. Coveo limits e
 
 We enable the source parameter `performFieldMappingUsingAllOrigins`, so scraped metadata maps automatically to fields with the same name. Without it, the 12 fields created through the API stayed empty even though the metadata had been extracted. With it, those fields populated without any per-field mapping rules. The setting does not carry over between sources: it was missing on the first full crawl, which left the 12 fields empty on all 1,028 items and required a rebuild, so it must be set on each new source before its first build.
 
-**Coveo documentation:** [Manage source mappings](https://docs.coveo.com/en/1640/) describes automatic mapping to matching field names, and [Add a Web source](https://docs.coveo.com/en/malf0160/) describes this parameter for Web sources. The documentation did not confirm it for Sitemap sources, so we verified it on our test source.
+**Coveo documentation:** [Manage source mappings](https://docs.coveo.com/en/1640/) describes automatic mapping to matching field names, and [Add a Web source](https://docs.coveo.com/en/malf0160/) describes this parameter for Web sources. The documentation did not confirm it for Sitemap sources, so we verified it on our test source. [Manage source mappings](https://docs.coveo.com/en/1640/) advises keeping this setting off for native sources, to avoid indexing irrelevant metadata and cluttering facets. We accept that because our scraping extracts only the 16 values we want. Automatically mapped fields have no rule on the source's mapping page, which is the likely reason the console lists these fields as unused in sources, although Coveo does not document that count.
 
 ### One item per Pokémon
 
@@ -280,7 +281,9 @@ The application is a React and TypeScript page built with the official Atomic Re
 
 **Facets:** Type uses alphabetical order. Generation uses natural order, `alphanumericNatural`, so Generation 10 follows Generation 9, which plain text sorting does not do.
 
-**Our own inference:** the documentation we read does not say how a key's search hub behaves if a client sends a different value, so we do not treat the hub as a security control. The wrapper documentation shows asset setup only for Create React App, so we copy the same folders into Vite's `public/` directory and confirmed the result in a browser.
+**Search hub enforcement:** the browser key enforces `pokebowl-search` in Coveo. In a live test, requests sent with another search hub, or with none, were still routed to the `pokebowl-search` pipeline. [Ensure that authentication enforces search hub values](https://docs.coveo.com/en/las95231/) recommends enforcing the hub in the key or token. It does not state whether a client can override it, so this behavior is our observation. Evals and any query of the test source need a separate key.
+
+**Our own inference:** we do not treat the search hub as a security control, and all of this content is public. The wrapper documentation shows asset setup only for Create React App, so we copy the same folders into Vite's `public/` directory and confirmed the result in a browser.
 
 ## Limiting the application to the full source
 
@@ -297,3 +300,39 @@ The single-Pokémon test source stays in the organization for testing configurat
 **Coveo documentation:** [Set up a query pipeline](https://docs.coveo.com/en/2757/) states that routing everything to the default pipeline works only for a single website or application. [Manage query pipelines](https://docs.coveo.com/en/1791/) describes dedicated pipelines with conditions and states that the default pipeline should have no condition. [Query pipeline routing](https://docs.coveo.com/en/1666) recommends condition-based routing on the search hub with positive operators. [Manage filter rules](https://docs.coveo.com/en/3410/) recommends filters that include content rather than exclude it, and states that filters alone do not prevent content from being exposed. [Filter: Query pipeline feature](https://docs.coveo.com/en/1440/) states that the constant part of the query is combined with AND and is unsuited to dynamic content. [Manage projects](https://docs.coveo.com/en/n7ef0517/) describes projects.
 
 **Our own inference:** the filter is a relevance control and not a security control, which is acceptable because all of this content is public. A query using the browser key with a different search hub returned no test source items, which suggests the key's search hub takes precedence, but we did not confirm this.
+
+## Visual direction
+
+The interface is polished yet playful: a calm, spacious structure with a friendly, tactile personality, because the application is themed around Pokémon but is shown to an enterprise audience.
+
+- A warm off-white base keeps attention on the artwork.
+- Each card's artwork sits on a tint of the Pokémon's Type, and dual-Type Pokémon blend both colors.
+- Rounded type (Nunito, self-hosted), pill badges, and cards with a heavier bottom edge give a tactile feel.
+- Type badge text is chosen for contrast, and a unit test holds every badge to at least 4.5:1.
+- The layout, colors and components are our own and do not copy official Pokémon styling.
+
+Page sizes and result columns are defined once in `src/search/settings.ts`, and page sizes are multiples of both column counts so that every row is full. The default of 12 and the 3 and 4 column layouts are desktop choices; phone layouts were dropped from scope at the user's request.
+
+Our own markup uses Tailwind and shadcn/ui. Atomic's components are styled through [theme variables and CSS parts](https://docs.coveo.com/en/atomic/latest/usage/themes-and-visual-customization/), because they use Shadow DOM and Tailwind classes cannot reach inside them. Result cards are rendered inside Atomic's Shadow DOM, so one shared stylesheet is adopted there instead of copying styles into each result. Some rules that override Atomic's page layout use `!important`, which Coveo does not document as an approach; they remain because the layout has no documented setting for a single centered content block.
+
+Atomic's search box only empties its text when cleared, so the application runs a new search when the box is emptied. Facets request up to a fixed ceiling so that a new Generation or Type is never hidden.
+
+**Rejected alternatives:** a restrained product look, which undersells the theme, and a dark editorial look, which suits the artwork less well on tinted cards.
+
+## Search behavior
+
+Three behaviors are added on top of Coveo's default relevance search.
+
+**Decision: a number-only search is a Pokédex lookup.** A query that is only a number, such as `3` or `#25`, returns the one Pokémon with that Pokédex number, and a notice above the results says so. Without this, a number matches every occurrence of that number in the body text, including stats and Generation labels, so `3` returned 806 Pokémon. The rejected alternative was boosting the exact match and keeping the other results, which leaves the same noise below it. Text searches such as `Generation 3` are unchanged.
+
+**Decision: the home page is in Pokédex order.** An empty query has nothing to rank on, so Coveo's order looks arbitrary. When no search text exists and no other sort was chosen, the application sorts by Pokédex number. New Pokémon whose number is `???` sort last. The rejected alternative was a curated list, which needs maintenance and does not help browsing.
+
+**Decision: add query correction and a sort control.** Coveo lists these among standard search interface components. The sort options are best match, Pokédex number and name. `pokemon_number` and `pokemon_name` have the **Sort** option enabled in Coveo. We did not enable **Use cache for sort**, because a sorted query already takes about 22 milliseconds in the search API.
+
+**Coveo documentation:** [Modify requests and responses](https://docs.coveo.com/en/atomic/latest/usage/atomic-modify-requests-responses/) describes the request hook, and advises limiting it to search requests and coding defensively. It recommends the Headless advanced query action for setting `aq`, without giving a reason. [Ensure that your search interfaces contain standard components](https://docs.coveo.com/en/mc2g0332/) covers query correction and sorting. [Manage fields](https://docs.coveo.com/en/1833/) states that the Sort option needs no rebuild, though a delay may occur.
+
+**Our own inference:** we use the request hook despite that recommendation, because the lookup must also clear the text query in the same request, and the advanced query action cannot do that. The search box and analytics keep the text the person typed.
+
+## Hosting
+
+**Decision: host the application on Vercel.** It connects to the GitHub repository, deploys when changes merge, and needs little setup for a static Vite application. The rejected alternative was Netlify, which offers similar deployment features. The application is a static page that calls Coveo from the browser, so it needs no server. The Coveo organization ID and the search-only key are set as build variables in Vercel, and they reach the browser by design.

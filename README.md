@@ -17,7 +17,7 @@
 
 A Pokémon search application built on the [Coveo](https://www.coveo.com/) platform. It indexes the individual Pokémon pages on [pokemondb.net](https://pokemondb.net/) so that users can find Pokémon by searching and by filtering on Type and Generation.
 
-**Status:** in development. The content is indexed in Coveo, and the search interface shows results with pictures and filters by Type and Generation. Generated answers, type-ahead, the detail page and hosting are still to come.
+**Status:** in development. All 1,028 Pokémon are indexed in Coveo, and the local search page shows results with pictures and filters by Type and Generation. Hosting, generated answers, type-ahead and the detail page are still to come.
 
 ## How content is indexed
 
@@ -25,10 +25,18 @@ A Coveo Sitemap source reads the site's sitemap and keeps only individual Pokém
 
 Coveo settings are recorded in [configs/coveo](configs/coveo/), and the reasoning is in the [architecture document](docs/architecture.md).
 
-## Planned features
+## Features
+
+Built:
 
 - Search results with each Pokémon's picture
 - Type and Generation filters
+- Pokédex order on the home page and a sort control
+- Exact Pokédex lookup for number-only searches
+- Query correction
+
+Planned:
+
 - AI-generated answers from the indexed content
 - Type-ahead search suggestions
 - A detail page for each Pokémon
@@ -40,6 +48,7 @@ Coveo settings are recorded in [configs/coveo](configs/coveo/), and the reasonin
 |---|---|
 | Application | React, TypeScript and Vite |
 | Search interface | Coveo Atomic React |
+| Custom interface | Tailwind and shadcn/ui |
 | Coveo indexing extension | Python |
 | Tests | Vitest, React Testing Library and pytest |
 | Continuous integration | GitHub Actions |

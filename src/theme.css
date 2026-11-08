@@ -1,0 +1,238 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@theme inline {
+  --font-sans: var(--atomic-font-family);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+}
+
+:root {
+  --radius: 0.75rem;
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: var(--atomic-primary);
+  --primary-foreground: var(--card);
+  --secondary: var(--atomic-neutral-light);
+  --secondary-foreground: var(--foreground);
+  --muted: var(--atomic-neutral-light);
+  --accent: var(--atomic-neutral-light);
+  --accent-foreground: var(--foreground);
+  --destructive: var(--atomic-primary-dark);
+  --input: var(--border);
+  --ring: var(--atomic-ring-primary);
+  --foreground: #1e2230;
+  --muted-foreground: #6b6658;
+  --border: #ece6d9;
+  --border-strong: #d9d0bd;
+  --card: #ffffff;
+  --background: #fbf8f1;
+  --size-content: 1360px;
+  --size-search: 720px;
+  --size-filters: 272px;
+  --size-gutter: 24px;
+  --size-search-row: 67px;
+  --atomic-primary: #d1352b;
+  --atomic-primary-light: #e8574c;
+  --atomic-primary-dark: #a92820;
+  --atomic-ring-primary: rgba(209, 53, 43, 0.35);
+  --atomic-primary-background: #fdecea;
+  --atomic-background: var(--card);
+  --atomic-on-background: var(--foreground);
+  --atomic-neutral: var(--border);
+  --atomic-neutral-light: #f7f3ea;
+  --atomic-neutral-dark: var(--muted-foreground);
+  --atomic-font-family: 'Nunito Variable', ui-rounded, system-ui, sans-serif;
+  --atomic-font-bold: 800;
+  --atomic-text-base: 0.9375rem;
+  --atomic-border-radius: 0.5rem;
+  --atomic-border-radius-md: 0.75rem;
+  --atomic-border-radius-lg: 1rem;
+  --atomic-border-radius-xl: 1.5rem;
+  --atomic-layout-max-search-box-input-width: var(--size-search);
+}
+
+atomic-layout-section[section='search'] {
+  justify-self: center !important;
+  width: 100% !important;
+  max-width: var(--size-search) !important;
+  margin-top: 0 !important;
+  min-height: var(--size-search-row);
+}
+
+@media (min-width: 1024px) {
+  atomic-search-layout {
+    grid-template-areas:
+      '. atomic-section-search atomic-section-search .'
+      '. atomic-section-facets atomic-section-main .' !important;
+    grid-template-columns:
+      var(--size-gutter) var(--size-filters) minmax(0, 1fr)
+      var(--size-gutter) !important;
+    column-gap: 0 !important;
+  }
+
+  atomic-layout-section[section='main'] {
+    margin-left: var(--size-gutter);
+  }
+}
+
+atomic-layout-section[section='status'] {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  min-height: 44px;
+  margin-bottom: 16px;
+}
+
+atomic-layout-section[section='status'] > * {
+  margin-bottom: 0 !important;
+}
+
+atomic-layout-section[section='status'] > atomic-breadbox {
+  flex-basis: 100%;
+}
+
+atomic-layout-section[section='status'] > atomic-query-summary {
+  margin-right: auto;
+}
+
+atomic-layout-section[section='facets'] > atomic-facet-manager > :last-child {
+  margin-bottom: 0;
+}
+
+atomic-search-box::part(wrapper) {
+  position: relative !important;
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+  height: auto;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-bottom-width: 5px;
+  border-radius: 20px;
+}
+
+atomic-search-box::part(textarea-spacer) {
+  display: none;
+}
+
+atomic-search-box::part(input) {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+atomic-search-box::part(submit-button) {
+  margin: 6px;
+  color: var(--atomic-on-primary);
+  background: var(--atomic-primary);
+  border-radius: 12px;
+}
+
+atomic-search-box::part(submit-icon) {
+  color: var(--atomic-on-primary);
+}
+
+atomic-facet::part(facet) {
+  padding: 16px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 20px;
+}
+
+atomic-facet::part(label-button) {
+  font-size: 1.0625rem;
+  font-weight: 800;
+}
+
+atomic-facet::part(value-label) {
+  font-weight: 600;
+}
+
+atomic-facet::part(value-checkbox) {
+  border-radius: 6px;
+}
+
+atomic-result-list::part(result-list) {
+  grid-template-columns: repeat(var(--result-columns-narrow), minmax(0, 1fr));
+  gap: 20px;
+}
+
+@media (min-width: 1280px) {
+  atomic-result-list::part(result-list) {
+    grid-template-columns: repeat(var(--result-columns-wide), minmax(0, 1fr));
+  }
+}
+
+atomic-result-list::part(outline) {
+  padding: 0;
+  border: 0;
+}
+
+atomic-result-list::part(result-list-grid-clickable-container) {
+  padding: 0;
+  border: 0;
+}
+
+atomic-result-list::part(result-list-grid-clickable-container):hover {
+  background: transparent;
+}
+
+atomic-sort-dropdown::part(select) {
+  height: 40px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-weight: 800;
+}
+
+atomic-layout-section[section='status'] > atomic-did-you-mean {
+  flex-basis: 100%;
+}
+
+atomic-query-summary::part(container) {
+  font-weight: 600;
+}
+
+atomic-pager::part(page-button),
+atomic-pager::part(previous-button),
+atomic-pager::part(next-button) {
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-weight: 800;
+}
+
+atomic-pager::part(active-page-button) {
+  color: var(--atomic-on-primary);
+  background: var(--atomic-primary);
+  border-color: var(--atomic-primary);
+}
+
+@layer base {
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--atomic-font-family);
+  }
+}

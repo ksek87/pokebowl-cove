@@ -5,6 +5,11 @@ from bs4 import BeautifulSoup
 from reconstruct_body import reconstruct, run
 
 
+def ensure(condition: bool) -> None:
+    if not condition:
+        raise AssertionError
+
+
 def stats_block() -> str:
     return """
     <h2>Base stats</h2>
@@ -76,46 +81,46 @@ def text_of(html: str) -> str:
 
 def test_defenses_become_sentences_grouped_by_damage():
     text = text_of(reconstruct(TWO_FORMS))
-    assert (
+    ensure((
         "Charizard takes 4x damage from Rock. It takes 2x damage from Water. "
         "It takes 0.25x damage from Fighting. It takes no damage from Ground."
-    ) in text
+    ) in text)
 
 
 def test_each_form_is_named_in_its_own_sentences():
     text = text_of(reconstruct(TWO_FORMS))
-    assert "Mega Charizard X takes 4x damage from Rock." in text
-    assert "Mega Charizard X base stats:" in text
+    ensure("Mega Charizard X takes 4x damage from Rock." in text)
+    ensure("Mega Charizard X base stats:" in text)
 
 
 def test_grid_and_its_intro_are_removed():
     output = reconstruct(TWO_FORMS)
-    assert "type-table" not in output
-    assert "The effectiveness of each type" not in output
+    ensure("type-table" not in output)
+    ensure("The effectiveness of each type" not in output)
 
 
 def test_stats_are_labelled_with_ranges_and_total():
     text = text_of(reconstruct(TWO_FORMS))
-    assert (
+    ensure((
         "Charizard base stats: HP: base 78, ranging from 266 to 360 at level 100. Total: 534."
-    ) in text
-    assert "Min" not in text.split()
+    ) in text)
+    ensure("Min" not in text.split())
 
 
 def test_boilerplate_is_removed():
     text = text_of(reconstruct(TWO_FORMS))
-    assert "Additional artwork" not in text
-    assert "The ranges shown" not in text
+    ensure("Additional artwork" not in text)
+    ensure("The ranges shown" not in text)
 
 
 def test_local_numbers_are_kept_only_for_the_base_form():
-    assert text_of(reconstruct(TWO_FORMS)).count("Local №") == 1
+    ensure(text_of(reconstruct(TWO_FORMS)).count("Local №") == 1)
 
 
 def test_page_clutter_and_moves_are_removed_if_still_present():
     text = text_of(reconstruct(TWO_FORMS))
     for removed in ("Site header", "Skip to main", "Prev next", "Contents", "Flamethrower", "Site footer"):
-        assert removed not in text
+        ensure(removed not in text)
 
 
 def test_ability_specific_defenses_name_the_ability():
@@ -130,20 +135,20 @@ def test_ability_specific_defenses_name_the_ability():
     """
     html = page(panel("base", ability_grids), tabs='<a href="#base">Mr. Mime</a>')
     text = text_of(reconstruct(html))
-    assert "With the Soundproof ability, Mr. Mime takes 4x damage from Rock." in text
-    assert "With the Filter ability, Mr. Mime takes 4x damage from Rock." in text
+    ensure("With the Soundproof ability, Mr. Mime takes 4x damage from Rock." in text)
+    ensure("With the Filter ability, Mr. Mime takes 4x damage from Rock." in text)
 
 
 def test_unknown_stats_are_left_as_written():
     unknown = "<h2>Base stats</h2><ul><li>The base stats are not currently known.</li></ul>"
     html = page(panel("base", f'<div class="resp-scroll">{grid()}</div>', unknown), tabs='<a href="#base">Browt</a>')
-    assert "The base stats are not currently known." in text_of(reconstruct(html))
+    ensure("The base stats are not currently known." in text_of(reconstruct(html)))
 
 
 def test_only_normal_damage_is_stated_plainly():
     normal = '<div class="resp-scroll"><table class="type-table"><tr><td title="Fire &#8594; Rock = normal effectiveness" class="type-fx-cell type-fx-100"></td></tr></table></div>'
     html = page(panel("base", normal), tabs='<a href="#base">Testmon</a>')
-    assert "Testmon takes normal damage from every type." in text_of(reconstruct(html))
+    ensure("Testmon takes normal damage from every type." in text_of(reconstruct(html)))
 
 
 class FakeStream(io.BytesIO):
@@ -163,7 +168,7 @@ class FakeDocument:
         self.saved = None
 
     def get_data_stream(self, name: str):
-        assert name == "documentdata"
+        ensure(name == "documentdata")
         return io.BytesIO(self.html.encode("utf-8"))
 
     def add_data_stream(self, stream):
@@ -173,5 +178,5 @@ class FakeDocument:
 def test_run_writes_reconstructed_html_back_to_documentdata():
     document = FakeDocument(TWO_FORMS)
     run(document)
-    assert document.saved.name == "documentdata"
-    assert "takes 4x damage" in document.saved.getvalue().decode("utf-8")
+    ensure(document.saved.name == "documentdata")
+    ensure("takes 4x damage" in document.saved.getvalue().decode("utf-8"))
