@@ -1,0 +1,27 @@
+[
+  {
+    "name": "pokemon-pages",
+    "for": { "urls": [".*"] },
+    "exclude": [
+      { "type": "CSS", "path": "header" },
+      { "type": "CSS", "path": "footer" },
+      { "type": "CSS", "path": "nav" },
+      { "type": "CSS", "path": "ul.list-nav" },
+      { "type": "XPATH", "path": "//*[@id='dex-moves']/following-sibling::*" }
+    ],
+    "metadata": {
+      "pokemon_type": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Type']/following-sibling::td/a/text()"
+      },
+      "pokemon_generation": {
+        "type": "XPATH",
+        "path": "//p[contains(., 'introduced in')]/abbr[1]/text()"
+      },
+      "pokemon_image": {
+        "type": "XPATH",
+        "path": "(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//img/@src"
+      }
+    }
+  }
+]

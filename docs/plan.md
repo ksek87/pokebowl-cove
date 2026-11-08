@@ -71,7 +71,7 @@ Owner: Agent · Estimate: 30 min · Depends on: PC-03
 
 Owner: Agent · Estimate: 30 min · Depends on: PC-04
 
-- [ ] GitHub Actions runs tests and the build on every pull request
+- [x] GitHub Actions runs tests and the build on every pull request
 - [ ] A failing test blocks a passing status
 
 ---
@@ -84,17 +84,17 @@ Owner: Agent · Estimate: 30 min · Depends on: PC-04
 
 Owner: Both · Estimate: 45 min
 
-- [ ] Source type chosen: Web, Sitemap or Push
-- [ ] Handling of alternate forms, such as Mega Evolutions, chosen
-- [ ] Method for extracting Generation chosen
-- [ ] Decisions and rejected alternatives recorded in `docs/architecture.md`
+- [x] Source type chosen: Web, Sitemap or Push
+- [x] Handling of alternate forms, such as Mega Evolutions, chosen
+- [x] Method for extracting Generation chosen
+- [x] Decisions and rejected alternatives recorded in `docs/architecture.md`
 
 ### PC-11: Define expected index results
 
 Owner: Both · Estimate: 30 min · Depends on: PC-10
 
-- [ ] Expected title, Type, Generation and image written down for a few Pokémon, including Charizard, whose Mega form has a different Type
-- [ ] List of URLs that must not be indexed, such as moves and list pages
+- [ ] Expected title, Type, Generation and image written down for a few Pokémon, including Charizard, whose Mega form has a different Type (Charizard done)
+- [x] List of URLs that must not be indexed, such as moves and list pages
 
 ### PC-12: Create a single-Pokémon test source
 
@@ -102,13 +102,14 @@ Owner: You, guided by Agent · Estimate: 30 min · Depends on: PC-10
 
 This source lets us test configuration without waiting for a full crawl.
 
-- [ ] Source indexes exactly one Pokémon page
-- [ ] The item is visible in the Coveo console
+- [x] Source indexes exactly one Pokémon page
+- [x] The item is visible in the Coveo console
 
 ### PC-13: Configure extraction, fields and mappings
 
 Owner: You, guided by Agent · Estimate: 2 h · Depends on: PC-11, PC-12
 
+- [ ] Web scraping configuration applied to the test source (in progress)
 - [ ] Page clutter is removed from the indexed body
 - [ ] Type, Generation and image fields are populated
 - [ ] Results match PC-11, and the final configuration is documented
@@ -120,7 +121,7 @@ Owner: You, guided by Agent · Estimate: 1 h, plus about 40 min of crawl time ·
 The crawl stays within the site's requested rate of one page every 2 seconds.
 
 - [ ] Only individual Pokémon pages are indexed
-- [ ] Item count is reasonable for the number of Pokémon
+- [ ] Item count is 1,028: 1,025 numbered Pokémon and 3 new Generation 10 Pokémon without numbers
 - [ ] A sample of items matches the expected field values
 
 ---
