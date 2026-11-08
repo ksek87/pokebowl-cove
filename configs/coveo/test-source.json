@@ -1,0 +1,22 @@
+{
+  "name": "pokemondb-test-charizard",
+  "type": "Sitemap",
+  "sitemapUrls": ["https://pokemondb.net/static/sitemaps/pokemondb.xml"],
+  "includeAllNonExcludedPages": true,
+  "exclusions": [
+    {
+      "condition": "matches regex rule",
+      "value": "^(?!https://pokemondb\\.net/static/sitemaps/pokemondb\\.xml$|https://pokemondb\\.net/pokedex/charizard$).*$"
+    }
+  ],
+  "timeBetweenRequestsMs": 2000,
+  "executeJavaScript": false,
+  "contentVisibility": "everyone",
+  "webScraping": "web-scraping.json",
+  "extensions": [
+    { "name": "pre-reconstruct-body", "stage": "Pre-conversion", "actionOnError": "Skip extension", "applyTo": "All items (common)" }
+  ],
+  "jsonParameters": {
+    "performFieldMappingUsingAllOrigins": true
+  }
+}

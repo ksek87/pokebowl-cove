@@ -1,0 +1,14 @@
+[
+  { "name": "pokemon_number", "type": "STRING", "description": "National Pokédex number", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
+  { "name": "pokemon_species", "type": "STRING", "description": "Species label", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
+  { "name": "pokemon_height", "type": "STRING", "description": "Height of the base form", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
+  { "name": "pokemon_weight", "type": "STRING", "description": "Weight of the base form", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
+  { "name": "pokemon_abilities", "type": "STRING", "description": "Abilities of the base form", "facet": false, "multiValueFacet": true, "multiValueFacetTokenizers": ";", "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
+  { "name": "pokemon_hp", "type": "STRING", "description": "Base HP", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
+  { "name": "pokemon_attack", "type": "STRING", "description": "Base Attack", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
+  { "name": "pokemon_defense", "type": "STRING", "description": "Base Defense", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
+  { "name": "pokemon_sp_atk", "type": "STRING", "description": "Base Special Attack", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
+  { "name": "pokemon_sp_def", "type": "STRING", "description": "Base Special Defense", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
+  { "name": "pokemon_speed", "type": "STRING", "description": "Base Speed", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false },
+  { "name": "pokemon_total", "type": "STRING", "description": "Base stat total", "facet": false, "multiValueFacet": false, "includeInQuery": true, "includeInResults": true, "sort": false, "mergeWithLexicon": false }
+]

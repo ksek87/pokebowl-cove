@@ -23,7 +23,7 @@ The finished work is presented to a panel of Coveo experts in a 45-minute sessio
 | Stage | Tickets | Notes |
 |---|---|---|
 | 1. Foundation | PC-03 to PC-05 | Can run alongside stage 2 |
-| 2. Index | PC-10 to PC-14 | Every later stage depends on correct data |
+| 2. Index | PC-10 to PC-15 | Every later stage depends on correct data |
 | 3. Search | PC-20 to PC-23, PC-30, PC-31 | Can start against the single-Pokémon source |
 | 4. Models and evals | PC-40 to PC-43, PC-50, PC-51, PC-60 to PC-63 | Start PC-50 as soon as search works, because its data must exist before the model can build |
 | 5. Detail page and bonus | PC-70, PC-80 to PC-83 | PC-70 can run in parallel with stage 4 |
@@ -71,7 +71,7 @@ Owner: Agent · Estimate: 30 min · Depends on: PC-03
 
 Owner: Agent · Estimate: 30 min · Depends on: PC-04
 
-- [ ] GitHub Actions runs tests and the build on every pull request
+- [x] GitHub Actions runs tests and the build on every pull request
 - [ ] A failing test blocks a passing status
 
 ---
@@ -84,17 +84,17 @@ Owner: Agent · Estimate: 30 min · Depends on: PC-04
 
 Owner: Both · Estimate: 45 min
 
-- [ ] Source type chosen: Web, Sitemap or Push
-- [ ] Handling of alternate forms, such as Mega Evolutions, chosen
-- [ ] Method for extracting Generation chosen
-- [ ] Decisions and rejected alternatives recorded in `docs/architecture.md`
+- [x] Source type chosen: Web, Sitemap or Push
+- [x] Handling of alternate forms, such as Mega Evolutions, chosen
+- [x] Method for extracting Generation chosen
+- [x] Decisions and rejected alternatives recorded in `docs/architecture.md`
 
 ### PC-11: Define expected index results
 
 Owner: Both · Estimate: 30 min · Depends on: PC-10
 
-- [ ] Expected title, Type, Generation and image written down for a few Pokémon, including Charizard, whose Mega form has a different Type
-- [ ] List of URLs that must not be indexed, such as moves and list pages
+- [x] Expected title, Type, Generation and image written down for a few Pokémon, including Charizard, whose Mega form has a different Type (see `docs/indexing-expected-results.md`)
+- [x] List of URLs that must not be indexed, such as moves and list pages
 
 ### PC-12: Create a single-Pokémon test source
 
@@ -102,25 +102,37 @@ Owner: You, guided by Agent · Estimate: 30 min · Depends on: PC-10
 
 This source lets us test configuration without waiting for a full crawl.
 
-- [ ] Source indexes exactly one Pokémon page
-- [ ] The item is visible in the Coveo console
+- [x] Source indexes exactly one Pokémon page
+- [x] The item is visible in the Coveo console
 
 ### PC-13: Configure extraction, fields and mappings
 
 Owner: You, guided by Agent · Estimate: 2 h · Depends on: PC-11, PC-12
 
-- [ ] Page clutter is removed from the indexed body
-- [ ] Type, Generation and image fields are populated
-- [ ] Results match PC-11, and the final configuration is documented
+- [x] Web scraping configuration applied to the test source
+- [x] Page clutter is removed from the indexed body
+- [x] Type, Generation and image fields are populated
+- [x] Detail-page fields are populated
+- [x] Results match PC-11, and the final configuration is documented
+
+### PC-15: Reconstruct readable body text
+
+Owner: Both · Estimate: 1.5 h · Depends on: PC-13
+
+Type effectiveness grids and stat tables lose their meaning when flattened into text. A pre-conversion indexing pipeline extension rewrites them as sentences so they are useful to search and generated answers.
+
+- [x] Extension built test-first and verified on saved sample pages
+- [x] Extension added in Coveo and applied to the test source
+- [x] Charizard's body contains the rewritten sentences and all 16 fields still populate
 
 ### PC-14: Run and verify the full crawl
 
-Owner: You, guided by Agent · Estimate: 1 h, plus about 40 min of crawl time · Depends on: PC-13
+Owner: You, guided by Agent · Estimate: 1 h, plus about 40 min of crawl time · Depends on: PC-13, PC-15
 
 The crawl stays within the site's requested rate of one page every 2 seconds.
 
 - [ ] Only individual Pokémon pages are indexed
-- [ ] Item count is reasonable for the number of Pokémon
+- [ ] Item count is 1,028: 1,025 numbered Pokémon and 3 new Generation 10 Pokémon without numbers
 - [ ] A sample of items matches the expected field values
 
 ---
@@ -281,6 +293,7 @@ Owner: Both · Estimate: 45 min · Depends on: PC-62
 - [ ] RGA reporting is configured
 - [ ] Configuration is tuned using PC-44 results
 
+
 ---
 
 ## Epic 7: Detail page
@@ -295,6 +308,7 @@ Owner: Agent · Estimate: 2 h · Depends on: PC-21
 - [ ] Each result links to a page with a shareable URL
 - [ ] Components are built test-first using shadcn/ui and Tailwind
 - [ ] Unknown Pokémon show a clear not-found state
+- [ ] New Pokémon with unknown numbers or empty stats display cleanly
 
 ---
 
