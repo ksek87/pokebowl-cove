@@ -105,11 +105,12 @@ The main cost is less control over appearance, because styling is limited to the
 | Unit and component tests | Vitest and React Testing Library |
 | Browser tests | Playwright |
 | Evals and data scripts | TypeScript run with Node |
+| Coveo indexing extension | Python, tested with pytest |
 | CI/CD | GitHub Actions |
 | Coveo configuration export | Coveo CLI |
 | Hosting | To be decided |
 
-We use one language so the project has a single toolchain. We considered Python for evals, mainly for its LLM evaluation libraries. We do not need those libraries because answers are checked against expected facts and citations. Eval speed depends on Coveo's API response times, so the language does not affect performance.
+We use TypeScript for the application, tests and scripts. The one exception is the indexing extension, because Coveo runs extensions as Python. We considered Python for evals, mainly for its LLM evaluation libraries. We do not need those libraries because answers are checked against expected facts and citations. Eval speed depends on Coveo's API response times, so the language does not affect performance.
 
 ### Eval reference data
 
@@ -175,6 +176,34 @@ When a platform task would repeat the same manual step, we use a Coveo API inste
 
 The first four fields (`pokemon_name`, `pokemon_type`, `pokemon_generation` and `pokemon_image`) were created in the console.
 
+### Body text clean-up
+
+A Pokémon page contains valuable information in layouts that do not survive being flattened into text. A type effectiveness grid becomes a row of numbers such as `½ 2 2 ¼` with no attacking types, and a stat row becomes `78 266 360` with no labels. Generated answers read only the body text, in chunks of about 250 words, so this information would be lost or misleading.
+
+Removing the content would have made the body cleaner but incomplete, so a pre-conversion indexing pipeline extension, [`reconstruct_body.py`](../configs/coveo/extensions/reconstruct_body.py), rewrites it before Coveo creates the body:
+
+| Original content | Result in the body |
+|---|---|
+| Type effectiveness grid | Sentences such as "Charizard takes 4x damage from Rock." Each form is named, and ability-specific grids name the ability. |
+| Stat table | "Charizard base stats: HP: base 78, ranging from 266 to 360 at level 100." with the total |
+| Local Pokédex numbers | Kept for the base form only, because they repeat for every form |
+| Stat range explanation and "Additional artwork" labels | Removed, because they add no information once the stats are labelled |
+
+Web scraping continues to remove site navigation and everything from the Moves section onward, and to extract the 16 field values.
+
+**Alternatives considered**
+
+- **Remove the content with web scraping:** simplest, but generated answers could not answer questions about type effectiveness or stat ranges.
+- **Post-conversion extension:** Coveo warns that editing the body after processing can make search results inconsistent, because summaries and excerpts are already extracted.
+- **Body mapping:** a mapping replaces the whole body, and the documentation shows no way to retain the original page text.
+- **Push source:** provides full control but discards the crawling configuration we have validated and requires our own scraper.
+
+**Costs and safeguards**
+
+The extension adds Python to the project and runs for every item. Coveo limits each extension to about 5 seconds per item. The slowest of our five sample pages took 224 ms locally. It is applied with **Skip extension** on error, so a failure leaves an item indexed with its original body and does not lose it.
+
+**Coveo documentation:** [Modifying item bodies](https://docs.coveo.com/en/2749/) states that changing `documentdata` in a pre-conversion script is "always preferable". [Add a body mapping](https://docs.coveo.com/en/1847/) describes how a mapping overrides the body, and [Python modules available to extensions](https://docs.coveo.com/en/116/) lists BeautifulSoup. [RGA content requirements](https://docs.coveo.com/en/nb6a0008/) states that only the body is embedded. [Indexing pipeline extension overview](https://docs.coveo.com/en/1556/) describes stages and timeouts. Coveo does not document whether the stream a pre-conversion script receives is the original page or the scraped page, so the script also removes navigation and the Moves section in case they are still present.
+
 ### Field mapping
 
 We enable the source parameter `performFieldMappingUsingAllOrigins`, so scraped metadata maps automatically to fields with the same name. Without it, the 12 fields created through the API stayed empty even though the metadata had been extracted. With it, those fields populated without any per-field mapping rules, and the same setting carries over to the full source.
@@ -193,4 +222,4 @@ The cost is that users cannot filter by alternate form. We considered separate i
 
 Each page states the Generation in a dedicated tag within its introduction, for example "introduced in Generation 1". We read it with a web scraping selector. This avoids an indexing pipeline extension, which would add a moving part without providing any benefit here.
 
-**Coveo documentation:** [Web scraping configuration](https://docs.coveo.com/en/mc1f3573/) describes CSS and XPath 1.0 selectors for extracting metadata, and states that extracted metadata needs fields and mappings before it can be used. The selector itself still has to be proven against the test source.
+**Coveo documentation:** [Web scraping configuration](https://docs.coveo.com/en/mc1f3573/) describes CSS and XPath 1.0 selectors for extracting metadata, and states that extracted metadata needs fields and mappings before it can be used. The selector was verified on the test source.

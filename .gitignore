@@ -20,3 +20,8 @@ challenge-docs/
 # Logs and OS files
 *.log
 .DS_Store
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
