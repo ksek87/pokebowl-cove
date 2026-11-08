@@ -1,0 +1,12 @@
+{
+  "keys": [
+    {
+      "name": "pokebowl-search-browser",
+      "description": "Browser search key for the public Pokémon search app",
+      "template": "Anonymous search",
+      "searchHub": "pokebowl-search",
+      "privileges": ["Execute queries: Allowed", "Execute agent queries: Allowed", "Analytics data: Push"],
+      "storedIn": "VITE_COVEO_SEARCH_API_KEY in the local .env file"
+    }
+  ]
+}

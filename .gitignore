@@ -6,6 +6,10 @@ dist/
 build/
 coverage/
 
+# Atomic icons and labels, copied from node_modules by npm run copy:atomic
+public/assets/
+public/lang/
+
 # Secrets and local environment
 .env
 .env.*
@@ -25,3 +29,7 @@ challenge-docs/
 .venv/
 __pycache__/
 .pytest_cache/
+
+# Playwright output
+test-results/
+playwright-report/

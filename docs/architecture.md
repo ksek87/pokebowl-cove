@@ -12,7 +12,7 @@ flowchart TD
     end
 
     subgraph INGEST["Coveo indexing"]
-        SOURCE["Coveo Sitemap source"]
+        SOURCE["Coveo Sitemap source<br/>a separate single-Pokémon source tests configuration"]
         FILTERS["URL filtering<br/>keeps only Pokémon pages"]
         SCRAPE["Web scraping<br/>removes page clutter, extracts 16 metadata values"]
         EXT["Pre-conversion extension<br/>rewrites stat tables and type grids as sentences"]
@@ -32,7 +32,7 @@ flowchart TD
     end
 
     subgraph QUERY["Coveo query layer"]
-        PIPELINE["Query pipeline<br/>applies rules and models"]
+        PIPELINE["Query pipeline<br/>limits the app to the full source, applies rules and models"]
         SEARCHAPI["Search API"]
         PRAPI["Passage Retrieval API<br/>bonus"]
         ANALYTICS["Coveo Analytics<br/>searches and clicks"]
@@ -98,6 +98,9 @@ flowchart TD
 | Field extraction | XPath web scraping selectors scoped to the first form tab | [Web scraping](#web-scraping-and-fields) |
 | Body text | Pre-conversion extension rewrites tables as sentences | [Body text reconstruction](#body-text-reconstruction) |
 | Field mapping | Automatic mapping through `performFieldMappingUsingAllOrigins` | [Field mapping](#field-mapping) |
+| Browser access | Anonymous search API key with the `pokebowl-search` search hub | [Search application connection](#search-application-connection) |
+| Runtime | Node 24 | [Search application connection](#search-application-connection) |
+| Application content | Dedicated `pokebowl-search` pipeline filters to the full source, and the test source is kept | [Limiting the application to the full source](#limiting-the-application-to-the-full-source) |
 | Repeated platform work | Coveo APIs in place of repeated console steps | [Use of Coveo APIs](#use-of-coveo-apis) |
 | Eval reference data | Sampled from pokemondb.net and verified by hand | [Eval reference data](#eval-reference-data) |
 
@@ -245,7 +248,7 @@ The extension adds Python to the project and runs for every item. Coveo limits e
 
 ### Field mapping
 
-We enable the source parameter `performFieldMappingUsingAllOrigins`, so scraped metadata maps automatically to fields with the same name. Without it, the 12 fields created through the API stayed empty even though the metadata had been extracted. With it, those fields populated without any per-field mapping rules, and the same setting carries over to the full source.
+We enable the source parameter `performFieldMappingUsingAllOrigins`, so scraped metadata maps automatically to fields with the same name. Without it, the 12 fields created through the API stayed empty even though the metadata had been extracted. With it, those fields populated without any per-field mapping rules. The setting does not carry over between sources: it was missing on the first full crawl, which left the 12 fields empty on all 1,028 items and required a rebuild, so it must be set on each new source before its first build.
 
 **Coveo documentation:** [Manage source mappings](https://docs.coveo.com/en/1640/) describes automatic mapping to matching field names, and [Add a Web source](https://docs.coveo.com/en/malf0160/) describes this parameter for Web sources. The documentation did not confirm it for Sitemap sources, so we verified it on our test source.
 
@@ -262,3 +265,35 @@ The cost is that users cannot filter by alternate form. We considered separate i
 Each page states the Generation in a dedicated tag within its introduction, for example "introduced in Generation 1". We read it with a web scraping selector, because a selector is enough to capture a value that is already isolated in the page.
 
 **Coveo documentation:** [Web scraping configuration](https://docs.coveo.com/en/mc1f3573/) describes CSS and XPath 1.0 selectors for extracting metadata, and states that extracted metadata needs fields and mappings before it can be used. The selector was verified on the test source.
+
+## Search application connection
+
+The application is a React and TypeScript page built with the official Atomic React wrapper, `@coveo/atomic-react`. It connects directly from the browser to Coveo with a search-only API key.
+
+**Decision: use the Atomic React wrapper.** It lets result templates be written as ordinary JSX. The rejected alternative was using Atomic's web components directly, which adds no capability here and requires manual template and component setup.
+
+**Decision: use one Anonymous search API key, `pokebowl-search-browser`, with the search hub `pokebowl-search`.** The rejected alternative was server-generated search tokens, which add a backend that public content does not need. Evals will use a separate key and search hub so their traffic stays out of the analytics used for model training.
+
+**Decision: run on Node 24.** The current Atomic packages declare support for Node up to the 24 line. On Node 26, npm silently installs a much older Atomic release, so `.nvmrc` and the `engines` field pin the project to Node 24.
+
+**Coveo documentation:** [Use API key authentication with the Search API](https://docs.coveo.com/en/105/) states that browser code may use only an Anonymous search key for public content, or a search token generated on a server. [Manage API keys](https://docs.coveo.com/en/1718/) lists the privileges of that template: Execute queries, Execute agent queries, and Analytics data push. [Atomic usage](https://docs.coveo.com/en/atomic/latest/usage/) states that the access token should enforce a search hub. [Use the React wrapper](https://docs.coveo.com/en/atomic/latest/usage/frameworks/atomic-react-wrapper/) states that the search hub must be set in the engine configuration, and that icons and labels must be served from the public directory.
+
+**Facets:** Type uses alphabetical order. Generation uses natural order, `alphanumericNatural`, so Generation 10 follows Generation 9, which plain text sorting does not do.
+
+**Our own inference:** the documentation we read does not say how a key's search hub behaves if a client sends a different value, so we do not treat the hub as a security control. The wrapper documentation shows asset setup only for Create React App, so we copy the same folders into Vite's `public/` directory and confirmed the result in a browser.
+
+## Limiting the application to the full source
+
+The single-Pokémon test source stays in the organization for testing configuration changes, so the index holds 1,029 items and Charizard exists twice. A dedicated query pipeline, `pokebowl-search`, receives queries from any search hub containing `pokebowl-`, and a filter rule on that pipeline limits them to `pokemondb-pokemon`. The default pipeline has no condition and no filter rule.
+
+**Decision: use a dedicated pipeline with a filter that includes the full source.** The rejected alternatives were:
+
+- Deleting the test source, which removes our safe place to test configuration.
+- Filtering in the application, which would not apply to requests made outside it.
+- A filter rule on the default pipeline, which we applied first and then replaced. Its search hub condition would not have covered the separate eval search hub, and rules and models on the default pipeline apply broadly.
+
+**Decision: do not create a Coveo project for now.** Projects group related resources and do not change search behavior, so one is not needed for the application to work. One can be added later without changing the configuration.
+
+**Coveo documentation:** [Set up a query pipeline](https://docs.coveo.com/en/2757/) states that routing everything to the default pipeline works only for a single website or application. [Manage query pipelines](https://docs.coveo.com/en/1791/) describes dedicated pipelines with conditions and states that the default pipeline should have no condition. [Query pipeline routing](https://docs.coveo.com/en/1666) recommends condition-based routing on the search hub with positive operators. [Manage filter rules](https://docs.coveo.com/en/3410/) recommends filters that include content rather than exclude it, and states that filters alone do not prevent content from being exposed. [Filter: Query pipeline feature](https://docs.coveo.com/en/1440/) states that the constant part of the query is combined with AND and is unsuited to dynamic content. [Manage projects](https://docs.coveo.com/en/n7ef0517/) describes projects.
+
+**Our own inference:** the filter is a relevance control and not a security control, which is acceptable because all of this content is public. A query using the browser key with a different search hub returned no test source items, which suggests the key's search hub takes precedence, but we did not confirm this.
