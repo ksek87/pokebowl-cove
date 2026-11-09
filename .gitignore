@@ -36,3 +36,7 @@ playwright-report/
 
 # Claude Code worktrees
 .claude/worktrees/
+
+# Local session notes and working reports, kept out of the repository
+docs/archive/
+docs/handoff.md
