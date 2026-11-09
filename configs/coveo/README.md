@@ -23,6 +23,8 @@ The reasons behind these settings are recorded in [docs/architecture.md](../../d
 
 The application has no real search history, so the Query Suggestions model starts from a [default queries file](https://docs.coveo.com/en/qa5b0256/), the method Coveo documents for test and low-traffic environments. The file holds Pokémon names, Types, Generations, Type pairs that exist in the data, abilities and species. All values come from the index.
 
+The second column is the optional integer importance value. It ranks categories only, because we have no real query counts: Pokémon names 1000, Types and Generations 500, Type pairs 200, abilities and species 100. The weights are defined once in `src/tooling/defaultQueries.ts`. Coveo does not document how the size of the gap between values affects ranking.
+
 To regenerate it after the index changes:
 
 ```sh

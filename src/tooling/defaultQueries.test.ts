@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   buildCandidates,
   type Candidate,
+  CATEGORY_WEIGHTS,
+  type CsvRow,
   FIELDS,
   isSensibleResult,
   MAX_DEFAULT_QUERIES,
@@ -10,6 +12,7 @@ import {
 } from './defaultQueries.ts';
 
 const ONE_EXTRA_QUERY = 1;
+const NO_WEIGHT = 0;
 
 const charizard = {
   [FIELDS.name]: 'Charizard',
@@ -119,20 +122,46 @@ describe('isSensibleResult', (): void => {
   });
 });
 
-describe('toCsv', (): void => {
-  it('writes one query per row with no header', (): void => {
-    expect(toCsv(['fire type', 'Blaze'])).toBe('fire type\nBlaze\n');
+describe('CATEGORY_WEIGHTS', (): void => {
+  it('ranks names, then Types and Generations, then pairs, then abilities and species', (): void => {
+    const { name, type, generation, typePair, ability, species } = CATEGORY_WEIGHTS;
+
+    expect(name).toBeGreaterThan(type);
+    expect(type).toBe(generation);
+    expect(generation).toBeGreaterThan(typePair);
+    expect(typePair).toBeGreaterThan(ability);
+    expect(ability).toBe(species);
   });
 
-  it('quotes a comma and doubles a quotation mark', (): void => {
-    expect(toCsv(['a, b', 'say "hi"'])).toBe('"a, b"\n"say ""hi"""\n');
+  it.each(Object.entries(CATEGORY_WEIGHTS))('uses a positive integer for %s', (_category, weight): void => {
+    expect(Number.isInteger(weight)).toBe(true);
+    expect(weight).toBeGreaterThan(NO_WEIGHT);
+  });
+});
+
+describe('toCsv', (): void => {
+  const fire: CsvRow = { query: 'fire type', category: 'type' };
+
+  it('writes the query and its weight, one per row, with no header', (): void => {
+    expect(toCsv([fire, { query: 'Blaze', category: 'ability' }])).toBe(
+      `fire type,${CATEGORY_WEIGHTS.type}\nBlaze,${CATEGORY_WEIGHTS.ability}\n`,
+    );
+  });
+
+  it('quotes a comma and doubles a quotation mark in the query only', (): void => {
+    expect(
+      toCsv([
+        { query: 'a, b', category: 'name' },
+        { query: 'say "hi"', category: 'name' },
+      ]),
+    ).toBe(`"a, b",${CATEGORY_WEIGHTS.name}\n"say ""hi""",${CATEGORY_WEIGHTS.name}\n`);
   });
 
   it('accepts the maximum number of queries', (): void => {
-    expect((): string => toCsv(Array<string>(MAX_DEFAULT_QUERIES).fill('q'))).not.toThrow();
+    expect((): string => toCsv(Array<CsvRow>(MAX_DEFAULT_QUERIES).fill(fire))).not.toThrow();
   });
 
   it('fails above the maximum number of queries', (): void => {
-    expect((): string => toCsv(Array<string>(MAX_DEFAULT_QUERIES + ONE_EXTRA_QUERY).fill('q'))).toThrow(/limit/);
+    expect((): string => toCsv(Array<CsvRow>(MAX_DEFAULT_QUERIES + ONE_EXTRA_QUERY).fill(fire))).toThrow(/limit/);
   });
 });
