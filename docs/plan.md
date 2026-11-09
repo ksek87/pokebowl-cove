@@ -34,7 +34,7 @@ Evals, performance baselines and interface polish are additions we chose and are
 
 ## How we work
 
-- Work is organized into epics and tickets. Each epic has a separate branch and is tracked through one or more pull requests. Epics 4 to 8 were combined on `integration/overnight`, which is open as PR #6.
+- Work is organized into epics and tickets. Each epic has a separate branch and is tracked through one or more pull requests. Epics 4 to 8 were combined on one integration branch and merged through PR #6.
 - A ticket is done when all of its acceptance criteria are checked.
 - Tests or expected results are defined before implementation.
 - The user makes all Coveo platform changes, with guidance from the agent.
@@ -221,7 +221,7 @@ Owner: You · Estimate: 15 min · Depends on: PC-30
 
 ## Epic 4: Evals and performance
 
-**Branch:** `feature/evals`, with finished work combined in `integration/overnight` (PR #6)
+**Branch:** `feature/evals`, with finished work combined in one integration branch (PR #6)
 
 Evals run on demand with `npm run eval`. The index quality check turns analytics capture off, so its traffic does not affect the analytics used for model training. Relevance and answer evals need a second API key with a separate search hub, because the browser key enforces `pokebowl-search`.
 
@@ -271,7 +271,7 @@ Owner: Both · Estimate: 1 h · Depends on: PC-62
 
 ## Epic 5: Query Suggestions
 
-**Branch:** `feature/query-suggestions`, with finished work combined in `integration/overnight` (PR #6)
+**Branch:** `feature/query-suggestions`, with finished work combined in one integration branch (PR #6)
 
 ### PC-50: Pre-populate suggestions
 
@@ -312,7 +312,7 @@ Searching `char` returns only 5 items, with Charizard last and Charmander missin
 
 ## Epic 6: Generated answers
 
-**Branch:** `feature/generated-answers`, with finished work combined in `integration/overnight` (PR #6)
+**Branch:** `feature/generated-answers`, with finished work combined in one integration branch (PR #6)
 
 ### PC-60: Confirm content quality
 
@@ -371,7 +371,7 @@ Pokémon mentioned in an answer should link to our detail page, while citations 
 
 ## Epic 7: Detail page
 
-**Branch:** `feature/detail-page`, with finished work combined in `integration/overnight` (PR #6)
+**Branch:** `feature/detail-page`, with finished work combined in one integration branch (PR #6)
 
 ### PC-70: Build the Pokémon detail page
 
@@ -390,7 +390,7 @@ Owner: Agent · Estimate: 2 h · Depends on: PC-21
 
 ## Epic 7a: Interface design and polish
 
-**Branch:** `feature/ui-polish`, with finished work combined in `integration/overnight` (PR #6)
+**Branch:** `feature/ui-polish`, with finished work combined in one integration branch (PR #6)
 
 The application is shown live to a panel, so it needs a deliberate, finished design beyond Atomic's default look. Atomic components are styled through theme variables and CSS parts.
 
