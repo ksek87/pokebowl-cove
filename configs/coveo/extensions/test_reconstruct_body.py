@@ -50,13 +50,13 @@ def panel(panel_id: str, defenses: str, stats: str = "") -> str:
     """
 
 
-def page(*panels: str, tabs: str) -> str:
+def page(*panels: str, tabs: str, heading: str = "Charizard") -> str:
     return f"""
     <html><body>
       <header>Site header</header><a href="#main">Skip to main content</a>
       <main id="main">
         <nav>Prev next</nav><ul class="list-nav"><li>Contents</li></ul>
-        <h1>Charizard</h1>
+        <h1>{heading}</h1>
         <div class="tabset-basics sv-tabs-wrapper">
           <div class="sv-tabs-tab-list">{tabs}</div>
           <div class="sv-tabs-panel-list">{"".join(panels)}</div>
@@ -133,7 +133,7 @@ def test_ability_specific_defenses_name_the_ability():
       </div>
     </div>
     """
-    html = page(panel("base", ability_grids), tabs='<a href="#base">Mr. Mime</a>')
+    html = page(panel("base", ability_grids), tabs='<a href="#base">Mr. Mime</a>', heading="Mr. Mime")
     text = text_of(reconstruct(html))
     ensure("With the Soundproof ability, Mr. Mime takes 4x damage from Rock." in text)
     ensure("With the Filter ability, Mr. Mime takes 4x damage from Rock." in text)

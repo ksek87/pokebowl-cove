@@ -22,6 +22,18 @@ Tables must be rewritten as readable sentences. For Charizard, the body must inc
 - `Charizard takes 4x damage from Rock.`
 - `Mega Charizard X takes 2x damage from Ground, Rock and Dragon.`
 
+Every fact in a form tab must be a sentence that starts with that form's full name. For Charizard, the body must also include:
+
+- `Charizard weighs 90.5 kg (199.5 lbs).`
+- `Mega Charizard X weighs 110.5 kg (243.6 lbs).`
+- `Charizard is Fire and Flying type.`
+- `Mega Charizard X is Fire and Dragon type.`
+- `Charizard abilities: Blaze, Solar Power (hidden ability).`
+- `Charizard is weak to Rock (4x), Water and Electric.`
+- `Charizard is immune to Ground.`
+
+Form labels in the form tabs must include the Pokémon's name. For Deoxys, the body must include `Deoxys Attack Forme base stats:`, and the form tabs must not include "Attack Forme" without "Deoxys" before it. The page introduction, evolution chart and Pokédex entries keep the site's labels.
+
 The body must not include site navigation, type effectiveness grids, unlabelled stat ranges or the Moves section and anything after it.
 
 ## Full crawl
