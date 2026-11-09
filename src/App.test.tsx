@@ -40,6 +40,9 @@ vi.mock('@coveo/atomic-react', () => {
     AtomicQuerySummary: (): null => null,
     AtomicResultList: (): null => null,
     AtomicPager: (): null => null,
+    AtomicGeneratedAnswer: ({ collapsible }: { collapsible: boolean }): JSX.Element => (
+      <div data-testid="generated-answer" data-collapsible={String(collapsible)} />
+    ),
     AtomicBreadbox: (): null => null,
     AtomicDidYouMean: (): null => null,
     AtomicSortDropdown: passthrough,
@@ -99,6 +102,12 @@ it('offers the configured page sizes through Atomic', (): void => {
   const pageSizes = screen.getByTestId('page-sizes');
   expect(pageSizes).toHaveAttribute('data-choices', PAGE_SIZES.join(','));
   expect(pageSizes).toHaveAttribute('data-initial', String(DEFAULT_PAGE_SIZE));
+});
+
+it('offers generated answers that collapse when they are long', (): void => {
+  render(<App config={config} />);
+
+  expect(screen.getByTestId('generated-answer')).toHaveAttribute('data-collapsible', 'true');
 });
 
 it('links the logo and title to the home page', (): void => {

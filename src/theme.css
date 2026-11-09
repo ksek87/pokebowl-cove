@@ -212,6 +212,21 @@ atomic-search-box::part(submit-button) {
   border-radius: var(--radius-control);
 }
 
+atomic-search-box::part(suggestions-wrapper) {
+  /* The panel is positioned inside the box's border, so it extends by that border to share its edges. */
+  left: calc(-1 * var(--size-panel-border));
+  right: calc(-1 * var(--size-panel-border));
+  width: auto;
+  margin-top: var(--space-status-row);
+  border: var(--border-panel);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+}
+
+atomic-search-box::part(query-suggestion-text) {
+  color: var(--foreground);
+}
+
 atomic-search-box::part(submit-icon) {
   color: var(--atomic-on-primary);
 }
@@ -238,6 +253,41 @@ atomic-facet::part(value-label) {
 
 atomic-facet::part(value-checkbox) {
   border-radius: var(--radius-checkbox);
+}
+
+atomic-generated-answer::part(container) {
+  margin-bottom: var(--size-grid-gap);
+  background: var(--card);
+  border: var(--border-panel);
+  border-radius: var(--radius-panel);
+  box-shadow: none;
+  overflow: hidden;
+}
+
+atomic-generated-answer::part(header-label) {
+  color: var(--foreground);
+  font-weight: var(--atomic-font-bold);
+}
+
+atomic-generated-answer::part(generated-text) {
+  color: var(--foreground);
+  font-size: var(--text-label);
+  font-weight: 600;
+}
+
+atomic-generated-answer::part(citations-label) {
+  font-size: var(--text-small);
+  font-weight: var(--atomic-font-bold);
+}
+
+atomic-generated-answer::part(citation) {
+  border: var(--border-panel);
+  border-radius: var(--radius-control);
+  font-weight: var(--atomic-font-bold);
+}
+
+atomic-generated-answer::part(citation):hover {
+  border-color: var(--border-strong);
 }
 
 atomic-result-list::part(result-list),

@@ -1,4 +1,5 @@
-import { expect, type Locator, type Page, test } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
+import { expect, test } from './fixtures.ts';
 import { DEFAULT_PAGE_SIZE, POKEMON_FIELDS } from '../src/search/settings.ts';
 
 const NETWORK_TIMEOUT = 15_000;

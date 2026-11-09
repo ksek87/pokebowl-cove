@@ -1,4 +1,5 @@
-import { expect, type Locator, type Page, test } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
+import { expect, test } from './fixtures.ts';
 import { DEFAULT_PAGE_SIZE } from '../src/search/settings.ts';
 
 const NETWORK_TIMEOUT = 15_000;
@@ -9,6 +10,7 @@ const WIDE = 1920;
 const LARGEST = 2560;
 const ALL_WIDTHS = [NARROW, LAPTOP, WIDE, LARGEST];
 const TOLERANCE_PX = 2;
+const PANEL_BORDER_PX = 2;
 const SEARCH_ROUTE = '**/rest/search/v2*';
 const SLOW_RESPONSE_MS = 2_500;
 const NEEDED_FOCUS_CONTRAST = 3;
@@ -154,6 +156,38 @@ test.describe('search box', () => {
     const foreground = await page.evaluate((): string => getComputedStyle(document.body).color);
     expect(color).toBe(foreground);
     expect(weight).toBeGreaterThan(400);
+  });
+
+  test('matches the suggestion panel to the search box', async ({ page }): Promise<void> => {
+    await page.route('**/rest/search/v2/querySuggest*', (route) =>
+      route.fulfill({
+        json: { completions: [{ expression: 'charizard', highlighted: '[char]izard', score: 1, executableConfidence: 1 }] },
+      }),
+    );
+    await openResults(page, LAPTOP);
+    const input = page.locator('atomic-search-box textarea:not([part="textarea-spacer"])');
+    await input.click();
+    await input.pressSequentially('char');
+    const panel = page.locator('atomic-search-box [part~="suggestions-wrapper"]');
+    await expect(panel).toBeVisible({ timeout: NETWORK_TIMEOUT });
+
+    const panelBox = await panel.boundingBox();
+    const boxBox = await page.locator('atomic-search-box [part="wrapper"]').boundingBox();
+    expect(Math.abs((panelBox?.x ?? 0) - (boxBox?.x ?? 0))).toBeLessThanOrEqual(TOLERANCE_PX);
+    expect(Math.abs((panelBox?.width ?? 0) - (boxBox?.width ?? 0))).toBeLessThanOrEqual(TOLERANCE_PX);
+    expect(panelBox?.y ?? 0).toBeGreaterThan((boxBox?.y ?? 0) + (boxBox?.height ?? 0));
+
+    const styles = await panel.evaluate((element) => ({
+      radius: getComputedStyle(element).borderTopLeftRadius,
+      border: getComputedStyle(element).borderTopWidth,
+    }));
+    const boxRadius = await page.locator('atomic-search-box [part="wrapper"]').evaluate((element): string => getComputedStyle(element).borderTopLeftRadius);
+    expect(styles.radius).toBe(boxRadius);
+    expect(styles.border).toBe(`${PANEL_BORDER_PX}px`);
+
+    const textColor = await page.locator('atomic-search-box [part~="query-suggestion-text"]').first().evaluate((element): string => getComputedStyle(element).color);
+    const foreground = await page.evaluate((): string => getComputedStyle(document.body).color);
+    expect(textColor).toBe(foreground);
   });
 
   test('has comfortable submit and clear targets', async ({ page }): Promise<void> => {

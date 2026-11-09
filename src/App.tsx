@@ -3,6 +3,7 @@ import {
   AtomicDidYouMean,
   AtomicFacet,
   AtomicFacetManager,
+  AtomicGeneratedAnswer,
   AtomicLayoutSection,
   AtomicPager,
   AtomicQuerySummary,
@@ -98,6 +99,7 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
                 <AtomicRefineToggle />
               </AtomicLayoutSection>
               <AtomicLayoutSection section="results">
+                <AtomicGeneratedAnswer collapsible />
                 <ResultPlaceholders />
                 <AtomicResultList
                   display="grid"

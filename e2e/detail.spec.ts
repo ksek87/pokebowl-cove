@@ -1,4 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
+import { expect, test } from './fixtures.ts';
 import { pokemonDetailHref } from '../src/search/pokemonDetail.ts';
 import { POKEMON_STATS } from '../src/search/settings.ts';
 
