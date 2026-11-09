@@ -11,10 +11,22 @@ Copies of the configuration applied in the Coveo Administration Console. The con
 | `extensions/reconstruct_body.py` | Pre-conversion extension that rewrites stat tables and type grids as sentences | Exact script pasted into the `pre-reconstruct-body` extension, which requests only **Original file** item data. Tests are in `test_reconstruct_body.py` |
 | `query-pipeline.json` | The `pokebowl-search` query pipeline, its condition and filter rule | Our record of the console settings, not a Coveo import format |
 | `ml-models.json` | The Semantic Encoder and RGA models, their content and pipeline association | Our record of the console settings, not a Coveo import format |
-| `query-suggestions-default-queries.csv` | Suggestion candidates for the Query Suggestions model: Pokémon names, Types, Generations, Type pairs, abilities and species | Exact file uploaded through the Advanced Model Configurations API as `DEFAULT_QUERIES` for `en` |
+| `query-suggestions-default-queries.csv` | Suggestion candidates for the Query Suggestions model: Pokémon names, Types, Generations, Type pairs, abilities and species | Exact file uploaded through the Advanced Model Configurations API as `DEFAULT_QUERIES` for `en`. Generated, do not edit by hand |
 | `api-keys.json` | Settings of the browser search key, without its value | Our record of the console settings, not a Coveo import format |
 | `test-source.json` | Settings of the single-Pokémon test source | Our record of the console settings, not a Coveo import format |
 
 These files record the intended settings and do not prove what is live in Coveo. After applying a setting, confirm it in the console or through a query. The first full crawl ran without `performFieldMappingUsingAllOrigins` and without the Facet option on `pokemon_generation`, although both were recorded here.
 
 The reasons behind these settings are recorded in [docs/architecture.md](../../docs/architecture.md).
+
+## Query Suggestions default queries
+
+The application has no real search history, so the Query Suggestions model starts from a [default queries file](https://docs.coveo.com/en/qa5b0256/), the method Coveo documents for test and low-traffic environments. The file holds Pokémon names, Types, Generations, Type pairs that exist in the data, abilities and species. All values come from the index.
+
+To regenerate it after the index changes:
+
+```sh
+node --env-file=.env scripts/generate-default-queries.ts
+```
+
+The script reads every item once and then runs each query other than names against the `pokebowl-search` pipeline. It drops any query with no matching result in the top results. All of its requests set `analytics.capture` to `false`, so they do not reach the analytics that train models. The file must stay within Coveo's limit of 5,000 queries per language, and the script fails if it does not.
