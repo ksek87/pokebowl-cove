@@ -365,7 +365,7 @@ Owner: Agent· Depends on: PC-75
 - [x] Result cards have consistent, correctly sized pictures and show name, number, Type and Generation
 - [x] Type is shown with clear visual badges
 - [x] Facets, search box, summary and pagination match the design
-- [ ] Loading, no-results and error states are designed
+- [x] Loading, no-results and error states are designed
 - [x] Layout works on desktop window widths, with every row of results filled (phone optimization dropped at the user's request)
 
 ### PC-79: Move custom interface code to Tailwind and shadcn/ui

@@ -389,3 +389,17 @@ A query parameter needs no rewrite rules on Vercel and does not interfere with t
 The page reads one item through a separate Headless engine with analytics off, using an exact match on the name. Coveo's `==` operator treated `?` and `*` as wildcards in our testing, so the page also checks that the returned name equals the requested name. Pokémon with `???` as their number hide it and state that base stats are not available. Result cards use Atomic's link templates, so a card click still logs Atomic's click event.
 
 Not confirmed: real artwork on the page, and that the click event reaches Coveo in production.
+
+## Interface states and motion
+
+**Decision: the no-results and error views are rendered from Headless search status, in place of `atomic-no-results` and `atomic-query-error`.** Atomic's error view prints the organization endpoint and offers no retry, and its no-results text cannot vary by query, and its documented parts can restyle these but cannot change them. The rejected alternative was restyling Atomic's parts, which would keep the service URL visible. Atomic still marks the page with its no-results and error classes, which center the message on the page.
+
+**Decision: first-load placeholders match the real result cards and facets.** Atomic's placeholders have a generic shape and cannot be reshaped through parts, so `atomic-result-list` and `atomic-facet-manager` are hidden until Atomic marks the first search as done, and placeholders with the same text sizes as a real card are shown instead.
+
+**Decision: one solid focus outline, using the foreground color with an offset, for all controls.** Atomic's ring variable points to the same token. The former translucent ring measured 1.69:1, below the 3:1 that WCAG 1.4.11 requires.
+
+**Motion is limited to feedback:** card lift and press, control color transitions, and an opacity fade on new results and opened facets. It uses transforms and opacity only, so it cannot move the layout, and it is turned off when a person requests reduced motion.
+
+**Atomic detail:** the type documentation lists the search box part as `input`, but the rendered part is `textarea`, so the styles target `textarea`.
+
+**Finding to keep in mind:** with the Semantic Encoder active, a nonsense text query can still return results, so a no-results page is now reached mainly through number lookups and filters.

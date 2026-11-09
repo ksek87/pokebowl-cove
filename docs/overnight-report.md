@@ -35,6 +35,50 @@ Screenshots of the search page and the detail page were taken at 1100, 1440, 192
 - The browser suite added a small amount of search traffic to the `pokebowl-search` search hub.
 - The ranked suggestions file is in the repository, but Coveo still has the first file until it is uploaded.
 
+## Items 2 and 3: interface audit fixes, designed states and motion
+
+### What changed
+
+- **Fixed from `docs/ui-audit.md`:** UI-01, UI-02, UI-03, UI-04, UI-08, UI-09, UI-10, UI-13, UI-15, UI-16, UI-17, UI-22, the heading and control styling of UI-12, and the placeholder, retry and status region of UI-11.
+- **Designed states (PC-76):** no-results and error views show the Pokéball, plain wording and one action. Loading matches the real cards and facets.
+- **Motion:** card lift and press, control transitions, and fades on new results and opened facets. All of it stops when reduced motion is requested.
+- **UI-14:** loose values have names. The layout overrides were not restructured.
+- **Unchanged by decision:** the page numbering stays centered on the page, the search box stays centered, and Best match stays.
+
+### Results
+
+| Check | Result |
+|---|---|
+| Type check | Clean |
+| Unit tests | 185 passed |
+| Production build | Succeeded |
+| Python tests | 11 passed |
+| Browser tests | 96 passed |
+
+Code commit: `9467215`. Full-page screenshots were taken at 1100, 1440, 1920 and 2560 pixels for the home page, search, correction, number lookup, no results, error, loading, and the detail page in normal, not-found, loading and error states. They were reviewed on one contact sheet per width, with individual pages viewed for no results and loading. The page numbers stayed centered on the page at every width, and both facets started collapsed. Images from pokemondb.net were blocked, so artwork shows the fallback Pokéball.
+
 ## To discuss
 
-Nothing from this item needs a decision.
+**Wording to review (UI-01, UI-02):**
+
+| State | Title | Text | Action |
+|---|---|---|---|
+| Error | Search is not available right now | The Pokémon could not be loaded. Check your connection and try again. | Try again |
+| No results, text search | No Pokémon found | Nothing matched “query”. Try a different name, Type or ability. | Show all Pokémon |
+| No results, number search | No Pokémon found | There is no Pokémon with Pokédex number #9999. | Show all Pokémon |
+| No results, filters only | No Pokémon found | Nothing matched these filters. | Show all Pokémon |
+| Detail page error | Something went wrong | The Pokémon could not be loaded. | Try again |
+
+**Decisions from the interface audit:**
+
+- UI-05: the search box stays centered on the page. Confirm, or span it across the results column.
+- UI-06: whether to add a wider layout above 1920 pixels.
+- UI-11: whether not-found suggests close matches.
+- UI-12: whether the detail page has a search box.
+- UI-14: whether to restructure the Atomic layout overrides. This was not done, because it could disturb the page centering.
+- UI-18: whether an empty search box shows suggestions.
+- UI-19: whether to hide sort and page size for very small result sets.
+- UI-20: the wording of the number lookup notice.
+- UI-24: whether to keep filters or search in view on long pages.
+
+**Noted, no decision needed yet:** with the Semantic Encoder active, a nonsense text query can still return results.

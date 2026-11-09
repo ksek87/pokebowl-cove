@@ -90,6 +90,7 @@ Changing the sort shows "something went wrong" on `main`. The sort expressions i
 
 ## Small open items
 
+- **Interface audit:** fixes are on `integration/overnight`. Open decisions are listed in `docs/overnight-report.md`.
 - **CR-17:** search `25`, then check in Visit Browser whether the event shows `25` or blank.
 - **PC-02:** the user will email Will Tseng on the Technical Challenge thread with the organization ID, asking to enable Passage Retrieval. Do not remind the user about this.
 - **PC-05:** tick the failing-test item the first time a test fails in CI.

@@ -4,6 +4,16 @@ This report reviews the interface of the Pokémon search application, built with
 
 Two builds were reviewed: the search page on branch `fix/code-review-findings`, and the Pokémon detail page on branch `feature/detail-page`. All evidence comes from a real Chromium browser, using screenshots, bounding boxes and computed styles. Unless a finding says otherwise, images from pokemondb.net were replaced by a neutral gray circle of the same dimensions, so a gray circle in a screenshot is not a defect. Real artwork was checked on two page loads.
 
+## Status
+
+Fixes are on the branch `integration/overnight`.
+
+- **Fixed:** UI-01, UI-02, UI-03, UI-04, UI-08, UI-09, UI-10, UI-13, UI-15, UI-16 and UI-17, UI-22, and the Pokémon-name heading and control styling of UI-12, and the placeholder, retry and status region of UI-11. Wording for UI-01 and UI-02 is listed for review in `docs/overnight-report.md`.
+- **Already handled:** UI-07 bottom spacing, and UI-23 through the detail page merge.
+- **Partly done:** UI-14. Loose values now have names. The layout overrides were left in place, to avoid disturbing the page centering.
+- **Kept by decision:** the page numbering stays centered on the page on a separate row (UI-07), and Best match stays (UI-21).
+- **Waiting for a decision:** UI-05, UI-06, close-match suggestions in UI-11, the search box in UI-12, UI-18, UI-19, UI-20 and UI-24.
+
 ## Verdict
 
 The normal results view is good: with real artwork it is coherent, friendly and tidy, and the grid is accurate at every width. The product stops looking finished as soon as anything departs from the normal path. Error and no-results states show default Atomic artwork and generic text that belong to a different product, loading does not resemble the final page, and keyboard focus is close to invisible on selected controls. The status row jumps vertically depending on the state, and the page has several competing center lines. A Coveo expert will recognize the unstyled Atomic defaults at once.
