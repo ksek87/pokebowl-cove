@@ -20,7 +20,11 @@ if (supportedHash !== window.location.hash) {
   window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${supportedHash}`);
 }
 
-const config = readCoveoConfig(import.meta.env);
+// Each value is named, so Vite inlines only these two and no other build variable reaches the browser.
+const config = readCoveoConfig({
+  VITE_COVEO_ORGANIZATION_ID: import.meta.env.VITE_COVEO_ORGANIZATION_ID,
+  VITE_COVEO_SEARCH_API_KEY: import.meta.env.VITE_COVEO_SEARCH_API_KEY,
+});
 const pokemonName = pokemonNameFromUrl(window.location.search);
 
 createRoot(root).render(
