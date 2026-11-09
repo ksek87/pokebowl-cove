@@ -1,12 +1,31 @@
 """Coveo pre-conversion extension that makes Pokémon page tables readable.
 
-Type effectiveness grids and stat tables lose their meaning when flattened to
-text, so they are rewritten as sentences before Coveo creates the item body.
+Data tables, type effectiveness grids and stat tables lose their meaning when
+flattened to text, so they are rewritten as sentences before Coveo creates the
+item body. Every sentence names its form, because a generated answer reads the
+body in chunks and a chunk can start in the middle of a form's section.
 """
+
+import re
 
 from bs4 import BeautifulSoup
 
 DAMAGE_LABELS = ((400, "4x damage"), (200, "2x damage"), (50, "0.5x damage"), (25, "0.25x damage"), (0, "no damage"))
+NORMAL_DAMAGE = 100
+DOUBLE_DAMAGE = 200
+HALF_DAMAGE = 50
+NO_DAMAGE = 0
+DATA_SENTENCES = {
+    "National №": "{subject} is number {value} in the National Pokédex.",
+    "Type": "{subject} is {value} type.",
+    "Species": "{subject} is the {value}.",
+    "Height": "{subject} is {value} tall.",
+    "Weight": "{subject} weighs {value}.",
+    "Abilities": "{subject} abilities: {value}.",
+}
+OTHER_DATA_SENTENCE = "{subject} {label}: {value}."
+UNKNOWN_VALUES = ("", "—", "???")
+HIDDEN_ABILITY = "hidden ability"
 CLUTTER_SELECTORS = ("header", "footer", "nav", "ul.list-nav", 'a[href="#main"]')
 REPEATED_TEXT = ("Additional artwork", "The ranges shown on the right")
 
@@ -21,7 +40,7 @@ def cell_multiplier(cell):
     for css_class in cell.get("class", []):
         if css_class.startswith("type-fx-") and css_class[8:].isdigit():
             return int(css_class[8:])
-    return 100
+    return NORMAL_DAMAGE
 
 
 def attackers_by_multiplier(container):
@@ -30,6 +49,30 @@ def attackers_by_multiplier(container):
         attacker = cell["title"].split(" → ")[0]
         grouped.setdefault(cell_multiplier(cell), []).append(attacker)
     return grouped
+
+
+def marked(names, value, common):
+    """Names the multiplier only where it differs from the common one, as in "Rock (4x)"."""
+    if value == common:
+        return names
+    return [f"{name} ({value / NORMAL_DAMAGE:g}x)" for name in names]
+
+
+def attackers_where(grouped, keep, common):
+    """Attacking types whose multiplier passes `keep`, strongest first."""
+    return [name for value in sorted(grouped, reverse=True) if keep(value) for name in marked(grouped[value], value, common)]
+
+
+def weakness_sentences(subject, grouped):
+    """States type matchups in the words people ask with: weak to, resists, immune to."""
+    weak = attackers_where(grouped, lambda value: value > NORMAL_DAMAGE, DOUBLE_DAMAGE)
+    resisted = attackers_where(grouped, lambda value: NO_DAMAGE < value < NORMAL_DAMAGE, HALF_DAMAGE)
+    sentences = [f"{subject} is weak to {join_names(weak)}." if weak else f"{subject} has no type weaknesses."]
+    if resisted:
+        sentences.append(f"{subject} resists {join_names(resisted)}.")
+    if NO_DAMAGE in grouped:
+        sentences.append(f"{subject} is immune to {join_names(grouped[NO_DAMAGE])}.")
+    return " ".join(sentences)
 
 
 def defense_sentences(subject, container):
@@ -69,6 +112,7 @@ def rewrite_defenses(soup, panel, name):
         intro.decompose()
     container = heading.find_next_sibling("div")
     for subject, group in defense_groups(name, container):
+        container.insert_before(paragraph(soup, weakness_sentences(subject, attackers_by_multiplier(group))))
         container.insert_before(paragraph(soup, defense_sentences(subject, group)))
     container.decompose()
 
@@ -89,6 +133,47 @@ def rewrite_stats(soup, panel, name):
     container.replace_with(paragraph(soup, f"{name} base stats: {' '.join(lines)} Total: {total}."))
 
 
+def clean_text(cell):
+    for line_break in cell.find_all("br"):
+        line_break.replace_with("; ")
+    text = " ".join(cell.get_text(" ", strip=True).split())
+    return re.sub(r"\s+([,;)])", r"\1", re.sub(r"\(\s+", "(", text)).strip("; ")
+
+
+def ability_names(cell):
+    names = []
+    for link in cell.find_all("a"):
+        after = link.next_sibling
+        hidden = isinstance(after, str) and HIDDEN_ABILITY in after
+        names.append(f"{link.get_text(strip=True)} ({HIDDEN_ABILITY})" if hidden else link.get_text(strip=True))
+    return ", ".join(names)
+
+
+def data_value(label, cell):
+    links = [link.get_text(strip=True) for link in cell.find_all("a")]
+    if label == "Type" and links:
+        return join_names(links)
+    if label == "Abilities":
+        return ability_names(cell) or clean_text(cell)
+    return clean_text(cell)
+
+
+def data_sentence(subject, row):
+    label = row.th.get_text(" ", strip=True)
+    value = data_value(label, row.td)
+    if value in UNKNOWN_VALUES:
+        return f"{subject} has no listed {label.lower()}."
+    return DATA_SENTENCES.get(label, OTHER_DATA_SENTENCE).format(subject=subject, label=label, value=value)
+
+
+def rewrite_data_tables(soup, panel, name):
+    for heading in panel.find_all("h2"):
+        table = heading.find_next_sibling()
+        if table is not None and table.name == "table" and "vitals-table" in table.get("class", []):
+            rows = [row for row in table.select("tr") if row.th and row.td]
+            table.replace_with(paragraph(soup, " ".join(data_sentence(name, row) for row in rows)))
+
+
 def remove_repeated_text(panel):
     for item in panel.find_all("p"):
         if any(text in item.get_text() for text in REPEATED_TEXT):
@@ -103,20 +188,38 @@ def remove_local_numbers(panel):
 
 def rewrite_panel(soup, panel, name):
     rewrite_stats(soup, panel, name)
+    rewrite_data_tables(soup, panel, name)
     rewrite_defenses(soup, panel, name)
     remove_repeated_text(panel)
+
+
+def form_name(pokemon, label):
+    """Adds the Pokémon's name to labels such as "Attack Forme", and keeps labels such as "Mega Charizard X"."""
+    if not pokemon or pokemon in label:
+        return label
+    return f"{pokemon} {label}"
+
+
+def name_form_tabs(wrapper, pokemon):
+    """Renames the form tabs and returns each panel's full form name."""
+    names = {}
+    for tab in wrapper.select_one(".sv-tabs-tab-list").select("a[href]"):
+        names[tab["href"].lstrip("#")] = form_name(pokemon, tab.get_text(strip=True))
+        tab.string = names[tab["href"].lstrip("#")]
+    return names
 
 
 def rewrite_form_panels(soup):
     wrapper = soup.select_one(".tabset-basics")
     if wrapper is None:
         return
-    labels = tab_labels(wrapper)
+    heading = soup.find("h1")
+    names = name_form_tabs(wrapper, heading.get_text(strip=True) if heading else "")
     panels = wrapper.select_one(".sv-tabs-panel-list").find_all("div", class_="sv-tabs-panel", recursive=False)
     for index, panel in enumerate(panels):
-        rewrite_panel(soup, panel, labels[panel["id"]])
         if index > 0:
             remove_local_numbers(panel)
+        rewrite_panel(soup, panel, names[panel["id"]])
 
 
 def remove_clutter(soup):

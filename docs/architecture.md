@@ -15,7 +15,7 @@ flowchart TD
         SOURCE["Coveo Sitemap source<br/>a separate single-Pokémon source tests configuration"]
         FILTERS["URL filtering<br/>keeps only Pokémon pages"]
         SCRAPE["Web scraping<br/>removes page clutter, extracts 16 metadata values"]
-        EXT["Pre-conversion extension<br/>rewrites stat tables and type grids as sentences"]
+        EXT["Pre-conversion extension<br/>rewrites data tables, stat tables and type grids<br/>as sentences that name each form"]
         MAP["Automatic mapping<br/>metadata to same-named fields"]
     end
 
@@ -96,7 +96,7 @@ flowchart TD
 | Ingestion | Coveo Sitemap source with URL rules | [Coveo source](#coveo-source-sitemap) |
 | Alternate forms | One item per Pokémon, with fields from the base form and all forms in the body | [One item per Pokémon](#one-item-per-pokémon) |
 | Field extraction | XPath web scraping selectors scoped to the first form tab | [Web scraping](#web-scraping-and-fields) |
-| Body text | Pre-conversion extension rewrites tables as sentences | [Body text reconstruction](#body-text-reconstruction) |
+| Body text | Pre-conversion extension rewrites tables as sentences that name each form | [Body text reconstruction](#body-text-reconstruction) |
 | Field mapping | Automatic mapping through `performFieldMappingUsingAllOrigins` | [Field mapping](#field-mapping) |
 | Browser access | Anonymous search API key with the `pokebowl-search` search hub | [Search application connection](#search-application-connection) |
 | Runtime | Node 24 | [Search application connection](#search-application-connection) |
@@ -234,7 +234,9 @@ Removing the content would have made the body cleaner but incomplete, so a pre-c
 
 | Original content | Result in the body |
 |---|---|
-| Type effectiveness grid | Sentences such as "Charizard takes 4x damage from Rock." Each form is named, and ability-specific grids name the ability. |
+| Form tab labels | The Pokémon's name is added to labels that lack it, so "Attack Forme" becomes "Deoxys Attack Forme". Labels that already contain it, such as "Mega Charizard X" or "Alolan Meowth", are kept. |
+| Pokédex data, Training and Breeding tables | One sentence per row, each starting with the form's full name: "Charizard weighs 90.5 kg (199.5 lbs).", "Charizard is 1.7 m (5′07″) tall.", "Charizard is Fire and Flying type.", "Charizard abilities: Blaze, Solar Power (hidden ability).", "Mega Charizard X Base Exp.: 285." A missing value becomes "Eternamax has no listed weight." |
+| Type effectiveness grid | Sentences in the words people ask with: "Charizard is weak to Rock (4x), Water and Electric.", "Charizard resists …" and "Charizard is immune to Ground." These are followed by the detailed sentences, such as "Charizard takes 4x damage from Rock." Each form is named, and ability-specific grids name the ability. |
 | Stat table | "Charizard base stats: HP: base 78, ranging from 266 to 360 at level 100." with the total |
 | Local Pokédex numbers | Kept for the base form only, because they repeat for every form |
 | Stat range explanation and "Additional artwork" labels | Removed, because they add no information once the stats are labelled |
@@ -253,6 +255,48 @@ Web scraping continues to remove site navigation and everything from the Moves s
 The extension adds Python to the project and runs for every item. Coveo limits each extension to about 5 seconds per item. The slowest of our five sample pages took 224 ms locally. It is applied with **Skip extension** on error, so a failure leaves an item indexed with its original body and does not lose it. The extension is named `pre-reconstruct-body`, requests only the **Original file** item data and is applied at the **Pre-conversion** stage to all items. It was verified in Coveo on the test source: the Charizard body contains the rewritten sentences for all three forms, and all 16 fields still populate.
 
 **Coveo documentation:** [Modifying item bodies](https://docs.coveo.com/en/2749/) states that changing `documentdata` in a pre-conversion script is "always preferable". [Add a body mapping](https://docs.coveo.com/en/1847/) describes how a mapping overrides the body, and [Python modules available to extensions](https://docs.coveo.com/en/116/) lists BeautifulSoup. [RGA content requirements](https://docs.coveo.com/en/nb6a0008/) states that only the body is embedded. [Indexing pipeline extension overview](https://docs.coveo.com/en/1556/) describes stages and timeouts. Coveo does not document whether the stream a pre-conversion script receives is the original page or the scraped page, so the script also removes navigation and the Moves section in case they are still present.
+
+### Naming every form in the body
+
+**Problem.** Generated answers mixed up forms. Asked "How much does Charizard weigh?", the answer gave Mega Charizard X's 110.5 kg instead of Charizard's 90.5 kg. The extension already named each form in its stat and type defense sentences, but it left each form tab's Pokédex data table as it was. Flattened to text, that table reads "Weight 110.5 kg (243.6 lbs)" with no form name, and it comes before the form's first named sentence. A chunk that holds this table can therefore hold only the previous form's name. Of 1,028 pages, 181 have forms whose Type, height, weight or abilities differ from the base form. In a test of 23 questions about such Pokémon, 5 answers gave another form's height or weight.
+
+Three related gaps had the same root. In 47 pages, form labels such as "Normal Forme", "Attack Forme", "Combat Breed" or "Male" do not contain the Pokémon's name, so even named sentences did not say which Pokémon they were about. "Is Charizard weak to water?" got no answer, because the body said "Charizard takes 2x damage from Water" and never "weak". The Training and Breeding tables had the same unnamed layout as the Pokédex data table.
+
+**Change.** The extension now writes every fact in each form tab as a sentence that starts with the form's full name, for every form including the base form. It adds the Pokémon's name, read from the page heading, to form labels that lack it, both in the tab list and in every sentence. It adds weakness, resistance and immunity sentences built from the same type grid as the damage sentences. The evolution chart, the "Changes" section and the "Pokédex entries" section are not changed. The application reads Pokédex entries from the stored page, and they are outside the form tabs. These sections, and the page introduction, keep the site's labels, so headings such as "Attack Forme" above a Pokédex entry still appear without the Pokémon's name in 46 of the 227 pages checked. The "Changes" section already names the Pokémon, as in "Thundurus (Incarnate Forme)".
+
+**Coveo documentation:**
+
+- [RGA content requirements](https://docs.coveo.com/en/nb6a0008/) states that RGA uses only the body, that the body is split into chunks of up to 250 words with up to 10% overlap, and that text in tables is embedded but parsed less predictably. It recommends content that is focused and written to answer questions.
+- [Modifying item bodies](https://docs.coveo.com/en/2749/) states that changing `documentdata` in a pre-conversion script is preferable to changing the body later.
+- [Create and manage RGA models](https://docs.coveo.com/en/nb6a0085/) and [Semantic Encoder models](https://docs.coveo.com/en/nb890247/) state that each model creates embeddings when it builds and rebuilds weekly. A rebuilt source therefore does not change answers until both models rebuild.
+- [Inspect RGA chunks](https://docs.coveo.com/en/p5dc0110/) describes the Chunk Inspector, which shows how a model split an item into chunks.
+
+**Our inference:** because a chunk can start anywhere in a section, a fact is only safe when its own sentence names the form, so every fact sentence repeats the name. Plain-language weakness sentences should match questions better than multiplier sentences, because the embeddings compare the question with the chunk text. Neither point is stated by Coveo, and only the answer evals after the model rebuild can show the effect.
+
+**Alternatives considered**
+
+- **One item per form:** gives each form its own body, but creates near-duplicate items, which the RGA guidance advises against, and Sitemap sources do not support sub-items. See [One item per Pokémon](#one-item-per-pokémon).
+- **Name only the first sentence of each table:** shorter, but a chunk that starts after that sentence would again hold unnamed values.
+- **A prompt instruction about forms:** Coveo allows a custom prompt, but it cannot add a name that the chunk does not contain.
+- **Rewriting the evolution chart as sentences:** it would help evolution questions, but it is a separate change and was left out of this fix.
+
+**Cost.** Repeating the names makes the body longer. Over the 227 pages checked, the body grew by a median of 14% and at most 44%. The longest page, Rotom, has about 2,400 words, far below the limit of 1,000 chunks per item. The slowest page took 240 ms locally, against Coveo's limit of about 5 seconds per item.
+
+**Checks.** `test_form_sentences.py` uses fixtures that copy the page structure and values of Charizard, Pikachu, Eevee, Deoxys, Tauros, Rotom, Meowth and Bulbasaur. It checks that every form's height, weight, Type, abilities and other rows appear in sentences that start with the form's full name, that every 250-word window around a form's weight names that form, that labels always include the Pokémon's name, and that the weakness sentences are correct. The extension was also run over 227 saved pages: the 189 pages with more than one form and a sample of single-form pages. It raised no errors, every form passed the same checks, and the 531 weakness sentences agreed with the damage sentences.
+
+**Rollout order**
+
+1. The user pastes the new `reconstruct_body.py` into the `pre-reconstruct-body` extension in the console.
+2. Rebuild the single-Pokémon test source. In Content Browser, the Charizard quick view must show the sentences listed in [Indexing Expected Results](indexing-expected-results.md), and all 16 fields must still populate.
+3. Rebuild the full source, keeping the 2-second crawl delay. It must still hold 1,028 items with all 16 fields.
+4. The user rebuilds the Semantic Encoder and RGA models manually, so they do not wait for the weekly rebuild.
+5. Run the answer evals with `npm run eval:answers`.
+
+The answer evals reflect this change only after step 4, because the models answer from the embeddings of their last build.
+
+The 16 field selectors read the Pokédex data and stat tables that the extension now replaces. The fields should still populate, because web scraping runs in the crawler and the extension runs later, in the indexing pipeline. Coveo does not document this order for the stream a pre-conversion script receives, so this is our inference. It is supported by the earlier test, where the six stat fields still populated after the extension had replaced the stat tables. Step 2 confirms it for the Pokédex data table before the full rebuild.
+
+**Answer evals.** The answer set now asks base-form height and weight questions for Charizard, Venusaur, Lucario, Meowth and Tauros, and "What types is Charizard weak to?". The values of the other forms come from [`form-facts.json`](../evals/reference/form-facts.json). A base-form answer fails when it gives another form's value in place of the base form's value. An answer that gives both passes but is flagged for a person to check.
 
 ### Field mapping
 

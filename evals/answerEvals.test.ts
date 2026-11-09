@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { buildAnswerCases, gradeAnswer, summarizeAnswers, type AnswerCase, type AnswerOutcome } from './answerEvals.ts';
+import {
+  buildAnswerCases,
+  gradeAnswer,
+  summarizeAnswers,
+  type AnswerCase,
+  type AnswerOutcome,
+  type FormFacts,
+} from './answerEvals.ts';
 
 const URI = 'https://pokemondb.net/pokedex/charizard';
 const OTHER = 'https://pokemondb.net/pokedex/pikachu';
@@ -61,6 +68,40 @@ describe('gradeAnswer', (): void => {
   });
 });
 
+describe('gradeAnswer for base-form questions', (): void => {
+  const base: AnswerCase = {
+    id: 'w',
+    category: 'base-form',
+    question: 'How much does Charizard weigh?',
+    facts: ['90.5'],
+    citeAny: [URI],
+    otherFormValues: ['110.5', '100.5'],
+  };
+
+  it('fails and names the value when another form is given in place of the base form', (): void => {
+    const grade = gradeAnswer(base, outcome({ text: 'Charizard weighs 110.5 kg (243.6 lbs).' }));
+
+    expect(grade).toMatchObject({ passed: false, otherFormValuesShown: ['110.5'] });
+    expect(grade.reason).toContain('another form');
+  });
+
+  it('passes the base value alone', (): void => {
+    expect(gradeAnswer(base, outcome({ text: 'Charizard weighs 90.5 kg.' }))).toMatchObject({ passed: true, otherFormValuesShown: [] });
+  });
+
+  it('passes the base value given with other forms, and asks a person to check it', (): void => {
+    const grade = gradeAnswer(base, outcome({ text: 'Charizard weighs 90.5 kg; Mega Charizard X weighs 110.5 kg.' }));
+
+    expect(grade).toMatchObject({ passed: true, needsHumanReview: true, otherFormValuesShown: ['110.5'] });
+  });
+
+  it('matches whole numbers only, so 85.0 is not found inside 185.0', (): void => {
+    const tauros: AnswerCase = { ...base, facts: ['88.4'], otherFormValues: ['85.0'] };
+
+    expect(gradeAnswer(tauros, outcome({ text: 'It weighs 185.0 kg.' })).otherFormValuesShown).toEqual([]);
+  });
+});
+
 describe('summarizeAnswers', (): void => {
   it('reports pass rates by category', (): void => {
     const graded = [
@@ -102,5 +143,35 @@ describe('buildAnswerCases', (): void => {
     const scoped = buildAnswerCases(items).find((entry): boolean => entry.category === 'scoped');
 
     expect(scoped?.scope).toContain('=="Charizard"');
+  });
+
+  const formFacts: FormFacts = {
+    baseForm: [
+      { name: 'Charizard', field: 'weight', otherForms: ['110.5'] },
+      { name: 'Charizard', field: 'height', otherForms: ['1.8'] },
+      { name: 'Missingno', field: 'weight', otherForms: ['1.0'] },
+    ],
+    weaknesses: [{ name: 'Charizard', types: ['Rock', 'Water'] }],
+  };
+
+  it('asks base-form height and weight questions with the index value and the other forms to reject', (): void => {
+    const cases = buildAnswerCases(items, formFacts).filter((entry): boolean => entry.category === 'base-form');
+
+    expect(cases).toEqual([
+      expect.objectContaining({
+        question: 'How much does Charizard weigh?',
+        facts: ['90.5'],
+        otherFormValues: ['110.5'],
+        citeAny: [items[0]?.uri],
+      }),
+      expect.objectContaining({ question: 'How tall is Charizard?', facts: ['1.7'], otherFormValues: ['1.8'] }),
+    ]);
+  });
+
+  it('asks which types a Pokémon is weak to', (): void => {
+    const weakness = buildAnswerCases(items, formFacts).find((entry): boolean => entry.id === 'weakness-charizard');
+
+    expect(weakness).toMatchObject({ category: 'fact', facts: ['Rock', 'Water'], citeAny: [items[0]?.uri] });
+    expect(weakness?.question).toContain('weak');
   });
 });
