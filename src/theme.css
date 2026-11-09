@@ -69,7 +69,8 @@
   --radius-checkbox: 6px;
   --space-control-inset: 6px;
   --space-status-row: 8px;
-  --space-status-column: 12px;
+  --space-control-label: 8px;
+  --space-control-group: 24px;
   --space-panel: 16px;
   --focus-ring: var(--foreground);
   --focus-width: 2px;
@@ -142,7 +143,7 @@ atomic-layout-section[section='status'] {
   display: flex !important;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-status-row) var(--space-status-column);
+  gap: var(--space-status-row) var(--space-control-group);
   min-height: var(--size-status-row);
   margin-bottom: var(--space-status-row);
 }
@@ -334,11 +335,16 @@ atomic-layout-section[section='status'] > atomic-did-you-mean {
 atomic-sort-dropdown::part(label),
 atomic-results-per-page::part(label) {
   align-self: center;
-  margin: 0;
+  margin: 0 var(--space-control-label) 0 0;
   color: var(--foreground);
   font-size: var(--text-small);
   font-weight: var(--atomic-font-bold);
   line-height: normal;
+}
+
+/* A flex label drops the trailing space in Atomic's text, so the colon sits against the words. */
+atomic-results-per-page::part(label) {
+  display: flex;
 }
 
 atomic-results-per-page::part(label)::after {
@@ -347,13 +353,6 @@ atomic-results-per-page::part(label)::after {
 
 atomic-results-per-page::part(buttons) {
   align-items: center;
-}
-
-/* Below the width where the grid gains a column, the row needs this space for the summary. */
-@media (max-width: 1279.98px) {
-  atomic-results-per-page::part(label) {
-    display: none;
-  }
 }
 
 atomic-query-summary::part(container) {

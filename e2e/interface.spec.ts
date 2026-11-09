@@ -16,9 +16,11 @@ const SLOW_RESPONSE_MS = 2_500;
 const NEEDED_FOCUS_CONTRAST = 3;
 const NEEDED_TEXT_CONTRAST = 4.5;
 const CONTROL_SIZE_PX = 40;
+const NO_GAP_PX = 0;
+const LAYOUT_ROUNDING_PX = 1;
+const ONE_STYLE = 1;
 const MAX_ILLUSTRATION_PX = 140;
 const MAX_LAYOUT_SHIFT = 0.05;
-const SINGLE_LINE_MAX_PX = 30;
 const MIN_FOCUS_WIDTH_PX = 2;
 const TINY_PNG_WIDTH = 2;
 const TINY_PNG = Buffer.from(
@@ -122,10 +124,13 @@ test.describe('controls row', () => {
     expect(correction?.y).toBeGreaterThanOrEqual((control?.y ?? 0) + (control?.height ?? 0));
   });
 
-  test('keeps the summary on one line at the narrowest width', async ({ page }): Promise<void> => {
+  test('keeps both controls on one row beside the summary at the narrowest width', async ({ page }): Promise<void> => {
     await openResults(page, NARROW, '/#q=fire');
+    const sort = await page.locator('atomic-sort-dropdown').boundingBox();
+    const sizes = await page.locator('atomic-results-per-page').boundingBox();
     const summary = await page.locator('atomic-query-summary').boundingBox();
-    expect(summary?.height).toBeLessThanOrEqual(SINGLE_LINE_MAX_PX);
+    expect(sizes?.y).toBe(sort?.y);
+    expect((summary?.x ?? 0) + (summary?.width ?? 0)).toBeLessThanOrEqual(sort?.x ?? 0);
   });
 
   test('uses one label style', async ({ page }): Promise<void> => {
@@ -390,3 +395,72 @@ test.describe('motion', () => {
     expect(name).toBe('none');
   });
 });
+
+interface StatusRowLayout {
+  labelGaps: number[];
+  groupGap: number;
+  centers: number[];
+  heights: number[];
+  rightEdge: number;
+  gridRightEdge: number;
+  labelStyles: string[];
+  tokens: { label: number; group: number };
+}
+
+function readStatusRow(page: Page): Promise<StatusRowLayout> {
+  return page.evaluate((): StatusRowLayout => {
+    const sort = document.querySelector('atomic-sort-dropdown') as HTMLElement;
+    const sizes = document.querySelector('atomic-results-per-page') as HTMLElement;
+    const part = (host: HTMLElement, name: string): HTMLElement[] => [
+      ...(host.shadowRoot ?? host).querySelectorAll<HTMLElement>(`[part~="${name}"]`),
+    ];
+    const box = (element: HTMLElement): DOMRect => element.getBoundingClientRect();
+    const [sortLabel] = part(sort, 'label');
+    const [select] = part(sort, 'select');
+    const [sizeLabel] = part(sizes, 'label');
+    const buttons = [...part(sizes, 'button'), ...part(sizes, 'active-button')].sort(
+      (first, second): number => box(first).left - box(second).left,
+    );
+    const [firstButton] = buttons;
+    const controls = [select, ...buttons];
+    const token = (name: string): number =>
+      Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue(name));
+    const style = (label: HTMLElement): string => {
+      const { fontSize, fontWeight, color } = getComputedStyle(label);
+      return [fontSize, fontWeight, color].join(' ');
+    };
+    return {
+      labelGaps: [box(select).left - box(sortLabel).right, box(firstButton).left - box(sizeLabel).right],
+      groupGap: box(sizes).left - box(sort).right,
+      centers: [sortLabel, sizeLabel, ...controls].map((item): number => box(item).top + box(item).height / 2),
+      heights: controls.map((item): number => box(item).height),
+      rightEdge: box(sizes).right,
+      gridRightEdge: box(document.querySelector('atomic-result-list') as HTMLElement).right,
+      labelStyles: [style(sortLabel), style(sizeLabel)],
+      tokens: { label: token('--space-control-label'), group: token('--space-control-group') },
+    };
+  });
+}
+
+for (const width of ALL_WIDTHS) {
+  for (const path of ['/', '/#q=fire']) {
+    test(`spaces the sort and page-size controls evenly at ${width}px on ${path}`, async ({ page }): Promise<void> => {
+      await page.setViewportSize({ width, height: WINDOW_HEIGHT });
+      await page.goto(path);
+      await expect(page.locator('atomic-result').first()).toBeVisible({ timeout: NETWORK_TIMEOUT });
+
+      const row = await readStatusRow(page);
+
+      expect(row.tokens.label).toBeGreaterThan(NO_GAP_PX);
+      expect(row.tokens.group).toBeGreaterThan(row.tokens.label);
+      for (const gap of row.labelGaps) {
+        expect(Math.abs(gap - row.tokens.label)).toBeLessThanOrEqual(LAYOUT_ROUNDING_PX);
+      }
+      expect(Math.abs(row.groupGap - row.tokens.group)).toBeLessThanOrEqual(LAYOUT_ROUNDING_PX);
+      expect(new Set(row.heights)).toEqual(new Set([CONTROL_SIZE_PX]));
+      expect(Math.max(...row.centers) - Math.min(...row.centers)).toBeLessThanOrEqual(LAYOUT_ROUNDING_PX);
+      expect(Math.abs(row.rightEdge - row.gridRightEdge)).toBeLessThanOrEqual(LAYOUT_ROUNDING_PX);
+      expect(new Set(row.labelStyles).size).toBe(ONE_STYLE);
+    });
+  }
+}
