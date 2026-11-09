@@ -159,7 +159,7 @@ Owner: Agent
 
 ### PC-02: Request Passage Retrieval access
 
-Owner: You· Send as soon as possible
+Owner: You · Send as soon as possible
 
 Passage Retrieval must be enabled by Coveo before the bonus work can start.
 
@@ -175,14 +175,14 @@ Owner: Agent
 
 ### PC-04: Add test tooling
 
-Owner: Agent· Depends on: PC-03
+Owner: Agent · Depends on: PC-03
 
 - [x] Vitest and React Testing Library run with `npm test`
 - [x] One sample test proves the setup works
 
 ### PC-05: Add continuous integration
 
-Owner: Agent· Depends on: PC-04
+Owner: Agent · Depends on: PC-04
 
 - [x] GitHub Actions runs tests and the build on every pull request
 
@@ -203,14 +203,14 @@ Owner: Both
 
 ### PC-11: Define expected index results
 
-Owner: Both· Depends on: PC-10
+Owner: Both · Depends on: PC-10
 
 - [x] Expected title, Type, Generation and image written down for a few Pokémon, including Charizard, whose Mega form has a different Type (see `docs/indexing-expected-results.md`)
 - [x] List of URLs that must not be indexed, such as moves and list pages
 
 ### PC-12: Create a single-Pokémon test source
 
-Owner: You, guided by Agent· Depends on: PC-10
+Owner: You, guided by Agent · Depends on: PC-10
 
 This source lets us test configuration without waiting for a full crawl.
 
@@ -219,7 +219,7 @@ This source lets us test configuration without waiting for a full crawl.
 
 ### PC-13: Configure extraction, fields and mappings
 
-Owner: You, guided by Agent· Depends on: PC-11, PC-12
+Owner: You, guided by Agent · Depends on: PC-11, PC-12
 
 - [x] Web scraping configuration applied to the test source
 - [x] Page clutter is removed from the indexed body
@@ -229,7 +229,7 @@ Owner: You, guided by Agent· Depends on: PC-11, PC-12
 
 ### PC-15: Reconstruct readable body text
 
-Owner: Both· Depends on: PC-13
+Owner: Both · Depends on: PC-13
 
 Type effectiveness grids and stat tables lose their meaning when flattened into text. A pre-conversion indexing pipeline extension rewrites them as sentences so they are useful to search and generated answers.
 
@@ -239,7 +239,7 @@ Type effectiveness grids and stat tables lose their meaning when flattened into 
 
 ### PC-14: Run and verify the full crawl
 
-Owner: You, guided by Agent· Depends on: PC-13, PC-15
+Owner: You, guided by Agent · Depends on: PC-13, PC-15
 
 The crawl stays within the site's requested rate of one page every 2 seconds.
 
@@ -255,28 +255,28 @@ The crawl stays within the site's requested rate of one page every 2 seconds.
 
 ### PC-20: Connect the application to Coveo
 
-Owner: Both· Depends on: PC-03, PC-12
+Owner: Both · Depends on: PC-03, PC-12
 
 - [x] Search-only API key created and stored locally
 - [x] Atomic search interface returns results from our organization
 
 ### PC-21: Display results with pictures
 
-Owner: Agent· Depends on: PC-13, PC-20
+Owner: Agent · Depends on: PC-13, PC-20
 
 - [x] Each result shows the Pokémon's name and picture
 - [x] A missing image does not break the result
 
 ### PC-22: Add Type and Generation facets
 
-Owner: Agent· Depends on: PC-13, PC-20
+Owner: Agent · Depends on: PC-13, PC-20
 
 - [x] Type facet filters results correctly
 - [x] Generation facet filters results correctly
 
 ### PC-23: Add browser tests for search
 
-Owner: Agent· Depends on: PC-21, PC-22
+Owner: Agent · Depends on: PC-21, PC-22
 
 - [x] Playwright covers searching, filtering and viewing a result
 
@@ -288,7 +288,7 @@ Owner: Agent· Depends on: PC-21, PC-22
 
 ### PC-30: Host the application
 
-Owner: Both· Depends on: PC-21
+Owner: Both · Depends on: PC-21
 
 - [x] Hosting provider chosen and recorded in `docs/architecture.md`
 - [x] Application is publicly reachable and returns results, at https://pokebowl-cove.vercel.app/
@@ -296,7 +296,7 @@ Owner: Both· Depends on: PC-21
 
 ### PC-31: Share the repository with Coveo
 
-Owner: You· Depends on: PC-30, PC-100, PC-101, PC-102
+Owner: You · Depends on: PC-30, PC-100, PC-101, PC-102
 
 This is part of the final submission. The repository stays private until the presentations and demo are prepared.
 
@@ -338,21 +338,21 @@ Owner: Both
 
 ### PC-41: Add index quality checks
 
-Owner: Agent· Depends on: PC-14, PC-40
+Owner: Agent · Depends on: PC-14, PC-40
 
 - [x] Indexed Type, Generation and image values are compared with reference data
 - [x] The run reports any non-Pokémon pages in the index
 
 ### PC-42: Add relevance evals
 
-Owner: Both· Depends on: PC-14
+Owner: Both · Depends on: PC-14
 
 - [x] Labelled query set created
 - [x] Recall@K and MRR are reported
 
 ### PC-43: Establish the performance baseline
 
-Owner: Agent· Depends on: PC-30
+Owner: Agent · Depends on: PC-30
 
 - [x] p50 and p95 latency recorded for search, type-ahead, answers and page load
 - [x] Performance targets set from the baseline
@@ -363,7 +363,7 @@ These are pre-hosting numbers from one local network, in `evals/reports/performa
 
 ### PC-44: Add generated answer evals
 
-Owner: Both· Depends on: PC-62
+Owner: Both · Depends on: PC-62
 
 - [x] Questions cover expected facts, citations and unanswerable cases
 - [x] Results are saved in a report
@@ -376,7 +376,7 @@ Owner: Both· Depends on: PC-62
 
 ### PC-50: Pre-populate suggestions
 
-Owner: Both· Depends on: PC-20, and the model from PC-51
+Owner: Both · Depends on: PC-20, and the model from PC-51
 
 The application has no real users, so the model has no search history to learn from. Coveo's documented method for a low-traffic environment is a default queries file. See `docs/architecture.md`, section Query Suggestions.
 
@@ -388,7 +388,7 @@ The application has no real users, so the model has no search history to learn f
 
 ### PC-51: Build the model and enable type-ahead
 
-Owner: Both· Depends on: PC-20
+Owner: Both · Depends on: PC-20
 
 The model is created first, because the default queries file attaches to an existing model.
 
@@ -432,7 +432,7 @@ The overall target is not met. The gap is in descriptive, Generation, ability an
 
 ### PC-60: Confirm content quality
 
-Owner: Both· Depends on: PC-14
+Owner: Both · Depends on: PC-14
 
 Generated answers use only an item's body text, so that text must be clean and meaningful.
 
@@ -441,14 +441,14 @@ Generated answers use only an item's body text, so that text must be clean and m
 
 ### PC-61: Create and associate the models
 
-Owner: You, guided by Agent· Depends on: PC-60
+Owner: You, guided by Agent · Depends on: PC-60
 
 - [x] Semantic Encoder and Relevance Generative Answering (RGA) models use the same content, limited to the full source
 - [x] Both models are associated with the `pokebowl-search` query pipeline
 
 ### PC-62: Add generated answers to the application
 
-Owner: Agent· Depends on: PC-61
+Owner: Agent · Depends on: PC-61
 
 - [x] Answers and citations display for suitable queries
 - [x] Search still works when no answer is generated
@@ -467,7 +467,7 @@ An animated Pokéball at the top-right corner of the detail page's main card ope
 
 ### PC-63: Tune answers and add reporting
 
-Owner: Both· Depends on: PC-62
+Owner: Both · Depends on: PC-62
 
 - Not doing: RGA reporting is configured
 - Not doing: Configuration is tuned using PC-44 results
@@ -491,7 +491,7 @@ Pokémon mentioned in an answer should link to our detail page, while citations 
 
 ### PC-70: Build the Pokémon detail page
 
-Owner: Agent· Depends on: PC-21
+Owner: Agent · Depends on: PC-21
 
 - [x] Data shown on the page agreed
 - [x] Each result links to a page with a shareable URL
@@ -511,14 +511,14 @@ The application is shown live to a panel, so it needs a deliberate, finished des
 
 ### PC-75: Agree the visual direction
 
-Owner: Both· Depends on: PC-22
+Owner: Both · Depends on: PC-22
 
 - [x] Layout, colour, type and tone agreed before styling starts
 - [x] Direction recorded in `docs/architecture.md`
 
 ### PC-76: Polish the search page
 
-Owner: Agent· Depends on: PC-75
+Owner: Agent · Depends on: PC-75
 
 - [x] Header and page layout are designed, with no browser default styling
 - [x] Result cards have consistent, correctly sized pictures and show name, number, Type and Generation
@@ -542,14 +542,14 @@ Tailwind and shadcn/ui are the approved tools for our interface code. Atomic com
 
 ### PC-77: Polish the remaining experiences
 
-Owner: Agent· Depends on: PC-75, PC-62, PC-70
+Owner: Agent · Depends on: PC-75, PC-62, PC-70
 
 - [x] Generated answers, type-ahead and the detail page match the search page design
 - Not doing: The bonus feature matches the design, if it is built
 
 ### PC-78: Review quality across the application
 
-Owner: Both· Depends on: PC-76, PC-77
+Owner: Both · Depends on: PC-76, PC-77
 
 - [ ] Reviewed in a real browser by the user, with screenshots at each width
 - [x] Keyboard use, focus states, colour contrast and image alt text checked (automated, on the hosted site at 1100, 1440, 1920 and 2560 px; no defects found)
@@ -566,20 +566,20 @@ The Passage Retrieval API returns ranked text passages from indexed content, mai
 
 ### PC-80: Set up Passage Retrieval
 
-Owner: You, guided by Agent· Depends on: PC-02, PC-61
+Owner: You, guided by Agent · Depends on: PC-02, PC-61
 
 - Not doing: Passage Retrieval model created and associated with the query pipeline
 - Not doing: A test API call returns relevant passages
 
 ### PC-81: Choose the feature concept
 
-Owner: Both· Depends on: PC-80
+Owner: Both · Depends on: PC-80
 
 - Not doing: Concept agreed and recorded in `docs/architecture.md`
 
 ### PC-82: Build the feature
 
-Owner: Agent· Depends on: PC-81
+Owner: Agent · Depends on: PC-81
 
 - Not doing: Feature is built test-first and works in the hosted application
 - Not doing: Credentials are not exposed beyond what is safe for the browser
@@ -601,14 +601,14 @@ This is the minimum outcome for the bonus.
 
 ### PC-90: Export the Coveo configuration
 
-Owner: Both· Depends on: PC-14, PC-61
+Owner: Both · Depends on: PC-14, PC-61
 
 - [ ] Configuration exported to the repository with the Coveo CLI
 - [ ] No secrets appear in the export
 
 ### PC-91: Finish the documentation
 
-Owner: Agent· Depends on: PC-90
+Owner: Agent · Depends on: PC-90
 
 - [ ] `docs/architecture.md` reflects the final configuration and decisions
 - [ ] README explains how to set up, run, test and evaluate the project
@@ -621,7 +621,7 @@ Owner: Agent· Depends on: PC-90
 
 ### PC-100: Prepare the technical deep dive and demo
 
-Owner: Both· Depends on: PC-44, PC-91
+Owner: Both · Depends on: PC-44, PC-91
 
 - [ ] Covers what we built, the Coveo configuration, architecture choices and lessons learned
 - [ ] Includes eval results
@@ -635,7 +635,7 @@ Owner: Both
 
 ### PC-103: Submit the presentation materials
 
-Owner: You· Depends on: PC-100, PC-101, PC-102
+Owner: You · Depends on: PC-100, PC-101, PC-102
 
 - [ ] Materials submitted before the session
 
@@ -658,7 +658,7 @@ Owner: You, supported by Agent
 
 ### PC-S1: Add end-user feedback on generated answers
 
-Owner: Agent· Depends on: PC-62
+Owner: Agent · Depends on: PC-62
 
 - Not doing: Users can rate an answer (Atomic's generated answer shows feedback buttons; not tested yet)
 - Not doing: Ratings are captured somewhere we can review them (not verified)
