@@ -23,18 +23,18 @@ The assessment defines four tiers of required work and a panel presentation. A t
 | Essential | Show each Pokémon's picture in results | Done | PC-21 |
 | Intermediate | Host the code on GitHub and share the link | Code is on GitHub; not yet shared | PC-31 |
 | Intermediate | Host the search application | Not started | PC-30 |
-| Advanced | Generative answers with Relevance Generative Answering | Not started; the index is ready | PC-61, PC-62 |
-| Advanced | Preload a Query Suggestions model for type-ahead | Not started | PC-50, PC-51 |
-| Advanced | Pokémon detail page | Not started | PC-70 |
+| Advanced | Generative answers with Relevance Generative Answering | Models built and associated; application work not started | PC-61, PC-62 |
+| Advanced | Preload a Query Suggestions model for type-ahead | Model built and default queries uploaded; suggestions not yet confirmed in the application | PC-50, PC-51 |
+| Advanced | Pokémon detail page | In progress | PC-70 |
 | Advanced | Technical deep dive presentation | Not started | PC-100 |
 | Advanced | Enterprise customer value presentation | Not started | PC-102 |
 | Bonus | Passage Retrieval: at minimum, understand it and hold a point of view | Not started; access must be requested | PC-02, PC-80 to PC-83 |
 
-Evals, performance baselines and interface polish are our own additions and are not assessment requirements. They support the presentation.
+Evals, performance baselines and interface polish are additions we chose and are not assessment requirements. They support the presentation.
 
 ## How we work
 
-- Work is organized into epics and tickets. Each epic has its own branch and is tracked through one or more pull requests.
+- Work is organized into epics and tickets. Each epic has a separate branch and is tracked through one or more pull requests.
 - A ticket is done when all of its acceptance criteria are checked.
 - Tests or expected results are defined before implementation.
 - The user makes all Coveo platform changes, with guidance from the agent.
@@ -230,16 +230,16 @@ Evals run on demand with `npm run eval` and use a dedicated search hub so that t
 
 Owner: Both · Estimate: 1 h
 
-- [ ] Script pulls 30 to 50 sample pages at the site's requested rate
-- [ ] Expected values are saved as JSON and raw HTML stays out of Git
+- [x] Script pulls 30 to 50 sample pages at the site's requested rate
+- [x] Expected values are saved as JSON and raw HTML stays out of Git
 - [ ] Difficult cases are verified by hand
 
 ### PC-41: Add index quality checks
 
 Owner: Agent · Estimate: 30 min · Depends on: PC-14, PC-40
 
-- [ ] Indexed Type, Generation and image values are compared with reference data
-- [ ] The run reports any non-Pokémon pages in the index
+- [x] Indexed Type, Generation and image values are compared with reference data
+- [x] The run reports any non-Pokémon pages in the index
 
 ### PC-42: Add relevance evals
 
@@ -269,21 +269,25 @@ Owner: Both · Estimate: 1 h · Depends on: PC-62
 
 **Branch:** `feature/query-suggestions`
 
-### PC-50: Preload analytics data
+### PC-50: Pre-populate suggestions
 
-Owner: Both · Estimate: 1 h · Depends on: PC-20
+Owner: Both · Estimate: 1 h · Depends on: PC-20, and the model from PC-51
 
-The model learns from search and click analytics and needs at least 100 events.
+The application has no real users, so the model has no search history to learn from. Coveo's documented method for a low-traffic environment is a default queries file. See `docs/architecture.md`, section Query Suggestions.
 
-- [ ] Preload approach chosen and recorded
-- [ ] Realistic searches and clicks recorded in Coveo Analytics
+- [x] Preload approach chosen and recorded
+- [x] Contents of the default queries file confirmed by the user
+- [x] File generated from index values and uploaded to the model
+- [ ] Fallback used only if the model cannot become active: scripted sessions through the application, disclosed as synthetic
 
 ### PC-51: Build the model and enable type-ahead
 
-Owner: Both · Estimate: 45 min, plus model build time · Depends on: PC-50
+Owner: Both · Estimate: 45 min, plus model build time · Depends on: PC-20
+
+The model is created first, because the default queries file attaches to an existing model.
 
 - [ ] Model is active and associated with the query pipeline
-- [ ] Search box shows useful suggestions for partial queries
+- [ ] Search box shows useful suggestions for partial queries, checked in a real browser
 
 ---
 
@@ -304,8 +308,8 @@ Generated answers use only an item's body text, so that text must be clean and m
 
 Owner: You, guided by Agent · Estimate: 45 min, plus model build time · Depends on: PC-60
 
-- [ ] Semantic Encoder and Relevance Generative Answering (RGA) models use the same content, limited to the full source
-- [ ] Both models are associated with the `pokebowl-search` query pipeline
+- [x] Semantic Encoder and Relevance Generative Answering (RGA) models use the same content, limited to the full source
+- [x] Both models are associated with the `pokebowl-search` query pipeline
 
 ### PC-62: Add generated answers to the application
 
@@ -368,7 +372,7 @@ Owner: Agent· Depends on: PC-75
 
 Owner: Agent · Depends on: PC-76
 
-Tailwind and shadcn/ui are the approved tools for our own interface code. The first polish pass used hand-written CSS and a native dropdown instead, which went against that decision. Atomic's own components stay on Atomic theme variables and CSS parts, because Atomic uses Shadow DOM.
+Tailwind and shadcn/ui are the approved tools for our interface code. The first polish pass used hand-written CSS and a native dropdown instead, which went against that decision. Atomic components stay on Atomic theme variables and CSS parts, because Atomic uses Shadow DOM.
 
 - [x] Header, result cards, Type badges and the page-size control use Tailwind and shadcn/ui
 - [x] Result cards render correctly inside Atomic's Shadow DOM
@@ -424,8 +428,8 @@ Owner: Both · Estimate: 30 min
 
 This is the minimum outcome for the bonus.
 
-- [ ] Documented how the API works and when to use it
-- [ ] Documented how we would use it in future work
+- [x] Documented how the API works and when to use it
+- [x] Documented how we would use it in future work
 
 ---
 
@@ -501,5 +505,6 @@ These items are covered in the presentation as our production approach. They are
 
 - Scheduled evals and regression alerts
 - Automated configuration drift detection and promotion between environments
-- A/B testing of query pipeline changes
+- A/B testing of query pipeline changes and of the Query Suggestions model
+- Retraining Query Suggestions on logged real queries and clicks, which needs real traffic
 - Ongoing review of user feedback and sampled answers

@@ -21,9 +21,28 @@ export const PAGE_SIZES = [
 // A ceiling well above any facet's values, so that new values are never hidden.
 export const FACET_VALUE_LIMIT = 100;
 
-export const POKEDEX_NUMBER_FIELD = 'pokemon_number';
+export const SEARCH_HUB = 'pokebowl-search';
+
+export const POKEMON_FIELDS = {
+  name: 'pokemon_name',
+  image: 'pokemon_image',
+  number: 'pokemon_number',
+  type: 'pokemon_type',
+  generation: 'pokemon_generation',
+} as const;
+
 export const POKEDEX_NUMBER_WIDTH = 4;
-export const POKEDEX_SORT = `@${POKEDEX_NUMBER_FIELD} ascending`;
-export const NAME_SORT = '@pokemon_name ascending';
+export const UNKNOWN_POKEDEX_NUMBER = '???';
+
+// Atomic expects sort expressions without "@" before the field, and Headless adds it to the request.
+export const RELEVANCY_SORT = 'relevancy';
+export const POKEDEX_SORT = `${POKEMON_FIELDS.number} ascending`;
+const NAME_SORT = `${POKEMON_FIELDS.name} ascending`;
+
+export const SORT_OPTIONS = [
+  { label: 'Best match', expression: RELEVANCY_SORT },
+  { label: 'Pokédex number', expression: POKEDEX_SORT },
+  { label: 'Name A to Z', expression: NAME_SORT },
+];
 
 export const POKEBALL_IMAGE = '/pokeball.svg';

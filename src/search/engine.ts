@@ -1,8 +1,7 @@
 import type { SearchEngineConfiguration } from '@coveo/headless';
 import type { CoveoConfig } from '../config.ts';
 import { preprocessSearchRequest } from './queryRewrite.ts';
-
-export const SEARCH_HUB = 'pokebowl-search';
+import { SEARCH_HUB } from './settings.ts';
 
 export function toEngineConfiguration(config: CoveoConfig): SearchEngineConfiguration {
   return {

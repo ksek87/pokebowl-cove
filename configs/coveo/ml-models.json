@@ -1,0 +1,46 @@
+{
+  "models": [
+    {
+      "name": "pokebowl-semantic-encoder",
+      "type": "Semantic Encoder",
+      "id": "g7g9ksahd7cvoorg_embeddings_514c1da3_4eea_458a_a05e_8f60f052e192",
+      "sources": ["pokemondb-pokemon"],
+      "filters": null,
+      "queryPipeline": "pokebowl-search",
+      "associationCondition": null
+    },
+    {
+      "name": "pokebowl-rga",
+      "type": "Relevance Generative Answering",
+      "id": "g7g9ksahd7cvoorg_genqa_0e742d37_4976_4d84_913c_dacbb630e2e3",
+      "sources": ["pokemondb-pokemon"],
+      "filters": null,
+      "queryPipeline": "pokebowl-search",
+      "associationCondition": "Query is not empty",
+      "advancedConfiguration": "Defaults"
+    },
+    {
+      "name": "pokebowl-query-suggestions",
+      "type": "Query Suggestions",
+      "id": "g7g9ksahd7cvoorg_querysuggest_d5261f5b_03c8_4444_b0e3_553ea968b9b0",
+      "learningInterval": { "dataPeriod": "1 month", "buildingFrequency": "Daily", "reason": "A rebuild picks up the default queries file sooner than the weekly default" },
+      "filters": null,
+      "queryPipeline": "pokebowl-search",
+      "associationCondition": null,
+      "status": "Rebuild in progress after the learning interval change",
+      "defaultQueries": {
+        "file": "configs/coveo/query-suggestions-default-queries.csv",
+        "configurationType": "DEFAULT_QUERIES",
+        "languageCode": "en",
+        "appliedThrough": "Machine Learning API, Advanced Model Configurations, PUT configs/{configurationType}",
+        "result": "HTTP 200 reported by the user"
+      }
+    }
+  ],
+  "appliedThrough": "Administration Console: Models and Query Pipelines",
+  "verified": {
+    "date": "2026-11-08",
+    "builds": "Reported complete by the user",
+    "associations": "Confirmed by the user on the pokebowl-search Machine learning tab"
+  }
+}

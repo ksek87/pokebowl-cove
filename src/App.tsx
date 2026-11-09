@@ -10,6 +10,7 @@ import {
   AtomicQuerySummary,
   AtomicRefineToggle,
   AtomicResultList,
+  AtomicResultsPerPage,
   AtomicSearchBox,
   AtomicSearchInterface,
   AtomicSearchLayout,
@@ -22,13 +23,14 @@ import type { CoveoConfig } from './config.ts';
 import { toEngineConfiguration } from './search/engine.ts';
 import { showAllWhenCleared } from './search/showAllWhenCleared.ts';
 import { POKEMON_RESULT_FIELDS, PokemonResult } from './search/PokemonResult.tsx';
-import { ResultsPerPage } from './search/ResultsPerPage.tsx';
 import {
+  DEFAULT_PAGE_SIZE,
   FACET_VALUE_LIMIT,
-  NAME_SORT,
+  PAGE_SIZES,
   POKEBALL_IMAGE,
-  POKEDEX_SORT,
+  POKEMON_FIELDS,
   RESULT_COLUMNS,
+  SORT_OPTIONS,
 } from './search/settings.ts';
 import { PokedexLookupNotice } from './search/PokedexLookupNotice.tsx';
 
@@ -75,14 +77,14 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
             <AtomicLayoutSection section="facets">
               <AtomicFacetManager>
                 <AtomicFacet
-                  field="pokemon_type"
+                  field={POKEMON_FIELDS.type}
                   label="Type"
                   sortCriteria="alphanumeric"
                   numberOfValues={FACET_VALUE_LIMIT}
                   withSearch={false}
                 />
                 <AtomicFacet
-                  field="pokemon_generation"
+                  field={POKEMON_FIELDS.generation}
                   label="Generation"
                   sortCriteria="alphanumericNatural"
                   numberOfValues={FACET_VALUE_LIMIT}
@@ -97,11 +99,14 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
               <AtomicDidYouMean />
                 <AtomicQuerySummary />
               <AtomicSortDropdown>
-                <AtomicSortExpression label="Best match" expression="relevancy" />
-                <AtomicSortExpression label="Pokédex number" expression={POKEDEX_SORT} />
-                <AtomicSortExpression label="Name A to Z" expression={NAME_SORT} />
+                {SORT_OPTIONS.map(({ label, expression }) => (
+                  <AtomicSortExpression key={label} label={label} expression={expression} />
+                ))}
               </AtomicSortDropdown>
-              <ResultsPerPage engine={engine} />
+              <AtomicResultsPerPage
+                choicesDisplayed={PAGE_SIZES.join(',')}
+                initialChoice={DEFAULT_PAGE_SIZE}
+              />
                 <AtomicRefineToggle />
               </AtomicLayoutSection>
               <AtomicLayoutSection section="results">
