@@ -33,8 +33,7 @@
         "configurationType": "DEFAULT_QUERIES",
         "languageCode": "en",
         "appliedThrough": "Machine Learning API, Advanced Model Configurations, PUT configs/{configurationType}",
-        "result": "HTTP 200 reported by the user; queries served by the Query Suggestion API after the rebuild",
-        "pending": "The ranked version of the file has not been uploaded"
+        "result": "Ranked file uploaded with HTTP 200, reported by the user on 2026-11-09. After the rebuild, 84 of 86 suggestions served for 12 test prefixes were in the file, and 7 of the 12 prefixes came back strictly in importance order, compared with 1 of 12 before the rebuild. Pokémon names now lead the suggestions, for example for char"
       }
     }
   ],
