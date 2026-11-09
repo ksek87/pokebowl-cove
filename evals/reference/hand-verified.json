@@ -1,0 +1,11 @@
+{
+  "source": "Values read by hand from pokemondb.net, recorded in docs/indexing-expected-results.md",
+  "itemCount": 1028,
+  "pokemon": {
+    "charizard": { "name": "Charizard", "number": "0006", "types": ["Fire", "Flying"], "generation": "Generation 1", "image": "https://img.pokemondb.net/artwork/charizard.jpg" },
+    "mr-mime": { "name": "Mr. Mime", "number": "0122", "types": ["Psychic", "Fairy"], "generation": "Generation 1", "image": "https://img.pokemondb.net/artwork/mr-mime.jpg" },
+    "porygon2": { "name": "Porygon2", "number": "0233", "types": ["Normal"], "generation": "Generation 2", "image": "https://img.pokemondb.net/artwork/porygon2.jpg" },
+    "rotom": { "name": "Rotom", "number": "0479", "types": ["Electric", "Ghost"], "generation": "Generation 4", "image": "https://img.pokemondb.net/artwork/rotom.jpg" },
+    "browt": { "name": "Browt", "number": "???", "types": ["Grass"], "generation": "Generation 10", "image": "https://img.pokemondb.net/artwork/browt.jpg" }
+  }
+}

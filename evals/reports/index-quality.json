@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "itemCount": {
+    "expected": 1028,
+    "actual": 1028
+  },
+  "pagesCompared": 40,
+  "mismatches": [],
+  "missingPages": [],
+  "nonPokemonPages": [],
+  "duplicatePages": []
+}
