@@ -12,7 +12,20 @@ Copies of the configuration applied in the Coveo Administration Console. The con
 | `query-pipeline.json` | The `pokebowl-search` query pipeline, its condition and filter rule | Our own record of the console settings, not a Coveo import format |
 | `api-keys.json` | Settings of the browser search key, without its value | Our own record of the console settings, not a Coveo import format |
 | `test-source.json` | Settings of the single-Pokémon test source | Our own record of the console settings, not a Coveo import format |
+| `query-suggestions-default-queries.csv` | Starting suggestions for the Query Suggestions model | UTF-8 CSV without headers, uploaded to the model as a default queries file. Generated, do not edit by hand |
 
 These files record the intended settings and do not prove what is live in Coveo. After applying a setting, confirm it in the console or through a query. The first full crawl ran without `performFieldMappingUsingAllOrigins` and without the Facet option on `pokemon_generation`, although both were recorded here.
 
 The reasons behind these settings are recorded in [docs/architecture.md](../../docs/architecture.md).
+
+## Query Suggestions default queries
+
+The application has no real search history, so the Query Suggestions model starts from a [default queries file](https://docs.coveo.com/en/qa5b0256/), the method Coveo documents for test and low-traffic environments. The file holds Pokémon names, Types, Generations, Type pairs that exist in the data, abilities and species. All values come from the index.
+
+To regenerate it after the index changes:
+
+```sh
+node --env-file=.env scripts/generate-default-queries.ts
+```
+
+The script reads every item once and then runs each query other than names against the `pokebowl-search` pipeline. It drops any query with no matching result in the top results. All of its requests set `analytics.capture` to `false`, so they do not reach the analytics that train models. The file must stay within Coveo's limit of 5,000 queries per language, and the script fails if it does not.
