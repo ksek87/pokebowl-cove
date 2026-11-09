@@ -23,7 +23,17 @@ export interface AnswerCase {
   /** Advanced query that limits the answer to one Pokémon. */
   scope?: string;
   note?: string;
+  /** Values of the Pokémon's other forms, which must not replace the base form's value. */
+  otherFormValues?: string[];
 }
+
+/** Reference values that the index does not hold, read from the Pokémon pages. */
+export interface FormFacts {
+  baseForm: { name: string; field: 'height' | 'weight'; otherForms: string[] }[];
+  weaknesses: { name: string; types: string[] }[];
+}
+
+const NO_FORM_FACTS: FormFacts = { baseForm: [], weaknesses: [] };
 
 export interface AnswerOutcome {
   text: string;
@@ -39,6 +49,8 @@ export interface AnswerGrade {
   citationCorrect: boolean;
   needsHumanReview: boolean;
   reason: string;
+  /** Other-form values found in the answer, for base-form questions. */
+  otherFormValuesShown?: string[];
 }
 
 export type GradedAnswer = AnswerGrade & {
@@ -82,10 +94,41 @@ function slug(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 }
 
+function firstNumber(value: string): string {
+  return /[\d.]+/.exec(value)?.[0] ?? value;
+}
+
+const BASE_FORM_QUESTIONS: Record<FormFacts['baseForm'][number]['field'], (name: string) => string> = {
+  height: (name) => `How tall is ${name}?`,
+  weight: (name) => `How much does ${name} weigh?`,
+};
+
+function formCases(items: AnswerItem[], formFacts: FormFacts): AnswerCase[] {
+  const baseForm = formFacts.baseForm.flatMap(({ name, field, otherForms }): AnswerCase[] => {
+    const item = byName(items, name);
+    return item
+      ? [{
+          id: `base-${field}-${slug(name)}`,
+          category: 'base-form',
+          question: BASE_FORM_QUESTIONS[field](name),
+          facts: [firstNumber(item[field])],
+          citeAny: [item.uri],
+          otherFormValues: otherForms,
+        }]
+      : [];
+  });
+  const weaknesses = formFacts.weaknesses.flatMap(({ name, types }): AnswerCase[] => {
+    const item = byName(items, name);
+    return item
+      ? [{ id: `weakness-${slug(name)}`, category: 'fact', question: `What types is ${name} weak to?`, facts: types, citeAny: [item.uri] }]
+      : [];
+  });
+  return [...baseForm, ...weaknesses];
+}
+
 function factCases(item: AnswerItem): AnswerCase[] {
   const citeAny = [item.uri];
   const [ability] = item.abilities;
-  const firstNumber = (value: string): string => /[\d.]+/.exec(value)?.[0] ?? value;
   return [
     { id: `type-${slug(item.name)}`, category: 'fact', question: `What type is ${item.name}?`, facts: item.types, citeAny },
     { id: `species-${slug(item.name)}`, category: 'fact', question: `What species is ${item.name}?`, facts: [item.species.replace(/ Pokémon$/, '')], citeAny },
@@ -96,7 +139,7 @@ function factCases(item: AnswerItem): AnswerCase[] {
 
 const FACT_QUESTIONS_PER_ITEM = 2;
 
-export function buildAnswerCases(items: AnswerItem[]): AnswerCase[] {
+export function buildAnswerCases(items: AnswerItem[], formFacts: FormFacts = NO_FORM_FACTS): AnswerCase[] {
   const facts = FACT_NAMES.flatMap((name, position): AnswerCase[] => {
     const item = byName(items, name);
     if (!item) {
@@ -133,7 +176,7 @@ export function buildAnswerCases(items: AnswerItem[]): AnswerCase[] {
     citeAny: pages.flatMap((name) => byName(items, name)?.uri ?? []),
     note,
   }));
-  return [...facts, ...unanswerable, ...scoped, ...judgment];
+  return [...facts, ...formCases(items, formFacts), ...unanswerable, ...scoped, ...judgment];
 }
 
 function sameUri(first: string, second: string): boolean {
@@ -164,6 +207,11 @@ function gradeScoped(testCase: AnswerCase, outcome: AnswerOutcome): AnswerGrade 
   };
 }
 
+/** Finds whole numbers only, so "85.0" is not found inside "185.0". */
+function shownValues(answer: string, values: string[]): string[] {
+  return values.filter((value): boolean => new RegExp(`(?<![\\d.])${value.replace(/\./g, '\\.')}(?![\\d])`).test(answer));
+}
+
 export function gradeAnswer(testCase: AnswerCase, outcome: AnswerOutcome): AnswerGrade {
   if (testCase.category === 'unanswerable') {
     return gradeUnanswerable(outcome);
@@ -175,13 +223,23 @@ export function gradeAnswer(testCase: AnswerCase, outcome: AnswerOutcome): Answe
   const missingFacts = testCase.facts.filter((fact): boolean => !answer.includes(fact.toLowerCase()));
   const citationCorrect = outcome.citations.some((uri): boolean => testCase.citeAny.some((wanted): boolean => sameUri(uri, wanted)));
   const passed = outcome.answerGenerated && !missingFacts.length && citationCorrect;
-  return {
+  const grade = {
     passed,
     missingFacts,
     citationCorrect,
     needsHumanReview: testCase.category === 'judgment',
     reason: passed ? 'Every expected fact and a correct citation.' : 'Missing answer, fact or citation.',
   };
+  if (!testCase.otherFormValues) {
+    return grade;
+  }
+  const otherFormValuesShown = shownValues(answer, testCase.otherFormValues);
+  if (!otherFormValuesShown.length) {
+    return { ...grade, otherFormValuesShown };
+  }
+  return passed
+    ? { ...grade, otherFormValuesShown, needsHumanReview: true, reason: 'The base value and other forms\' values; a person checks which is which.' }
+    : { ...grade, otherFormValuesShown, reason: 'Gave another form\'s value in place of the base form\'s.' };
 }
 
 export function summarizeAnswers(graded: GradedAnswer[]): {

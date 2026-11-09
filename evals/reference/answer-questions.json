@@ -178,6 +178,121 @@
     ]
   },
   {
+    "id": "base-weight-charizard",
+    "category": "base-form",
+    "question": "How much does Charizard weigh?",
+    "facts": [
+      "90.5"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/charizard"
+    ],
+    "otherFormValues": [
+      "110.5",
+      "100.5"
+    ]
+  },
+  {
+    "id": "base-weight-venusaur",
+    "category": "base-form",
+    "question": "How much does Venusaur weigh?",
+    "facts": [
+      "100.0"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/venusaur"
+    ],
+    "otherFormValues": [
+      "155.5"
+    ]
+  },
+  {
+    "id": "base-height-venusaur",
+    "category": "base-form",
+    "question": "How tall is Venusaur?",
+    "facts": [
+      "2.0"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/venusaur"
+    ],
+    "otherFormValues": [
+      "2.4"
+    ]
+  },
+  {
+    "id": "base-weight-lucario",
+    "category": "base-form",
+    "question": "How much does Lucario weigh?",
+    "facts": [
+      "54.0"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/lucario"
+    ],
+    "otherFormValues": [
+      "57.5",
+      "49.4"
+    ]
+  },
+  {
+    "id": "base-height-lucario",
+    "category": "base-form",
+    "question": "How tall is Lucario?",
+    "facts": [
+      "1.2"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/lucario"
+    ],
+    "otherFormValues": [
+      "1.3"
+    ]
+  },
+  {
+    "id": "base-weight-meowth",
+    "category": "base-form",
+    "question": "How much does Meowth weigh?",
+    "facts": [
+      "4.2"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/meowth"
+    ],
+    "otherFormValues": [
+      "7.5"
+    ]
+  },
+  {
+    "id": "base-weight-tauros",
+    "category": "base-form",
+    "question": "How much does Tauros weigh?",
+    "facts": [
+      "88.4"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/tauros"
+    ],
+    "otherFormValues": [
+      "115.0",
+      "85.0",
+      "110.0"
+    ]
+  },
+  {
+    "id": "weakness-charizard",
+    "category": "fact",
+    "question": "What types is Charizard weak to?",
+    "facts": [
+      "Rock",
+      "Water",
+      "Electric"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/charizard"
+    ]
+  },
+  {
     "id": "none-0",
     "category": "unanswerable",
     "question": "Who won the 1998 World Cup?",
