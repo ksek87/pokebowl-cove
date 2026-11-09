@@ -16,7 +16,11 @@
     "prebuild": "npm run copy:atomic",
     "test:e2e": "playwright test",
     "eval": "node --env-file=.env evals/checkIndex.ts",
-    "eval:reference": "node --env-file=.env evals/buildReference.ts"
+    "eval:reference": "node --env-file=.env evals/buildReference.ts",
+    "eval:sets": "node --env-file=.env evals/buildEvalSets.ts",
+    "eval:relevance": "node --env-file=.env evals/runRelevance.ts",
+    "eval:answers": "node --env-file=.env evals/runAnswers.ts",
+    "eval:performance": "node --env-file=.env evals/runPerformance.ts"
   },
   "dependencies": {
     "@coveo/atomic-react": "^3.11.50",

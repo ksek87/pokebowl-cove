@@ -1,5 +1,5 @@
 import type { CoveoConfig } from '../src/config.ts';
-import { POKEMON_FIELDS } from '../src/search/settings.ts';
+import { POKEMON_DETAIL_ONLY_FIELDS, POKEMON_FIELDS, POKEMON_STATS } from '../src/search/settings.ts';
 
 export interface IndexedItem {
   clickUri: string;
@@ -7,7 +7,11 @@ export interface IndexedItem {
 }
 
 const LARGEST_PAGE = 1000;
-const FIELDS = Object.values(POKEMON_FIELDS);
+const FIELDS = [
+  ...Object.values(POKEMON_FIELDS),
+  ...Object.values(POKEMON_DETAIL_ONLY_FIELDS),
+  ...POKEMON_STATS.map((stat): string => stat.field),
+];
 
 /** Reads every item the search key can see, without recording analytics. */
 export async function fetchIndexedItems(
