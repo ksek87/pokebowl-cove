@@ -318,7 +318,7 @@ Our markup uses Tailwind and shadcn/ui. Atomic's components are styled through [
 
 Atomic's clear button only empties the text, so the application runs a search for everything, from the first page, when that button is used. Emptying the box by keyboard follows Atomic's behavior and waits for Enter, which avoids unrequested searches and false submit events in analytics. The search uses the `searchboxSubmit` event because Headless has no public event for clearing, and it fires only on the explicit button. Facets request up to a fixed ceiling so that a new Generation or Type is never hidden.
 
-**Decision: center the page numbers on the page.** The pager has a full-width row below the facets and results, on the same axis as the title and search box. The `pagination` layout section is a direct child of `atomic-search-layout` with its own grid area, so its position does not depend on the facets width. The rejected alternative was centering it under the results column, which put it off the page axis.
+**Decision: center the page numbers on the page.** The pager has a full-width row below the facets and results, on the same axis as the title and search box. The `pagination` layout section is a direct child of `atomic-search-layout` with a dedicated grid area, so its position does not depend on the facets width. The rejected alternative was centering it under the results column, which put it off the page axis.
 
 **Decision: use Atomic's `atomic-results-per-page` for page sizes.** It hides itself on errors and empty results, so we do not maintain that logic. It replaced a custom dropdown built on Headless and shadcn/ui. It shows buttons instead of a dropdown, and it is styled through CSS parts to match the pager.
 
