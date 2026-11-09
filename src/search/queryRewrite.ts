@@ -1,8 +1,13 @@
-import type { SearchEngineConfiguration } from '@coveo/headless';
-import { POKEDEX_NUMBER_FIELD, POKEDEX_NUMBER_WIDTH, POKEDEX_SORT } from './settings.ts';
+import {
+  buildCriterionExpression,
+  parseCriterionExpression,
+  type SearchEngineConfiguration,
+} from '@coveo/headless';
+import { POKEDEX_NUMBER_WIDTH, POKEDEX_SORT, POKEMON_FIELDS, RELEVANCY_SORT } from './settings.ts';
 
-const POKEDEX_QUERY = /^#?(?<number>\d{1,4})$/;
-const DEFAULT_SORT = 'relevancy';
+const POKEDEX_QUERY = new RegExp(`^#?(?<number>\\d{1,${POKEDEX_NUMBER_WIDTH}})$`);
+
+export const POKEDEX_SORT_REQUEST = buildCriterionExpression(parseCriterionExpression(POKEDEX_SORT));
 
 interface SearchBody {
   q?: string;
@@ -19,11 +24,11 @@ export function parsePokedexNumber(query: string): string | null {
 export function rewriteSearchBody<T extends SearchBody>(body: T): T {
   const pokedexNumber = parsePokedexNumber(body.q ?? '');
   if (pokedexNumber) {
-    const lookup = `@${POKEDEX_NUMBER_FIELD}=="${pokedexNumber}"`;
+    const lookup = `@${POKEMON_FIELDS.number}=="${pokedexNumber}"`;
     return { ...body, q: '', aq: body.aq ? `(${body.aq}) ${lookup}` : lookup };
   }
-  if (!body.q && body.sortCriteria === DEFAULT_SORT) {
-    return { ...body, sortCriteria: POKEDEX_SORT };
+  if (!body.q?.trim() && body.sortCriteria === RELEVANCY_SORT) {
+    return { ...body, sortCriteria: POKEDEX_SORT_REQUEST };
   }
   return body;
 }

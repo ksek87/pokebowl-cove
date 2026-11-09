@@ -52,7 +52,17 @@
   --size-search: 720px;
   --size-filters: 272px;
   --size-gutter: 24px;
-  --size-search-row: 67px;
+  --size-sort-select: 190px;
+  --size-sort-arrow-space: 48px;
+  --size-search-box: 60px;
+  --size-panel-border: 2px;
+  --size-card-edge: 5px;
+  --size-search-row: calc(var(--size-search-box) + var(--size-panel-border) + var(--size-card-edge));
+  --border-panel: var(--size-panel-border) solid var(--border);
+  --radius-panel: 20px;
+  --radius-control: 12px;
+  --text-small: 13px;
+  --text-label: 15px;
   --atomic-primary: #d1352b;
   --atomic-primary-light: #e8574c;
   --atomic-primary-dark: #a92820;
@@ -81,6 +91,7 @@ atomic-layout-section[section='search'] {
   min-height: var(--size-search-row);
 }
 
+/* Media queries cannot read variables. This width must match Atomic's mobile breakpoint. */
 @media (min-width: 1024px) {
   atomic-search-layout {
     grid-template-areas:
@@ -94,6 +105,13 @@ atomic-layout-section[section='search'] {
 
   atomic-layout-section[section='main'] {
     margin-left: var(--size-gutter);
+  }
+
+  /* Atomic empties the facets on these states, so the message takes the full width and centers on the page. */
+  atomic-search-interface:is(.atomic-search-interface-no-results, .atomic-search-interface-error)
+    atomic-layout-section[section='main'] {
+    grid-column: 2 / -2;
+    margin-left: 0;
   }
 }
 
@@ -114,8 +132,10 @@ atomic-layout-section[section='status'] > atomic-breadbox {
   flex-basis: 100%;
 }
 
+/* A zero basis lets the summary wrap, so a long query cannot push the controls to a second row. */
 atomic-layout-section[section='status'] > atomic-query-summary {
-  margin-right: auto;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 atomic-layout-section[section='facets'] > atomic-facet-manager > :last-child {
@@ -126,12 +146,12 @@ atomic-search-box::part(wrapper) {
   position: relative !important;
   display: flex;
   align-items: center;
-  min-height: 60px;
+  min-height: var(--size-search-box);
   height: auto;
   background: var(--card);
-  border: 2px solid var(--border);
-  border-bottom-width: 5px;
-  border-radius: 20px;
+  border: var(--border-panel);
+  border-bottom-width: var(--size-card-edge);
+  border-radius: var(--radius-panel);
 }
 
 atomic-search-box::part(textarea-spacer) {
@@ -147,7 +167,7 @@ atomic-search-box::part(submit-button) {
   margin: 6px;
   color: var(--atomic-on-primary);
   background: var(--atomic-primary);
-  border-radius: 12px;
+  border-radius: var(--radius-control);
 }
 
 atomic-search-box::part(submit-icon) {
@@ -157,8 +177,8 @@ atomic-search-box::part(submit-icon) {
 atomic-facet::part(facet) {
   padding: 16px;
   background: var(--card);
-  border: 2px solid var(--border);
-  border-radius: 20px;
+  border: var(--border-panel);
+  border-radius: var(--radius-panel);
 }
 
 atomic-facet::part(label-button) {
@@ -200,10 +220,12 @@ atomic-result-list::part(result-list-grid-clickable-container):hover {
 }
 
 atomic-sort-dropdown::part(select) {
+  width: var(--size-sort-select);
+  padding-right: var(--size-sort-arrow-space);
   height: 40px;
   background: var(--card);
-  border: 2px solid var(--border);
-  border-radius: 12px;
+  border: var(--border-panel);
+  border-radius: var(--radius-control);
   font-weight: 800;
 }
 
@@ -218,12 +240,19 @@ atomic-query-summary::part(container) {
 atomic-pager::part(page-button),
 atomic-pager::part(previous-button),
 atomic-pager::part(next-button) {
-  border: 2px solid var(--border);
-  border-radius: 12px;
+  border: var(--border-panel);
+  border-radius: var(--radius-control);
   font-weight: 800;
 }
 
-atomic-pager::part(active-page-button) {
+atomic-results-per-page::part(button) {
+  border: var(--border-panel);
+  border-radius: var(--radius-control);
+  font-weight: 800;
+}
+
+atomic-pager::part(active-page-button),
+atomic-results-per-page::part(active-button) {
   color: var(--atomic-on-primary);
   background: var(--atomic-primary);
   border-color: var(--atomic-primary);

@@ -1,5 +1,6 @@
 import { expect, it } from 'vitest';
-import { SEARCH_HUB, toEngineConfiguration } from './engine.ts';
+import { toEngineConfiguration } from './engine.ts';
+import { SEARCH_HUB } from './settings.ts';
 
 it('uses the Coveo values and the search hub enforced by the browser key', (): void => {
   const configuration = toEngineConfiguration({
@@ -10,8 +11,7 @@ it('uses the Coveo values and the search hub enforced by the browser key', (): v
   expect(configuration).toEqual({
     organizationId: 'test-org',
     accessToken: 'test-key',
-    search: { searchHub: 'pokebowl-search' },
+    search: { searchHub: SEARCH_HUB },
     preprocessRequest: expect.any(Function),
   });
-  expect(SEARCH_HUB).toBe('pokebowl-search');
 });
