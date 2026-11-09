@@ -126,3 +126,7 @@ Passage Retrieval hands-on work (PC-80 to PC-82) depends on Coveo enabling acces
 - Check interface changes in a real browser before reporting them as done.
 - Hand Rerail scan fixes and agreed implementation work to background agents, so the user can keep working. Do not start work the user has not agreed.
 - Do not remind the user about the PC-02 email.
+
+## Known flaky test
+
+`e2e/interface.spec.ts`, the search page loading test, fails intermittently in full parallel runs and passes alone. The cause is not confirmed. Its error was not captured, so capture it the next time it fails.

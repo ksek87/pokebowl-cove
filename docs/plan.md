@@ -244,24 +244,26 @@ Owner: Agent · Estimate: 30 min · Depends on: PC-14, PC-40
 
 Owner: Both · Estimate: 1 h · Depends on: PC-14
 
-- [ ] Labelled query set created
-- [ ] Recall@K and MRR are reported
+- [x] Labelled query set created
+- [x] Recall@K and MRR are reported
 
 ### PC-43: Establish the performance baseline
 
 Owner: Agent · Estimate: 45 min · Depends on: PC-30
 
-- [ ] p50 and p95 latency recorded for search, type-ahead, answers and page load
-- [ ] Performance targets set from the baseline
-- [ ] Reports saved as JSON
+- [x] p50 and p95 latency recorded for search, type-ahead, answers and page load
+- [x] Performance targets set from the baseline
+- [x] Reports saved as JSON
+
+These are pre-hosting numbers from one local network, in `evals/reports/performance.json`. Measure again from the hosted application. The numbers did not support the sort cache, a page size limit, pipeline simplification or tuning answer settings for speed.
 - [ ] Bundle size reviewed, including whether a smaller stylesheet for cards is worthwhile (the inline copy is about 2.5% of the gzipped JavaScript)
 
 ### PC-44: Add generated answer evals
 
 Owner: Both · Estimate: 1 h · Depends on: PC-62
 
-- [ ] Questions cover expected facts, citations and unanswerable cases
-- [ ] Results are saved in a report
+- [x] Questions cover expected facts, citations and unanswerable cases
+- [x] Results are saved in a report
 - [ ] A real query with results but no answer is checked
 - [ ] When a generated answer counts against the allowance is confirmed
 
