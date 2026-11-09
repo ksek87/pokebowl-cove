@@ -36,6 +36,7 @@ test('removes a facet filter from the breadbox', async ({ page }): Promise<void>
   await page.goto('/');
   await expect(firstResult(page)).toBeVisible({ timeout: NETWORK_TIMEOUT });
 
+  await page.locator('atomic-facet').first().locator('[part="label-button"]').click();
   await page.locator('atomic-facet').first().getByRole('checkbox', { name: /Fire/ }).click();
   await expect(page).toHaveURL(new RegExp(`f-${POKEMON_FIELDS.type}=`), { timeout: NETWORK_TIMEOUT });
 

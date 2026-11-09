@@ -21,6 +21,9 @@ export const PAGE_SIZES = [
 // A ceiling well above any facet's values, so that new values are never hidden.
 export const FACET_VALUE_LIMIT = 100;
 
+// Atomic collapses every facet after this many, so zero starts them all collapsed.
+export const EXPANDED_FACETS_AT_LOAD = 0;
+
 export const SEARCH_HUB = 'pokebowl-search';
 
 export const POKEMON_FIELDS = {

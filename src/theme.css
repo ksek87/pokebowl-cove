@@ -96,7 +96,8 @@ atomic-layout-section[section='search'] {
   atomic-search-layout {
     grid-template-areas:
       '. atomic-section-search atomic-section-search .'
-      '. atomic-section-facets atomic-section-main .' !important;
+      '. atomic-section-facets atomic-section-main .'
+      '. atomic-section-pagination atomic-section-pagination .' !important;
     grid-template-columns:
       var(--size-gutter) var(--size-filters) minmax(0, 1fr)
       var(--size-gutter) !important;
@@ -105,6 +106,12 @@ atomic-layout-section[section='search'] {
 
   atomic-layout-section[section='main'] {
     margin-left: var(--size-gutter);
+  }
+
+  /* A row across both columns, so the pager centers on the page whatever the facets width. */
+  atomic-layout-section[section='pagination'] {
+    grid-area: atomic-section-pagination;
+    margin-bottom: var(--size-gutter);
   }
 
   /* Atomic empties the facets on these states, so the message takes the full width and centers on the page. */

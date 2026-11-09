@@ -25,6 +25,7 @@ import { showAllWhenCleared } from './search/showAllWhenCleared.ts';
 import { POKEMON_RESULT_FIELDS, PokemonResult } from './search/PokemonResult.tsx';
 import {
   DEFAULT_PAGE_SIZE,
+  EXPANDED_FACETS_AT_LOAD,
   FACET_VALUE_LIMIT,
   PAGE_SIZES,
   POKEBALL_IMAGE,
@@ -75,7 +76,7 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
               <AtomicSearchBox />
             </AtomicLayoutSection>
             <AtomicLayoutSection section="facets">
-              <AtomicFacetManager>
+              <AtomicFacetManager collapseFacetsAfter={EXPANDED_FACETS_AT_LOAD}>
                 <AtomicFacet
                   field={POKEMON_FIELDS.type}
                   label="Type"
@@ -118,9 +119,9 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
                 <AtomicNoResults />
                 <AtomicQueryError />
               </AtomicLayoutSection>
-              <AtomicLayoutSection section="pagination">
-                <AtomicPager />
-              </AtomicLayoutSection>
+            </AtomicLayoutSection>
+            <AtomicLayoutSection section="pagination">
+              <AtomicPager />
             </AtomicLayoutSection>
           </AtomicSearchLayout>
         </AtomicSearchInterface>

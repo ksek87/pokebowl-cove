@@ -24,8 +24,8 @@ The assessment defines four tiers of required work and a panel presentation. A t
 | Intermediate | Host the code on GitHub and share the link | Code is on GitHub; not yet shared | PC-31 |
 | Intermediate | Host the search application | Not started | PC-30 |
 | Advanced | Generative answers with Relevance Generative Answering | Models built and associated; application work not started | PC-61, PC-62 |
-| Advanced | Preload a Query Suggestions model for type-ahead | Model built and default queries uploaded; suggestions not yet confirmed in the application | PC-50, PC-51 |
-| Advanced | Pokémon detail page | In progress | PC-70 |
+| Advanced | Preload a Query Suggestions model for type-ahead | Complete: model active, default queries live, and suggestions confirmed in a real browser | PC-50, PC-51 |
+| Advanced | Pokémon detail page | Built on `feature/detail-page`, not yet merged | PC-70 |
 | Advanced | Technical deep dive presentation | Not started | PC-100 |
 | Advanced | Enterprise customer value presentation | Not started | PC-102 |
 | Bonus | Passage Retrieval: at minimum, understand it and hold a point of view | Not started; access must be requested | PC-02, PC-80 to PC-83 |
@@ -286,8 +286,8 @@ Owner: Both · Estimate: 45 min, plus model build time · Depends on: PC-20
 
 The model is created first, because the default queries file attaches to an existing model.
 
-- [ ] Model is active and associated with the query pipeline
-- [ ] Search box shows useful suggestions for partial queries, checked in a real browser
+- [x] Model is active and associated with the query pipeline
+- [x] Search box shows useful suggestions for partial queries, checked in a real browser
 
 ---
 
@@ -336,11 +336,11 @@ Owner: Both · Estimate: 45 min · Depends on: PC-62
 
 Owner: Agent · Estimate: 2 h · Depends on: PC-21
 
-- [ ] Data shown on the page agreed
-- [ ] Each result links to a page with a shareable URL
-- [ ] Components are built test-first using shadcn/ui and Tailwind
-- [ ] Unknown Pokémon show a clear not-found state
-- [ ] New Pokémon with unknown numbers or empty stats display cleanly
+- [x] Data shown on the page agreed
+- [x] Each result links to a page with a shareable URL
+- [x] Components are built test-first using shadcn/ui and Tailwind
+- [x] Unknown Pokémon show a clear not-found state
+- [x] New Pokémon with unknown numbers or empty stats display cleanly
 
 ---
 

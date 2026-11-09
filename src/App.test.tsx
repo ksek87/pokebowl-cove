@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import type { JSX, ReactNode } from 'react';
 import { expect, it, vi } from 'vitest';
 import { App } from './App.tsx';
-import { DEFAULT_PAGE_SIZE, PAGE_SIZES, SORT_OPTIONS } from './search/settings.ts';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES, SORT_OPTIONS, EXPANDED_FACETS_AT_LOAD } from './search/settings.ts';
 
 vi.mock('@coveo/headless', async (importActual) => ({
   ...(await importActual<object>()),
@@ -16,7 +16,17 @@ vi.mock('@coveo/atomic-react', () => {
     AtomicSearchInterface: passthrough,
     AtomicSearchLayout: passthrough,
     AtomicLayoutSection: passthrough,
-    AtomicFacetManager: passthrough,
+    AtomicFacetManager: ({
+      children,
+      collapseFacetsAfter,
+    }: {
+      children?: ReactNode;
+      collapseFacetsAfter: number;
+    }): JSX.Element => (
+      <div data-testid="facet-manager" data-collapse-after={collapseFacetsAfter}>
+        {children}
+      </div>
+    ),
     AtomicFacet: ({
       field,
       label,
@@ -57,6 +67,12 @@ it('renders the application heading', (): void => {
   render(<App config={config} />);
 
   expect(screen.getByRole('heading', { name: 'Pokémon Search' })).toBeInTheDocument();
+});
+
+it('starts with the configured number of facets expanded', (): void => {
+  render(<App config={config} />);
+
+  expect(screen.getByTestId('facet-manager')).toHaveAttribute('data-collapse-after', String(EXPANDED_FACETS_AT_LOAD));
 });
 
 it('offers a Type facet', (): void => {

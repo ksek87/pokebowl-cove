@@ -27,13 +27,13 @@
       "filters": null,
       "queryPipeline": "pokebowl-search",
       "associationCondition": null,
-      "status": "Rebuild in progress after the learning interval change",
+      "status": "Active, reported by the user after the rebuild",
       "defaultQueries": {
         "file": "configs/coveo/query-suggestions-default-queries.csv",
         "configurationType": "DEFAULT_QUERIES",
         "languageCode": "en",
         "appliedThrough": "Machine Learning API, Advanced Model Configurations, PUT configs/{configurationType}",
-        "result": "HTTP 200 reported by the user"
+        "result": "HTTP 200 reported by the user; queries served by the Query Suggestion API after the rebuild"
       }
     }
   ],

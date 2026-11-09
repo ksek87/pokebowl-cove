@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { DEFAULT_PAGE_SIZE, PAGE_SIZES, SORT_OPTIONS } from '../src/search/settings.ts';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES, POKEMON_FIELDS, SORT_OPTIONS } from '../src/search/settings.ts';
 
 const NETWORK_TIMEOUT = 15_000;
 const ALIGNMENT_TOLERANCE_PX = 2;
@@ -15,6 +15,8 @@ const DESKTOP_WIDTHS = [NARROW_DESKTOP, LAPTOP, FULL_HD, LARGE_DESKTOP];
 const NEXT_PAGE_SIZE = PAGE_SIZES.find((size): boolean => size !== DEFAULT_PAGE_SIZE);
 const HALF = 2;
 const PAGES_SKIPPED = 2;
+const MIN_SPACE_BELOW_PAGER_PX = 24;
+const FIRST_INDEX = 0;
 const SETTLE_MS = 1_000;
 const LONG_QUERY_REPEATS = 4;
 const LONG_QUERY = 'which fire type pokemon can learn to fly and also resist grass attacks '.repeat(
@@ -37,6 +39,14 @@ function searchInput(page: Page): Locator {
 
 function pageSizeChoices(page: Page): Locator {
   return page.locator('atomic-results-per-page input[type="radio"]');
+}
+
+function facet(page: Page, field: string): Locator {
+  return page.locator(`atomic-facet[field="${field}"]`);
+}
+
+async function expandFacet(page: Page, field: string): Promise<void> {
+  await facet(page, field).locator('[part="label-button"]').click({ timeout: NETWORK_TIMEOUT });
 }
 
 async function openDesktopPage(page: Page, width: number): Promise<void> {
@@ -67,8 +77,8 @@ test('filters results with the Type facet', async ({ page }): Promise<void> => {
   await expect(summary).toContainText('Results', { timeout: NETWORK_TIMEOUT });
   const unfiltered = await summary.innerText();
 
-  await page
-    .locator('atomic-facet[field="pokemon_type"]')
+  await expandFacet(page, POKEMON_FIELDS.type);
+  await facet(page, POKEMON_FIELDS.type)
     .getByRole('checkbox', { name: /Fire/ })
     .click();
 
@@ -78,8 +88,8 @@ test('filters results with the Type facet', async ({ page }): Promise<void> => {
 test('lists every Generation facet value in numeric order', async ({ page }): Promise<void> => {
   await page.goto('/');
 
-  const generations = page
-    .locator('atomic-facet[field="pokemon_generation"]')
+  await expandFacet(page, POKEMON_FIELDS.generation);
+  const generations = facet(page, POKEMON_FIELDS.generation)
     .getByRole('checkbox', { name: /Generation \d+/ });
   await expect(generations.first()).toBeVisible({ timeout: NETWORK_TIMEOUT });
 
@@ -336,22 +346,53 @@ function centerOf(box: Box): number {
   return box.x + box.width / HALF;
 }
 
+async function expectPagerCenteredBelowColumns(page: Page, width: number): Promise<void> {
+  const pager = await boxOf(page.locator('atomic-pager [part="buttons"]'));
+  const facets = await boxOf(page.locator('atomic-layout-section[section="facets"]'));
+  const grid = await boxOf(page.locator('atomic-result-list'));
+  const logoAndTitle = await boxOf(page.locator('[data-slot="home-link"]'));
+
+  expect(Math.abs(centerOf(pager) - width / HALF)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
+  expect(Math.abs(centerOf(pager) - centerOf(logoAndTitle))).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
+  expect(pager.y).toBeGreaterThanOrEqual(facets.y + facets.height);
+  expect(pager.y).toBeGreaterThanOrEqual(grid.y + grid.height);
+
+  const pageHeight = await page.evaluate((): number => document.documentElement.scrollHeight);
+  expect(pageHeight - (pager.y + pager.height)).toBeGreaterThanOrEqual(MIN_SPACE_BELOW_PAGER_PX);
+}
+
 for (const width of DESKTOP_WIDTHS) {
-  test(`keeps the results, status row and pager on one column at ${width}px`, async ({ page }): Promise<void> => {
+  test(`keeps the results and status row on one column at ${width}px`, async ({ page }): Promise<void> => {
     await openDesktopPage(page, width);
-    await expect(page.locator('atomic-pager [part="buttons"]')).toBeVisible();
 
     const grid = await boxOf(page.locator('atomic-result-list'));
     const status = await boxOf(page.locator('atomic-layout-section[section="status"]'));
-    const pagination = await boxOf(page.locator('atomic-layout-section[section="pagination"]'));
-    const pager = await boxOf(page.locator('atomic-pager [part="buttons"]'));
 
-    for (const row of [status, pagination]) {
-      expect(Math.abs(row.x - grid.x)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
-      expect(Math.abs(row.width - grid.width)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
+    expect(Math.abs(status.x - grid.x)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
+    expect(Math.abs(status.width - grid.width)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
+  });
+
+  test(`centers the pager on the page on a row below both columns at ${width}px`, async ({ page }): Promise<void> => {
+    await openDesktopPage(page, width);
+    await expect(page.locator('atomic-pager [part="buttons"]')).toBeVisible();
+
+    await expectPagerCenteredBelowColumns(page, width);
+  });
+
+  test(`keeps the pager centered below taller open facets at ${width}px`, async ({ page }): Promise<void> => {
+    await openDesktopPage(page, width);
+    await expect(page.locator('atomic-pager [part="buttons"]')).toBeVisible();
+    const headers = page.locator('atomic-facet [part="label-button"]');
+    const facetCount = await headers.count();
+    for (let index = FIRST_INDEX; index < facetCount; index += ONE_RESULT) {
+      await headers.nth(index).click();
     }
-    expect(Math.abs(centerOf(pager) - centerOf(grid))).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
-    expect(pagination.y).toBeGreaterThanOrEqual(grid.y + grid.height - ALIGNMENT_TOLERANCE_PX);
+    await expect(page.locator('atomic-facet').first().getByRole('checkbox').first()).toBeVisible();
+
+    const facets = await boxOf(page.locator('atomic-layout-section[section="facets"]'));
+    const grid = await boxOf(page.locator('atomic-result-list'));
+    expect(facets.height).toBeGreaterThan(grid.height);
+    await expectPagerCenteredBelowColumns(page, width);
   });
 
   test(`keeps the status row on one line with a search summary at ${width}px`, async ({ page }): Promise<void> => {
@@ -386,5 +427,17 @@ for (const width of DESKTOP_WIDTHS) {
     await expect(message).toBeVisible({ timeout: NETWORK_TIMEOUT });
 
     expect(Math.abs(centerOf(await boxOf(message)) - width / HALF)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
+  });
+}
+
+for (const field of [POKEMON_FIELDS.type, POKEMON_FIELDS.generation]) {
+  test(`starts the ${field} facet collapsed and expands it on click`, async ({ page }): Promise<void> => {
+    await openDesktopPage(page, LAPTOP);
+    await expect(facet(page, field).locator('[part="label-button"]')).toBeVisible({ timeout: NETWORK_TIMEOUT });
+    await expect(facet(page, field).getByRole('checkbox')).toHaveCount(NO_RESULTS);
+
+    await expandFacet(page, field);
+
+    await expect(facet(page, field).getByRole('checkbox').first()).toBeVisible();
   });
 }

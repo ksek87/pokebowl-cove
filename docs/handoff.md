@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: November 8, 2026 at 9:48 PM EST. Update this file, including the time, before ending a work session.
+Last updated: November 8, 2026 at 10:02 PM EST. Update this file, including the time, before ending a work session.
 
 ## Read first
 
@@ -16,7 +16,7 @@ The target is to finish almost everything quickly, with Friday, November 13, 202
 
 | Area | State |
 |---|---|
-| Git | PRs #1 to #5 are merged. Pushed branches without pull requests: `fix/code-review-findings` (review fixes, centering, model records and documentation), `feature/passage-retrieval-pov`, `feature/evals` and `feature/query-suggestions-file`. PC-70 is still in progress and uncommitted in `.claude/worktrees/`. Reconcile on merge: field names repeated in `evals/` and `src/tooling/` should use `POKEMON_FIELDS`, and `vite.config.ts` overlaps. |
+| Git | PRs #1 to #5 are merged. Pushed branches without pull requests: `fix/code-review-findings` (review fixes, centering, model records and documentation), `feature/passage-retrieval-pov`, `feature/evals`, `feature/query-suggestions-file` and `feature/detail-page`. Merge `fix/code-review-findings` first. `feature/detail-page` holds a snapshot of the fix branch, so keep the fix branch's versions of shared files and apply only the detail page changes. The ranked suggestions file and `docs/ui-audit.md` are still being produced. Reconcile on merge: field names repeated in `evals/` and `src/tooling/` should use `POKEMON_FIELDS`, and `vite.config.ts` overlaps. |
 | Assessment tiers | Essential is complete. Intermediate, Advanced and Bonus are not. |
 | Index | PC-14 is verified at 1,028 items, with all fields populated. The body review (PC-60) passed. |
 | Query routing | Dedicated `pokebowl-search` pipeline, condition Search Hub contains `pokebowl-`, filtered to `pokemondb-pokemon`. No Coveo project was created; it is optional. |
@@ -32,7 +32,7 @@ Do not launch any of these until the user says so. The user may release them one
 
 | Priority | Ticket | Goal | Branch | Ready? |
 |---|---|---|---|---|
-| 1 | PC-70 | Pokémon detail page | `feature/detail-page` | In progress; content confirmed by the user |
+| 1 | PC-70 | Pokémon detail page | `feature/detail-page` | Built and pushed, not merged. Runs on port 5174 during development |
 | 2 | PC-83 | Passage Retrieval point of view | `feature/passage-retrieval-pov` | Written and pushed. Linked pages such as the full API reference still need reading before the panel |
 | 3 | PC-40, PC-41 | Eval reference data and index checks | `feature/evals` | Done and pushed. Index check passed: 1,028 items and 40 sampled pages matched. The user still hand-checks 11 difficult pages |
 | 4 | PC-76 | Designed loading, no-results and error states | `feature/ui-states` | Yes |
@@ -64,7 +64,7 @@ Read the relevant Coveo or Vercel documentation in full before giving steps. Mar
 | Priority | Ticket | Work | Notes |
 |---|---|---|---|
 | 1 | PC-61 | Finish the Semantic Encoder and RGA models | Both builds are complete, and the IDs and associations are recorded in `configs/coveo/ml-models.json`. |
-| 2 | PC-51 | Show type-ahead | The model `pokebowl-query-suggestions` is built and associated with `pokebowl-search`. On November 8 the Query Suggestion API returned only a learned query, so the uploaded file was not yet being served. Confirm in a real browser once it is. |
+| 2 | PC-51 | Show type-ahead | Done. The model is active after a rebuild, and the file is live: typing `char` in the search box lists Pokémon and ability suggestions. All queries have equal importance, so Charizard is not first for `char`. Ranking is possible enrichment. |
 | 3 | PC-50 | Default queries file | Generated and uploaded with a 200 response. The model was then set to a 1-month data period and daily builds so a rebuild picks up the file, and the user reported a build in progress. The file is `configs/coveo/query-suggestions-default-queries.csv`. |
 | 4 | PC-30 | Host on Vercel | Set `VITE_COVEO_ORGANIZATION_ID` and `VITE_COVEO_SEARCH_API_KEY` as build variables, use Node 24 and deploy on merge. The free plan is limited to non-commercial personal use, and Vercel can pause projects, so check the link before the panel. |
 | 5 | PC-31 | Check history for secrets, then share the repository | Merged commits still carry an older local email. PR #1 keeps its old commits. |
@@ -82,7 +82,7 @@ Number-only searches are Pokédex lookups, the home page is in Pokédex order, p
 
 ## Page centering
 
-The no-results and error messages now center on the page, and the status row stays on one line with a search summary, at 1100, 1440, 1920 and 2560 px. The pager is centered under the results column, which is to the right of the page center because the facets take the left column. If the user wants the pager on the page center, it needs a full-width row below both columns.
+The no-results and error messages now center on the page, and the status row stays on one line with a search summary, at 1100, 1440, 1920 and 2560 px. The pager is centered on the page, on a full-width row below the facets and results.
 
 ## Sort bug: fixed on `fix/code-review-findings`
 
@@ -90,7 +90,6 @@ Changing the sort shows "something went wrong" on `main`. The sort expressions i
 
 ## Small open items
 
-- **Page numbering:** the user chooses whether it stays centered under the results column or moves to the page center.
 - **CR-17:** search `25`, then check in Visit Browser whether the event shows `25` or blank.
 - **PC-02:** the user will email Will Tseng on the Technical Challenge thread with the organization ID, asking to enable Passage Retrieval. Do not remind the user about this.
 - **PC-05:** tick the failing-test item the first time a test fails in CI.

@@ -318,6 +318,8 @@ Our markup uses Tailwind and shadcn/ui. Atomic's components are styled through [
 
 Atomic's clear button only empties the text, so the application runs a search for everything, from the first page, when that button is used. Emptying the box by keyboard follows Atomic's behavior and waits for Enter, which avoids unrequested searches and false submit events in analytics. The search uses the `searchboxSubmit` event because Headless has no public event for clearing, and it fires only on the explicit button. Facets request up to a fixed ceiling so that a new Generation or Type is never hidden.
 
+**Decision: center the page numbers on the page.** The pager has a full-width row below the facets and results, on the same axis as the title and search box. The `pagination` layout section is a direct child of `atomic-search-layout` with its own grid area, so its position does not depend on the facets width. The rejected alternative was centering it under the results column, which put it off the page axis.
+
 **Decision: use Atomic's `atomic-results-per-page` for page sizes.** It hides itself on errors and empty results, so we do not maintain that logic. It replaced a custom dropdown built on Headless and shadcn/ui. It shows buttons instead of a dropdown, and it is styled through CSS parts to match the pager.
 
 **Decision: remove unsupported sort and page size values from the URL before the application starts.** Atomic restores URL state as written. A sort that Coveo rejects makes Atomic remove the sort control, which leaves no way to change it, and a page size that is not offered leaves rows partly empty. `src/search/urlState.ts` keeps only the offered values and leaves other entries unchanged.
@@ -325,6 +327,8 @@ Atomic's clear button only empties the text, so the application runs a search fo
 **Rejected alternatives:** a restrained product look, which undersells the theme, and a dark editorial look, which suits the artwork less well on tinted cards.
 
 ## Search behavior
+
+The Type and Generation facets start collapsed at the user's request, set with one value on Atomic's facet manager (`collapseFacetsAfter`, 0 collapses all facets).
 
 Three behaviors are added on top of Coveo's default relevance search.
 
@@ -350,7 +354,7 @@ Query Suggestions is the type-ahead list in the search box. Its model learns fro
 
 **Decision: pre-populate the model with a default queries file, uploaded through the Advanced Model Configurations API.** This is the method Coveo documents for test and low-traffic environments. Enrichment comes after this baseline works, and only if it adds value.
 
-**First file:** `configs/coveo/query-suggestions-default-queries.csv`, with 2,234 queries generated from values in the index: 1,028 Pokémon names, 18 Types, 10 Generations, 178 Type pairs, 284 abilities and 716 species. Each query other than a name was tested against the index with analytics capture off, and 10 were dropped because no top-12 result carried the value. Queries carry no importance values, because any popularity numbers would be invented. Longer natural-language questions were left out, because the purpose of this feature is completing what a person types. A few could be added after generated answers work.
+**First file:** `configs/coveo/query-suggestions-default-queries.csv`, with 2,234 queries generated from values in the index: 1,028 Pokémon names, 18 Types, 10 Generations, 178 Type pairs, 284 abilities and 716 species. Each query other than a name was tested against the index with analytics capture off, and 10 were dropped because no top-12 result carried the value. The first file carried no importance values, because any popularity numbers would be invented. Longer natural-language questions were left out, because the purpose of this feature is completing what a person types. A few could be added after generated answers work.
 
 **Rejected as the first step: scripted sessions that search and click through the application.** The events would be correctly formed, but the traffic would be synthetic, and scripted volume would still be far below what the model needs to learn well. It remains the fallback if the model cannot become active without more analytics. If used, it would be disclosed as synthetic and kept to the `pokebowl-search` hub.
 
@@ -362,7 +366,9 @@ Query Suggestions is the type-ahead list in the search box. Its model learns fro
 
 **Our inference:** Coveo does not state whether a model becomes active with almost no analytics, or whether uploading the file triggers a rebuild. We will confirm both when the model is created. Choosing names and descriptive searches for the file is a product decision.
 
-**Learning interval:** a 1-month data period with daily builds, which Coveo's table lists as a valid pairing. We changed it from the default so that a rebuild picks up the uploaded file soon after upload. After the upload, the Query Suggestion API returned only a learned query, and Coveo does not document when the file takes effect. That a rebuild is needed is our inference.
+**Learning interval:** a 1-month data period with daily builds, which Coveo's table lists as a valid pairing. We changed it from the default so that a rebuild picks up the uploaded file soon after upload. Immediately after the upload, the Query Suggestion API returned only a learned query. After the rebuild it returned the file's queries, which supports our inference that the file takes effect on a rebuild. Coveo does not document this.
+
+**Ranking:** the user chose to add the file's optional importance column by category, so that Pokémon names come before abilities and species. The first upload had equal importance, and `char` listed `charm` first and Charizard seventh. These values rank categories and do not claim to be popularity. Upload of the ranked file is pending.
 
 ### In production
 
@@ -373,3 +379,13 @@ A client deployment would go further than this baseline:
 3. **Monitor suggestion quality.** Report on [searches that came from a suggestion](https://docs.coveo.com/en/2010/), which have the `omniboxAnalytics` event cause, and use the click-through measures in the [model card](https://docs.coveo.com/en/p2ac0141/).
 4. **Maintain the suggestions.** Use a [blocklist](https://docs.coveo.com/en/qa5b0256/) for unwanted terms. The [model card](https://docs.coveo.com/en/p2ac0141/) notes that the model can keep suggesting queries for removed content until it retrains.
 5. **Keep test traffic out.** Evals and monitoring use a separate search hub so they do not train the model.
+
+## Pokémon detail page
+
+**Decision: each result opens a detail page in this application, at a URL such as `/?pokemon=Mr.%20Mime`.** The page shows artwork, name, number, Types, Generation, species, height, weight, abilities and base stats, and links to the source page on pokemondb.net. The user confirmed this content.
+
+A query parameter needs no rewrite rules on Vercel and does not interfere with the `#` state that Atomic keeps in the URL. The rejected alternative was a path URL such as `/pokemon/mr-mime`, which needs hosting rewrites.
+
+The page reads one item through a separate Headless engine with analytics off, using an exact match on the name. Coveo's `==` operator treated `?` and `*` as wildcards in our testing, so the page also checks that the returned name equals the requested name. Pokémon with `???` as their number hide it and state that base stats are not available. Result cards use Atomic's link templates, so a card click still logs Atomic's click event.
+
+The work is on `feature/detail-page`, which must merge after `fix/code-review-findings`. Not confirmed: real artwork on the page, and that the click event reaches Coveo in production.
