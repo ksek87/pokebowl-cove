@@ -60,6 +60,27 @@ If Passage Retrieval access has not arrived, write PC-83 and add PC-82 only if a
 
 ---
 
+## Open problems
+
+Problems found during testing that still need work. Each stays here until it is fixed or the user decides to accept it.
+
+**Must fix before the presentation**
+
+- [ ] **Generated answers mix Pokémon forms (Epic 6, with PC-44 and PC-63).** The answer for `charizard` gives 110.5 kg and Tough Claws, which are Mega Charizard X values, beside base Charizard's Type and stats. The correct weight is 90.5 kg, as the detail page shows. The likely cause is that one page's body text holds several forms in the same format, but this is not confirmed. Any fix to the body text belongs in the indexing extension.
+- [ ] **Ranked Query Suggestions are not confirmed live (PC-50).** The ranked file was uploaded with a 200 response, but suggestions still came back in the old order: abilities and species above Pokémon names, and only 1 of 12 test prefixes in importance order. A build is running. Re-check after it finishes, then record the result in `configs/coveo/ml-models.json`. If the order does not change, find out why in Coveo's documentation before uploading again.
+
+**Check or decide**
+
+- [x] **`char` shows "Did you mean: chart" (PC-52). Accepted by the user.** It predates the partial-name change: the Search API returns the same correction with and without it. Turning off `queryCorrection` for one-word prefix searches is untested and would also remove corrections for genuine one-word typos.
+- [x] **Order within matching names is not meaningful (PC-52). Accepted by the user.** `char` ranks Charcadet and Charjabug above Charizard, because the order comes from Coveo's relevance score. Ranking popular Pokémon higher would need a popularity signal that does not exist without real traffic.
+- [ ] **Descriptive queries score low (Epic 4).** MRR is 0.717, the main reason overall MRR is 0.947 against a target of 0.95. The query `grass fire` returns no relevant result. Decide whether to improve this or explain it in the presentation.
+- [ ] **Facets are untested on the hosted site (PC-30).** Search, the home page and the detail page were checked on the live site, but facets were not. Check them after PC-52 merges.
+- [ ] **The performance eval does not apply the partial-name rewrite (PC-43).** `evals/reports/performance.json` does not reflect shipped search behaviour. Apply the rewrite and measure from the hosted site.
+- [ ] **Browser tests do not run in CI, and failed checks do not block merges (PC-05).** The first needs the eval API key. The second needs branch protection on `main`, set by the user.
+- [ ] **Duplicate icon (optional).** `public/pokeball.svg` and `docs/assets/pokeball.svg` are identical.
+
+---
+
 ## Epic 0: Foundation
 
 **Branch:** `feature/foundation`
@@ -206,14 +227,14 @@ Owner: Agent · Estimate: 45 min · Depends on: PC-21, PC-22
 Owner: Both · Estimate: 45 min · Depends on: PC-21
 
 - [x] Hosting provider chosen and recorded in `docs/architecture.md`
-- [ ] Application is publicly reachable and returns results
-- [ ] Merges deploy automatically
+- [x] Application is publicly reachable and returns results, at https://pokebowl-cove.vercel.app/
+- [x] Merges deploy automatically
 
 ### PC-31: Share the repository with Coveo
 
 Owner: You · Estimate: 15 min · Depends on: PC-30
 
-- [ ] History and files checked for secrets
+- [x] History and files checked for secrets
 - [ ] Repository made public or reviewers invited
 - [ ] Repository link sent to Coveo
 
@@ -300,13 +321,28 @@ Owner: Both · Depends on: PC-14
 
 Searching `char` returns only 5 items, with Charizard last and Charmander missing, because `char` is not a whole word in most names. A ranking expression rule can only reorder what a query already returns, so finding partial names needs a separate method.
 
-**Research result.** For one-word searches of two or more letters or digits, keep `q` unchanged and add, in the request hook, `wildcards: true`, `dq: @pokemon_name=char*`, and a `$qre` boost with modifier 100 in `aq`. On 16 partial-name queries, MRR rose from 0.65 to 1.00 and Recall@12 from 0.63 to 1.00. Across 123 queries MRR rose from 0.90 to 0.95, with p95 at 184 ms. Sending `char*` as `q` was rejected, because it matched all 1,028 items and changes the text sent to RGA. Test targets: partial MRR at least 0.95, Recall@12 of 1.00, overall MRR at least 0.95, no category below baseline, and search p95 within 250 ms.
+**Decision.** The change is code only, with no Coveo configuration change. For one-word searches of two or more letters or digits, the request hook keeps `q` unchanged and adds `wildcards: true`, `dq: @pokemon_name=<q>*` and a `$qre` boost of 300 in `aq`. A benchmark of nine settings chose 300, the lowest setting that reaches the best score on every measure. A boost of 100, the first research recommendation, gave a perfect MRR but left `char` in a mixed order. Sending `char*` as `q` was rejected, because it matched all 1,028 items and changes the text sent to RGA. See `docs/architecture.md`.
+
+**Facet decision.** Names matched through `dq` were not filtered by a selected facet, so `char` with Type Fire showed Charjabug. Selected facet values are added to `dq`, because a filter must always filter and `char` with Type Fire must still find Charmander. Dropping `dq` when a facet is selected would lose Charmander, and accepting the defect would leave a visibly broken filter.
+
+**Targets at boost 300, measured without facets from a developer machine:**
+
+| Target | Measured | Met |
+|---|---|---|
+| Partial MRR at least 0.95 | 1.00 | Yes |
+| Partial Recall@12 of 1.00 | 1.00 | Yes |
+| No category below baseline | None below | Yes |
+| Search p95 within 250 ms | 190 ms | Yes |
+| Overall MRR at least 0.95 | 0.947 | No |
+
+The overall target is not met. The gap is in descriptive, Generation, ability and species queries, which one-word prefix matching does not improve.
 
 - [x] Coveo's documented options for prefix matching and name boosts read in full, with a recommendation prepared
-- [ ] The user approves the recommendation
-- [ ] Expected results defined for partial-name queries
-- [ ] Change applied in `pokebowl-search` and recorded in `configs/coveo/`
-- [ ] Expected results verified against live data
+- [x] The user approves the recommendation
+- [x] Expected results defined for partial-name queries
+- [x] Facet selections filter names matched through `dq`, checked in a real browser
+- [x] Change applied in the request hook and documented in `docs/architecture.md`, with no change needed in `configs/coveo/`
+- [x] Expected results verified against live data
 
 ---
 

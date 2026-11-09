@@ -19,6 +19,7 @@
     "eval:reference": "node --env-file=.env evals/buildReference.ts",
     "eval:sets": "node --env-file=.env evals/buildEvalSets.ts",
     "eval:relevance": "node --env-file=.env evals/runRelevance.ts",
+    "eval:prefix-benchmark": "node --env-file=.env evals/runPrefixBenchmark.ts",
     "eval:answers": "node --env-file=.env evals/runAnswers.ts",
     "eval:performance": "node --env-file=.env evals/runPerformance.ts"
   },

@@ -47,6 +47,13 @@ interface Dependencies {
   clock?: Clock;
 }
 
+export type SearchRequestBody = Record<string, unknown> & { q: string; aq?: string; sortCriteria?: string };
+
+interface TimedSearchDependencies extends Dependencies {
+  /** Applied to the request body, so an eval can run the same rewrite as the application. */
+  rewrite?: (body: SearchRequestBody) => SearchRequestBody;
+}
+
 function endpoint(config: CoveoConfig, path: string): string {
   return `https://${config.organizationId}.org.coveo.com/rest/${path}`;
 }
@@ -60,7 +67,7 @@ function facet(field: string): object {
 }
 
 /** Mirrors what the page sends, including facets, so timings reflect real requests. */
-export function buildSearchBody(options: SearchOptions): Record<string, unknown> {
+export function buildSearchBody(options: SearchOptions): SearchRequestBody {
   const { q, aq, sortCriteria = RELEVANCY_SORT, numberOfResults = DEFAULT_PAGE_SIZE, generative = false } = options;
   return {
     q,
@@ -87,13 +94,13 @@ export function buildSearchBody(options: SearchOptions): Record<string, unknown>
 export async function timedSearch(
   config: CoveoConfig,
   options: SearchOptions,
-  { api = fetch, clock = now }: Dependencies = {},
+  { api = fetch, clock = now, rewrite = (body): SearchRequestBody => body }: TimedSearchDependencies = {},
 ): Promise<TimedSearch> {
   const started = clock();
   const response = await api(endpoint(config, 'search/v2'), {
     method: 'POST',
     headers: headers(config),
-    body: JSON.stringify(buildSearchBody(options)),
+    body: JSON.stringify(rewrite(buildSearchBody(options))),
   });
   if (!response.ok) {
     throw new Error(`The Search API returned ${response.status}.`);

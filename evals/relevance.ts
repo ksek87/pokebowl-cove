@@ -40,6 +40,7 @@ const PAIR_SAMPLE = 8;
 const PARTIAL_SAMPLE = 12;
 const NATURAL_SAMPLE = 8;
 const PREFIX_LENGTH = 4;
+export const TYPE_QUERY_SUFFIX = ' type';
 
 /** Names that punctuation or spelling makes hard, kept in when the index has them. */
 const DIFFICULT_NAMES = ['Mr. Mime', "Farfetch'd", 'Nidoran♀', 'Type: Null', 'Porygon2', 'Ho-Oh'];
@@ -75,7 +76,7 @@ export function toEvalItem({ raw }: IndexedItem): EvalItem {
   };
 }
 
-function spread<T>(values: T[], size: number): T[] {
+export function spread<T>(values: T[], size: number): T[] {
   if (values.length <= size) {
     return values;
   }
@@ -83,7 +84,7 @@ function spread<T>(values: T[], size: number): T[] {
   return Array.from({ length: size }, (_unused, slot): T => values[Math.floor(slot * step)]);
 }
 
-function unique(values: string[]): string[] {
+export function unique(values: string[]): string[] {
   return [...new Set(values)].sort((a, b): number => a.localeCompare(b, 'en', { numeric: true }));
 }
 
@@ -108,7 +109,7 @@ function valueQueries(items: EvalItem[]): RelevanceQuery[] {
   const species = spread(unique(items.map((item): string => item.species).filter(Boolean)), SPECIES_SAMPLE);
   return [
     ...types.map((type) => ({
-      query: `${type.toLowerCase()} type`,
+      query: `${type.toLowerCase()}${TYPE_QUERY_SUFFIX}`,
       category: 'type',
       relevant: namesWhere(items, (item): boolean => item.types.includes(type)),
     })),

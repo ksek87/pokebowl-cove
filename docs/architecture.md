@@ -348,7 +348,110 @@ Three behaviors are added on top of Coveo's default relevance search.
 
 **Coveo documentation:** [Modify requests and responses](https://docs.coveo.com/en/atomic/latest/usage/atomic-modify-requests-responses/) describes the request hook, and advises limiting it to search requests and coding defensively. It recommends the Headless advanced query action for setting `aq`, without giving a reason. [Ensure that your search interfaces contain standard components](https://docs.coveo.com/en/mc2g0332/) covers query correction and sorting. [Manage fields](https://docs.coveo.com/en/1833/) states that the Sort option needs no rebuild, though a delay may occur.
 
-**Our inference:** we use the request hook despite that recommendation, because the lookup must also clear the text query in the same request, and the advanced query action cannot do that. The search box keeps the text the person typed. Whether analytics keep it has not been verified, and Coveo's documentation suggests the lookup may be recorded with empty text. Check it in Usage Analytics.
+**Our inference:** we use the request hook despite that recommendation, because the number lookup must also clear the text query in the same request, and the advanced query action cannot do that. The partial-name search below uses the same hook for a related reason. The search box keeps the text the person typed. Whether analytics keep it has not been verified, and Coveo's documentation suggests the lookup may be recorded with empty text. Check it in Usage Analytics.
+
+### Partial-name search
+
+**Problem.** Searching `char` returned only 5 items, with Charizard last and Charmander missing. Coveo matches whole words, and `char` is not a whole word in most Pokémon names. A ranking rule can only reorder results that a query already returns, so finding these names needs a way to include them.
+
+**Decision: match the start of the name for one-word searches, and rank those names first.** The request hook in `src/search/queryRewrite.ts` handles a search that is one word of two or more Unicode letters or digits and is not a Pokédex number lookup. It keeps `q` as typed and adds three things:
+
+- `wildcards: true`
+- `dq: @pokemon_name=char*`, which includes the names that start with the word
+- `$qre(expression:'@pokemon_name=char*',modifier:'300')` in `aq`, after any existing `aq`, which ranks those names first
+
+The boost is `NAME_PREFIX_BOOST` in `src/search/settings.ts`. Multi-word searches, empty searches and number lookups do not change. Only letters and digits qualify, so typed text cannot add query syntax to the field expression. This is an application change only, and needs no Coveo configuration.
+
+**Decision: `dq` repeats the active filters.** With only the name match in `dq`, selecting Type Fire for `char` still returned Charjabug, which is Bug and Electric: 6 results, against a Fire facet count of 5. Coveo documents the combined expression as `((q AND lq AND aq) OR dq) AND cq`. Our inference, which the documentation does not state, is that facet selections apply only to the first group, so an item that matches `dq` skips them.
+
+The user decided that selected facet values must be added to `dq`, because the alternatives give poor search behavior: a filter must always filter, and a partial name such as `char` with Type Fire must still find Charmander.
+
+**How this was found.** The benchmark missed the defect, because it selects no facets. A browser test that selected a facet caught it.
+
+The hook now builds the filter from the request, for every facet in `facets` rather than a fixed list:
+
+| Filter state | Added to `dq` |
+|---|---|
+| Selected values | `@pokemon_type==("Fire","Bug")`, any value of one facet |
+| Excluded values | `NOT @pokemon_type==("Bug")` |
+| More than one facet | One expression each, so all must match |
+| Existing `aq` | `(aq)`, the expression before the boost |
+
+For example, `char` with Fire in Generation 1 sends `@pokemon_name=char* @pokemon_type==("Fire") @pokemon_generation==("Generation 1")`. Live results: `char` with Fire returns 5 results, all Fire, including Charmander. Fire or Bug returns 6, adding Charjabug. Fire with Generation 1 returns 4. Excluding Fire returns Charjabug and Thundurus. The interface does not enable facet exclusion, so exclusion was tested through the Search API only.
+
+**When `dq` is left out.** A filter that cannot be repeated exactly removes `dq` for that request, and the boost stays. The person then sees whole-word matches only, which is better than showing an item the filter should remove. This applies to:
+
+- A value containing a double quote or backslash. Values can arrive through the URL, so this also blocks query syntax injection.
+- A field name that is not letters, digits or underscores.
+- A value state other than selected, excluded or idle.
+- Facets that require every selected value (`resultsMustMatch: allValues`).
+- Active range, hierarchical or automatic facets.
+
+The application uses only Type and Generation facets with quote-free values, so none of these apply today. The same benchmark sends no active facets, so its results below are unaffected.
+
+**Escaping.** Coveo's documentation does not describe an escape for a double quote inside a quoted field value, so we tested it. `@pokemon_name==("Fi\"re")` returned a 400 error, and a backslash before a quote still ended the value, so a crafted value could add its own expression. A no syntax block is not a substitute: `@pokemon_type==<@- Fire -@>` returned 82 items, because Coveo removes special characters in the block and exact matching is not preserved. Values without quotes work as they are, including `Flabébé`, `Farfetch'd` and `Type: Null`.
+
+**Known limit, not verified:** a value that Coveo ML automatically selects on the server would not appear in the request and could not be repeated in `dq`. We have no facet ranking model, so this does not apply today.
+
+**Did you mean.** `char` shows "Did you mean: chart". This predates the change: the Search API returns the same correction for `char` with and without the rewrite. It comes from the `queryCorrection` setting that Headless sends. We left it unchanged.
+
+**Benchmark method.** `npm run eval:prefix-benchmark` runs each setting against live Coveo through `rewriteSearchBody`, sequentially and paced, with analytics capture off. It writes `evals/reports/prefix-benchmark.json`. It uses 171 queries: the 123 reference queries, 18 bare Type queries such as `dragon`, and 30 three-letter prefixes shared by at least three names, sampled evenly. Queries the rewrite does not affect are sent once and are not timed, which leaves 93 timed queries. The benchmark does not select facets. Facet behavior is covered by the unit tests and browser tests.
+
+The name-first measure asks whether the top min(relevant count, 12) positions are all relevant. MRR only sees the first relevant result, so it cannot detect a mixed order.
+
+| Setting | Overall MRR (123) | Partial MRR | Partial name-first | Short-prefix name-first | Short-prefix R@12 | Bare Type P@12 | p95 |
+|---|---|---|---|---|---|---|---|
+| Before this change | 0.901 | 0.646 | 56% | 10% | 0.178 | 0.931 | 195 ms |
+| Prefix match, no boost | 0.938 | 0.927 | 88% | 73% | 0.950 | 0.931 | 192 ms |
+| 50 | 0.942 | 0.958 | 94% | 77% | 0.967 | 0.931 | 189 ms |
+| 100 | 0.947 | 1.000 | 94% | 77% | 0.978 | 0.931 | 185 ms |
+| 150 | 0.947 | 1.000 | 100% | 87% | 1.000 | 0.931 | 188 ms |
+| 200 | 0.947 | 1.000 | 100% | 90% | 1.000 | 0.931 | 190 ms |
+| 300 | 0.947 | 1.000 | 100% | 97% | 1.000 | 0.931 | 189 ms |
+| 500 | 0.947 | 1.000 | 100% | 97% | 1.000 | 0.931 | 202 ms |
+| 1000 | 0.947 | 1.000 | 100% | 97% | 1.000 | 0.931 | 198 ms |
+
+Latency was measured from a developer machine, not a hosted site, and the differences between settings are within normal variation. Among bare Type queries, only `dark`, `dragon` and `rock` changed in the top 3, and precision did not change. The other reference categories did not change.
+
+**Why 300.** It is the lowest tested setting that reaches the best score on every measure. Stronger boosts add nothing.
+
+**Target not met.** The overall MRR target of 0.95 is missed, at 0.947. The remaining gap is in descriptive queries (0.717) and in Generation (0.950), ability (0.922) and species (0.922) queries. One-word prefix matching does not improve these, and we did not tune the benchmark to hide this.
+
+**Rejected alternatives**
+
+- **Boost 100, the first recommendation.** MRR is perfect, but `char` still places Thundurus and Magmar among the Char- names.
+- **Sending `char*` as `q`.** It matched all 1,028 items and changes the text sent to generated answers.
+- **No `wildcards` flag, or the `*=` form without it.** Live tests showed no expansion.
+- **`applyToEveryResults` or `isConstant` at modifier 100.** Neither changed the order. `isConstant` should also stay false for an expression that depends on user input, because it asks Coveo to cache the result set.
+- **Headless advanced query action, or a pipeline `queryParamOverride`.** The expression comes from the typed text in the same request and also needs `wildcards`. A pipeline override sets one fixed parameter per statement.
+- **Leaving out `dq` whenever a facet is selected.** Rejected by the user. It keeps filtering correct but loses names: `char` with Type Fire would no longer return Charmander.
+- **Accepting that facets do not filter the added names.** Rejected by the user. It leaves a visibly broken filter, and a filter must always filter.
+
+**Coveo documentation**
+
+- [Wildcards](https://docs.coveo.com/en/1580): wildcards are disabled by default in the Search API, and isolating the data in a dedicated field is advised. At least two characters must precede a wildcard, an overly broad expression returns `WildcardTooGeneral`, and expansion is limited by default to the first 512 terms found alphabetically.
+- [Query expressions](https://docs.coveo.com/en/2830.md): the combined expression is `((q AND lq AND aq) OR dq) AND cq`, and `cq` and `dq` should never be used for features that affect ranking.
+- [Query ranking expressions](https://docs.coveo.com/en/1462.md): a modifier is typically between -100 and 100 "unless you want to completely override the index ranking scores", and a modifier of 100 adds 1000 to the score.
+- [Modify requests and responses](https://docs.coveo.com/en/atomic/latest/usage/atomic-modify-requests-responses/): the request hook should be coded defensively, for example with `try...catch`, and the Headless advanced query action should be used for `aq`.
+- [Using facets](https://docs.coveo.com/en/1571/): each selected value is a filter on top of other selections, results contain at least one selected value of a facet, and exclusion is available when enabled.
+- [Facet controller in Headless](https://docs.coveo.com/en/headless/latest/reference/interfaces/Search.Facet.html): `toggleSelect` and `toggleExclude` change a value's state. Coveo's pages we read do not describe the `currentValues` request format, so we confirmed it from the request Atomic sends and from the Headless type definitions.
+- [Special characters](https://docs.coveo.com/en/2744): `==` is an exact match operator, `NOT` excludes, and a list in parentheses acts as OR. The page shows the list with `=`. We use it with `==`, which we confirmed live.
+- [No syntax blocks](https://docs.coveo.com/en/1454/): `<@- -@>` protects variables by removing special characters from them.
+- [Query parameter overrides](https://docs.coveo.com/en/1491): an analytics event's `advancedQuery` should be set to the `aq` value of the corresponding query, and one statement overrides one parameter. The same page also describes a comma-separated list of overrides in its syntax section, which conflicts with that rule.
+
+**Our inference**
+
+- Using `dq` only for inclusion and putting the boost in `aq` follows the guidance on ranking features.
+- 300 is the deliberate case of overriding index ranking scores: a name that starts with the typed word should come before a match in the body text.
+- We differ from the advanced query recommendation because `dq` and `wildcards` must be set with `aq`, from the typed text, in the same request. The hook keeps the restriction to search requests and the `try...catch`.
+- **Known limit, not verified:** analytics may record a different `aq` from the rewritten request, because the hook changes the request after Headless builds it. Coveo's guidance is that the two should match. Check this in Usage Analytics.
+- The two-character minimum in our rule matches Coveo's wildcard requirement.
+
+**Questions the panel may ask**
+
+- **Why does `dq` need the facet values at all?** Coveo documents the query expression as `((q AND lq AND aq) OR dq) AND cq`. In our tests, items matched through `dq` skipped facet filtering. The link between the two is our inference from testing: we did not find Coveo documentation that states it.
+- **Why is the boost in `aq`, with `dq` used only for inclusion?** Coveo says `cq` and `dq` should never be used for features that affect ranking, and recommends the basic or advanced expression instead.
+- **Why is the modifier 300, above Coveo's typical -100 to 100?** Coveo's `$qre` documentation allows a larger value when you want to completely override the index ranking scores, and this is that deliberate case. The benchmark chose it as the lowest tested setting that reaches the best score on every measure.
 
 ## Hosting
 

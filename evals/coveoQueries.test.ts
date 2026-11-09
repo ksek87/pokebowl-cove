@@ -100,3 +100,12 @@ it('reports no answer when the stream says so', async (): Promise<void> => {
 
   expect(result).toMatchObject({ text: '', answerGenerated: false, firstTextMs: null });
 });
+
+it('sends the request through a rewrite when one is given', async (): Promise<void> => {
+  const api = vi.fn(async (_url: unknown, _init?: RequestInit): Promise<Response> => new Response(JSON.stringify({ results: [] })));
+  const rewrite = <T extends object>(body: T): T => ({ ...body, wildcards: true });
+
+  await timedSearch(CONFIG, { q: 'fire' }, { api: api as typeof fetch, rewrite });
+
+  expect(JSON.parse(String(api.mock.calls[0]?.[1]?.body))).toMatchObject({ q: 'fire', wildcards: true, analytics: { capture: false } });
+});

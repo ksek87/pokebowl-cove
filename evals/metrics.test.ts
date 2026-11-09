@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { latencyStats, percentile, proposeTarget, recallAtK, reciprocalRank } from './metrics.ts';
+import { latencyStats, namesFirst, percentile, precisionAtK, proposeTarget, recallAtK, reciprocalRank } from './metrics.ts';
 
 const RANKED = ['a', 'b', 'c', 'd'];
 const TOP_TWO = 2;
@@ -45,4 +45,23 @@ it('summarizes a sample', (): void => {
 it('rounds a target up from the p95 with headroom', (): void => {
   expect(proposeTarget(JUST_OVER_A_STEP, NO_HEADROOM, STEP)).toBe(TARGET);
   expect(proposeTarget(ONE_STEP, HEADROOM, STEP)).toBe(TARGET);
+});
+
+it('requires every top position that relevant items can fill to be relevant', (): void => {
+  expect(namesFirst(RANKED, ['a', 'b'], TOP_FOUR)).toBe(1);
+  expect(namesFirst(RANKED, ['a', 'c'], TOP_FOUR)).toBe(0);
+});
+
+it('checks only K positions when more items are relevant than fit', (): void => {
+  expect(namesFirst(RANKED, ['a', 'b', 'x', 'y', 'z'], TOP_TWO)).toBe(1);
+});
+
+it('fails the name-first check when too few results came back', (): void => {
+  expect(namesFirst(['a'], ['a', 'b'], TOP_FOUR)).toBe(0);
+});
+
+it('measures the relevant share of the results shown in the top K', (): void => {
+  expect(precisionAtK(RANKED, ['a', 'c'], TOP_FOUR)).toBe(HALF);
+  expect(precisionAtK(['a', 'b'], ['a'], TOP_FOUR)).toBe(HALF);
+  expect(precisionAtK([], ['a'], TOP_FOUR)).toBe(0);
 });
