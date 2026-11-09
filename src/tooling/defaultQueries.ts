@@ -14,12 +14,29 @@ const TYPE_PAIR_LENGTH = 2;
 
 type Category = 'name' | 'type' | 'generation' | 'typePair' | 'ability' | 'species';
 
+const NAME_WEIGHT = 1000;
+const TYPE_AND_GENERATION_WEIGHT = 500;
+const TYPE_PAIR_WEIGHT = 200;
+const ABILITY_AND_SPECIES_WEIGHT = 100;
+
+// The relative importance Coveo reads from the second column of the default queries file.
+export const CATEGORY_WEIGHTS: Record<Category, number> = {
+  name: NAME_WEIGHT,
+  type: TYPE_AND_GENERATION_WEIGHT,
+  generation: TYPE_AND_GENERATION_WEIGHT,
+  typePair: TYPE_PAIR_WEIGHT,
+  ability: ABILITY_AND_SPECIES_WEIGHT,
+  species: ABILITY_AND_SPECIES_WEIGHT,
+};
+
 export interface Candidate {
   category: Category;
   query: string;
   field: string;
   values: string[];
 }
+
+export type CsvRow = Pick<Candidate, 'query' | 'category'>;
 
 type Item = Record<string, unknown>;
 
@@ -91,13 +108,14 @@ export function isSensibleResult(candidate: Candidate, raw: Item): boolean {
   return candidate.values.every((value): boolean => found.includes(value.toLowerCase()));
 }
 
-function csvRow(query: string): string {
-  return /[",\r\n]/.test(query) ? `"${query.replaceAll('"', '""')}"` : query;
+function csvRow({ query, category }: CsvRow): string {
+  const text = /[",\r\n]/.test(query) ? `"${query.replaceAll('"', '""')}"` : query;
+  return `${text},${CATEGORY_WEIGHTS[category]}\n`;
 }
 
-export function toCsv(queries: string[]): string {
-  if (queries.length > MAX_DEFAULT_QUERIES) {
-    throw new Error(`${queries.length} queries exceed the limit of ${MAX_DEFAULT_QUERIES}`);
+export function toCsv(rows: CsvRow[]): string {
+  if (rows.length > MAX_DEFAULT_QUERIES) {
+    throw new Error(`${rows.length} queries exceed the limit of ${MAX_DEFAULT_QUERIES}`);
   }
-  return queries.map((query): string => `${csvRow(query)}\n`).join('');
+  return rows.map(csvRow).join('');
 }

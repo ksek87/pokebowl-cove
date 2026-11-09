@@ -12,7 +12,7 @@ Copies of the configuration applied in the Coveo Administration Console. The con
 | `query-pipeline.json` | The `pokebowl-search` query pipeline, its condition and filter rule | Our own record of the console settings, not a Coveo import format |
 | `api-keys.json` | Settings of the browser search key, without its value | Our own record of the console settings, not a Coveo import format |
 | `test-source.json` | Settings of the single-Pokémon test source | Our own record of the console settings, not a Coveo import format |
-| `query-suggestions-default-queries.csv` | Starting suggestions for the Query Suggestions model | UTF-8 CSV without headers, uploaded to the model as a default queries file. Generated, do not edit by hand |
+| `query-suggestions-default-queries.csv` | Starting suggestions for the Query Suggestions model | UTF-8 CSV without headers, with a query and an importance value on each row, uploaded to the model as a default queries file. Generated, do not edit by hand |
 
 These files record the intended settings and do not prove what is live in Coveo. After applying a setting, confirm it in the console or through a query. The first full crawl ran without `performFieldMappingUsingAllOrigins` and without the Facet option on `pokemon_generation`, although both were recorded here.
 
@@ -21,6 +21,8 @@ The reasons behind these settings are recorded in [docs/architecture.md](../../d
 ## Query Suggestions default queries
 
 The application has no real search history, so the Query Suggestions model starts from a [default queries file](https://docs.coveo.com/en/qa5b0256/), the method Coveo documents for test and low-traffic environments. The file holds Pokémon names, Types, Generations, Type pairs that exist in the data, abilities and species. All values come from the index.
+
+The second column is the optional integer importance value. It ranks categories only, because we have no real query counts: Pokémon names 1000, Types and Generations 500, Type pairs 200, abilities and species 100. The weights are defined once in `src/tooling/defaultQueries.ts`. Coveo does not document how the size of the gap between values affects ranking.
 
 To regenerate it after the index changes:
 

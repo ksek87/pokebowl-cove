@@ -100,7 +100,7 @@ function report(itemCount: number, { kept, dropped }: Validated): void {
 async function main(): Promise<void> {
   const items = await readAllItems();
   const validated = await validate(buildCandidates(items));
-  await writeFile(OUTPUT, toCsv(validated.kept.map((candidate): string => candidate.query)), 'utf8');
+  await writeFile(OUTPUT, toCsv(validated.kept), 'utf8');
   report(items.length, validated);
 }
 
