@@ -475,7 +475,7 @@ Latency was measured from a developer machine, not a hosted site, and the differ
 
 ## Hosting
 
-**Decision: host the application on Vercel.** It connects to the GitHub repository, deploys when changes merge, and needs little setup for a static Vite application. The rejected alternative was Netlify, which offers similar deployment features. The application is a static page that calls Coveo from the browser, so it needs no server. The Coveo organization ID and the search-only key are set as build variables in Vercel, and they reach the browser by design.
+**Decision: host the application on Vercel.** It connects to the GitHub repository, deploys when changes merge, and needs little setup for a static Vite application. The rejected alternative was Netlify, which offers similar deployment features. The application is a static page that calls Coveo from the browser, so it needs no server. The Coveo organization ID and the search-only key are set as build variables in Vercel, and they reach the browser by design. `src/main.tsx` names exactly these two values when it reads them, so Vite inlines only them. Passing all of `import.meta.env` would also inline Vercel's own `VITE_VERCEL_*` build values, such as the commit message and author name; a production build with marker values in those variables confirmed they are absent.
 
 ## Query Suggestions
 
