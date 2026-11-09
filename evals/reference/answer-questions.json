@@ -1,0 +1,332 @@
+[
+  {
+    "id": "type-charizard",
+    "category": "fact",
+    "question": "What type is Charizard?",
+    "facts": [
+      "Fire",
+      "Flying"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/charizard"
+    ]
+  },
+  {
+    "id": "species-charizard",
+    "category": "fact",
+    "question": "What species is Charizard?",
+    "facts": [
+      "Flame"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/charizard"
+    ]
+  },
+  {
+    "id": "species-pikachu",
+    "category": "fact",
+    "question": "What species is Pikachu?",
+    "facts": [
+      "Mouse"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/pikachu"
+    ]
+  },
+  {
+    "id": "ability-pikachu",
+    "category": "fact",
+    "question": "What abilities can Pikachu have?",
+    "facts": [
+      "Static"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/pikachu"
+    ]
+  },
+  {
+    "id": "ability-bulbasaur",
+    "category": "fact",
+    "question": "What abilities can Bulbasaur have?",
+    "facts": [
+      "Overgrow"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/bulbasaur"
+    ]
+  },
+  {
+    "id": "height-bulbasaur",
+    "category": "fact",
+    "question": "How tall is Bulbasaur?",
+    "facts": [
+      "0.7"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/bulbasaur"
+    ]
+  },
+  {
+    "id": "height-mewtwo",
+    "category": "fact",
+    "question": "How tall is Mewtwo?",
+    "facts": [
+      "2.0"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/mewtwo"
+    ]
+  },
+  {
+    "id": "type-mewtwo",
+    "category": "fact",
+    "question": "What type is Mewtwo?",
+    "facts": [
+      "Psychic"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/mewtwo"
+    ]
+  },
+  {
+    "id": "type-eevee",
+    "category": "fact",
+    "question": "What type is Eevee?",
+    "facts": [
+      "Normal"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/eevee"
+    ]
+  },
+  {
+    "id": "species-eevee",
+    "category": "fact",
+    "question": "What species is Eevee?",
+    "facts": [
+      "Evolution"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/eevee"
+    ]
+  },
+  {
+    "id": "species-gengar",
+    "category": "fact",
+    "question": "What species is Gengar?",
+    "facts": [
+      "Shadow"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/gengar"
+    ]
+  },
+  {
+    "id": "ability-gengar",
+    "category": "fact",
+    "question": "What abilities can Gengar have?",
+    "facts": [
+      "Cursed Body"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/gengar"
+    ]
+  },
+  {
+    "id": "ability-snorlax",
+    "category": "fact",
+    "question": "What abilities can Snorlax have?",
+    "facts": [
+      "Immunity"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/snorlax"
+    ]
+  },
+  {
+    "id": "height-snorlax",
+    "category": "fact",
+    "question": "How tall is Snorlax?",
+    "facts": [
+      "2.1"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/snorlax"
+    ]
+  },
+  {
+    "id": "height-lucario",
+    "category": "fact",
+    "question": "How tall is Lucario?",
+    "facts": [
+      "1.2"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/lucario"
+    ]
+  },
+  {
+    "id": "type-lucario",
+    "category": "fact",
+    "question": "What type is Lucario?",
+    "facts": [
+      "Fighting",
+      "Steel"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/lucario"
+    ]
+  },
+  {
+    "id": "none-0",
+    "category": "unanswerable",
+    "question": "Who won the 1998 World Cup?",
+    "facts": [],
+    "citeAny": []
+  },
+  {
+    "id": "none-1",
+    "category": "unanswerable",
+    "question": "What is the capital of France?",
+    "facts": [],
+    "citeAny": []
+  },
+  {
+    "id": "none-2",
+    "category": "unanswerable",
+    "question": "What is the current price of a Nintendo Switch?",
+    "facts": [],
+    "citeAny": []
+  },
+  {
+    "id": "none-3",
+    "category": "unanswerable",
+    "question": "What does Charizard taste like?",
+    "facts": [],
+    "citeAny": []
+  },
+  {
+    "id": "none-4",
+    "category": "unanswerable",
+    "question": "How do I reset my bank password?",
+    "facts": [],
+    "citeAny": []
+  },
+  {
+    "id": "none-5",
+    "category": "unanswerable",
+    "question": "What is the phone number of Ash Ketchum's mother?",
+    "facts": [],
+    "citeAny": []
+  },
+  {
+    "id": "scoped-charizard-0",
+    "category": "scoped",
+    "question": "Describe the appearance and behavior of Charizard.",
+    "facts": [],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/charizard"
+    ],
+    "scope": "@pokemon_name==\"Charizard\""
+  },
+  {
+    "id": "scoped-charizard-1",
+    "category": "scoped",
+    "question": "What are the abilities of Charizard?",
+    "facts": [],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/charizard"
+    ],
+    "scope": "@pokemon_name==\"Charizard\""
+  },
+  {
+    "id": "scoped-pikachu-0",
+    "category": "scoped",
+    "question": "Describe the appearance and behavior of Pikachu.",
+    "facts": [],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/pikachu"
+    ],
+    "scope": "@pokemon_name==\"Pikachu\""
+  },
+  {
+    "id": "scoped-pikachu-1",
+    "category": "scoped",
+    "question": "What are the abilities of Pikachu?",
+    "facts": [],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/pikachu"
+    ],
+    "scope": "@pokemon_name==\"Pikachu\""
+  },
+  {
+    "id": "scoped-mewtwo-0",
+    "category": "scoped",
+    "question": "Describe the appearance and behavior of Mewtwo.",
+    "facts": [],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/mewtwo"
+    ],
+    "scope": "@pokemon_name==\"Mewtwo\""
+  },
+  {
+    "id": "scoped-mewtwo-1",
+    "category": "scoped",
+    "question": "What are the abilities of Mewtwo?",
+    "facts": [],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/mewtwo"
+    ],
+    "scope": "@pokemon_name==\"Mewtwo\""
+  },
+  {
+    "id": "judgment-0",
+    "category": "judgment",
+    "question": "What does Pikachu evolve into?",
+    "facts": [
+      "Raichu"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/pikachu"
+    ],
+    "note": "Evolution facts are not index fields."
+  },
+  {
+    "id": "judgment-1",
+    "category": "judgment",
+    "question": "Which Pokémon evolves into Charizard?",
+    "facts": [
+      "Charmeleon"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/charizard"
+    ],
+    "note": "Evolution facts are not index fields."
+  },
+  {
+    "id": "judgment-2",
+    "category": "judgment",
+    "question": "Is Charizard weak to water?",
+    "facts": [
+      "water"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/charizard"
+    ],
+    "note": "A correct answer needs reading, beyond naming the Type."
+  },
+  {
+    "id": "judgment-3",
+    "category": "judgment",
+    "question": "What is the difference between Charmander and Charmeleon?",
+    "facts": [
+      "Charmander",
+      "Charmeleon"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/charmander",
+      "https://pokemondb.net/pokedex/charmeleon"
+    ],
+    "note": "Quality of a comparison needs a person."
+  }
+]

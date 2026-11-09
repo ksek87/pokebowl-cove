@@ -1,0 +1,2610 @@
+{
+  "measuredAt": "2026-11-09T14:13:31.912Z",
+  "method": "Recall@K counts hits out of the relevant items that can fit in K. Text queries run in pokebowl-search with analytics capture off.",
+  "ks": [
+    3,
+    12
+  ],
+  "overall": {
+    "queries": 123,
+    "mrr": 0.9010162601626015,
+    "recall": {
+      "3": 0.8956639566395663,
+      "12": 0.9072862774082285
+    }
+  },
+  "byCategory": {
+    "name": {
+      "queries": 28,
+      "mrr": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    "type": {
+      "queries": 18,
+      "mrr": 1,
+      "recall": {
+        "3": 1,
+        "12": 0.9907407407407409
+      }
+    },
+    "generation": {
+      "queries": 10,
+      "mrr": 0.95,
+      "recall": {
+        "3": 0.8666666666666668,
+        "12": 0.825
+      }
+    },
+    "ability": {
+      "queries": 15,
+      "mrr": 0.9222222222222223,
+      "recall": {
+        "3": 0.9111111111111111,
+        "12": 0.9025252525252525
+      }
+    },
+    "species": {
+      "queries": 15,
+      "mrr": 0.9222222222222222,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    "partial": {
+      "queries": 16,
+      "mrr": 0.6458333333333333,
+      "recall": {
+        "3": 0.6145833333333333,
+        "12": 0.63125
+      }
+    },
+    "descriptive": {
+      "queries": 13,
+      "mrr": 0.7173076923076922,
+      "recall": {
+        "3": 0.6923076923076923,
+        "12": 0.8365384615384616
+      }
+    },
+    "natural": {
+      "queries": 8,
+      "mrr": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    }
+  },
+  "failures": [
+    {
+      "query": "pika",
+      "category": "partial",
+      "ranked": [
+        "Pikipek"
+      ],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    },
+    {
+      "query": "balt",
+      "category": "partial",
+      "ranked": [],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    },
+    {
+      "query": "panp",
+      "category": "partial",
+      "ranked": [],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    },
+    {
+      "query": "inka",
+      "category": "partial",
+      "ranked": [],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    },
+    {
+      "query": "mabo",
+      "category": "partial",
+      "ranked": [],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    },
+    {
+      "query": "grass fire",
+      "category": "descriptive",
+      "judgment": "A Type pair is taken to mean Pokémon with both Types.",
+      "ranked": [
+        "Gouging Fire",
+        "Fletchinder",
+        "Flareon",
+        "Ponyta",
+        "Houndoom",
+        "Quilava",
+        "Cyndaquil",
+        "Fomantis",
+        "Fuecoco",
+        "Darmanitan",
+        "Litten",
+        "Pombon"
+      ],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    }
+  ],
+  "scores": [
+    {
+      "query": "Bulbasaur",
+      "category": "name",
+      "ranked": [
+        "Bulbasaur",
+        "Venusaur",
+        "Ivysaur",
+        "Charmander",
+        "Squirtle",
+        "Gardevoir",
+        "Mr. Mime",
+        "Voltorb",
+        "Magmar",
+        "Moltres",
+        "Electrode",
+        "Xurkitree"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Golbat",
+      "category": "name",
+      "ranked": [
+        "Golbat",
+        "Crobat",
+        "Zubat",
+        "Gogoat"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Farfetch'd",
+      "category": "name",
+      "ranked": [
+        "Farfetch'd",
+        "Sirfetch'd",
+        "Farigiraf"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Jynx",
+      "category": "name",
+      "ranked": [
+        "Jynx",
+        "Smoochum"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Ledyba",
+      "category": "name",
+      "ranked": [
+        "Ledyba",
+        "Ledian"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Dunsparce",
+      "category": "name",
+      "ranked": [
+        "Dunsparce",
+        "Dudunsparce",
+        "Salamence",
+        "Darmanitan"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Pupitar",
+      "category": "name",
+      "ranked": [
+        "Pupitar",
+        "Larvitar",
+        "Tyranitar",
+        "Pombon",
+        "Meditite"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Vigoroth",
+      "category": "name",
+      "ranked": [
+        "Vigoroth",
+        "Slaking",
+        "Slakoth",
+        "Venomoth",
+        "Whiscash",
+        "Swellow",
+        "Charmander",
+        "Stoutland",
+        "Aerodactyl"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Vibrava",
+      "category": "name",
+      "ranked": [
+        "Vibrava",
+        "Flygon",
+        "Trapinch",
+        "Virizion"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Bagon",
+      "category": "name",
+      "ranked": [
+        "Bagon",
+        "Shelgon",
+        "Salamence"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Burmy",
+      "category": "name",
+      "ranked": [
+        "Burmy",
+        "Wormadam",
+        "Mothim",
+        "Remoraid",
+        "Bonsly"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Croagunk",
+      "category": "name",
+      "ranked": [
+        "Croagunk",
+        "Toxicroak",
+        "Seismitoad",
+        "Krokorok",
+        "Marowak",
+        "Crawdaunt",
+        "Crocalor"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Victini",
+      "category": "name",
+      "ranked": [
+        "Victini",
+        "Victreebel"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Tympole",
+      "category": "name",
+      "ranked": [
+        "Tympole",
+        "Seismitoad",
+        "Palpitoad",
+        "Tadbulb",
+        "Poipole",
+        "Tynamo",
+        "Tyranitar",
+        "Indeedee",
+        "Typhlosion",
+        "Tyrogue"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Gothitelle",
+      "category": "name",
+      "ranked": [
+        "Gothitelle",
+        "Gothita",
+        "Gothorita",
+        "Mr. Mime"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Accelgor",
+      "category": "name",
+      "ranked": [
+        "Accelgor",
+        "Shelmet",
+        "Decidueye"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Greninja",
+      "category": "name",
+      "ranked": [
+        "Greninja",
+        "Frogadier",
+        "Froakie",
+        "Shedinja"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Sylveon",
+      "category": "name",
+      "ranked": [
+        "Sylveon",
+        "Umbreon",
+        "Leafeon",
+        "Glaceon",
+        "Espeon",
+        "Vaporeon",
+        "Eevee",
+        "Flareon",
+        "Jolteon"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Oricorio",
+      "category": "name",
+      "ranked": [
+        "Oricorio"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Jangmo-o",
+      "category": "name",
+      "ranked": [
+        "Jangmo-o",
+        "Hakamo-o",
+        "Kommo-o"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Corviknight",
+      "category": "name",
+      "ranked": [
+        "Corviknight",
+        "Corvisquire",
+        "Rookidee",
+        "Bunnelby",
+        "Braviary",
+        "Tinkaton",
+        "Skarmory"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Cursola",
+      "category": "name",
+      "ranked": [
+        "Cursola",
+        "Corsola"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Enamorus",
+      "category": "name",
+      "ranked": [
+        "Enamorus"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Bramblin",
+      "category": "name",
+      "ranked": [
+        "Bramblin",
+        "Brambleghast",
+        "Basculegion",
+        "Golbat",
+        "Gulpin",
+        "Wailmer"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Flutter Mane",
+      "category": "name",
+      "ranked": [
+        "Flutter Mane",
+        "Rapidash",
+        "Misdreavus",
+        "Dartrix",
+        "Meowstic",
+        "Aerodactyl",
+        "Chatot",
+        "Meloetta"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Mr. Mime",
+      "category": "name",
+      "ranked": [
+        "Mr. Mime",
+        "Mime Jr.",
+        "Mr. Rime"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Type: Null",
+      "category": "name",
+      "ranked": [
+        "Type: Null",
+        "Silvally",
+        "Snubbull",
+        "Celesteela",
+        "Alcremie",
+        "Noctowl",
+        "Butterfree",
+        "Noivern",
+        "Noibat",
+        "Tinkatink",
+        "Duskull",
+        "Liepard"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Porygon2",
+      "category": "name",
+      "ranked": [
+        "Porygon2",
+        "Porygon-Z",
+        "Porygon",
+        "Shelgon",
+        "Victreebel",
+        "Weezing"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "bug type",
+      "category": "type",
+      "ranked": [
+        "Blipbug",
+        "Nymble",
+        "Venonat",
+        "Spidops",
+        "Tarountula",
+        "Rellor",
+        "Shedinja",
+        "Beautifly",
+        "Parasect",
+        "Vivillon",
+        "Cutiefly",
+        "Yanmega"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "dark type",
+      "category": "type",
+      "ranked": [
+        "Darkrai",
+        "Umbreon",
+        "Mabosstiff",
+        "Vullaby",
+        "Maschiff",
+        "Krokorok",
+        "Sableye",
+        "Kingambit",
+        "Ting-Lu",
+        "Thievul",
+        "Nickit",
+        "Obstagoon"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "dragon type",
+      "category": "type",
+      "ranked": [
+        "Dragonite",
+        "Regidrago",
+        "Dragonair",
+        "Goomy",
+        "Dragalge",
+        "Drampa",
+        "Tatsugiri",
+        "Frigibax",
+        "Dracozolt",
+        "Kyurem",
+        "Arctibax",
+        "Gouging Fire"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "electric type",
+      "category": "type",
+      "ranked": [
+        "Electabuzz",
+        "Luxio",
+        "Manectric",
+        "Electivire",
+        "Magnemite",
+        "Elekid",
+        "Electrike",
+        "Electrode",
+        "Pichu",
+        "Flaaffy",
+        "Tynamo",
+        "Pawmi"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "fairy type",
+      "category": "type",
+      "ranked": [
+        "Clefable",
+        "Milcery",
+        "Flabébé",
+        "Togepi",
+        "Florges",
+        "Clefairy",
+        "Wigglytuff",
+        "Dachsbun",
+        "Jigglypuff",
+        "Togekiss",
+        "Alcremie",
+        "Whimsicott"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "fighting type",
+      "category": "type",
+      "ranked": [
+        "Annihilape",
+        "Kubfu",
+        "Grapploct",
+        "Hawlucha",
+        "Timburr",
+        "Hitmontop",
+        "Pawmot",
+        "Crabrawler",
+        "Tyrogue",
+        "Sneasler",
+        "Pawmo",
+        "Tauros"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 0.9166666666666666
+      }
+    },
+    {
+      "query": "fire type",
+      "category": "type",
+      "ranked": [
+        "Gouging Fire",
+        "Charcadet",
+        "Darmanitan",
+        "Crocalor",
+        "Fletchinder",
+        "Flareon",
+        "Pombon",
+        "Fuecoco",
+        "Typhlosion",
+        "Armarouge",
+        "Simisear",
+        "Cyndaquil"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "flying type",
+      "category": "type",
+      "ranked": [
+        "Vullaby",
+        "Fletchinder",
+        "Doduo",
+        "Pidgeotto",
+        "Staravia",
+        "Archeops",
+        "Sigilyph",
+        "Pidgeot",
+        "Pelipper",
+        "Wingull",
+        "Dodrio",
+        "Yanmega"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "ghost type",
+      "category": "type",
+      "ranked": [
+        "Houndstone",
+        "Greavard",
+        "Dreepy",
+        "Sinistcha",
+        "Misdreavus",
+        "Litwick",
+        "Spiritomb",
+        "Haunter",
+        "Cofagrigus",
+        "Pumpkaboo",
+        "Flutter Mane",
+        "Aegislash"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "grass type",
+      "category": "type",
+      "ranked": [
+        "Floragato",
+        "Sprigatito",
+        "Lurantis",
+        "Fomantis",
+        "Browt",
+        "Brambleghast",
+        "Skiddo",
+        "Arboliva",
+        "Whimsicott",
+        "Sawsbuck",
+        "Rowlet",
+        "Meowscarada"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "ground type",
+      "category": "type",
+      "ranked": [
+        "Toedscruel",
+        "Toedscool",
+        "Seismitoad",
+        "Torterra",
+        "Dugtrio",
+        "Rhydon",
+        "Gabite",
+        "Landorus",
+        "Clodsire",
+        "Rhyhorn",
+        "Silicobra",
+        "Marshtomp"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "ice type",
+      "category": "type",
+      "ranked": [
+        "Vanillish",
+        "Glaceon",
+        "Cryogonal",
+        "Eiscue",
+        "Spheal",
+        "Abomasnow",
+        "Regice",
+        "Vanillite",
+        "Avalugg",
+        "Glalie",
+        "Bergmite",
+        "Cubchoo"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "normal type",
+      "category": "type",
+      "ranked": [
+        "Type: Null",
+        "Silvally",
+        "Terapagos",
+        "Dubwool",
+        "Wigglytuff",
+        "Arboliva",
+        "Castform",
+        "Maushold",
+        "Azurill",
+        "Whismur",
+        "Zorua",
+        "Porygon-Z"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 0.9166666666666666
+      }
+    },
+    {
+      "query": "poison type",
+      "category": "type",
+      "ranked": [
+        "Nidoran♂ (male)",
+        "Nidoran♀ (female)",
+        "Garbodor",
+        "Clodsire",
+        "Nidorino",
+        "Foongus",
+        "Toxicroak",
+        "Weezing",
+        "Koffing",
+        "Toxel",
+        "Skrelp",
+        "Drapion"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "psychic type",
+      "category": "type",
+      "ranked": [
+        "Beheeyem",
+        "Kirlia",
+        "Kadabra",
+        "Gardevoir",
+        "Espathra",
+        "Abra",
+        "Espurr",
+        "Flittle",
+        "Elgyem",
+        "Farigiraf",
+        "Gothita",
+        "Wyrdeer"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "rock type",
+      "category": "type",
+      "ranked": [
+        "Roggenrola",
+        "Regirock",
+        "Dwebble",
+        "Rhyperior",
+        "Rockruff",
+        "Graveler",
+        "Stonjourner",
+        "Omastar",
+        "Garganacl",
+        "Rhydon",
+        "Carkol",
+        "Naclstack"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "steel type",
+      "category": "type",
+      "ranked": [
+        "Steelix",
+        "Perrserker",
+        "Kingambit",
+        "Archaludon",
+        "Tinkatink",
+        "Cobalion",
+        "Aron",
+        "Orthworm",
+        "Magnemite",
+        "Forretress",
+        "Melmetal",
+        "Scizor"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "water type",
+      "category": "type",
+      "ranked": [
+        "Seel",
+        "Panpour",
+        "Finizen",
+        "Vaporeon",
+        "Buizel",
+        "Lotad",
+        "Drizzile",
+        "Palpitoad",
+        "Wugtrio",
+        "Simipour",
+        "Dondozo",
+        "Araquanid"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "generation 1",
+      "category": "generation",
+      "ranked": [
+        "Flareon",
+        "Jolteon",
+        "Scyther",
+        "Electrode",
+        "Ponyta",
+        "Tentacruel",
+        "Magnemite",
+        "Tentacool",
+        "Ninetales",
+        "Vileplume",
+        "Gloom",
+        "Mew"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "generation 2",
+      "category": "generation",
+      "ranked": [
+        "Pineco",
+        "Qwilfish",
+        "Weezing",
+        "Tynamo",
+        "Elekid",
+        "Heracross",
+        "Yanma",
+        "Flaaffy",
+        "Jolteon",
+        "Scyther",
+        "Electrode",
+        "Ponyta"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 0.6666666666666666,
+        "12": 0.5
+      }
+    },
+    {
+      "query": "generation 3",
+      "category": "generation",
+      "ranked": [
+        "Cacturne",
+        "Swalot",
+        "Kangaskhan",
+        "Cradily",
+        "Lileep",
+        "Armaldo",
+        "Anorith",
+        "Crawdaunt",
+        "Corphish",
+        "Cloyster",
+        "Shellder",
+        "Kabutops"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 0.6666666666666666,
+        "12": 0.6666666666666666
+      }
+    },
+    {
+      "query": "generation 4",
+      "category": "generation",
+      "ranked": [
+        "Phione",
+        "Cresselia",
+        "Darkrai",
+        "Regigigas",
+        "Dialga",
+        "Heatran",
+        "Azelf",
+        "Rotom",
+        "Palkia",
+        "Mesprit",
+        "Uxie",
+        "Gallade"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "generation 5",
+      "category": "generation",
+      "ranked": [
+        "Exploud",
+        "Beartic",
+        "Eelektross",
+        "Leavanny",
+        "Scolipede",
+        "Seismitoad",
+        "Woobat",
+        "Zebstrika",
+        "Unfezant",
+        "Samurott",
+        "Oshawott",
+        "Snivy"
+      ],
+      "reciprocalRank": 0.5,
+      "recall": {
+        "3": 0.6666666666666666,
+        "12": 0.9166666666666666
+      }
+    },
+    {
+      "query": "generation 6",
+      "category": "generation",
+      "ranked": [
+        "Diancie",
+        "Volcanion",
+        "Xerneas",
+        "Gogoat",
+        "Flabébé",
+        "Florges",
+        "Vivillon",
+        "Greninja",
+        "Skiddo",
+        "Chesnaught",
+        "Quilladin",
+        "Delphox"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "generation 7",
+      "category": "generation",
+      "ranked": [
+        "Melmetal",
+        "Decidueye",
+        "Greninja",
+        "Diancie",
+        "Volcanion",
+        "Florges",
+        "Vivillon",
+        "Chesnaught",
+        "Delphox",
+        "Eelektross",
+        "Samurott",
+        "Heatran"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 0.6666666666666666,
+        "12": 0.16666666666666666
+      }
+    },
+    {
+      "query": "generation 8",
+      "category": "generation",
+      "ranked": [
+        "Sneasler",
+        "Glastrier",
+        "Regidrago",
+        "Regieleki",
+        "Kubfu",
+        "Spectrier",
+        "Alcremie",
+        "Milcery",
+        "Perrserker",
+        "Grapploct",
+        "Boltund",
+        "Thievul"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "generation 9",
+      "category": "generation",
+      "ranked": [
+        "Dondozo",
+        "Cetoddle",
+        "Houndstone",
+        "Orthworm",
+        "Finizen",
+        "Espathra",
+        "Wugtrio",
+        "Flittle",
+        "Rellor",
+        "Capsakid",
+        "Klawf",
+        "Mabosstiff"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "generation 10",
+      "category": "generation",
+      "ranked": [
+        "Pombon",
+        "Gecqua",
+        "Browt",
+        "Jolteon",
+        "Drampa",
+        "Zygarde",
+        "Passimian",
+        "Omanyte",
+        "Mamoswine",
+        "Pyroar",
+        "Piplup",
+        "Mareanie"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Adaptability",
+      "category": "ability",
+      "ranked": [
+        "Eevee",
+        "Corphish",
+        "Porygon-Z",
+        "Basculin",
+        "Basculegion",
+        "Kabutops",
+        "Glimmora",
+        "Wiglett",
+        "Beedrill",
+        "Silvally",
+        "Noctowl",
+        "Lucario"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 0.45454545454545453
+      }
+    },
+    {
+      "query": "Blaze",
+      "category": "ability",
+      "ranked": [
+        "Typhlosion",
+        "Blaziken",
+        "Quilava",
+        "Torracat",
+        "Litten",
+        "Rapidash",
+        "Tauros",
+        "Charmander",
+        "Pignite",
+        "Tepig",
+        "Cyndaquil",
+        "Pombon"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 0.8333333333333334
+      }
+    },
+    {
+      "query": "Damp",
+      "category": "ability",
+      "ranked": [
+        "Shroomish",
+        "Parasect",
+        "Poliwag",
+        "Quagsire",
+        "Wooper",
+        "Politoed",
+        "Poliwrath",
+        "Poliwhirl",
+        "Frillish",
+        "Jellicent",
+        "Panpour",
+        "Paras"
+      ],
+      "reciprocalRank": 0.5,
+      "recall": {
+        "3": 0.6666666666666666,
+        "12": 0.8333333333333334
+      }
+    },
+    {
+      "query": "Emergency Exit",
+      "category": "ability",
+      "ranked": [
+        "Golisopod",
+        "Electabuzz"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Grass Pelt",
+      "category": "ability",
+      "ranked": [
+        "Skiddo",
+        "Gogoat",
+        "Rowlet",
+        "Orthworm",
+        "Castform",
+        "Victreebel",
+        "Nuzleaf",
+        "Sprigatito",
+        "Maractus",
+        "Toedscruel",
+        "Lilligant",
+        "Pelipper"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Ice Face",
+      "category": "ability",
+      "ranked": [
+        "Eiscue",
+        "Glalie",
+        "Arctibax",
+        "Cubone",
+        "Mawile",
+        "Shieldon",
+        "Glastrier",
+        "Gligar",
+        "Druddigon",
+        "Yamask",
+        "Bastiodon",
+        "Smoochum"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Libero",
+      "category": "ability",
+      "ranked": [
+        "Raboot",
+        "Scorbunny",
+        "Cinderace"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Mold Breaker",
+      "category": "ability",
+      "ranked": [
+        "Basculin",
+        "Basculegion",
+        "Ogerpon",
+        "Veluza",
+        "Tinkatink",
+        "Pinsir",
+        "Tinkaton",
+        "Tinkatuff",
+        "Fraxure",
+        "Axew",
+        "Emboar",
+        "Throh"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 0.6666666666666666,
+        "12": 0.8333333333333334
+      }
+    },
+    {
+      "query": "Pickpocket",
+      "category": "ability",
+      "ranked": [
+        "Shroodle",
+        "Tinkatink",
+        "Sneasel",
+        "Tinkaton",
+        "Tinkatuff",
+        "Grimmsnarl",
+        "Morgrem",
+        "Impidimp",
+        "Barbaracle",
+        "Binacle",
+        "Nuzleaf",
+        "Seedot"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Purifying Salt",
+      "category": "ability",
+      "ranked": [
+        "Nacli",
+        "Naclstack",
+        "Garganacl",
+        "Weezing",
+        "Muk"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Sand Spit",
+      "category": "ability",
+      "ranked": [
+        "Sandaconda",
+        "Silicobra",
+        "Shellder",
+        "Sandygast",
+        "Sandshrew",
+        "Sandile",
+        "Barboach"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Slow Start",
+      "category": "ability",
+      "ranked": [
+        "Regigigas",
+        "Varoom",
+        "Rhyhorn",
+        "Feebas",
+        "Lugia",
+        "Whismur",
+        "Ivysaur",
+        "Dratini",
+        "Manaphy",
+        "Volcarona",
+        "Dragapult",
+        "Mienshao"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Steely Spirit",
+      "category": "ability",
+      "ranked": [
+        "Perrserker",
+        "Spiritomb"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Telepathy",
+      "category": "ability",
+      "ranked": [
+        "Exeggcute",
+        "Solosis",
+        "Dialga",
+        "Palkia",
+        "Beheeyem",
+        "Elgyem",
+        "Exeggutor",
+        "Oranguru",
+        "Latias",
+        "Latios",
+        "Rabsca",
+        "Dottler"
+      ],
+      "reciprocalRank": 0.3333333333333333,
+      "recall": {
+        "3": 0.3333333333333333,
+        "12": 0.5833333333333334
+      }
+    },
+    {
+      "query": "Unseen Fist",
+      "category": "ability",
+      "ranked": [
+        "Urshifu",
+        "Golurk"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Abundance Pokémon",
+      "category": "species",
+      "ranked": [
+        "Landorus",
+        "Shellos",
+        "Zigzagoon",
+        "Drifloon",
+        "Wurmple",
+        "Chansey",
+        "Rufflet",
+        "Machop",
+        "Rampardos",
+        "Electrode",
+        "Pelipper",
+        "Morpeko"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Bell Pokémon",
+      "category": "species",
+      "ranked": [
+        "Bronzong",
+        "Torracat",
+        "Chingling",
+        "Cranidos",
+        "Bellsprout",
+        "Bellibolt",
+        "Bellossom",
+        "Chatot",
+        "Morpeko",
+        "Exeggutor",
+        "Chikorita",
+        "Flutter Mane"
+      ],
+      "reciprocalRank": 0.3333333333333333,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Calm Pokémon",
+      "category": "species",
+      "ranked": [
+        "Hatenna",
+        "Blissey",
+        "Meganium",
+        "Tauros",
+        "Dragonite",
+        "Pelipper",
+        "Arboliva",
+        "Sylveon",
+        "Gloom",
+        "Igglybuff",
+        "Mantine",
+        "Donphan"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Cotton Puff Pokémon",
+      "category": "species",
+      "ranked": [
+        "Cottonee",
+        "Jumpluff",
+        "Swirlix",
+        "Eldegoss",
+        "Swablu",
+        "Ribombee",
+        "Whimsicott",
+        "Jigglypuff",
+        "Tentacool",
+        "Squirtle",
+        "Tentacruel",
+        "Burmy"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Elder Tree Pokémon",
+      "category": "species",
+      "ranked": [
+        "Trevenant",
+        "Sudowoodo",
+        "Pineco",
+        "Abomasnow",
+        "Rampardos",
+        "Electabuzz",
+        "Phantump",
+        "Natu",
+        "Aipom",
+        "Heracross",
+        "Treecko",
+        "Grovyle"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Forbidden Pokémon",
+      "category": "species",
+      "ranked": [
+        "Spiritomb",
+        "Mudsdale",
+        "Magneton",
+        "Rattata",
+        "Tentacruel",
+        "Barboach",
+        "Gastly",
+        "Koffing",
+        "Victreebel",
+        "Wugtrio",
+        "Tentacool",
+        "Shellder"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Happiness Pokémon",
+      "category": "species",
+      "ranked": [
+        "Blissey",
+        "Togepi",
+        "Togetic",
+        "Chansey",
+        "Clefairy",
+        "Mismagius",
+        "Ho-oh",
+        "Wynaut",
+        "Hattrem",
+        "Charmander",
+        "Kirlia",
+        "Indeedee"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Judo Pokémon",
+      "category": "species",
+      "ranked": [
+        "Throh",
+        "Grapploct",
+        "Urshifu",
+        "Capsakid",
+        "Mienfoo",
+        "Pawmi",
+        "Flamigo",
+        "Krokorok",
+        "Gyarados",
+        "Electrode",
+        "Zamazenta",
+        "Pichu"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Mach Pokémon",
+      "category": "species",
+      "ranked": [
+        "Garchomp",
+        "Pidgeot",
+        "Golurk",
+        "Inteleon",
+        "Dragapult",
+        "Gyarados",
+        "Machoke",
+        "Machop",
+        "Machamp",
+        "Darmanitan",
+        "Tinkaton",
+        "Electivire"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Ogre Darner Pokémon",
+      "category": "species",
+      "ranked": [
+        "Yanmega",
+        "Drapion",
+        "Ogerpon",
+        "Darmanitan",
+        "Darumaka",
+        "Probopass",
+        "Slowbro",
+        "Morpeko",
+        "Snover",
+        "Gardevoir",
+        "Magmar",
+        "Moltres"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Pumpkin Pokémon",
+      "category": "species",
+      "ranked": [
+        "Pumpkaboo",
+        "Gourgeist",
+        "Gimmighoul",
+        "Bulbasaur",
+        "Morelull",
+        "Igglybuff",
+        "Chikorita",
+        "Jigglypuff",
+        "Poipole",
+        "Overqwil",
+        "Basculegion",
+        "Umbreon"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Scatterdust Pokémon",
+      "category": "species",
+      "ranked": [
+        "Scatterbug",
+        "Spewpa",
+        "Vivillon",
+        "Talonflame",
+        "Scyther",
+        "Scovillain",
+        "Vileplume",
+        "Dustox",
+        "Scraggy",
+        "Scrafty",
+        "Krookodile",
+        "Scorbunny"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Snail Pokémon",
+      "category": "species",
+      "ranked": [
+        "Shelmet",
+        "Sliggoo",
+        "Shellos",
+        "Slugma",
+        "Shellder",
+        "Flutter Mane",
+        "Wiglett",
+        "Squirtle",
+        "Turtonator",
+        "Cloyster",
+        "Metapod",
+        "Empoleon"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Symbol Pokémon",
+      "category": "species",
+      "ranked": [
+        "Wartortle",
+        "Unown",
+        "Smeargle",
+        "Pikachu",
+        "Togepi",
+        "Persian",
+        "Luvdisc",
+        "Murkrow",
+        "Darumaka",
+        "Cofagrigus",
+        "Klang",
+        "Swoobat"
+      ],
+      "reciprocalRank": 0.5,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "Two-Handed Pokémon",
+      "category": "species",
+      "ranked": [
+        "Binacle",
+        "Rampardos",
+        "Iron Hands",
+        "Heracross",
+        "Enamorus",
+        "Rufflet",
+        "Deoxys",
+        "Metang",
+        "Drifloon",
+        "Tandemaus",
+        "Hippowdon",
+        "Landorus"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "char",
+      "category": "partial",
+      "ranked": [
+        "Thundurus",
+        "Magmar",
+        "Charcadet",
+        "Charjabug",
+        "Charizard"
+      ],
+      "reciprocalRank": 0.3333333333333333,
+      "recall": {
+        "3": 0.3333333333333333,
+        "12": 0.6
+      }
+    },
+    {
+      "query": "pika",
+      "category": "partial",
+      "ranked": [
+        "Pikipek"
+      ],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    },
+    {
+      "query": "bulba",
+      "category": "partial",
+      "ranked": [
+        "Bulbasaur"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "mew",
+      "category": "partial",
+      "ranked": [
+        "Mew",
+        "Mewtwo",
+        "Meowscarada"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "bulb",
+      "category": "partial",
+      "ranked": [
+        "Bulbasaur",
+        "Ivysaur",
+        "Petilil",
+        "Venusaur",
+        "Lampent",
+        "Weezing",
+        "Morelull",
+        "Litten",
+        "Illumise"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "seel",
+      "category": "partial",
+      "ranked": [
+        "Seel",
+        "Dewgong"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "pich",
+      "category": "partial",
+      "ranked": [
+        "Pichu"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "mudk",
+      "category": "partial",
+      "ranked": [
+        "Mudkip",
+        "Mudbray"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "balt",
+      "category": "partial",
+      "ranked": [],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    },
+    {
+      "query": "mism",
+      "category": "partial",
+      "ranked": [
+        "Mismagius",
+        "Misdreavus"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "panp",
+      "category": "partial",
+      "ranked": [],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    },
+    {
+      "query": "klan",
+      "category": "partial",
+      "ranked": [
+        "Klang"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "inka",
+      "category": "partial",
+      "ranked": [],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    },
+    {
+      "query": "type",
+      "category": "partial",
+      "ranked": [
+        "Type: Null",
+        "Dondozo",
+        "Orthworm",
+        "Zeraora",
+        "Xerneas",
+        "Victini",
+        "Numel",
+        "Ogerpon",
+        "Houndstone",
+        "Espathra",
+        "Flittle",
+        "Mabosstiff"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "hatt",
+      "category": "partial",
+      "ranked": [
+        "Hatterene"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 0.5,
+        "12": 0.5
+      }
+    },
+    {
+      "query": "mabo",
+      "category": "partial",
+      "ranked": [],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    },
+    {
+      "query": "bug dark",
+      "category": "descriptive",
+      "judgment": "A Type pair is taken to mean Pokémon with both Types.",
+      "ranked": [
+        "Lokix",
+        "Venonat",
+        "Shedinja",
+        "Mabosstiff",
+        "Maschiff",
+        "Thievul",
+        "Nickit",
+        "Wyrdeer",
+        "Parasect",
+        "Iron Valiant",
+        "Sneasel",
+        "Darkrai"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "dark normal",
+      "category": "descriptive",
+      "judgment": "A Type pair is taken to mean Pokémon with both Types.",
+      "ranked": [
+        "Umbreon",
+        "Obstagoon",
+        "Linoone",
+        "Darkrai",
+        "Kingambit",
+        "Sableye",
+        "Zigzagoon",
+        "Zorua",
+        "Krokorok",
+        "Gengar",
+        "Mabosstiff",
+        "Maschiff"
+      ],
+      "reciprocalRank": 0.5,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "electric normal",
+      "category": "descriptive",
+      "judgment": "A Type pair is taken to mean Pokémon with both Types.",
+      "ranked": [
+        "Jolteon",
+        "Magnemite",
+        "Electabuzz",
+        "Magneton",
+        "Manectric",
+        "Pikachu",
+        "Pichu",
+        "Heliolisk",
+        "Electrode",
+        "Flaaffy",
+        "Raichu",
+        "Luxio"
+      ],
+      "reciprocalRank": 0.125,
+      "recall": {
+        "3": 0,
+        "12": 0.5
+      }
+    },
+    {
+      "query": "fire normal",
+      "category": "descriptive",
+      "judgment": "A Type pair is taken to mean Pokémon with both Types.",
+      "ranked": [
+        "Flareon",
+        "Gouging Fire",
+        "Charmander",
+        "Quilava",
+        "Litleo",
+        "Fletchinder",
+        "Vaporeon",
+        "Magmar",
+        "Darmanitan",
+        "Typhlosion",
+        "Lampent",
+        "Charizard"
+      ],
+      "reciprocalRank": 0.2,
+      "recall": {
+        "3": 0,
+        "12": 0.5
+      }
+    },
+    {
+      "query": "grass fire",
+      "category": "descriptive",
+      "judgment": "A Type pair is taken to mean Pokémon with both Types.",
+      "ranked": [
+        "Gouging Fire",
+        "Fletchinder",
+        "Flareon",
+        "Ponyta",
+        "Houndoom",
+        "Quilava",
+        "Cyndaquil",
+        "Fomantis",
+        "Fuecoco",
+        "Darmanitan",
+        "Litten",
+        "Pombon"
+      ],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    },
+    {
+      "query": "ice ground",
+      "category": "descriptive",
+      "judgment": "A Type pair is taken to mean Pokémon with both Types.",
+      "ranked": [
+        "Piloswine",
+        "Mamoswine",
+        "Abomasnow",
+        "Wooper",
+        "Swinub",
+        "Snover",
+        "Snom",
+        "Avalugg",
+        "Clodsire",
+        "Cryogonal",
+        "Arctozolt",
+        "Aurorus"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 0.6666666666666666,
+        "12": 1
+      }
+    },
+    {
+      "query": "psychic fairy",
+      "category": "descriptive",
+      "judgment": "A Type pair is taken to mean Pokémon with both Types.",
+      "ranked": [
+        "Gardevoir",
+        "Kirlia",
+        "Hatterene",
+        "Ralts",
+        "Mime Jr.",
+        "Metang",
+        "Scream Tail",
+        "Indeedee",
+        "Tapu Lele",
+        "Rapidash",
+        "Hattrem",
+        "Hatenna"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 0.875
+      }
+    },
+    {
+      "query": "steel dragon",
+      "category": "descriptive",
+      "judgment": "A Type pair is taken to mean Pokémon with both Types.",
+      "ranked": [
+        "Steelix",
+        "Archaludon",
+        "Dialga",
+        "Duraludon",
+        "Tinkatink",
+        "Perrserker",
+        "Arctibax",
+        "Baxcalibur",
+        "Kingambit",
+        "Goomy",
+        "Orthworm",
+        "Goodra"
+      ],
+      "reciprocalRank": 0.5,
+      "recall": {
+        "3": 0.6666666666666666,
+        "12": 1
+      }
+    },
+    {
+      "query": "electric mouse pokemon",
+      "category": "descriptive",
+      "judgment": "Hand-written query; relevant means Electric with Mouse in its species.",
+      "ranked": [
+        "Pawmi",
+        "Pichu",
+        "Pawmo",
+        "Pikachu",
+        "Raichu",
+        "Sandslash",
+        "Sandshrew",
+        "Electabuzz",
+        "Magnemite",
+        "Jolteon",
+        "Raticate",
+        "Electrode"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "fire fox",
+      "category": "descriptive",
+      "judgment": "Hand-written query; relevant means Fire with Fox in its species.",
+      "ranked": [
+        "Braixen",
+        "Fennekin",
+        "Vulpix",
+        "Delphox",
+        "Ninetales",
+        "Zorua",
+        "Thievul",
+        "Litten",
+        "Gouging Fire",
+        "Litwick",
+        "Fuecoco",
+        "Moltres"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "water turtle",
+      "category": "descriptive",
+      "judgment": "Hand-written query; relevant means Water with Turtle in its species.",
+      "ranked": [
+        "Wartortle",
+        "Squirtle",
+        "Blastoise",
+        "Tirtouga",
+        "Vaporeon",
+        "Buizel",
+        "Drizzile",
+        "Finizen",
+        "Goldeen",
+        "Gecqua",
+        "Wugtrio",
+        "Poliwhirl"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "grass seed pokemon",
+      "category": "descriptive",
+      "judgment": "Hand-written query; relevant means Grass with Seed in its species.",
+      "ranked": [
+        "Bulbasaur",
+        "Eldegoss",
+        "Venusaur",
+        "Arboliva",
+        "Ivysaur",
+        "Sunkern",
+        "Ferroseed",
+        "Breloom",
+        "Oddish",
+        "Maractus",
+        "Trumbeak",
+        "Exeggcute"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 0.6666666666666666,
+        "12": 1
+      }
+    },
+    {
+      "query": "ghost pokemon that is a gas",
+      "category": "descriptive",
+      "judgment": "Hand-written query; relevant means Ghost with Gas in its species.",
+      "ranked": [
+        "Gastly",
+        "Haunter",
+        "Drifblim",
+        "Koffing",
+        "Weezing",
+        "Toucannon",
+        "Pupitar",
+        "Garbodor",
+        "Pumpkaboo",
+        "Salandit",
+        "Trubbish",
+        "Greavard"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "what type is Bulbasaur",
+      "category": "natural",
+      "judgment": "A question about one Pokémon is taken to be answered by its page.",
+      "ranked": [
+        "Bulbasaur",
+        "Venusaur",
+        "Ivysaur",
+        "Squirtle",
+        "Charmander",
+        "Gallade",
+        "Slowpoke",
+        "Gardevoir",
+        "Moltres",
+        "Spinarak",
+        "Magmar",
+        "Mr. Mime"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "what type is Magikarp",
+      "category": "natural",
+      "judgment": "A question about one Pokémon is taken to be answered by its page.",
+      "ranked": [
+        "Magikarp",
+        "Gyarados",
+        "Magmortar",
+        "Pidgeot",
+        "Magneton",
+        "Magnemite",
+        "Magnezone",
+        "Garbodor",
+        "Azumarill",
+        "Tinkatink",
+        "Magcargo",
+        "Darmanitan"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "what type is Mudkip",
+      "category": "natural",
+      "judgment": "A question about one Pokémon is taken to be answered by its page.",
+      "ranked": [
+        "Mudkip",
+        "Marshtomp",
+        "Mudsdale",
+        "Swampert",
+        "Mudbray",
+        "Dewott",
+        "Muk",
+        "Pombon",
+        "Barboach",
+        "Camerupt",
+        "Oshawott",
+        "Tatsugiri"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "what type is Deoxys",
+      "category": "natural",
+      "judgment": "A question about one Pokémon is taken to be answered by its page.",
+      "ranked": [
+        "Deoxys",
+        "Decidueye",
+        "Dusclops",
+        "Dedenne",
+        "Drowzee",
+        "Toxtricity",
+        "Togekiss",
+        "Delcatty",
+        "Cutiefly",
+        "Delphox",
+        "Latios",
+        "Froslass"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "what type is Panpour",
+      "category": "natural",
+      "judgment": "A question about one Pokémon is taken to be answered by its page.",
+      "ranked": [
+        "Panpour",
+        "Simipour",
+        "Pansear",
+        "Pansage",
+        "Tentacool",
+        "Pancham",
+        "Shellos",
+        "Fidough",
+        "Bonsly",
+        "Vivillon",
+        "Darmanitan",
+        "Volcarona"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "what type is Reshiram",
+      "category": "natural",
+      "judgment": "A question about one Pokémon is taken to be answered by its page.",
+      "ranked": [
+        "Reshiram",
+        "Kyurem",
+        "Cramorant",
+        "Regirock",
+        "Medicham",
+        "Reuniclus",
+        "Poliwhirl",
+        "Beldum",
+        "Koraidon",
+        "Regidrago",
+        "Remoraid",
+        "Vivillon"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "what type is Type: Null",
+      "category": "natural",
+      "judgment": "A question about one Pokémon is taken to be answered by its page.",
+      "ranked": [
+        "Type: Null",
+        "Silvally",
+        "Mudkip",
+        "Solrock",
+        "Gloom",
+        "Jynx",
+        "Cutiefly",
+        "Buizel",
+        "Celesteela",
+        "Snubbull",
+        "Arctozolt",
+        "Tandemaus"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    },
+    {
+      "query": "what type is Kleavor",
+      "category": "natural",
+      "judgment": "A question about one Pokémon is taken to be answered by its page.",
+      "ranked": [
+        "Kleavor",
+        "Scyther",
+        "Krabby",
+        "Buizel",
+        "Krookodile",
+        "Drapion",
+        "Klink",
+        "Krokorok",
+        "Loudred",
+        "Gastrodon",
+        "Arboliva",
+        "Cherrim"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 1
+      }
+    }
+  ]
+}
