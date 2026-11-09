@@ -17,7 +17,7 @@
 
 A Pokémon search application built on the [Coveo](https://www.coveo.com/) platform. It indexes the individual Pokémon pages on [pokemondb.net](https://pokemondb.net/) so that users can find Pokémon by searching and by filtering on Type and Generation.
 
-**Status:** in development. All 1,028 Pokémon are indexed in Coveo. The application is complete locally and in review, and hosting is next.
+**Live site:** [pokebowl-cove.vercel.app](https://pokebowl-cove.vercel.app/). All 1,028 Pokémon are indexed in Coveo.
 
 ## How content is indexed
 
@@ -35,9 +35,7 @@ Coveo settings are recorded in [configs/coveo](configs/coveo/), and the reasonin
 - Type-ahead search suggestions
 - AI-generated answers from the indexed content, with citations
 - A shareable detail page for each Pokémon
-- Index quality evals
-
-Planned: relevance and generated answer evals, performance benchmarks, and hosting.
+- Evals for index quality, relevance, generated answers and performance
 
 ## Technology
 
@@ -81,8 +79,6 @@ Add your Coveo organization ID and search-only API key to `.env`. Never commit t
 
 - [Architecture and decisions](docs/architecture.md)
 - [Project plan](docs/plan.md)
-- [Session handoff](docs/handoff.md)
 - [Indexing expected results](docs/indexing-expected-results.md)
 - [Passage Retrieval point of view](docs/passage-retrieval.md)
 - [Coveo configuration](configs/coveo/README.md)
-- [Archived reports](docs/archive/README.md)
