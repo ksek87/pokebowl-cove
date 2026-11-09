@@ -1,5 +1,7 @@
 # Code Review
 
+> **Archived.** This code review is a point-in-time record. Open items moved to `docs/plan.md` and `docs/handoff.md`.
+
 This document reviews the Pokémon search application in this repository. The application is built with React and Vite on Coveo Atomic and Headless, and it searches an index of pokemondb.net pages. The findings below were written before any fixes, so they name files and states as they were then. `src/search/ResultsPerPage.tsx` has since been replaced by Atomic's control.
 
 **Fix status, November 8, 2026.** On branch `integration/overnight`, each with a test written first where behavior changed:

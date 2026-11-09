@@ -1,5 +1,7 @@
 # Overnight Report
 
+> **Archived.** This overnight work report is a point-in-time record. Open items moved to `docs/plan.md` and `docs/handoff.md`.
+
 This report records the work done on the night of November 8, 2026, while the project owner was away. All of it is on the branch `integration/overnight`. Nothing was merged to `main`, and no Coveo configuration was changed.
 
 ## Summary
@@ -85,7 +87,7 @@ Screenshots of the search page and the detail page were taken at 1100, 1440, 192
 
 ### What changed
 
-- **Fixed from `docs/ui-audit.md`:** UI-01, UI-02, UI-03, UI-04, UI-08, UI-09, UI-10, UI-13, UI-15, UI-16, UI-17, UI-22, the heading and control styling of UI-12, and the placeholder, retry and status region of UI-11.
+- **Fixed from `docs/archive/ui-audit.md`:** UI-01, UI-02, UI-03, UI-04, UI-08, UI-09, UI-10, UI-13, UI-15, UI-16, UI-17, UI-22, the heading and control styling of UI-12, and the placeholder, retry and status region of UI-11.
 - **Designed states (PC-76):** no-results and error views show the Pokéball, plain wording and one action. Loading matches the real cards and facets.
 - **Motion:** card lift and press, control transitions, and fades on new results and opened facets. All of it stops when reduced motion is requested.
 - **UI-14:** loose values have names. The layout overrides were not restructured.
@@ -167,16 +169,6 @@ These are runtime dependencies, not development-only ones. No dependency or over
 
 ## To discuss
 
-**Wording to review (UI-01, UI-02):**
-
-| State | Title | Text | Action |
-|---|---|---|---|
-| Error | Search is not available right now | The Pokémon could not be loaded. Check your connection and try again. | Try again |
-| No results, text search | No Pokémon found | Nothing matched “query”. Try a different name, Type or ability. | Show all Pokémon |
-| No results, number search | No Pokémon found | There is no Pokémon with Pokédex number #9999. | Show all Pokémon |
-| No results, filters only | No Pokémon found | Nothing matched these filters. | Show all Pokémon |
-| Detail page error | Something went wrong | The Pokémon could not be loaded. | Try again |
-
 **Decisions from the interface audit:**
 
 - UI-05: the search box stays centered on the page. Confirm, or span it across the results column.
@@ -190,7 +182,6 @@ These are runtime dependencies, not development-only ones. No dependency or over
 - UI-24: whether to keep filters or search in view on long pages.
 
 - Generated answers: the answer disappears on a non-relevance sort, as Coveo documents. Confirm that is acceptable, or consider hiding the sort while an answer shows.
-- Generated answers: whether a citation should open the application's detail page rather than pokemondb.net. It opens the source page now.
 
 **Noted, no decision needed yet:** with the Semantic Encoder active, a nonsense text query can still return results.
 

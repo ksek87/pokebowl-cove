@@ -1,4 +1,4 @@
-import type { Result } from '@coveo/headless';
+import { buildSearchParameterSerializer, type Result } from '@coveo/headless';
 import { readTypes } from './pokemonTypes.ts';
 import {
   POKEMON_DETAIL_ONLY_FIELDS,
@@ -81,4 +81,21 @@ export function toPokemonDetail(result: Result): PokemonDetail {
     total: text(raw[POKEMON_DETAIL_ONLY_FIELDS.total]),
     sourceUrl: clickUri,
   };
+}
+
+export function sourceLinkLabel(name: string): string {
+  return `Learn more about ${name}`;
+}
+
+/** Uses Headless's URL format, which Atomic reads when the search page loads. */
+export function facetSearchHref(field: string, value: string): string {
+  return `/#${buildSearchParameterSerializer().serialize({ f: { [field]: [value] } })}`;
+}
+
+export function facetLinkLabel(value: string): string {
+  return `Show all ${value} Pokémon`;
+}
+
+export function askPokemonQuestion(template: string, name: string): string {
+  return template.replace('{name}', name);
 }

@@ -1,5 +1,7 @@
 # Interface audit
 
+> **Archived.** This interface audit is a point-in-time record. Open items moved to `docs/plan.md` and `docs/handoff.md`.
+
 This report reviews the interface of the Pokémon search application, built with React, Vite, Coveo Atomic and Headless, Tailwind and shadcn/ui. It judges what a person sees and can do at desktop widths of 1100, 1440, 1920 and 2560 px. Phone layouts are out of scope by the owner's decision.
 
 Two builds were reviewed: the search page on branch `fix/code-review-findings`, and the Pokémon detail page on branch `feature/detail-page`. All evidence comes from a real Chromium browser, using screenshots, bounding boxes and computed styles. Unless a finding says otherwise, images from pokemondb.net were replaced by a neutral gray circle of the same dimensions, so a gray circle in a screenshot is not a defect. Real artwork was checked on two page loads.
@@ -8,7 +10,7 @@ Two builds were reviewed: the search page on branch `fix/code-review-findings`, 
 
 Fixes are on the branch `integration/overnight`.
 
-- **Fixed:** UI-01, UI-02, UI-03, UI-04, UI-08, UI-09, UI-10, UI-13, UI-15, UI-16 and UI-17, UI-22, and the Pokémon-name heading and control styling of UI-12, and the placeholder, retry and status region of UI-11. Wording for UI-01 and UI-02 is listed for review in `docs/overnight-report.md`.
+- **Fixed:** UI-01, UI-02, UI-03, UI-04, UI-08, UI-09, UI-10, UI-13, UI-15, UI-16 and UI-17, UI-22, and the Pokémon-name heading and control styling of UI-12, and the placeholder, retry and status region of UI-11. Wording for UI-01 and UI-02 is listed for review in `docs/archive/overnight-report.md`.
 - **Already handled:** UI-07 bottom spacing, and UI-23 through the detail page merge.
 - **Partly done:** UI-14. Loose values now have names. The layout overrides were left in place, to avoid disturbing the page centering.
 - **Kept by decision:** the page numbering stays centered on the page on a separate row (UI-07), and Best match stays (UI-21).

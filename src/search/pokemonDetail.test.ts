@@ -1,12 +1,12 @@
-import type { Result } from '@coveo/headless';
+import { buildSearchParameterSerializer, type Result } from '@coveo/headless';
 import { describe, expect, it } from 'vitest';
 import {
   exactNameExpression,
+  facetSearchHref,
   findRequestedPokemon,
   pokemonDetailHref,
   pokemonNameFromUrl,
-  toPokemonDetail,
-} from './pokemonDetail.ts';
+  toPokemonDetail, sourceLinkLabel, askPokemonQuestion } from './pokemonDetail.ts';
 import {
   POKEMON_DETAIL_ONLY_FIELDS,
   POKEMON_DETAIL_PARAM,
@@ -97,5 +97,24 @@ describe('toPokemonDetail', (): void => {
     const [{ field }] = POKEMON_STATS;
 
     expect(toPokemonDetail(pokemon({ [field]: UNKNOWN_POKEDEX_NUMBER })).stats).toEqual([]);
+  });
+});
+
+it('words the source link around the Pokémon name', (): void => {
+  expect(sourceLinkLabel('Mr. Mime')).toBe('Learn more about Mr. Mime');
+});
+
+it('links a facet value to the filtered search page', (): void => {
+  const href = facetSearchHref(POKEMON_FIELDS.generation, 'Generation 1');
+
+  expect(href.startsWith('/#')).toBe(true);
+  expect(buildSearchParameterSerializer().deserialize(href.slice(2)).f).toEqual({
+    [POKEMON_FIELDS.generation]: ['Generation 1'],
+  });
+});
+
+describe('askPokemonQuestion', (): void => {
+  it('puts the name in a question', (): void => {
+    expect(askPokemonQuestion('Describe {name}', 'Mr. Mime')).toBe('Describe Mr. Mime');
   });
 });

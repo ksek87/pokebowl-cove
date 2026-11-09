@@ -1,109 +1,77 @@
 # Session Handoff
 
-Last updated: November 9, 2026 at 8:00 AM EST. Update this file, including the time, before ending a work session.
+Last updated: November 9, 2026 at 8:53 AM EST. Update this file, including the time, before ending a work session.
 
 ## Read first
 
-1. `AGENTS.md`: working rules, including web standards and architecture
-2. `docs/plan.md`: tickets and acceptance criteria
+1. `AGENTS.md`: working rules
+2. `docs/plan.md`: tickets, status and acceptance criteria
 3. `docs/architecture.md`: decisions and reasoning
 4. `configs/coveo/`: what is applied in Coveo
 5. `docs/indexing-expected-results.md`: expected index values
 
+Finished reports are in `docs/archive/`. Open items from them are in this file and the plan.
+
 ## Current state
 
-The target is to finish almost everything quickly, with Friday, November 13, 2026 as the outer limit. `docs/plan.md` holds the status against the assessment requirements and all tickets.
+The target is Friday, November 13, 2026.
 
 | Area | State |
 |---|---|
-| Git | PRs #1 to #5 are merged. `integration/overnight` is the combined branch: the review fixes, centering, model records, UI audit, detail page, evals, ranked suggestions file and Passage Retrieval document, merged and tested together. Merge that branch to bring all of this work to `main`; the separate feature branches remain for history. `docs/overnight-report.md` records the overnight work. |
-| Assessment tiers | Essential is complete. Intermediate, Advanced and Bonus are not. |
-| Index | PC-14 is verified at 1,028 items, with all fields populated. The body review (PC-60) passed. |
-| Query routing | Dedicated `pokebowl-search` pipeline, condition Search Hub contains `pokebowl-`, filtered to `pokemondb-pokemon`. No Coveo project was created; it is optional. |
-| Search interface | Results, Type and Generation facets, page sizes, pager, query correction, Pokédex lookup for number-only searches and Pokédex order on the home page work. The sort control is broken on `main` and fixed on `integration/overnight`. Page sizes now use Atomic's `atomic-results-per-page`. Tailwind and shadcn/ui are in place. |
-| Tests | On `integration/overnight`, 186 unit, 109 browser and 11 Python tests pass. Browser tests run locally only and use a stubbed answer stream. |
-| Rerail | No repository rules were added, by the user's decision. |
+| Git | **PR #6 is open:** `integration/overnight` into `main`. It contains the review fixes, detail page, generated answers, evals, suggestions generator and Passage Retrieval document, so no other PR is needed. |
+| Uncommitted on `integration/overnight` | The detail page link rewording, its tests, and the documentation reconciliation with this archive. Commit and push only when the user asks. |
+| Assessment | Essential is done. Generated answers, Query Suggestions and the detail page are built in PR #6. Hosting, sharing the repository and the presentations remain. |
+| Coveo | Index verified at 1,028 items. `pokebowl-search` pipeline has the Semantic Encoder, RGA and Query Suggestions models, all recorded in `configs/coveo/ml-models.json`. |
+| Query Suggestions | The live file has equal importance. The ranked file in `configs/coveo/` needs uploading and a build. |
+| Tests | Last full run on `integration/overnight`: 186 unit, 117 browser and 11 Python tests passed. The link rewording then brought unit tests to 187, with 8 of 8 detail browser tests passing. Browser tests run locally only and use a stubbed answer stream. |
 
-There are two streams of remaining work. Stream A is agent work: anything not marked done waits for the user to release it. Stream B needs the user, because it involves the Coveo console, Vercel or the user's judgment. `docs/overnight-report.md` lists everything done on the night of November 8 and every open decision.
+**To run the application:** check out `integration/overnight`, run `fnm use`, `npm ci` and `npm run dev`, and open http://localhost:5173/. A local `.env` must hold the two values listed in `.env.example`. A detail page opens at a URL such as http://localhost:5173/?pokemon=Charizard.
 
-**To run the integrated application:** check out `integration/overnight`, run `fnm use`, `npm ci` and `npm run dev`, and open http://localhost:5173/. A local `.env` must hold the two Coveo values listed in `.env.example`. A detail page opens at a URL such as http://localhost:5173/?pokemon=Charizard.
+## Next steps
 
-## Stream A: subagent work, in priority order
+Read the relevant Coveo or Vercel documentation in full before giving steps, and mark each user action with 🟡.
 
-Items not marked done wait for the user's release. The user may release them one at a time.
-
-| Priority | Ticket | Goal | Branch | Ready? |
-|---|---|---|---|---|
-| 1 | PC-70 | Pokémon detail page | `integration/overnight` | Built and combined with the other work, not merged to `main` |
-| 2 | PC-83 | Passage Retrieval point of view | `integration/overnight` | Done and corrected from the full Coveo pages. Nothing was tested, because Passage Retrieval is not enabled |
-| 3 | PC-40, PC-41 | Eval reference data and index checks | `integration/overnight` | Done and combined. Index check passed: 1,028 items and 40 sampled pages matched. The user still hand-checks 11 difficult pages |
-| 4 | PC-76 | Designed loading, no-results and error states | `integration/overnight` | Done. The wording is listed for the user to review |
-| 5 | PC-42 | Relevance evals | `integration/overnight` | Needs the eval API key from Stream B |
-| 6 | PC-62, then PC-77 | Generated answers in the application, in the same design | `integration/overnight` | Done. PC-63 tuning and PC-44 answer evals remain |
-| Any time | Rerail fixes | Fix findings from a scan, for review afterwards | `chore/rerail-fixes` | When a scan has agreed fixes |
-
-**PC-70 content, confirmed by the user:** artwork, name, number, Types, Generation, species, height, weight, abilities and all stats, built with shadcn/ui, with a shareable URL for each Pokémon and a clear not-found state. New Pokémon have `???` as their number and no stats. An exact lookup with `@pokemon_name=="Mr. Mime"` returns one item.
-
-**PC-83 output:** a document that explains how the Passage Retrieval API works, when to use it instead of Search or RGA, and how we would use it in future work. Cite Coveo documentation, and separate what it states from our view. Passage Retrieval is not yet enabled, so do not claim to have tested it. The Hosted MCP idea below is a concept only, and is not planned work.
-
-**PC-40 limits:** fetch at most one pokemondb.net page every 2 seconds, and keep raw HTML out of Git.
-
-**Every subagent must:**
-
-- Work in a separate git worktree and branch, starting from an up-to-date `main`.
-- Use Node 24 through `fnm`, run `npm ci`, and follow `AGENTS.md`, including test-first development and no Claude attribution.
-- Have the main session's `.env` linked into its worktree, without committing it, if it runs browser tests.
-- Use a separate dev server port for browser tests. `playwright.config.ts` is fixed to port 5173 and reuses a running server, so a test in a worktree could otherwise run against another checkout. Make the port configurable the first time this is needed.
-- Check interface work in a real browser with screenshots.
-- Leave `docs/plan.md` and `docs/handoff.md` to the main session, and report which boxes to tick.
-- Not change Coveo configuration, and tell the user about any major change to `configs/coveo/extensions/reconstruct_body.py`.
-- Not commit or push unless the user has asked for that work to be committed.
-
-## Stream B: work with the user
-
-Read the relevant Coveo or Vercel documentation in full before giving steps. Mark each user action with 🟡.
-
-| Priority | Ticket | Work | Notes |
+| Order | Work | Who | Notes |
 |---|---|---|---|
-| 1 | PC-61 | Finish the Semantic Encoder and RGA models | Both builds are complete, and the IDs and associations are recorded in `configs/coveo/ml-models.json`. |
-| 2 | PC-51 | Show type-ahead | Done. The model is active after a rebuild, and the file is live: typing `char` in the search box lists Pokémon and ability suggestions. The live file has equal importance, so Charizard is not first for `char`. A ranked file is in the repository and waits for upload and a build. |
-| 3 | PC-50 | Default queries file | Generated and uploaded with a 200 response. The model was then set to a 1-month data period and daily builds so a rebuild picks up the file, and the rebuild made the file live. `configs/coveo/query-suggestions-default-queries.csv` is now the ranked version, which still needs uploading with the same values, followed by a build. |
-| 4 | PC-30 | Host on Vercel | Set `VITE_COVEO_ORGANIZATION_ID` and `VITE_COVEO_SEARCH_API_KEY` as build variables, use Node 24 and deploy on merge. The free plan is limited to non-commercial personal use, and Vercel can pause projects, so check the link before the panel. |
-| 5 | PC-31 | Check history for secrets, then share the repository | Merged commits still carry an older local email. PR #1 keeps its old commits. |
-| 6 | Eval key | Create a second API key with a search hub containing `pokebowl-`, for example `pokebowl-evals` | Unblocks PC-42 and browser tests in CI. Record it in `configs/coveo/api-keys.json`, without its value. |
-| 7 | PC-02, PC-80 | Passage Retrieval access and setup | The user sends the organization ID to Coveo when ready. |
-| 8 | PC-63, PC-44 | Tune answers and add answer evals | After generated answers work. |
-| 9 | PC-43 | Performance baseline | After hosting. |
-| Last | PC-90, PC-91, PC-100 to PC-103 | Configuration export, final docs and presentations | The user chooses the enterprise customer for PC-102. Plan for 45 minutes including questions. Any skipped tier item needs a justification. |
+| 1 | Upload the ranked suggestions file (PC-50) | 🟡 User | Advanced Model Configurations `PUT configs/{configurationType}`, `DEFAULT_QUERIES`, `en`. The daily build picks it up |
+| 2 | Merge PR #6 | 🟡 User | Use **Create a merge commit** |
+| 3 | Partial-name search (PC-52) | Both | Waiting on the user's go-ahead for research |
+| 4 | Pokémon links in generated answers (PC-64) | Both | Waiting on the user's choice of approach |
+| 5 | Host on Vercel (PC-30), then share the repository (PC-31) | 🟡 User, guided | Set the two Coveo values as build variables and use Node 24. The free plan is for non-commercial use and projects can pause, so check the link before the panel. Merged commits still carry an older local email |
+| 6 | Create the eval key | 🟡 User, guided | Search hub containing `pokebowl-`, such as `pokebowl-evals`. Unblocks PC-42, PC-44 and browser tests in CI. Record it in `configs/coveo/api-keys.json` without its value |
+| 7 | Relevance and answer evals, tuning (PC-42, PC-44, PC-63) | Both | Needs the eval key |
+| 8 | Performance baseline (PC-43) | Agent | After hosting |
+| Last | PC-78, PC-90, PC-91, PC-100 to PC-103 | Both | The user chooses the enterprise customer for PC-102. Plan for 45 minutes including questions. Any skipped tier item needs a justification |
 
-## Recent decisions
+Passage Retrieval hands-on work (PC-80 to PC-82) depends on Coveo enabling access. The Hosted MCP idea is a concept only and is not planned work.
 
-Number-only searches are Pokédex lookups, the home page is in Pokédex order, page sizes stay at 12, 24, 48 and 96, and query correction and a sort control are added. The clear button returns to the full list and keyboard emptying waits for Enter. Best match stays the default label. Hosting is on Vercel. Phone layouts are out of scope. See `docs/architecture.md` for the reasoning, including why the request hook is used for lookups.
+## Open decisions for the user
 
-**Questions the panel may ask:** automatic mapping is on although Coveo advises keeping it off for native sources; the request hook is used although Coveo recommends an advanced query action for `aq`; some Atomic layout overrides use `!important`. Each has a recorded reason.
+- The interface questions listed under PC-78.
+- Whether to restructure Atomic layout overrides (PC-79).
+- Whether an answer disappearing on a non-relevance sort is acceptable (PC-63).
+- Which detail page enhancements to make. A UI/UX ideation report was in progress when this was written.
+- `npm audit`: the recommendation below.
 
-## Page centering
+## Open checks
 
-The no-results and error messages now center on the page, and the status row stays on one line with a search summary, at 1100, 1440, 1920 and 2560 px. The pager is centered on the page, on a full-width row below the facets and results.
-
-## Sort bug: fixed on `integration/overnight`
-
-Changing the sort shows "something went wrong" on `main`. The sort expressions included `@` before the field name, and Headless adds another, so the Search API rejected `@@pokemon_number`. Expressions now use Atomic's format without `@`, and the request hook uses Headless's conversion. Every option was checked in a real browser at 1100, 1440, 1920 and 2560 px. See `docs/code-review.md` for the status of every finding. Coveo states that an answer may not be generated when results are not sorted by relevance, so PC-62 depends on sorting being correct.
-
-## Small open items
-
-- **Interface audit:** fixes are on `integration/overnight`. Open decisions are listed in `docs/overnight-report.md`.
-- **CR-17:** search `25`, then check in Visit Browser whether the event shows `25` or blank.
-- **PC-02:** the user will email Will Tseng on the Technical Challenge thread with the organization ID, asking to enable Passage Retrieval. Do not remind the user about this.
+- **Number lookups in analytics:** search `25`, then check in **Visit Browser** whether the event shows `25` or blank. This also confirms the search hub on analytics events. If blank, correct `docs/architecture.md`.
+- **PC-40:** 11 difficult pages need checking by hand.
 - **PC-05:** tick the failing-test item the first time a test fails in CI.
-- **Browser tests in CI:** `npm run test:e2e` needs the Coveo values, so it does not run in CI yet.
-- **Dependency audit:** `npm audit` reports 9 high and 1 low finding, all from packages that `@coveo/atomic-react` and `@coveo/headless` bring in, and npm offers no fix. They come down to one `zod` advisory and two `i18next-http-backend` advisories; the other entries are packages that depend on those. **Not reachable in our use:** the `zod` memory exhaustion (GHSA-mrhx-c7xc-m3w5) comes through `@ag-ui/client`, which Headless calls only when a generated answer has an `agentId`, and we set none. That code is in the browser bundle but is not run. The `i18next-http-backend` advisories (GHSA-3cmx-xjww-583x, GHSA-9jhj-wvmw-cfx5) need a language or namespace value an attacker controls in the load path. Atomic does build that path with the language in its query string, but we do not set the language from user input, and the namespace is fixed. These are runtime dependencies, not development-only ones, and none of the affected code is part of our build tooling. **Recommendation, for the user to decide:** leave them with no overrides, update when Coveo releases new packages, and repeat this check if an `agentId` is ever added.
-- **Layout jump:** fixed. Cumulative layout shift fell from 0.444 to about 0.02 on a production build, by reserving the search row. PC-43 still needs the full baseline.
 - **Extension health:** check `pre-reconstruct-body` usage statistics, because a timeout silently indexes an item without the rewrite.
-- **Analytics hub:** the hub on analytics events has not been verified directly. The model learned the query `fire` from real searches on `pokebowl-search`, which suggests it is correct. Confirm it during the CR-17 check.
-- **Bundle size:** the main JavaScript file is 1.63 MB, or 442 KB gzipped, on `integration/overnight`. Measure its effect in PC-43.
-- **Optional:** branch protection on `main`, set by the user in GitHub, so failed checks block merges.
-- **Parked:** Knowledge Hub access. It is an early-access beta and is not visible in the user's console. It could be requested in the PC-02 email.
+- **Optional:** branch protection on `main`, set by the user in GitHub.
+- **Parked:** Knowledge Hub access, an early-access beta not visible in the user's console.
+
+## Known limits
+
+- Text typed right after the clear button, before the search returns, can be replaced, because Headless copies the executed query into the search box. No public option prevents it.
+- An arriving generated answer moves the cards down, because the page cannot know in advance whether an answer will exist.
+- Searching `char` returns few results until PC-52 is done.
+- With the Semantic Encoder active, a nonsense text query can still return results.
+- Body text has repeated Pokédex entries and game labels such as "Let's Go Pikachu". Any fix belongs in the extension.
+- **Questions the panel may ask:** automatic mapping is on although Coveo advises keeping it off for native sources; the request hook is used although Coveo recommends an advanced query action for `aq`; some Atomic layout overrides use `!important`. Each has a recorded reason.
+
+**Dependency audit:** `npm audit` reports 9 high and 1 low finding, all through Coveo's packages, and npm offers no fix. They reduce to one `zod` advisory and two `i18next-http-backend` advisories. None is reachable in our use: the first needs a generated answer `agentId`, and we set none; the others need a language or namespace value an attacker controls. Recommendation, for the user to decide: no overrides, update when Coveo releases new packages, and repeat the check if an `agentId` is added.
 
 ## Things to remember
 
@@ -119,13 +87,12 @@ Changing the sort shows "something went wrong" on `main`. The sort expressions i
 - The browser key enforces the `pokebowl-search` hub in Coveo, so other hubs sent by a client still route there. A second key is needed to query the test source or to run evals.
 - Coveo's API explorer can run requests while signed in, with no admin key. Multi-value fields created through the API need `"multiValueFacetTokenizers": ";"`.
 
-**For upcoming tickets**
+**Facts for upcoming tickets**
 
-- **PC-70:** new Pokémon have `???` as their number and empty stats. All stats are strings.
-- **PC-50:** Coveo's documented method for low traffic is a default queries file. A model needs approximately 10,000 search events to learn suggestions and at least 100 to provide recommendations. Test configuration mode is only for sandbox organizations. Eval traffic needs a separate search hub so it does not affect analytics.
-- **PC-60 and PC-61:** generated answers use only the body field. RGA and Semantic Encoder models must use the same content and the same query pipeline, and must be limited to `pokemondb-pokemon`, because `pokemondb-test-charizard` is being kept and the pipeline filter may not cover model building.
-- **PC-81 idea, concept only and not planned work:** Coveo's Hosted MCP Server could expose the index to an AI agent. Its Answer tool requires Knowledge Hub, but Search and Fetch do not.
-- Body text still has repeated Pokédex entries and game labels such as "Let's Go Pikachu". We keep them unless PC-42 or PC-44 shows a problem, and any fix belongs in the extension.
+- New Pokémon have `???` as their number and empty stats. All stats are strings.
+- A Query Suggestions model needs approximately 10,000 search events to learn suggestions. Eval traffic needs a separate search hub.
+- RGA and Semantic Encoder models use the same content and are limited to `pokemondb-pokemon`, because `pokemondb-test-charizard` is kept.
+- Fetch at most one pokemondb.net page every 2 seconds, and keep raw HTML out of Git.
 
 **Tools**
 
@@ -135,6 +102,12 @@ Changing the sort shows "something went wrong" on `main`. The sort expressions i
 - To verify Coveo directly, run a Node script outside the repository with `node --env-file=.env`, and send `maximumAge: 0`. Never print the key.
 - The shell is zsh, so a command held in a variable does not split into words, and `timeout` is not installed.
 - Sample pages from the earlier session were temporary. Re-fetch them when needed, one page every 2 seconds, and keep raw HTML out of Git.
+
+**Background agents**
+
+- Use a separate git worktree and dev server port (`E2E_PORT`), with the main `.env` linked and not committed.
+- Follow `AGENTS.md`, including test-first development, real-browser checks and no Claude attribution.
+- Do not change Coveo, and do not commit or push unless the user asked for it.
 
 ## How the user wants to work
 

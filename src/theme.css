@@ -72,6 +72,15 @@
   --space-control-label: 8px;
   --space-control-group: 24px;
   --space-panel: 16px;
+  /* The launcher plus its edge space must fit in the margin beside the detail page content at the narrowest width. */
+  --size-chat-launcher: 3rem;
+  --space-chat-edge: 0.5rem;
+  --space-chat-panel-gap: 0.75rem;
+  --space-chat-panel-bottom: calc(var(--space-chat-edge) + var(--size-chat-launcher) + var(--space-chat-panel-gap));
+  --size-chat-panel: 26rem;
+  --size-chat-panel-height: min(40rem, calc(100dvh - var(--space-chat-panel-bottom) - var(--space-chat-edge)));
+  --motion-chat-idle: 2.4s;
+  --motion-chat-typing: 0.9s;
   --focus-ring: var(--foreground);
   --focus-width: 2px;
   --focus-offset: 2px;
@@ -291,6 +300,18 @@ atomic-generated-answer::part(citation):hover {
   border-color: var(--border-strong);
 }
 
+[data-slot='ask-thread'] atomic-generated-answer::part(container) {
+  margin-bottom: 0;
+  background: var(--muted);
+  border: 0;
+  border-radius: var(--radius-control);
+}
+
+[data-slot='ask-thread'] atomic-generated-answer::part(header) {
+  padding-block: 0;
+  padding-inline: var(--space-control-label);
+}
+
 atomic-result-list::part(result-list),
 [data-slot='result-placeholders'] {
   grid-template-columns: repeat(var(--result-columns-narrow), minmax(0, 1fr));
@@ -432,6 +453,29 @@ atomic-sort-dropdown::part(select):hover {
   atomic-result-list::part(outline),
   atomic-facet::part(values) {
     animation: reveal var(--motion-reveal) ease-out;
+  }
+
+  [data-slot='ask-launcher'] img {
+    animation: ask-wobble var(--motion-chat-idle) ease-in-out infinite;
+  }
+
+  [data-slot='ask-typing'] img {
+    animation: ask-wobble var(--motion-chat-typing) ease-in-out infinite;
+  }
+}
+
+@keyframes ask-wobble {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-14deg);
+  }
+
+  75% {
+    transform: rotate(14deg);
   }
 }
 

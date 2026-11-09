@@ -38,7 +38,7 @@ flowchart TD
         ANALYTICS["Coveo Analytics<br/>searches and clicks"]
     end
 
-    subgraph APP["Search app: Atomic React, hosting TBD"]
+    subgraph APP["Search app: Atomic React, hosted on Vercel"]
         BOX["Search box with type-ahead"]
         ANSWER["Generated answer"]
         FACETS["Type and Generation facets"]
@@ -47,7 +47,7 @@ flowchart TD
         BONUS["Passage Retrieval feature<br/>bonus, concept TBD"]
     end
 
-    SEED["Query Suggest preload<br/>approach TBD"]
+    SEED["Default queries file<br/>uploaded through the Machine Learning API"]
 
     PAGES --> SOURCE
     OTHER -. "excluded" .-> FILTERS
@@ -58,7 +58,7 @@ flowchart TD
     MAP --> ITEMS
     MAP --> FIELDS
 
-    ITEMS -->|"body embedded"| SE
+    ITEMS -->|"title and body embedded"| SE
     ITEMS -->|"body embedded"| RGA
     ITEMS -->|"body embedded"| CPR
 
@@ -82,7 +82,7 @@ flowchart TD
 
     BOX -. "search events" .-> ANALYTICS
     RESULTS -. "click events" .-> ANALYTICS
-    SEED -. "preload data" .-> ANALYTICS
+    SEED -->|"suggestion candidates"| QS
     ANALYTICS -->|"trains"| QS
 ```
 
@@ -103,7 +103,13 @@ flowchart TD
 | Application content | Dedicated `pokebowl-search` pipeline filters to the full source, and the test source is kept | [Limiting the application to the full source](#limiting-the-application-to-the-full-source) |
 | Hosting | Vercel | [Hosting](#hosting) |
 | Repeated platform work | Coveo APIs in place of repeated console steps | [Use of Coveo APIs](#use-of-coveo-apis) |
-| Eval reference data | Sampled from pokemondb.net and verified by hand | [Eval reference data](#eval-reference-data) |
+| Eval reference data | Sampled from pokemondb.net, with difficult cases verified by hand | [Eval reference data](#eval-reference-data) |
+| Search behavior | Number lookups, Pokédex order on the home page, Best match as the default label, collapsed facets | [Search behavior](#search-behavior) |
+| Page sizes | Atomic's `atomic-results-per-page` | [Visual direction](#visual-direction) |
+| Empty and error views | Rendered from Headless search status | [Interface states and motion](#interface-states-and-motion) |
+| Type-ahead | Query Suggestions model with a default queries file | [Query Suggestions](#query-suggestions) |
+| Generated answers | Atomic's `atomic-generated-answer` with Semantic Encoder and RGA models | [Generated answers](#generated-answers) |
+| Detail page | Query parameter URL, read through a separate Headless engine | [Pokémon detail page](#pokémon-detail-page) |
 
 ## Decisions
 
@@ -342,7 +348,7 @@ Three behaviors are added on top of Coveo's default relevance search.
 
 **Coveo documentation:** [Modify requests and responses](https://docs.coveo.com/en/atomic/latest/usage/atomic-modify-requests-responses/) describes the request hook, and advises limiting it to search requests and coding defensively. It recommends the Headless advanced query action for setting `aq`, without giving a reason. [Ensure that your search interfaces contain standard components](https://docs.coveo.com/en/mc2g0332/) covers query correction and sorting. [Manage fields](https://docs.coveo.com/en/1833/) states that the Sort option needs no rebuild, though a delay may occur.
 
-**Our inference:** we use the request hook despite that recommendation, because the lookup must also clear the text query in the same request, and the advanced query action cannot do that. The search box and analytics keep the text the person typed.
+**Our inference:** we use the request hook despite that recommendation, because the lookup must also clear the text query in the same request, and the advanced query action cannot do that. The search box keeps the text the person typed. Whether analytics keep it has not been verified, and Coveo's documentation suggests the lookup may be recorded with empty text. Check it in Usage Analytics.
 
 ## Hosting
 
@@ -356,7 +362,7 @@ Query Suggestions is the type-ahead list in the search box. Its model learns fro
 
 **First file:** `configs/coveo/query-suggestions-default-queries.csv`, with 2,234 queries generated from values in the index: 1,028 Pokémon names, 18 Types, 10 Generations, 178 Type pairs, 284 abilities and 716 species. Each query other than a name was tested against the index with analytics capture off, and 10 were dropped because no top-12 result carried the value. The first file carried no importance values, because any popularity numbers would be invented. Longer natural-language questions were left out, because the purpose of this feature is completing what a person types. A few could be added after generated answers work.
 
-**Rejected as the first step: scripted sessions that search and click through the application.** The events would be correctly formed, but the traffic would be synthetic, and scripted volume would still be far below what the model needs to learn well. It remains the fallback if the model cannot become active without more analytics. If used, it would be disclosed as synthetic and kept to the `pokebowl-search` hub.
+**Rejected as the first step: scripted sessions that search and click through the application.** The events would be correctly formed, but the traffic would be synthetic, and scripted volume would still be far below what the model needs to learn well. It was kept as a fallback in case the model could not become active, and was not needed.
 
 **Rejected: scripted calls directly to the Search and Analytics APIs.** Our code would have to reproduce the event format that Atomic already produces.
 
@@ -364,7 +370,7 @@ Query Suggestions is the type-ahead list in the search box. Its model learns fro
 
 **Coveo documentation:** [Troubleshoot Query Suggestions models](https://docs.coveo.com/en/q6qc0388/) states that a model needs approximately 10,000 search events to produce learned suggestions, and that a test or low-traffic environment can be pre-populated with a default queries file. [Set advanced QS model configurations](https://docs.coveo.com/en/qa5b0256/) describes the file: a UTF-8 CSV without headers, at most 5,000 queries per language, with an optional importance value. [Create and manage a QS model](https://docs.coveo.com/en/3398/) states that a model needs at least 100 events to provide recommendations, and that Test configuration mode is available only in sandbox organizations. [Reviewing query suggestion candidates](https://docs.coveo.com/en/2010/) states that, at low volume, a query qualifies after one search followed by a click.
 
-**Our inference:** Coveo does not state whether a model becomes active with almost no analytics, or whether uploading the file triggers a rebuild. We will confirm both when the model is created. Choosing names and descriptive searches for the file is a product decision.
+**Our inference:** Coveo does not state whether a model becomes active with almost no analytics, or whether uploading the file triggers a rebuild. Our model did become active. Choosing names and descriptive searches for the file is a product decision.
 
 **Learning interval:** a 1-month data period with daily builds, which Coveo's table lists as a valid pairing. We changed it from the default so that a rebuild picks up the uploaded file soon after upload. Immediately after the upload, the Query Suggestion API returned only a learned query. After the rebuild it returned the file's queries, which supports our inference that the file takes effect on a rebuild. Coveo does not document this.
 
@@ -404,6 +410,16 @@ Not confirmed: real artwork on the page, and that the click event reaches Coveo 
 
 **Finding to keep in mind:** with the Semantic Encoder active, a nonsense text query can still return results, so a no-results page is now reached mainly through number lookups and filters.
 
+**Pokédex entries:** the detail page shows the most recent entry of the base form, with its game names. Other entries sit behind "More entries", grouped by distinct text with every game that shares it, and alternate forms are grouped under their names. The text comes from the item's stored page through the Headless [Quickview](https://docs.coveo.com/en/3311/) controller on the analytics-off lookup engine. The page is parsed with `DOMParser` and only text is read, because the stored HTML contains scripts and must never be inserted into the page. The rejected alternatives were showing the body field, excerpt or summary, which have no structure, and adding entries as index fields, which needs a source rebuild. The section depends on the markup of the source page, so it hides itself when the page has no entries, when parsing finds nothing, or when the content does not arrive within a named timeout, because Headless has no failed state for this request. A visible line credits the Pokémon games and Pokémon Database. Whether the pokemondb.net terms allow quoting this text has not been checked.
+
+**Links to search:** Type badges and the Generation value open the search page filtered by that value. The links are built with Headless `buildSearchParameterSerializer`, which writes the URL format that Atomic reads. A browser test confirms that the filter is applied.
+
+## User decisions on states and links
+
+- **No-results and error screens:** approved as worded. The text is in `src/search/SearchStateMessage.tsx`.
+- **Generated answer citations:** they stay on pokemondb.net, because in enterprise search a citation sends a person to the full source.
+- **Detail page source link:** it reads "Learn more about" followed by the Pokémon's name, and opens the pokemondb.net page.
+
 ## Generated answers
 
 **Decision: use Atomic's `atomic-generated-answer` at the top of the results section, with `collapsible` on.** The answer sits below the fixed controls row and above the result cards. It keeps Atomic's disclaimer, citations, feedback and copy actions, and is styled only through its documented CSS parts.
@@ -422,3 +438,16 @@ Not confirmed: real artwork on the page, and that the click event reaches Coveo 
 
 The type-ahead panel now shares the search box's edges, border and radius, and uses the main text color, through Atomic's `suggestions-wrapper` and `query-suggestion-text` parts.
 
+## Ask about this Pokémon
+
+**Decision: the detail page has a chat assistant, opened from an animated Pokéball fixed at the bottom right.** The user chose this shopping-site pattern over a card on the page. The panel stays closed on load. It greets the person and offers three suggested questions, defined once in `src/search/settings.ts`. Picking one adds it to a thread, shows the Pokéball as a typing indicator, then streams the answer as an assistant message. Suggestions already asked are removed, so a person can ask the rest, and the thread scrolls inside the panel.
+
+An answer is generated only when a person picks a question. Generating on load was rejected, because it would use the generative allowance on every view and add seconds of waiting. Free-text input was rejected, because question wording strongly affected speed and quality.
+
+Each question and answer pair uses its own `atomic-generated-answer` in an `atomic-search-interface` with its own search engine, because Atomic shows one answer per engine. A thread holds at most one interface per suggested question. This keeps Atomic's citations, disclaimer, feedback and copy buttons, styled through CSS parts to read as a chat message. The rejected alternative was the Headless `GeneratedAnswer` controller with one engine, which would have required rebuilding those features and rendering Markdown safely. The engine sends the question as `q` and an exact name match as `aq`, does not write to the URL and runs no first search. Citations stay on pokemondb.net. Pokémon with no stats, which have little indexed text, show no launcher.
+
+The launcher plus its edge space fits in the margin beside the page content at 1100 px, so it does not cover content while closed. The panel is a non-modal dialog: Escape and the close button return focus to the launcher, and each exchange has a status region for screen readers. Failed requests offer a retry in the thread. The Pokéball animations stop when reduced motion is requested.
+
+**Coveo documentation:** [Configure a search interface for RGA](https://docs.coveo.com/en/nb6a0037/) states that a custom interface uses `atomic-generated-answer` or the Headless `GeneratedAnswer` controller, and that an answer regenerates when filters narrow the results. [Filter: Query pipeline feature](https://docs.coveo.com/en/1440/) describes how `aq` combines with `q`.
+
+**Our inference:** Coveo has no guide for scoping an answer to one item. Combining `aq` with RGA to do so is our design. On ten real questions across six Pokémon, each answer cited only the Pokémon shown. First text appeared after about 1.8 to 2.6 seconds, and full answers took about 3 to 9 seconds. The sample is small. Several Atomic interfaces on one page is also our design: Coveo's guidance is one Search API call per user search, and each interface here sends one only when a person picks a question.

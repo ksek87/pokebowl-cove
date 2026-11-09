@@ -74,3 +74,13 @@ export const POKEMON_STATS = [
 
 // The highest value a single base stat can have in the games.
 export const STAT_BAR_MAXIMUM = 255;
+
+// How long the detail page waits for the stored page before hiding the Pokédex entries.
+export const POKEDEX_ENTRIES_TIMEOUT_MS = 8000;
+
+// {name} is replaced with the Pokémon's name. Short descriptive questions gave the best answers in testing.
+export const ASK_POKEMON_QUESTIONS = [
+  'Describe the appearance and behavior of {name}',
+  'Describe the strengths of {name} in battle',
+  'Describe how {name} evolves',
+];

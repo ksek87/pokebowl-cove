@@ -15,20 +15,25 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import type { CoveoConfig } from '../config.ts';
-import { CONTROL_BUTTON_CLASS } from './controlStyles.ts';
+import { AskAboutPokemon } from './AskAboutPokemon.tsx';
+import { CONTROL_BUTTON_CLASS, FOCUS_LINK_CLASS, PANEL_CARD_CLASS } from './controlStyles.ts';
 import { toEngineConfiguration } from './engine.ts';
 import { DetailPlaceholder } from './LoadingPlaceholders.tsx';
 import {
   exactNameExpression,
+  facetLinkLabel,
+  facetSearchHref,
   findRequestedPokemon,
   POKEMON_DETAIL_FIELDS,
   type PokemonDetail,
   toPokemonDetail,
+  sourceLinkLabel,
 } from './pokemonDetail.ts';
+import { PokedexEntries } from './PokedexEntries.tsx';
 import { PokemonImage } from './PokemonResult.tsx';
 import { cardTint, typeBadge } from './pokemonTypes.ts';
 import { SiteHeader } from './SiteHeader.tsx';
-import { STAT_BAR_MAXIMUM } from './settings.ts';
+import { POKEMON_FIELDS, STAT_BAR_MAXIMUM } from './settings.ts';
 
 const PERCENT = 100;
 const SITE_TITLE = 'Pokémon Search';
@@ -38,7 +43,7 @@ const STAT_ROW_LAYOUT = 'grid grid-cols-[5rem_3rem_1fr] items-center gap-2';
 function usePokemonLookup(
   config: CoveoConfig,
   name: string,
-): { results: ResultListState['results']; status: SearchStatusState; runLookup: () => void } {
+): { engine: SearchEngine; results: ResultListState['results']; status: SearchStatusState; runLookup: () => void } {
   const { engine, resultList, searchStatus } = useMemo(() => {
     const lookupEngine: SearchEngine = buildSearchEngine({
       configuration: { ...toEngineConfiguration(config), analytics: { enabled: false } },
@@ -65,7 +70,7 @@ function usePokemonLookup(
 
   useEffect(runLookup, [runLookup]);
 
-  return { results, status, runLookup };
+  return { engine, results, status, runLookup };
 }
 
 function goBackToSearch(event: MouseEvent<HTMLAnchorElement>): void {
@@ -112,7 +117,7 @@ function Stats({ detail }: { detail: PokemonDetail }): JSX.Element {
 
 function PokemonDetails({ detail }: { detail: PokemonDetail }): JSX.Element {
   return (
-    <Card className="overflow-hidden border-border rounded-(--radius-panel) border-(length:--size-panel-border) border-b-(length:--size-card-edge) py-0 shadow-none">
+    <Card className={PANEL_CARD_CLASS}>
       <CardContent className="grid p-0 lg:grid-cols-2">
         <div
           className="flex aspect-square items-center lg:aspect-auto justify-center p-10"
@@ -129,8 +134,14 @@ function PokemonDetails({ detail }: { detail: PokemonDetail }): JSX.Element {
             <ul className="mt-3 flex flex-wrap gap-1.5">
               {detail.types.map((type) => (
                 <li key={type}>
-                  <Badge className="px-3 text-(length:--text-small) font-extrabold" style={typeBadge(type)}>
-                    {type}
+                  <Badge
+                    asChild
+                    className={`px-3 text-(length:--text-small) font-extrabold transition-transform hover:-translate-y-px motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${FOCUS_LINK_CLASS}`}
+                    style={typeBadge(type)}
+                  >
+                    <a aria-label={facetLinkLabel(type)} href={facetSearchHref(POKEMON_FIELDS.type, type)}>
+                      {type}
+                    </a>
                   </Badge>
                 </li>
               ))}
@@ -138,7 +149,15 @@ function PokemonDetails({ detail }: { detail: PokemonDetail }): JSX.Element {
           </div>
           <dl className="grid grid-cols-2 gap-4">
             <Fact label="Species">{detail.species}</Fact>
-            <Fact label="Generation">{detail.generation}</Fact>
+            <Fact label="Generation">
+              <a
+                aria-label={facetLinkLabel(detail.generation)}
+                className={`text-primary underline ${FOCUS_LINK_CLASS}`}
+                href={facetSearchHref(POKEMON_FIELDS.generation, detail.generation)}
+              >
+                {detail.generation}
+              </a>
+            </Fact>
             <Fact label="Height">{detail.height}</Fact>
             <Fact label="Weight">{detail.weight}</Fact>
             <Fact label="Abilities">{detail.abilities.join(', ')}</Fact>
@@ -148,7 +167,7 @@ function PokemonDetails({ detail }: { detail: PokemonDetail }): JSX.Element {
             <Stats detail={detail} />
           </section>
           <a className="font-bold text-primary underline" href={detail.sourceUrl}>
-            View on pokemondb.net
+            {sourceLinkLabel(detail.name)}
           </a>
         </div>
       </CardContent>
@@ -200,7 +219,9 @@ function renderContent(
 }
 
 export function PokemonDetailPage({ config, name }: { config: CoveoConfig; name: string }): JSX.Element {
-  const { results, status, runLookup } = usePokemonLookup(config, name);
+  const { engine, results, status, runLookup } = usePokemonLookup(config, name);
+  const isLoaded = status.firstSearchExecuted && !status.isLoading && !status.hasError;
+  const result = isLoaded ? findRequestedPokemon(results, name) : undefined;
 
   useEffect((): void => {
     document.title = `${name} | ${SITE_TITLE}`;
@@ -218,6 +239,8 @@ export function PokemonDetailPage({ config, name }: { config: CoveoConfig; name:
           </Button>
         </div>
         <div role="status">{renderContent(name, results, status, runLookup)}</div>
+        {result ? <PokedexEntries engine={engine} result={result} sourceUrl={result.clickUri} /> : null}
+        {result && toPokemonDetail(result).stats.length ? <AskAboutPokemon config={config} name={name} /> : null}
       </main>
     </>
   );
