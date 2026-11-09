@@ -563,14 +563,58 @@ Measured at 1440×800: answers of about 200 words fit with no inner scroll. Real
 
 ## Performance
 
-**Decision: measure first, and make no performance change the numbers do not support.** A small, sequential and paced baseline was recorded in `evals/reports/performance.json`, because Coveo requires [load tests to be planned with and authorized by Coveo](https://docs.coveo.com/en/1948/). These are local, pre-hosting numbers.
+**Decision: measure first, and make no performance change the numbers do not support.** Coveo requires [load tests to be planned with and authorized by Coveo](https://docs.coveo.com/en/1948/), so every measurement is small, sequential and paced, and every request turns analytics capture off. The results are in `evals/reports/performance.json` (`npm run eval:performance`) and `evals/reports/bundle.json` (`npm run eval:bundle`).
 
-| Measure | p50 | p95 |
+### Method
+
+All numbers come from one developer machine on a home network, against the hosted site at https://pokebowl-cove.vercel.app/ (deployment of commit `5f6fbd0` on `main`). They are not real-user numbers.
+
+- **Coveo API timings.** Node sends requests straight to Coveo, one at a time, with the same request body as the application. The eval now runs `rewriteSearchBody` from `src/search/queryRewrite.ts`, so partial names and Pokédex numbers are sent exactly as the page sends them. The earlier baseline skipped this rewrite. `maximumAge` is 0, so Coveo's cache does not hide index time. Searches and suggestions are paced 500 ms apart. 20 generated answers are paced 3 seconds apart, from the questions that expect an answer.
+- **Hosted page timings.** Headless Chromium (Playwright) loads the hosted site 10 times in a fresh browser context each time, so every load is cold. The window is 1440×900, with no CPU or network throttling. Each run records first contentful paint, the load event, largest contentful paint (LCP), cumulative layout shift (CLS) and the time until the first result card is visible. It then types a three-letter partial name into the real search box and records the browser's own request times for type-ahead and search. The first 5 runs then ask one fact question and time the answer from pressing Enter. Runs are 2 seconds apart.
+- **What the page timings leave out.** pokemondb.net asks for 2 seconds between requests, and a page load asks for every card's artwork at once. One real artwork is therefore fetched once and served from memory for every card, so artwork download time is not included. Playwright answers CORS preflight requests itself when it intercepts a request, so the browser's request times do not include the preflight. A separate check measured a Coveo preflight at about 105 to 130 ms; browsers cache it, so only the first search of a visit pays it.
+- **Checks.** The hosted runs sent 62 search and suggestion requests, all with capture off. 9 of the 10 typed partial names reached Coveo with the partial-name rewrite applied, which confirms the hosted site runs the shipped behaviour; the tenth is a name the rewrite does not cover by design.
+
+### Results
+
+| Measure | Samples | p50 | p95 | Target |
+|---|---|---|---|---|
+| Search, Coveo API | 40 | 174 ms | 198 ms | 250 ms |
+| Type-ahead, Coveo API | 28 | 51 ms | 63 ms | 100 ms |
+| Generated answer, first text, Coveo API | 19 | 2.1 s | 3.0 s | 3.6 s |
+| Generated answer, complete, Coveo API | 19 | 3.1 s | 7.7 s | 9.3 s |
+| Hosted: first contentful paint | 10 | 260 ms | 292 ms | 400 ms |
+| Hosted: largest contentful paint | 10 | 260 ms | 292 ms | 400 ms |
+| Hosted: cumulative layout shift | 10 | 0.033 | 0.033 | 0.05 |
+| Hosted: first result visible | 10 | 537 ms | 575 ms | 700 ms |
+| Hosted: type-ahead request in the browser | 10 | 49 ms | 71 ms | 100 ms |
+| Hosted: search request in the browser | 10 | 172 ms | 220 ms | 300 ms |
+| Hosted: answer first text, from Enter | 5 | 2.3 s | 2.8 s | 3.4 s |
+| Hosted: answer complete, from Enter | 5 | 3.1 s | 3.7 s | 4.4 s |
+
+One of the 20 answerable questions returned no answer, so 19 answers were timed. With 10 or fewer samples, the p95 is the slowest run. Sorted queries and the largest page size were again no slower than the default: sorted p50 169 ms against 178 ms for relevance, and 96 results 97 ms against 76 ms for an empty query.
+
+**Targets.** Each target is the measured p95 plus 20%, rounded up to the next 50 ms. Layout shift is rounded up to two decimals and never targeted at zero. The aim is to catch a regression that stands out from run-to-run noise, not to promise a figure to users. These are developer-machine targets; production targets would come from real-user data.
+
+**What the numbers say.**
+
+- The partial-name rewrite costs nothing measurable. Search p50 was 182 ms before the rewrite was measured and 174 ms with it.
+- LCP equals first contentful paint. The loading placeholders are the largest element and appear first, so LCP does not see the result cards. "First result visible" is the better measure of when a person sees results.
+- The layout shift of 0.033 is the same on every run. It comes from two moments: the header and the search layout move by a few pixels about 335 ms into the load, and the query summary, sort menu and facet buttons change width when results replace the placeholders. It is small, but it has a cause that could be fixed.
+- Generated answers dominate. In the browser, first text took 2.3 s at p50. The slow tail of complete answers tracks long answers, as before.
+- Coveo's [response time guide](https://docs.coveo.com/en/1948/) lists several optimizations. We still do not apply the sort cache, a page size limit or pipeline simplification, because the numbers above show no problem they would solve. Coveo publishes no latency figures or tuning guide for generated answers. Our inference is that fixed, short questions remain the practical control, and that time to first text matters most because answers stream.
+
+### Bundle size
+
+Measured on a production build with source maps, gzip at level 9 per file (`evals/reports/bundle.json`).
+
+| Part | Raw | Gzip |
 |---|---|---|
-| Search | 182 ms | 205 ms |
-| Type-ahead | 56 ms | 62 ms |
-| First result visible | 369 ms | 424 ms |
-| Generated answer, first text | 2.0 s | 2.6 s |
-| Generated answer, complete | 3.1 s | 10.6 s |
+| JavaScript loaded at start (entry and runtime) | 1,651 kB | 448 kB |
+| CSS | 46 kB | 9 kB |
+| Lazy chunks (144 locale files, loaded only when needed) | 219 kB | 117 kB |
 
-Coveo's [response time guide](https://docs.coveo.com/en/1948/) lists several optimizations. We did not apply the sort cache, a page size limit or pipeline simplification, because sorted queries were no slower than relevance, 96 results cost about 25 ms, and search is already within target. Coveo publishes no latency figures or tuning guide for generated answers, and its advanced association settings are presented for answer quality. Our inference is that the slow tail tracks long answers, so fixed, short questions are the practical control. Answers stream, so the time to first text is what a person feels most.
+The largest packages in the entry chunk by gzip share are `@coveo/atomic` (21%), `react-dom` (14%), `@coveo/headless` (14%), `@reduxjs/toolkit` (4%), `coveo.analytics`, `i18next`, `@stencil/core`, `@ag-ui/client` and `zod` (about 3% each). Almost all of it is Coveo's UI and its dependencies. Our application code is a small share.
+
+**Decision: keep the inline card stylesheet as it is.** Atomic draws result cards inside Shadow DOM, so the cards need their own copy of our stylesheet, which is imported with `?inline` and shared by all cards. That copy is 43 kB raw and 8.6 kB gzipped, 1.9% of the entry chunk. A card-only stylesheet would save at most a few kilobytes gzipped, under 1% of the JavaScript, and would add a second Tailwind build to keep in sync. The page is already visible in under 300 ms on this machine, so the saving would not be measurable. Atomic itself carries 30 inline stylesheets, 120 kB raw and 16 kB gzipped.
+
+We make no bundle change. A smaller entry chunk would need code splitting around Atomic, which is Coveo's package and not ours to restructure.

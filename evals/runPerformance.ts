@@ -1,8 +1,10 @@
-import { chromium, type Page } from '@playwright/test';
 import { readCoveoConfig, type CoveoConfig } from '../src/config.ts';
-import { PAGE_SIZES, POKEMON_FIELDS, SORT_OPTIONS } from '../src/search/settings.ts';
-import { querySuggest, timedSearch, type SearchOptions } from './coveoQueries.ts';
-import { latencyStats, proposeTarget, type LatencyStats } from './metrics.ts';
+import { PAGE_SIZES, SORT_OPTIONS } from '../src/search/settings.ts';
+import type { AnswerCase } from './answerEvals.ts';
+import { ANSWER_PACING_MS, querySuggest, type SearchOptions } from './coveoQueries.ts';
+import { VIEWPORT, measureHostedRuns } from './hostedPage.ts';
+import { latencyStats, type LatencyStats } from './metrics.ts';
+import { hostedTargets, shippedAnswer, shippedSearch, summarizeHostedRuns, timingTarget } from './performance.ts';
 import type { RelevanceQuery } from './relevance.ts';
 import { pause, readEvalJson, runMain, writeEvalJson } from './runner.ts';
 
@@ -11,13 +13,15 @@ const PACING_MS = 500;
 const SEARCH_SAMPLES = 40;
 const VARIANT_SAMPLES = 15;
 const SUGGEST_SAMPLES = 40;
-const PAGE_LOADS = 15;
-const PAGE_LOAD_PACING_MS = 2000;
+/** Enough answers for a p95 that is not simply the slowest one, while using little of the generative allowance. */
+const ANSWER_SAMPLES = 20;
+const HOSTED_RUNS = 10;
+const HOSTED_ANSWER_RUNS = 5;
+const HOSTED_PACING_MS = 2000;
 const PREFIX_LENGTH = 3;
-const HEADROOM = 1.2;
-const ROUND_TO_MS = 50;
-const PAGE_TIMEOUT_MS = 30_000;
-const PREVIEW_URL = process.env.PERF_URL ?? 'http://localhost:4199/';
+const NO_ANSWER_EXPECTED = 'unanswerable';
+const FACT = 'fact';
+const HOSTED_URL = process.env.PERF_URL ?? 'https://pokebowl-cove.vercel.app/';
 
 async function sample<T>(items: T[], measure: (item: T) => Promise<number>, pacing: number): Promise<LatencyStats> {
   const durations: number[] = [];
@@ -28,9 +32,9 @@ async function sample<T>(items: T[], measure: (item: T) => Promise<number>, paci
   return latencyStats(durations);
 }
 
-function take(queries: string[], size: number): string[] {
-  const step = Math.max(queries.length / size, 1);
-  return Array.from({ length: Math.min(size, queries.length) }, (_unused, slot): string => queries[Math.floor(slot * step)]);
+function take<T>(items: T[], size: number): T[] {
+  const step = Math.max(items.length / size, 1);
+  return Array.from({ length: Math.min(size, items.length) }, (_unused, slot): T => items[Math.floor(slot * step)]);
 }
 
 function repeat(size: number): number[] {
@@ -38,7 +42,7 @@ function repeat(size: number): number[] {
 }
 
 async function searchVariants(config: CoveoConfig, words: string[]): Promise<Record<string, LatencyStats>> {
-  const timed = async (options: SearchOptions): Promise<number> => (await timedSearch(config, options)).ms;
+  const timed = async (options: SearchOptions): Promise<number> => (await shippedSearch(config, options)).ms;
   const largest = Math.max(...PAGE_SIZES);
   const [, pokedex, name] = SORT_OPTIONS.map((option): string =>
     option.expression.includes(' ') ? `@${option.expression}` : option.expression,
@@ -57,74 +61,55 @@ async function searchVariants(config: CoveoConfig, words: string[]): Promise<Rec
   return stats;
 }
 
-interface PageTimes {
-  firstContentfulPaint: number;
-  loadEvent: number;
-  firstResult: number;
-}
-
-async function measurePage(page: Page): Promise<PageTimes> {
-  const started = Date.now();
-  await page.goto(PREVIEW_URL, { waitUntil: 'load', timeout: PAGE_TIMEOUT_MS });
-  await page.locator('atomic-result').first().waitFor({ timeout: PAGE_TIMEOUT_MS });
-  const firstResult = Date.now() - started;
-  return page.evaluate((visible): PageTimes => {
-    const [navigation] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
-    const paint = performance.getEntriesByName('first-contentful-paint')[0];
-    return { firstContentfulPaint: paint?.startTime ?? 0, loadEvent: navigation.loadEventEnd, firstResult: visible };
-  }, firstResult);
-}
-
-/** Loads the built app in a real browser. Analytics are blocked and search capture is turned off. */
-async function pageLoads(): Promise<Record<keyof PageTimes, LatencyStats>> {
-  const browser = await chromium.launch();
-  const times: PageTimes[] = [];
-  for (let attempt = 0; attempt < PAGE_LOADS; attempt += 1) {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-    const page = await context.newPage();
-    await page.route(/pokemondb\.net|analytics|\/events\//, (route) => route.abort());
-    await page.route('**/rest/search/v2?*', async (route) => {
-      const body = JSON.parse(route.request().postData() ?? '{}') as Record<string, unknown>;
-      await route.continue({ postData: JSON.stringify({ ...body, analytics: { capture: false } }) });
-    });
-    times.push(await measurePage(page));
-    await context.close();
-    await pause(PAGE_LOAD_PACING_MS);
+async function answers(config: CoveoConfig, cases: AnswerCase[]): Promise<{ firstText: LatencyStats; complete: LatencyStats; withoutAnswer: number }> {
+  const firstText: number[] = [];
+  const complete: number[] = [];
+  for (const testCase of cases) {
+    const outcome = await shippedAnswer(config, { q: testCase.question, aq: testCase.scope });
+    if (outcome.firstTextMs !== null) {
+      firstText.push(outcome.firstTextMs);
+      complete.push(outcome.totalMs);
+    }
+    await pause(ANSWER_PACING_MS);
   }
-  await browser.close();
-  const read = (key: keyof PageTimes): LatencyStats => latencyStats(times.map((entry): number => entry[key]));
-  return { firstContentfulPaint: read('firstContentfulPaint'), loadEvent: read('loadEvent'), firstResult: read('firstResult') };
-}
-
-function targetFor(stats: LatencyStats | null): number | null {
-  return stats ? proposeTarget(stats.p95, HEADROOM, ROUND_TO_MS) : null;
+  return { firstText: latencyStats(firstText), complete: latencyStats(complete), withoutAnswer: cases.length - firstText.length };
 }
 
 async function main(): Promise<void> {
   const config = readCoveoConfig(process.env);
   const queries = await readEvalJson<RelevanceQuery[]>('reference/relevance-queries.json');
+  const questions = await readEvalJson<AnswerCase[]>('reference/answer-questions.json');
   const words = take(queries.map((entry): string => entry.query), SEARCH_SAMPLES);
-  const prefixes = take(queries.filter((entry): boolean => entry.category === 'name').map((entry): string => entry.query.slice(0, PREFIX_LENGTH)), SUGGEST_SAMPLES);
-  const search = await sample(words, async (q) => (await timedSearch(config, { q })).ms, PACING_MS);
+  const namePrefixes = queries.filter((entry): boolean => entry.category === 'name').map((entry): string => entry.query.slice(0, PREFIX_LENGTH));
+  const prefixes = take(namePrefixes, SUGGEST_SAMPLES);
+  const search = await sample(words, async (q) => (await shippedSearch(config, { q })).ms, PACING_MS);
   const typeAhead = await sample(prefixes, async (q) => (await querySuggest(config, q)).ms, PACING_MS);
   const variants = await searchVariants(config, words);
-  const page = await pageLoads();
-  const answers = await readEvalJson<{ firstTextMs: LatencyStats | null; totalMs: LatencyStats | null }>('reports/answers.json').catch(() => ({ firstTextMs: null, totalMs: null }));
+  const answerable = questions.filter((entry): boolean => entry.category !== NO_ANSWER_EXPECTED);
+  const answer = await answers(config, take(answerable, ANSWER_SAMPLES));
+  const facts = questions.filter((entry): boolean => entry.category === FACT).map((entry): string => entry.question);
+  const hosted = await measureHostedRuns(HOSTED_URL, {
+    prefixes: take(namePrefixes, HOSTED_RUNS),
+    questions: take(facts, HOSTED_ANSWER_RUNS),
+    pacingMs: HOSTED_PACING_MS,
+  });
+  const page = summarizeHostedRuns(hosted.runs);
 
   await writeEvalJson('reports/performance.json', {
     measuredAt: new Date().toISOString(),
-    context: `One local network, sequential paced requests, ${POKEMON_FIELDS.name} and other display fields, maximumAge 0 for API timings, production build served locally. Images from pokemondb.net were blocked. Hosted numbers will differ.`,
+    context: `Measured from one developer machine on a home network, not from users. API timings are sent from Node straight to Coveo with the same request bodies as the application, including the partial-name and Pokédex number rewrite, maximumAge 0 and analytics capture off. Requests are sequential and paced. Page timings load ${HOSTED_URL} in headless Chromium with no CPU or network throttling, a cold cache and a ${VIEWPORT.width}×${VIEWPORT.height} window. Each run then types one partial name and, in the first ${HOSTED_ANSWER_RUNS} runs, asks one question. Artwork from pokemondb.net is fetched once and served from memory for every card, to respect its crawl rate, so artwork download time is not included. Playwright answers CORS preflight requests itself when it intercepts a request, so browser request timings do not include a preflight.`,
     search,
     typeAhead,
     variants,
-    answer: answers,
-    page,
-    proposedTargetsMs: {
-      search: targetFor(search),
-      typeAhead: targetFor(typeAhead),
-      answerFirstText: targetFor(answers.firstTextMs),
-      answerTotal: targetFor(answers.totalMs),
-      firstResult: targetFor(page.firstResult),
+    answer,
+    hosted: { url: HOSTED_URL, ...page, sentSearches: hosted.sent },
+    proposedTargets: {
+      method: 'Each target is the measured p95 plus 20%, rounded up to the next 50 ms. Layout shift is rounded up to two decimals and is never below 0.01.',
+      searchMs: timingTarget(search),
+      typeAheadMs: timingTarget(typeAhead),
+      answerFirstTextMs: timingTarget(answer.firstText),
+      answerCompleteMs: timingTarget(answer.complete),
+      hosted: hostedTargets(page),
     },
   });
   console.log('Wrote evals/reports/performance.json');
