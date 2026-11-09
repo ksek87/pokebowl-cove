@@ -1,0 +1,253 @@
+import {
+  buildResultList,
+  buildSearchEngine,
+  buildSearchStatus,
+  loadAdvancedSearchQueryActions,
+  loadSearchActions,
+  loadSearchAnalyticsActions,
+  type ResultListState,
+  type SearchEngine,
+  type SearchStatusState,
+} from '@coveo/headless';
+import { type JSX, type MouseEvent, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import type { CoveoConfig } from '../config.ts';
+import { AskAboutPokemon } from './AskAboutPokemon.tsx';
+import { CONTROL_BUTTON_CLASS, FOCUS_LINK_CLASS, PANEL_CARD_CLASS } from './controlStyles.ts';
+import { toEngineConfiguration } from './engine.ts';
+import { DetailPlaceholder } from './LoadingPlaceholders.tsx';
+import {
+  exactNameExpression,
+  facetLinkLabel,
+  facetSearchHref,
+  findRequestedPokemon,
+  POKEMON_DETAIL_FIELDS,
+  type PokemonDetail,
+  toPokemonDetail,
+  sourceLinkLabel,
+} from './pokemonDetail.ts';
+import { PokedexEntries } from './PokedexEntries.tsx';
+import { PokemonImage } from './PokemonResult.tsx';
+import { cardTint, typeBadge } from './pokemonTypes.ts';
+import { SiteHeader } from './SiteHeader.tsx';
+import { POKEMON_FIELDS, STAT_BAR_MAXIMUM } from './settings.ts';
+
+const PERCENT = 100;
+const SITE_TITLE = 'Pokémon Search';
+const STAT_ROW_LAYOUT = 'grid grid-cols-[5rem_3rem_1fr] items-center gap-2';
+
+/** Runs the exact-name lookup. Analytics stay off, because a page load is not a search someone made. */
+function usePokemonLookup(
+  config: CoveoConfig,
+  name: string,
+): { engine: SearchEngine; results: ResultListState['results']; status: SearchStatusState; runLookup: () => void } {
+  const { engine, resultList, searchStatus } = useMemo(() => {
+    const lookupEngine: SearchEngine = buildSearchEngine({
+      configuration: { ...toEngineConfiguration(config), analytics: { enabled: false } },
+    });
+    return {
+      engine: lookupEngine,
+      resultList: buildResultList(lookupEngine, { options: { fieldsToInclude: POKEMON_DETAIL_FIELDS } }),
+      searchStatus: buildSearchStatus(lookupEngine),
+    };
+  }, [config]);
+  const [results, setResults] = useState(resultList.state.results);
+  const [status, setStatus] = useState(searchStatus.state);
+
+  useEffect(() => resultList.subscribe((): void => setResults(resultList.state.results)), [resultList]);
+  useEffect(() => searchStatus.subscribe((): void => setStatus(searchStatus.state)), [searchStatus]);
+
+  const runLookup = useCallback((): void => {
+    const { updateAdvancedSearchQueries } = loadAdvancedSearchQueryActions(engine);
+    const { executeSearch } = loadSearchActions(engine);
+    const { logInterfaceLoad } = loadSearchAnalyticsActions(engine);
+    engine.dispatch(updateAdvancedSearchQueries({ aq: exactNameExpression(name) }));
+    engine.dispatch(executeSearch(logInterfaceLoad()));
+  }, [engine, name]);
+
+  useEffect(runLookup, [runLookup]);
+
+  return { engine, results, status, runLookup };
+}
+
+function goBackToSearch(event: MouseEvent<HTMLAnchorElement>): void {
+  if (document.referrer.startsWith(window.location.origin)) {
+    event.preventDefault();
+    window.history.back();
+  }
+}
+
+function Fact({ label, children }: { label: string; children: ReactNode }): JSX.Element {
+  return (
+    <div>
+      <dt className="text-(length:--text-small) font-bold text-muted-foreground">{label}</dt>
+      <dd className="font-semibold">{children}</dd>
+    </div>
+  );
+}
+
+function Stats({ detail }: { detail: PokemonDetail }): JSX.Element {
+  if (!detail.stats.length) {
+    return <p className="text-muted-foreground">Base stats are not available yet.</p>;
+  }
+
+  return (
+    <dl className="grid gap-2">
+      {detail.stats.map(({ label, value }) => (
+        <div key={label} data-slot="pokemon-stat" className={STAT_ROW_LAYOUT}>
+          <dt className="font-bold text-muted-foreground">{label}</dt>
+          <dd className="contents">
+            <span className="text-right font-extrabold">{value}</span>
+            <Progress aria-hidden="true" value={Math.min(PERCENT, (value / STAT_BAR_MAXIMUM) * PERCENT)} />
+          </dd>
+        </div>
+      ))}
+      {Boolean(detail.total) && (
+        <div className={STAT_ROW_LAYOUT}>
+          <dt className="font-bold text-muted-foreground">Total</dt>
+          <dd className="text-right font-extrabold">{detail.total}</dd>
+        </div>
+      )}
+    </dl>
+  );
+}
+
+function PokemonDetails({ config, detail }: { config: CoveoConfig; detail: PokemonDetail }): JSX.Element {
+  return (
+    <Card className={`relative ${PANEL_CARD_CLASS} overflow-visible`}>
+      {detail.stats.length ? (
+        <div className="absolute top-3 right-3 z-10">
+          <AskAboutPokemon config={config} name={detail.name} />
+        </div>
+      ) : null}
+      <CardContent className="grid p-0 lg:grid-cols-(--detail-columns)">
+        <div
+          data-slot="detail-artwork"
+          className="flex items-center justify-center rounded-t-(--radius-panel) p-6 lg:rounded-tr-none lg:rounded-bl-(--radius-panel)"
+          style={{ background: cardTint(detail.types) }}
+        >
+          <PokemonImage image={detail.image} name={detail.name} className="size-auto max-h-full max-w-full" />
+        </div>
+        <div data-slot="detail-facts" className="grid content-start gap-4 p-6">
+          <div>
+            {Boolean(detail.number) && (
+              <p className="text-(length:--text-label) font-bold text-muted-foreground">#{detail.number}</p>
+            )}
+            <h1 className="min-w-0 text-4xl font-black tracking-tight">{detail.name}</h1>
+            <ul className="mt-3 flex flex-wrap gap-1.5">
+              {detail.types.map((type) => (
+                <li key={type}>
+                  <Badge
+                    asChild
+                    className={`px-3 text-(length:--text-small) font-extrabold transition-transform hover:-translate-y-px motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${FOCUS_LINK_CLASS}`}
+                    style={typeBadge(type)}
+                  >
+                    <a aria-label={facetLinkLabel(type)} href={facetSearchHref(POKEMON_FIELDS.type, type)}>
+                      {type}
+                    </a>
+                  </Badge>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <dl className="grid grid-cols-2 gap-3">
+            <Fact label="Species">{detail.species}</Fact>
+            <Fact label="Generation">
+              <a
+                aria-label={facetLinkLabel(detail.generation)}
+                className={`text-primary underline ${FOCUS_LINK_CLASS}`}
+                href={facetSearchHref(POKEMON_FIELDS.generation, detail.generation)}
+              >
+                {detail.generation}
+              </a>
+            </Fact>
+            <Fact label="Height">{detail.height}</Fact>
+            <Fact label="Weight">{detail.weight}</Fact>
+            <Fact label="Abilities">{detail.abilities.join(', ')}</Fact>
+          </dl>
+          <a className="font-bold text-primary underline" href={detail.sourceUrl}>
+            {sourceLinkLabel(detail.name)}
+          </a>
+        </div>
+        <section data-slot="detail-stats" aria-label="Base stats" className="p-6">
+          <h2 className="mb-2 text-lg font-extrabold">Base stats</h2>
+          <Stats detail={detail} />
+        </section>
+      </CardContent>
+    </Card>
+  );
+}
+
+function Message({ title, children }: { title: string; children?: ReactNode }): JSX.Element {
+  return (
+    <div className="flex flex-col items-center gap-3 py-16 text-center">
+      <h1 className="text-2xl font-black">{title}</h1>
+      {children}
+    </div>
+  );
+}
+
+function renderContent(
+  name: string,
+  results: ResultListState['results'],
+  { firstSearchExecuted, isLoading, hasError }: SearchStatusState,
+  retry: () => void,
+  config: CoveoConfig,
+): JSX.Element {
+  if (hasError) {
+    return (
+      <Message title="Something went wrong">
+        <p className="text-muted-foreground">The Pokémon could not be loaded.</p>
+        <Button variant="outline" className={CONTROL_BUTTON_CLASS} onClick={retry}>
+          Try again
+        </Button>
+      </Message>
+    );
+  }
+  if (!firstSearchExecuted || isLoading) {
+    return (
+      <>
+        <span className="sr-only">Loading {name}</span>
+        <DetailPlaceholder />
+      </>
+    );
+  }
+  const result = findRequestedPokemon(results, name);
+  return result ? (
+    <PokemonDetails config={config} detail={toPokemonDetail(result)} />
+  ) : (
+    <Message title="Pokémon not found">
+      <p className="text-muted-foreground">No Pokémon is named “{name}”.</p>
+    </Message>
+  );
+}
+
+export function PokemonDetailPage({ config, name }: { config: CoveoConfig; name: string }): JSX.Element {
+  const { engine, results, status, runLookup } = usePokemonLookup(config, name);
+  const isLoaded = status.firstSearchExecuted && !status.isLoading && !status.hasError;
+  const result = isLoaded ? findRequestedPokemon(results, name) : undefined;
+
+  useEffect((): void => {
+    document.title = `${name} | ${SITE_TITLE}`;
+  }, [name]);
+
+  return (
+    <>
+      <SiteHeader isPageHeading={false} />
+      <main className="mx-auto w-full max-w-(--size-content) flex-1 px-(--size-gutter) pb-16">
+        <div className="mb-4">
+          <Button asChild variant="outline" className={CONTROL_BUTTON_CLASS}>
+            <a href="/" onClick={goBackToSearch}>
+              Back to search
+            </a>
+          </Button>
+        </div>
+        <div role="status">{renderContent(name, results, status, runLookup, config)}</div>
+        {result ? <PokedexEntries engine={engine} result={result} sourceUrl={result.clickUri} /> : null}
+      </main>
+    </>
+  );
+}

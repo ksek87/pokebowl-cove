@@ -1,0 +1,384 @@
+{
+  "browt": {
+    "name": "Browt",
+    "number": "???",
+    "types": [
+      "Grass"
+    ],
+    "generation": "Generation 10",
+    "image": "https://img.pokemondb.net/artwork/browt.jpg"
+  },
+  "bulbasaur": {
+    "name": "Bulbasaur",
+    "number": "0001",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "generation": "Generation 1",
+    "image": "https://img.pokemondb.net/artwork/bulbasaur.jpg"
+  },
+  "charizard": {
+    "name": "Charizard",
+    "number": "0006",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "generation": "Generation 1",
+    "image": "https://img.pokemondb.net/artwork/charizard.jpg"
+  },
+  "claydol": {
+    "name": "Claydol",
+    "number": "0344",
+    "types": [
+      "Ground",
+      "Psychic"
+    ],
+    "generation": "Generation 3",
+    "image": "https://img.pokemondb.net/artwork/claydol.jpg"
+  },
+  "cleffa": {
+    "name": "Cleffa",
+    "number": "0173",
+    "types": [
+      "Fairy"
+    ],
+    "generation": "Generation 2",
+    "image": "https://img.pokemondb.net/artwork/cleffa.jpg"
+  },
+  "crustle": {
+    "name": "Crustle",
+    "number": "0558",
+    "types": [
+      "Bug",
+      "Rock"
+    ],
+    "generation": "Generation 5",
+    "image": "https://img.pokemondb.net/artwork/crustle.jpg"
+  },
+  "deoxys": {
+    "name": "Deoxys",
+    "number": "0386",
+    "types": [
+      "Psychic"
+    ],
+    "generation": "Generation 3",
+    "image": "https://img.pokemondb.net/artwork/deoxys-normal.jpg"
+  },
+  "farfetchd": {
+    "name": "Farfetch'd",
+    "number": "0083",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "generation": "Generation 1",
+    "image": "https://img.pokemondb.net/artwork/farfetchd.jpg"
+  },
+  "flabebe": {
+    "name": "Flabébé",
+    "number": "0669",
+    "types": [
+      "Fairy"
+    ],
+    "generation": "Generation 6",
+    "image": "https://img.pokemondb.net/artwork/flabebe.jpg"
+  },
+  "gecqua": {
+    "name": "Gecqua",
+    "number": "???",
+    "types": [
+      "Water"
+    ],
+    "generation": "Generation 10",
+    "image": "https://img.pokemondb.net/artwork/gecqua.jpg"
+  },
+  "gliscor": {
+    "name": "Gliscor",
+    "number": "0472",
+    "types": [
+      "Ground",
+      "Flying"
+    ],
+    "generation": "Generation 4",
+    "image": "https://img.pokemondb.net/artwork/gliscor.jpg"
+  },
+  "grimer": {
+    "name": "Grimer",
+    "number": "0088",
+    "types": [
+      "Poison"
+    ],
+    "generation": "Generation 1",
+    "image": "https://img.pokemondb.net/artwork/grimer.jpg"
+  },
+  "hatenna": {
+    "name": "Hatenna",
+    "number": "0856",
+    "types": [
+      "Psychic"
+    ],
+    "generation": "Generation 8",
+    "image": "https://img.pokemondb.net/artwork/hatenna.jpg"
+  },
+  "ho-oh": {
+    "name": "Ho-oh",
+    "number": "0250",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "generation": "Generation 2",
+    "image": "https://img.pokemondb.net/artwork/ho-oh.jpg"
+  },
+  "honchkrow": {
+    "name": "Honchkrow",
+    "number": "0430",
+    "types": [
+      "Dark",
+      "Flying"
+    ],
+    "generation": "Generation 4",
+    "image": "https://img.pokemondb.net/artwork/honchkrow.jpg"
+  },
+  "kilowattrel": {
+    "name": "Kilowattrel",
+    "number": "0941",
+    "types": [
+      "Electric",
+      "Flying"
+    ],
+    "generation": "Generation 9",
+    "image": "https://img.pokemondb.net/artwork/kilowattrel.jpg"
+  },
+  "kingambit": {
+    "name": "Kingambit",
+    "number": "0983",
+    "types": [
+      "Dark",
+      "Steel"
+    ],
+    "generation": "Generation 9",
+    "image": "https://img.pokemondb.net/artwork/kingambit.jpg"
+  },
+  "klang": {
+    "name": "Klang",
+    "number": "0600",
+    "types": [
+      "Steel"
+    ],
+    "generation": "Generation 5",
+    "image": "https://img.pokemondb.net/artwork/klang.jpg"
+  },
+  "lapras": {
+    "name": "Lapras",
+    "number": "0131",
+    "types": [
+      "Water",
+      "Ice"
+    ],
+    "generation": "Generation 1",
+    "image": "https://img.pokemondb.net/artwork/lapras.jpg"
+  },
+  "mr-mime": {
+    "name": "Mr. Mime",
+    "number": "0122",
+    "types": [
+      "Psychic",
+      "Fairy"
+    ],
+    "generation": "Generation 1",
+    "image": "https://img.pokemondb.net/artwork/mr-mime.jpg"
+  },
+  "nidoran-f": {
+    "name": "Nidoran♀ (female)",
+    "number": "0029",
+    "types": [
+      "Poison"
+    ],
+    "generation": "Generation 1",
+    "image": "https://img.pokemondb.net/artwork/nidoran-f.jpg"
+  },
+  "pombon": {
+    "name": "Pombon",
+    "number": "???",
+    "types": [
+      "Fire"
+    ],
+    "generation": "Generation 10",
+    "image": "https://img.pokemondb.net/artwork/pombon.jpg"
+  },
+  "popplio": {
+    "name": "Popplio",
+    "number": "0728",
+    "types": [
+      "Water"
+    ],
+    "generation": "Generation 7",
+    "image": "https://img.pokemondb.net/artwork/popplio.jpg"
+  },
+  "porygon2": {
+    "name": "Porygon2",
+    "number": "0233",
+    "types": [
+      "Normal"
+    ],
+    "generation": "Generation 2",
+    "image": "https://img.pokemondb.net/artwork/porygon2.jpg"
+  },
+  "pyukumuku": {
+    "name": "Pyukumuku",
+    "number": "0771",
+    "types": [
+      "Water"
+    ],
+    "generation": "Generation 7",
+    "image": "https://img.pokemondb.net/artwork/pyukumuku.jpg"
+  },
+  "raboot": {
+    "name": "Raboot",
+    "number": "0814",
+    "types": [
+      "Fire"
+    ],
+    "generation": "Generation 8",
+    "image": "https://img.pokemondb.net/artwork/raboot.jpg"
+  },
+  "rotom": {
+    "name": "Rotom",
+    "number": "0479",
+    "types": [
+      "Electric",
+      "Ghost"
+    ],
+    "generation": "Generation 4",
+    "image": "https://img.pokemondb.net/artwork/rotom.jpg"
+  },
+  "sableye": {
+    "name": "Sableye",
+    "number": "0302",
+    "types": [
+      "Dark",
+      "Ghost"
+    ],
+    "generation": "Generation 3",
+    "image": "https://img.pokemondb.net/artwork/sableye.jpg"
+  },
+  "simipour": {
+    "name": "Simipour",
+    "number": "0516",
+    "types": [
+      "Water"
+    ],
+    "generation": "Generation 5",
+    "image": "https://img.pokemondb.net/artwork/simipour.jpg"
+  },
+  "slurpuff": {
+    "name": "Slurpuff",
+    "number": "0685",
+    "types": [
+      "Fairy"
+    ],
+    "generation": "Generation 6",
+    "image": "https://img.pokemondb.net/artwork/slurpuff.jpg"
+  },
+  "sneasel": {
+    "name": "Sneasel",
+    "number": "0215",
+    "types": [
+      "Dark",
+      "Ice"
+    ],
+    "generation": "Generation 2",
+    "image": "https://img.pokemondb.net/artwork/sneasel.jpg"
+  },
+  "swampert": {
+    "name": "Swampert",
+    "number": "0260",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "generation": "Generation 3",
+    "image": "https://img.pokemondb.net/artwork/swampert.jpg"
+  },
+  "thundurus": {
+    "name": "Thundurus",
+    "number": "0642",
+    "types": [
+      "Electric",
+      "Flying"
+    ],
+    "generation": "Generation 5",
+    "image": "https://img.pokemondb.net/artwork/thundurus-incarnate.jpg"
+  },
+  "turtwig": {
+    "name": "Turtwig",
+    "number": "0387",
+    "types": [
+      "Grass"
+    ],
+    "generation": "Generation 4",
+    "image": "https://img.pokemondb.net/artwork/turtwig.jpg"
+  },
+  "type-null": {
+    "name": "Type: Null",
+    "number": "0772",
+    "types": [
+      "Normal"
+    ],
+    "generation": "Generation 7",
+    "image": "https://img.pokemondb.net/artwork/type-null.jpg"
+  },
+  "urshifu": {
+    "name": "Urshifu",
+    "number": "0892",
+    "types": [
+      "Fighting",
+      "Dark"
+    ],
+    "generation": "Generation 8",
+    "image": "https://img.pokemondb.net/artwork/urshifu-single-strike.jpg"
+  },
+  "vileplume": {
+    "name": "Vileplume",
+    "number": "0045",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "generation": "Generation 1",
+    "image": "https://img.pokemondb.net/artwork/vileplume.jpg"
+  },
+  "wormadam": {
+    "name": "Wormadam",
+    "number": "0413",
+    "types": [
+      "Bug",
+      "Grass"
+    ],
+    "generation": "Generation 4",
+    "image": "https://img.pokemondb.net/artwork/wormadam-plant.jpg"
+  },
+  "wyrdeer": {
+    "name": "Wyrdeer",
+    "number": "0899",
+    "types": [
+      "Normal",
+      "Psychic"
+    ],
+    "generation": "Generation 8",
+    "image": "https://img.pokemondb.net/artwork/wyrdeer.jpg"
+  },
+  "zygarde": {
+    "name": "Zygarde",
+    "number": "0718",
+    "types": [
+      "Dragon",
+      "Ground"
+    ],
+    "generation": "Generation 6",
+    "image": "https://img.pokemondb.net/artwork/zygarde-50.jpg"
+  }
+}

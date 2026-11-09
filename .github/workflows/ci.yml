@@ -18,6 +18,9 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+        env:
+          VITE_COVEO_ORGANIZATION_ID: ci-placeholder
+          VITE_COVEO_SEARCH_API_KEY: ci-placeholder
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'

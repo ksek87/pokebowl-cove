@@ -17,7 +17,7 @@
 
 A Pokémon search application built on the [Coveo](https://www.coveo.com/) platform. It indexes the individual Pokémon pages on [pokemondb.net](https://pokemondb.net/) so that users can find Pokémon by searching and by filtering on Type and Generation.
 
-**Status:** in development. All 1,028 Pokémon are indexed in Coveo, and the local search page shows results with pictures and filters by Type and Generation. Hosting, generated answers, type-ahead and the detail page are still to come.
+**Status:** in development. All 1,028 Pokémon are indexed in Coveo. The application is complete locally and in review, and hosting is next.
 
 ## How content is indexed
 
@@ -27,20 +27,17 @@ Coveo settings are recorded in [configs/coveo](configs/coveo/), and the reasonin
 
 ## Features
 
-Built:
-
 - Search results with each Pokémon's picture
 - Type and Generation filters
 - Pokédex order on the home page and a sort control
 - Exact Pokédex lookup for number-only searches
 - Query correction
-
-Planned:
-
-- AI-generated answers from the indexed content
 - Type-ahead search suggestions
-- A detail page for each Pokémon
-- Evals and performance benchmarks
+- AI-generated answers from the indexed content, with citations
+- A shareable detail page for each Pokémon
+- Index quality evals
+
+Planned: relevance and generated answer evals, performance benchmarks, and hosting.
 
 ## Technology
 
@@ -75,7 +72,8 @@ Add your Coveo organization ID and search-only API key to `.env`. Never commit t
 | `npm run dev` | Start the local development server |
 | `npm test` | Run the unit tests |
 | `npm run test:e2e` | Run the browser tests against Coveo. Needs the values in `.env` |
-| `npm run build` | Type-check and build for production |
+| `npm run eval` | Compare the index with the reference data. Needs the values in `.env` |
+| `npm run build` | Type-check and build for production. Fails if the Coveo values are missing |
 | `npm run preview` | Serve the production build locally |
 | `.venv/bin/pytest configs/coveo/extensions` | Run the Coveo extension's tests |
 
@@ -85,4 +83,6 @@ Add your Coveo organization ID and search-only API key to `.env`. Never commit t
 - [Project plan](docs/plan.md)
 - [Session handoff](docs/handoff.md)
 - [Indexing expected results](docs/indexing-expected-results.md)
+- [Passage Retrieval point of view](docs/passage-retrieval.md)
 - [Coveo configuration](configs/coveo/README.md)
+- [Archived reports](docs/archive/README.md)

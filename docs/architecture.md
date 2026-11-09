@@ -38,7 +38,7 @@ flowchart TD
         ANALYTICS["Coveo Analytics<br/>searches and clicks"]
     end
 
-    subgraph APP["Search app: Atomic React, hosting TBD"]
+    subgraph APP["Search app: Atomic React, hosted on Vercel"]
         BOX["Search box with type-ahead"]
         ANSWER["Generated answer"]
         FACETS["Type and Generation facets"]
@@ -47,7 +47,7 @@ flowchart TD
         BONUS["Passage Retrieval feature<br/>bonus, concept TBD"]
     end
 
-    SEED["Query Suggest preload<br/>approach TBD"]
+    SEED["Default queries file<br/>uploaded through the Machine Learning API"]
 
     PAGES --> SOURCE
     OTHER -. "excluded" .-> FILTERS
@@ -58,7 +58,7 @@ flowchart TD
     MAP --> ITEMS
     MAP --> FIELDS
 
-    ITEMS -->|"body embedded"| SE
+    ITEMS -->|"title and body embedded"| SE
     ITEMS -->|"body embedded"| RGA
     ITEMS -->|"body embedded"| CPR
 
@@ -82,7 +82,7 @@ flowchart TD
 
     BOX -. "search events" .-> ANALYTICS
     RESULTS -. "click events" .-> ANALYTICS
-    SEED -. "preload data" .-> ANALYTICS
+    SEED -->|"suggestion candidates"| QS
     ANALYTICS -->|"trains"| QS
 ```
 
@@ -103,7 +103,13 @@ flowchart TD
 | Application content | Dedicated `pokebowl-search` pipeline filters to the full source, and the test source is kept | [Limiting the application to the full source](#limiting-the-application-to-the-full-source) |
 | Hosting | Vercel | [Hosting](#hosting) |
 | Repeated platform work | Coveo APIs in place of repeated console steps | [Use of Coveo APIs](#use-of-coveo-apis) |
-| Eval reference data | Sampled from pokemondb.net and verified by hand | [Eval reference data](#eval-reference-data) |
+| Eval reference data | Sampled from pokemondb.net, with difficult cases verified by hand | [Eval reference data](#eval-reference-data) |
+| Search behavior | Number lookups, Pokédex order on the home page, Best match as the default label, collapsed facets | [Search behavior](#search-behavior) |
+| Page sizes | Atomic's `atomic-results-per-page` | [Visual direction](#visual-direction) |
+| Empty and error views | Rendered from Headless search status | [Interface states and motion](#interface-states-and-motion) |
+| Type-ahead | Query Suggestions model with a default queries file | [Query Suggestions](#query-suggestions) |
+| Generated answers | Atomic's `atomic-generated-answer` with Semantic Encoder and RGA models | [Generated answers](#generated-answers) |
+| Detail page | Query parameter URL, read through a separate Headless engine | [Pokémon detail page](#pokémon-detail-page) |
 
 ## Decisions
 
@@ -111,9 +117,9 @@ flowchart TD
 
 We will start with Coveo Atomic through its React wrapper. Atomic provides maintained components for search, facets, type-ahead and generated answers, which keeps the amount of custom interface code small.
 
-The main cost is less control over appearance, because styling is limited to theming and the style hooks each component exposes. We considered building on Coveo Headless with our own components. That offers complete control but takes longer and adds more custom code to maintain. We can revisit this decision if Atomic proves too limiting.
+The main cost is less control over appearance, because styling is limited to theming and the style hooks each component exposes. We considered building on Coveo Headless with custom components. That offers complete control but takes longer and adds more custom code to maintain. We can revisit this decision if Atomic proves too limiting.
 
-**Coveo documentation:** [Atomic](https://docs.coveo.com/en/atomic/latest/), [Atomic React wrapper](https://docs.coveo.com/en/atomic/latest/usage/frameworks/atomic-react-wrapper) and [Headless](https://docs.coveo.com/en/headless/latest/). Atomic is built on Headless, and the comparison of effort between them is our own judgment.
+**Coveo documentation:** [Atomic](https://docs.coveo.com/en/atomic/latest/), [Atomic React wrapper](https://docs.coveo.com/en/atomic/latest/usage/frameworks/atomic-react-wrapper) and [Headless](https://docs.coveo.com/en/headless/latest/). Atomic is built on Headless, and the comparison of effort between them is our judgment.
 
 ### Technology stack
 
@@ -152,7 +158,7 @@ The sitemap covers the whole site and lists 12,923 URLs. URL rules narrow these 
 **Benefits**
 
 - **Less complexity:** there is no link traversal to reason about, so the result does not depend on how the site links its pages.
-- **No starting-page problem:** a Web source's starting URLs must pass its own filters. A list page used as a starting point would therefore be indexed, unless we supplied all 1,028 Pokémon URLs as starting URLs.
+- **No starting-page problem:** a Web source's starting URLs must pass the source's filters. A list page used as a starting point would therefore be indexed, unless we supplied all 1,028 Pokémon URLs as starting URLs.
 - **Verifiable outcome:** the expected item count is known, so a full crawl can be checked against it.
 
 **Performance**
@@ -162,7 +168,7 @@ The performance gain is limited to crawling. Avoiding link traversal means the c
 **Alternatives considered**
 
 - **Web source:** this is the better option when pages must be discovered or when one page must be split into sub-items. We need neither.
-- **Push source:** this gives the most control over body text, but we would have to build and maintain our own scraper.
+- **Push source:** this gives the most control over body text, but we would have to build and maintain a custom scraper.
 
 **Coveo documentation**
 
@@ -170,7 +176,7 @@ The performance gain is limited to crawling. Avoiding link traversal means the c
 - [Add a Web source](https://docs.coveo.com/en/malf0160/): starting URLs are subject to the source's filters.
 - [Sitemap source web scraping](https://docs.coveo.com/en/mahe0350/): Sitemap sources do not support sub-items.
 
-The conclusions about complexity, the small crawl performance gain and the absence of any effect on search latency are our own reasoning. The Coveo documentation does not compare the two source types on these points.
+The conclusions about complexity, the small crawl performance gain and the absence of any effect on search latency are our reasoning. The Coveo documentation does not compare the two source types on these points.
 
 ### Test source configuration
 
@@ -179,13 +185,13 @@ The source `pokemondb-test-charizard` indexes one page so that configuration can
 | Setting | Value | Reason | Basis |
 |---|---|---|---|
 | Sitemap URLs | `https://pokemondb.net/static/sitemaps/pokemondb.xml` | This field expects the sitemap file itself. A normal web page can be read as an HTML sitemap, causing its links to be crawled. | [Add a Sitemap source](https://docs.coveo.com/en/1967/) |
-| Exclusion rule | Regex excluding every URL except the sitemap and Charizard | URL rules apply to sitemap URLs as well as pages, so the sitemap must stay allowed. | [Add a Sitemap source](https://docs.coveo.com/en/1967/). Using a single exclusion regex is our own approach because the console offered only exclusion rules. |
+| Exclusion rule | Regex excluding every URL except the sitemap and Charizard | URL rules apply to sitemap URLs as well as pages, so the sitemap must stay allowed. | [Add a Sitemap source](https://docs.coveo.com/en/1967/). Using a single exclusion regex is our approach because the console offered only exclusion rules. |
 | Include all non-excluded pages | On | Provides the inclusion rule every URL must match, leaving the exclusion regex to narrow the result. | [Add a Sitemap source](https://docs.coveo.com/en/1967/) |
 | Time between requests | 2,000 ms | The site's [robots.txt](https://pokemondb.net/robots.txt) asks for a 2-second delay. Coveo's default of 1,000 ms is faster than that. | Coveo default: [Add a Sitemap source](https://docs.coveo.com/en/1967/). The choice to follow robots.txt is ours. |
 | Execute JavaScript on pages | Off | Coveo advises enabling this only for content rendered by JavaScript, and it can slow crawling. We confirmed that the Type and Generation markup is in the page's HTML. | [Add a Sitemap source](https://docs.coveo.com/en/1967/) and inspection of the Charizard page |
-| Web scraping | [`web-scraping.json`](../configs/coveo/web-scraping.json) | Removes page navigation and sections from Moves onward, and extracts 16 metadata values from the page's first form tab. | [Web scraping configuration](https://docs.coveo.com/en/mc1f3573/) and [RGA content requirements](https://docs.coveo.com/en/nb6a0008/). Which sections to remove is our own choice. |
+| Web scraping | [`web-scraping.json`](../configs/coveo/web-scraping.json) | Removes page navigation and sections from Moves onward, and extracts 16 metadata values from the page's first form tab. | [Web scraping configuration](https://docs.coveo.com/en/mc1f3573/) and [RGA content requirements](https://docs.coveo.com/en/nb6a0008/). Which sections to remove is our choice. |
 | `performFieldMappingUsingAllOrigins` | True | Maps scraped metadata to fields with the same name. See Field mapping below. | [Add a Web source](https://docs.coveo.com/en/malf0160/), verified on our Sitemap test source |
-| Content visibility | Everyone | The content is public and the application has no user sign-in. | Our own decision |
+| Content visibility | Everyone | The content is public and the application has no user sign-in. | Our decision |
 | Extension | `pre-reconstruct-body` | Makes tables readable in the body. See Body text reconstruction below. | [Apply an extension](https://docs.coveo.com/en/1936/) |
 
 ### Full source configuration
@@ -207,7 +213,7 @@ Selectors for Type, image and detail values read only the first form tab, so Meg
 
 Field settings are in [`fields.json`](../configs/coveo/fields.json). Ranking and stemming are off because Coveo states that they have a significant performance cost. Free text search and caching are off because these values also appear in the body or have few distinct values. We can change this if evals show a need.
 
-**Coveo documentation:** [Manage fields](https://docs.coveo.com/en/1833/) and [Web scraping configuration](https://docs.coveo.com/en/mc1f3573/). The rule against contaminating base-form values and the reasoning for separate stat fields are our own.
+**Coveo documentation:** [Manage fields](https://docs.coveo.com/en/1833/) and [Web scraping configuration](https://docs.coveo.com/en/mc1f3573/). The rule against contaminating base-form values and the reasoning for separate stat fields are ours.
 
 ### Use of Coveo APIs
 
@@ -216,6 +222,7 @@ When a platform task would repeat the same manual step, we use a Coveo API inste
 | Task | API operation | Why | Request body |
 |---|---|---|---|
 | Create 12 detail-page fields | Field API, [create a batch of fields](https://docs.coveo.com/en/144/), run through Coveo's interactive API explorer while signed in | The detail page needs more data than the search page, and the same options applied to 12 fields would have been slow and error-prone to enter by hand | [`fields-batch-create.json`](../configs/coveo/fields-batch-create.json) |
+| Upload Query Suggestions default queries | Machine Learning API, [Advanced Model Configurations](https://docs.coveo.com/en/qa5b0256/), `PUT configs/{configurationType}` with `DEFAULT_QUERIES` and `en`, run through Coveo's interactive API explorer while signed in | Coveo offers this configuration only through the API | [`query-suggestions-default-queries.csv`](../configs/coveo/query-suggestions-default-queries.csv) |
 
 The first four fields (`pokemon_name`, `pokemon_type`, `pokemon_generation` and `pokemon_image`) were created in the console.
 
@@ -239,7 +246,7 @@ Web scraping continues to remove site navigation and everything from the Moves s
 - **Remove the content with web scraping:** simplest, but generated answers could not answer questions about type effectiveness or stat ranges.
 - **Post-conversion extension:** Coveo warns that editing the body after processing can make search results inconsistent, because summaries and excerpts are already extracted.
 - **Body mapping:** a mapping replaces the whole body, and the documentation shows no way to retain the original page text.
-- **Push source:** provides full control but discards the crawling configuration we have validated and requires our own scraper.
+- **Push source:** provides full control but discards the crawling configuration we have validated and requires a custom scraper.
 
 **Costs and safeguards**
 
@@ -259,7 +266,7 @@ Each Pokémon page becomes one item. Alternate forms such as Mega Evolutions app
 
 The cost is that users cannot filter by alternate form. We considered separate items for each form, but they create near-duplicate content that weakens generated answers.
 
-**Coveo documentation:** [RGA content requirements](https://docs.coveo.com/en/nb6a0008/) recommends avoiding near-duplicate documents and notes that only the body field is embedded. Applying that guidance to alternate forms is our own inference.
+**Coveo documentation:** [RGA content requirements](https://docs.coveo.com/en/nb6a0008/) recommends avoiding near-duplicate documents and notes that only the body field is embedded. Applying that guidance to alternate forms is our inference.
 
 ### Generation extraction
 
@@ -283,7 +290,7 @@ The application is a React and TypeScript page built with the official Atomic Re
 
 **Search hub enforcement:** the browser key enforces `pokebowl-search` in Coveo. In a live test, requests sent with another search hub, or with none, were still routed to the `pokebowl-search` pipeline. [Ensure that authentication enforces search hub values](https://docs.coveo.com/en/las95231/) recommends enforcing the hub in the key or token. It does not state whether a client can override it, so this behavior is our observation. Evals and any query of the test source need a separate key.
 
-**Our own inference:** we do not treat the search hub as a security control, and all of this content is public. The wrapper documentation shows asset setup only for Create React App, so we copy the same folders into Vite's `public/` directory and confirmed the result in a browser.
+**Our inference:** we do not treat the search hub as a security control, and all of this content is public. The wrapper documentation shows asset setup only for Create React App, so we copy the same folders into Vite's `public/` directory and confirmed the result in a browser.
 
 ## Limiting the application to the full source
 
@@ -299,7 +306,7 @@ The single-Pokémon test source stays in the organization for testing configurat
 
 **Coveo documentation:** [Set up a query pipeline](https://docs.coveo.com/en/2757/) states that routing everything to the default pipeline works only for a single website or application. [Manage query pipelines](https://docs.coveo.com/en/1791/) describes dedicated pipelines with conditions and states that the default pipeline should have no condition. [Query pipeline routing](https://docs.coveo.com/en/1666) recommends condition-based routing on the search hub with positive operators. [Manage filter rules](https://docs.coveo.com/en/3410/) recommends filters that include content rather than exclude it, and states that filters alone do not prevent content from being exposed. [Filter: Query pipeline feature](https://docs.coveo.com/en/1440/) states that the constant part of the query is combined with AND and is unsuited to dynamic content. [Manage projects](https://docs.coveo.com/en/n7ef0517/) describes projects.
 
-**Our own inference:** the filter is a relevance control and not a security control, which is acceptable because all of this content is public. A query using the browser key with a different search hub returned no test source items, which suggests the key's search hub takes precedence, but we did not confirm this.
+**Our inference:** the filter is a relevance control and not a security control, which is acceptable because all of this content is public. A query using the browser key with a different search hub returned no test source items, which suggests the key's search hub takes precedence, but we did not confirm this.
 
 ## Visual direction
 
@@ -309,17 +316,25 @@ The interface is polished yet playful: a calm, spacious structure with a friendl
 - Each card's artwork sits on a tint of the Pokémon's Type, and dual-Type Pokémon blend both colors.
 - Rounded type (Nunito, self-hosted), pill badges, and cards with a heavier bottom edge give a tactile feel.
 - Type badge text is chosen for contrast, and a unit test holds every badge to at least 4.5:1.
-- The layout, colors and components are our own and do not copy official Pokémon styling.
+- The layout, colors and components are original and do not copy official Pokémon styling.
 
-Page sizes and result columns are defined once in `src/search/settings.ts`, and page sizes are multiples of both column counts so that every row is full. The default of 12 and the 3 and 4 column layouts are desktop choices; phone layouts were dropped from scope at the user's request.
+Page sizes and result columns are defined once in `src/search/settings.ts`. Page sizes are multiples of the least common multiple of the two column counts, 4 and 6, so every row is full and the default stays at 12 cards. A product of the two counts would give 24. The content width is one named value, which also answers the earlier finding that very wide windows left half the screen unused. Phone layouts were dropped from scope at the user's request.
 
-Our own markup uses Tailwind and shadcn/ui. Atomic's components are styled through [theme variables and CSS parts](https://docs.coveo.com/en/atomic/latest/usage/themes-and-visual-customization/), because they use Shadow DOM and Tailwind classes cannot reach inside them. Result cards are rendered inside Atomic's Shadow DOM, so one shared stylesheet is adopted there instead of copying styles into each result. Some rules that override Atomic's page layout use `!important`, which Coveo does not document as an approach; they remain because the layout has no documented setting for a single centered content block.
+Our markup uses Tailwind and shadcn/ui. Atomic's components are styled through [theme variables and CSS parts](https://docs.coveo.com/en/atomic/latest/usage/themes-and-visual-customization/), because they use Shadow DOM and Tailwind classes cannot reach inside them. Result cards are rendered inside Atomic's Shadow DOM, so one shared stylesheet is adopted there instead of copying styles into each result. Some rules that override Atomic's page layout use `!important`, which Coveo does not document as an approach; they remain because the layout has no documented setting for a single centered content block.
 
-Atomic's search box only empties its text when cleared, so the application runs a new search when the box is emptied. Facets request up to a fixed ceiling so that a new Generation or Type is never hidden.
+Atomic's clear button only empties the text, so the application runs a search for everything, from the first page, when that button is used. Emptying the box by keyboard follows Atomic's behavior and waits for Enter, which avoids unrequested searches and false submit events in analytics. The search uses the `searchboxSubmit` event because Headless has no public event for clearing, and it fires only on the explicit button. Facets request up to a fixed ceiling so that a new Generation or Type is never hidden.
+
+**Decision: one centered column.** The title, search box, filters, results and page numbers share one center line. Type and Generation are `atomic-popover` dropdowns in Atomic's `horizontal-facets` layout section, inside `main`, so results use the full content width and there is no left column. The rejected alternative was keeping a left column and only widening the page, which keeps the results off the page's center line. The trade-off is that filter values are one click away. Atomic's layout rules are generated only for a facets section, so this layout needs a single column override and removes the earlier grid-area overrides.
+
+**Decision: use Atomic's `atomic-results-per-page` for page sizes.** It hides itself on errors and empty results, so we do not maintain that logic. It replaced a custom dropdown built on Headless and shadcn/ui. It shows buttons instead of a dropdown, and it is styled through CSS parts to match the pager.
+
+**Decision: remove unsupported sort and page size values from the URL before the application starts.** Atomic restores URL state as written. A sort that Coveo rejects makes Atomic remove the sort control, which leaves no way to change it, and a page size that is not offered leaves rows partly empty. `src/search/urlState.ts` keeps only the offered values and leaves other entries unchanged.
 
 **Rejected alternatives:** a restrained product look, which undersells the theme, and a dark editorial look, which suits the artwork less well on tinted cards.
 
 ## Search behavior
+
+Type and Generation filters are closed until a person opens their dropdown, so no collapse setting is needed.
 
 Three behaviors are added on top of Coveo's default relevance search.
 
@@ -327,12 +342,132 @@ Three behaviors are added on top of Coveo's default relevance search.
 
 **Decision: the home page is in Pokédex order.** An empty query has nothing to rank on, so Coveo's order looks arbitrary. When no search text exists and no other sort was chosen, the application sorts by Pokédex number. New Pokémon whose number is `???` sort last. The rejected alternative was a curated list, which needs maintenance and does not help browsing.
 
+**Decision: Best match follows the common industry pattern.** Relevance is the usual default sort, under names such as Best Match or Featured ([Elastic](https://docs-v3-preview.elastic.dev/elastic/docs-builder/docs/3915/reference/search-ui/solutions-ecommerce-search-page.md), [Algolia](https://www.algolia.com/blog/ux/best-practices-for-site-search-ui-design-patterns)). With no search text there is nothing to rank, so the default order is Pokédex order. Baymard warns that a label should not suggest a different order from the one applied ([Baymard](https://baymard.com/blog/default-sort-type)). That is the tradeoff here, because Best match and Pokédex number give the same order on the home page. No single authoritative standard exists for this case.
+
 **Decision: add query correction and a sort control.** Coveo lists these among standard search interface components. The sort options are best match, Pokédex number and name. `pokemon_number` and `pokemon_name` have the **Sort** option enabled in Coveo. We did not enable **Use cache for sort**, because a sorted query already takes about 22 milliseconds in the search API.
 
 **Coveo documentation:** [Modify requests and responses](https://docs.coveo.com/en/atomic/latest/usage/atomic-modify-requests-responses/) describes the request hook, and advises limiting it to search requests and coding defensively. It recommends the Headless advanced query action for setting `aq`, without giving a reason. [Ensure that your search interfaces contain standard components](https://docs.coveo.com/en/mc2g0332/) covers query correction and sorting. [Manage fields](https://docs.coveo.com/en/1833/) states that the Sort option needs no rebuild, though a delay may occur.
 
-**Our own inference:** we use the request hook despite that recommendation, because the lookup must also clear the text query in the same request, and the advanced query action cannot do that. The search box and analytics keep the text the person typed.
+**Our inference:** we use the request hook despite that recommendation, because the lookup must also clear the text query in the same request, and the advanced query action cannot do that. The search box keeps the text the person typed. Whether analytics keep it has not been verified, and Coveo's documentation suggests the lookup may be recorded with empty text. Check it in Usage Analytics.
 
 ## Hosting
 
 **Decision: host the application on Vercel.** It connects to the GitHub repository, deploys when changes merge, and needs little setup for a static Vite application. The rejected alternative was Netlify, which offers similar deployment features. The application is a static page that calls Coveo from the browser, so it needs no server. The Coveo organization ID and the search-only key are set as build variables in Vercel, and they reach the browser by design.
+
+## Query Suggestions
+
+Query Suggestions is the type-ahead list in the search box. Its model learns from analytics of what people searched and clicked, and it does not read the index. This application has no real users, so the model has no history to learn from.
+
+**Decision: pre-populate the model with a default queries file, uploaded through the Advanced Model Configurations API.** This is the method Coveo documents for test and low-traffic environments. Enrichment comes after this baseline works, and only if it adds value.
+
+**First file:** `configs/coveo/query-suggestions-default-queries.csv`, with 2,234 queries generated from values in the index: 1,028 Pokémon names, 18 Types, 10 Generations, 178 Type pairs, 284 abilities and 716 species. Each query other than a name was tested against the index with analytics capture off, and 10 were dropped because no top-12 result carried the value. The first file carried no importance values, because any popularity numbers would be invented. Longer natural-language questions were left out, because the purpose of this feature is completing what a person types. A few could be added after generated answers work.
+
+**Rejected as the first step: scripted sessions that search and click through the application.** The events would be correctly formed, but the traffic would be synthetic, and scripted volume would still be far below what the model needs to learn well. It was kept as a fallback in case the model could not become active, and was not needed.
+
+**Rejected: scripted calls directly to the Search and Analytics APIs.** Our code would have to reproduce the event format that Atomic already produces.
+
+**Possible enrichment, after the baseline:** importance values based on real query counts once they exist, more descriptive searches informed by general search practice, and removal of poor suggestions with a blocklist.
+
+**Coveo documentation:** [Troubleshoot Query Suggestions models](https://docs.coveo.com/en/q6qc0388/) states that a model needs approximately 10,000 search events to produce learned suggestions, and that a test or low-traffic environment can be pre-populated with a default queries file. [Set advanced QS model configurations](https://docs.coveo.com/en/qa5b0256/) describes the file: a UTF-8 CSV without headers, at most 5,000 queries per language, with an optional importance value. [Create and manage a QS model](https://docs.coveo.com/en/3398/) states that a model needs at least 100 events to provide recommendations, and that Test configuration mode is available only in sandbox organizations. [Reviewing query suggestion candidates](https://docs.coveo.com/en/2010/) states that, at low volume, a query qualifies after one search followed by a click.
+
+**Our inference:** Coveo does not state whether a model becomes active with almost no analytics, or whether uploading the file triggers a rebuild. Our model did become active. Choosing names and descriptive searches for the file is a product decision.
+
+**Learning interval:** a 1-month data period with daily builds, which Coveo's table lists as a valid pairing. We changed it from the default so that a rebuild picks up the uploaded file soon after upload. Immediately after the upload, the Query Suggestion API returned only a learned query. After the rebuild it returned the file's queries, which supports our inference that the file takes effect on a rebuild. Coveo does not document this.
+
+**Ranking:** the user chose to add the file's optional importance column by category, so that Pokémon names come before abilities and species. The first upload had equal importance, and `char` listed `charm` first and Charizard seventh. The ranked file has 2,236 queries, with importance 1000 for Pokémon names, 500 for Types and Generations, 200 for Type pairs, and 100 for abilities and species. These values rank categories and do not claim to be popularity. Upload of the ranked file is pending.
+
+### In production
+
+A client deployment would go further than this baseline:
+
+1. **Log real queries and clicks.** The application already logs them through Atomic. Each model rebuild then learns from real behavior, and the default queries file becomes a starting point that real data overtakes. Coveo recommends a [data period that covers at least 10,000 queries](https://docs.coveo.com/en/3398/), with 3 months and weekly rebuilds as its recommended setting.
+2. **A/B test before full rollout.** Coveo's [leading practice](https://docs.coveo.com/en/l1mf0321/) is to test a new model on a share of the traffic and compare search performance with and without it.
+3. **Monitor suggestion quality.** Report on [searches that came from a suggestion](https://docs.coveo.com/en/2010/), which have the `omniboxAnalytics` event cause, and use the click-through measures in the [model card](https://docs.coveo.com/en/p2ac0141/).
+4. **Maintain the suggestions.** Use a [blocklist](https://docs.coveo.com/en/qa5b0256/) for unwanted terms. The [model card](https://docs.coveo.com/en/p2ac0141/) notes that the model can keep suggesting queries for removed content until it retrains.
+5. **Keep test traffic out.** Evals and monitoring use a separate search hub so they do not train the model.
+
+## Pokémon detail page
+
+**Decision: each result opens a detail page in this application, at a URL such as `/?pokemon=Mr.%20Mime`.** The page shows artwork, name, number, Types, Generation, species, height, weight, abilities and base stats, and links to the source page on pokemondb.net. The user confirmed this content.
+
+A query parameter needs no rewrite rules on Vercel and does not interfere with the `#` state that Atomic keeps in the URL. The rejected alternative was a path URL such as `/pokemon/mr-mime`, which needs hosting rewrites.
+
+The page reads one item through a separate Headless engine with analytics off, using an exact match on the name. Coveo's `==` operator treated `?` and `*` as wildcards in our testing, so the page also checks that the returned name equals the requested name. Pokémon with `???` as their number hide it and state that base stats are not available. Result cards use Atomic's link templates, so a card click still logs Atomic's click event.
+
+Not confirmed: real artwork on the page, and that the click event reaches Coveo in production.
+
+## Interface states and motion
+
+**Decision: the no-results and error views are rendered from Headless search status, in place of `atomic-no-results` and `atomic-query-error`.** Atomic's error view prints the organization endpoint and offers no retry, and its no-results text cannot vary by query, and its documented parts can restyle these but cannot change them. The rejected alternative was restyling Atomic's parts, which would keep the service URL visible. Atomic still marks the page with its no-results and error classes, which center the message on the page.
+
+**Decision: first-load placeholders match the real result cards.** Atomic's placeholders have a generic shape and cannot be reshaped through its parts, so result cards use a matching placeholder. The filter row uses the `atomic-popover` placeholder, sized to the real control.
+
+**Decision: one solid focus outline, using the foreground color with an offset, for all controls.** Atomic's ring variable points to the same token. The former translucent ring measured 1.69:1, below the 3:1 that WCAG 1.4.11 requires.
+
+**Motion is limited to feedback:** card lift and press, control color transitions, and an opacity fade on new results and opened facets. It uses transforms and opacity only, so it cannot move the layout, and it is turned off when a person requests reduced motion.
+
+**Atomic detail:** the type documentation lists the search box part as `input`, but the rendered part is `textarea`, so the styles target `textarea`.
+
+**Finding to keep in mind:** with the Semantic Encoder active, a nonsense text query can still return results, so a no-results page is now reached mainly through number lookups and filters.
+
+**Pokédex entries:** the detail page shows the most recent entry of the base form, with its game names. Other entries sit behind "More entries", grouped by distinct text with every game that shares it, and alternate forms are grouped under their names. The text comes from the item's stored page through the Headless [Quickview](https://docs.coveo.com/en/3311/) controller on the analytics-off lookup engine. The page is parsed with `DOMParser` and only text is read, because the stored HTML contains scripts and must never be inserted into the page. The rejected alternatives were showing the body field, excerpt or summary, which have no structure, and adding entries as index fields, which needs a source rebuild. The section depends on the markup of the source page, so it hides itself when the page has no entries, when parsing finds nothing, or when the content does not arrive within a named timeout, because Headless has no failed state for this request. A visible line credits the Pokémon games and Pokémon Database. Whether the pokemondb.net terms allow quoting this text has not been checked.
+
+**Links to search:** Type badges and the Generation value open the search page filtered by that value. The links are built with Headless `buildSearchParameterSerializer`, which writes the URL format that Atomic reads. A browser test confirms that the filter is applied.
+
+## User decisions on states and links
+
+- **No-results and error screens:** approved as worded. The text is in `src/search/SearchStateMessage.tsx`.
+- **Generated answer citations:** they stay on pokemondb.net, because in enterprise search a citation sends a person to the full source.
+- **Detail page source link:** it reads "Learn more about" followed by the Pokémon's name, and opens the pokemondb.net page.
+
+## Generated answers
+
+**Decision: use Atomic's `atomic-generated-answer` at the top of the results section, with `collapsible` on.** The answer sits below the fixed controls row and above the result cards. It keeps Atomic's disclaimer, citations, feedback and copy actions, and is styled only through its documented CSS parts.
+
+**Coveo documentation:** [Configure a search interface for RGA](https://docs.coveo.com/en/nb6a0037/) states that an Atomic page must include this component, that the component does not appear when no answer is generated, that the hosted builders place it at the top of the results, that a disclaimer is part of the component, and that results not sorted by relevance may produce no answer. [RGA content requirements](https://docs.coveo.com/en/nb6a0008/) strongly recommends a disclaimer. The installed Atomic 3.65 source requests `text/markdown` first, with `text/plain` as the fallback, so the association's rich text option is used.
+
+**Our inference:** `collapsible` keeps a long answer from pushing the results far down. We left the no-answer slot empty, so a query without an answer shows normal results and no empty box. An answer that arrives still moves the cards down, because the page cannot know in advance whether an answer will exist.
+
+**Observed behavior, November 9, 2026:**
+
+- With Best match, `what type is charizard` and `which pokemon evolves into charizard` streamed answers with a citation to the Charizard page.
+- After changing that first search to Name A to Z, the answer disappeared and the sorted results stayed, with no error. This matches Coveo's documentation.
+- The search response carries a `generativeQuestionAnsweringId` for a text query even when the request does not include the answer format parameter. Coveo does not state when an answer counts against the allowance.
+
+**Testing:** every browser test uses a stubbed answer stream from `e2e/fixtures.ts`, so the suite reads no real answers from the allowance. The real end-to-end checks above were run separately.
+
+The type-ahead panel now shares the search box's edges, border and radius, and uses the main text color, through Atomic's `suggestions-wrapper` and `query-suggestion-text` parts.
+
+## Ask about this Pokémon
+
+**Decision: the detail page has a compact speech bubble, opened from a wobbling Pokéball at the top-right corner of the main card.** The user chose this over a card on the page, then over a chat window, and placed the Pokéball in the card so it is visible on load without scrolling. A fixed bottom-corner launcher was rejected for being less visible. The bubble stays closed on load, shows three suggested questions defined once in `src/search/settings.ts`, and shows one thing at a time. Picking a question replaces the questions with its answer, while the Pokéball wobbles faster and the bubble says it is thinking. "Ask something else" returns to the questions. There is no greeting, header or message history.
+
+An answer is generated only when a person picks a question. Generating on load was rejected, because it would use the generative allowance on every view and add seconds of waiting. Free-text input was rejected, because question wording strongly affected speed and quality.
+
+Only one `atomic-generated-answer` exists at a time, in an `atomic-search-interface` with a search engine created for that question, so an earlier answer cannot remain visible. This keeps Atomic's citations, disclaimer and Markdown rendering, styled through CSS parts. Its header, feedback, copy and citations label are hidden to keep the bubble quiet. The rejected alternative was the Headless `GeneratedAnswer` controller, which would have required rebuilding those features and rendering Markdown safely. The engine sends the question as `q` and an exact name match as `aq`, does not write to the URL and runs no first search. Citations stay on pokemondb.net. Pokémon with no stats have no Pokéball.
+
+The bubble is positioned against the Pokéball with its tail pointing at it, so it overlays the card and does not push content. It opens toward whichever side of the window has more room, and its content height is limited to that room, so it stays on screen however the page is scrolled. A long answer scrolls inside the bubble, with "Ask something else" kept in view. The bubble is a non-modal dialog: Escape and clicking outside return focus to the Pokéball, and a status region announces progress. Failed requests offer a retry. The animations stop when reduced motion is requested, and the bubble still says it is thinking.
+
+**Coveo documentation:** [Configure a search interface for RGA](https://docs.coveo.com/en/nb6a0037/) states that a custom interface uses `atomic-generated-answer` or the Headless `GeneratedAnswer` controller, and that an answer regenerates when filters narrow the results. [Filter: Query pipeline feature](https://docs.coveo.com/en/1440/) describes how `aq` combines with `q`.
+
+**Our inference:** Coveo has no guide for scoping an answer to one item. Combining `aq` with RGA to do so is our design. On ten real questions across six Pokémon, each answer cited only the Pokémon shown. First text appeared after about 1.8 to 2.6 seconds, and full answers took about 3 to 9 seconds. The sample is small. Several Atomic interfaces on one page is also our design: Coveo's guidance is one Search API call per user search, and each interface here sends one only when a person picks a question.
+
+## Detail page layout
+
+**Decision: artwork, facts and base stats sit side by side in one card at desktop widths**, with Pokédex entries below, so the main content fits in the window. The Pokéball sits at the top-right corner of the card. Its speech bubble opens to the left of it, 35rem wide, and uses the room below it, scrolling inside only when an answer is longer than that room.
+
+Measured at 1440×800: answers of about 200 words fit with no inner scroll. Real generated answers can be longer than the window. For Charizard they measured 325, 956 and 1,689 px of content against 556 px visible, because RGA returns headed, listed answers for broad questions. A wider bubble cannot remove that scrolling. Shorter answers would need different question wording or a prompt instruction.
+
+## Performance
+
+**Decision: measure first, and make no performance change the numbers do not support.** A small, sequential and paced baseline was recorded in `evals/reports/performance.json`, because Coveo requires [load tests to be planned with and authorized by Coveo](https://docs.coveo.com/en/1948/). These are local, pre-hosting numbers.
+
+| Measure | p50 | p95 |
+|---|---|---|
+| Search | 182 ms | 205 ms |
+| Type-ahead | 56 ms | 62 ms |
+| First result visible | 369 ms | 424 ms |
+| Generated answer, first text | 2.0 s | 2.6 s |
+| Generated answer, complete | 3.1 s | 10.6 s |
+
+Coveo's [response time guide](https://docs.coveo.com/en/1948/) lists several optimizations. We did not apply the sort cache, a page size limit or pipeline simplification, because sorted queries were no slower than relevance, 96 results cost about 25 ms, and search is already within target. Coveo publishes no latency figures or tuning guide for generated answers, and its advanced association settings are presented for answer quality. Our inference is that the slow tail tracks long answers, so fixed, short questions are the practical control. Answers stream, so the time to first text is what a person feels most.

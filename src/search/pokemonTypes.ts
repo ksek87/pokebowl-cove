@@ -1,82 +1,50 @@
-const TYPE_COLORS: Record<string, string> = {
-  Normal: '#a9a58f',
-  Fire: '#f2753a',
-  Water: '#3d8bff',
-  Electric: '#f6c927',
-  Grass: '#4cb963',
-  Ice: '#6fd3d6',
-  Fighting: '#c8443a',
-  Poison: '#9b59b6',
-  Ground: '#d9a95b',
-  Flying: '#8fa8f0',
-  Psychic: '#f2638f',
-  Bug: '#9bb52c',
-  Rock: '#b59f5b',
-  Ghost: '#6c5ca7',
-  Dragon: '#5b55e0',
-  Dark: '#4a4650',
-  Steel: '#8da3b3',
-  Fairy: '#f09ad0',
+const INK_DARK = 'var(--foreground)';
+const INK_LIGHT = 'var(--card)';
+
+// Each ink is the theme color with the higher WCAG contrast, checked in the tests.
+const TYPE_STYLES: Record<string, { background: string; ink: string }> = {
+  Normal: { background: '#a9a58f', ink: INK_DARK },
+  Fire: { background: '#f2753a', ink: INK_DARK },
+  Water: { background: '#3d8bff', ink: INK_DARK },
+  Electric: { background: '#f6c927', ink: INK_DARK },
+  Grass: { background: '#4cb963', ink: INK_DARK },
+  Ice: { background: '#6fd3d6', ink: INK_DARK },
+  Fighting: { background: '#c8443a', ink: INK_LIGHT },
+  Poison: { background: '#9b59b6', ink: INK_LIGHT },
+  Ground: { background: '#d9a95b', ink: INK_DARK },
+  Flying: { background: '#8fa8f0', ink: INK_DARK },
+  Psychic: { background: '#f2638f', ink: INK_DARK },
+  Bug: { background: '#9bb52c', ink: INK_DARK },
+  Rock: { background: '#b59f5b', ink: INK_DARK },
+  Ghost: { background: '#6c5ca7', ink: INK_LIGHT },
+  Dragon: { background: '#5b55e0', ink: INK_LIGHT },
+  Dark: { background: '#4a4650', ink: INK_LIGHT },
+  Steel: { background: '#8da3b3', ink: INK_DARK },
+  Fairy: { background: '#f09ad0', ink: INK_DARK },
 };
 
-const INK_DARK = '#1e2230';
-const INK_LIGHT = '#ffffff';
 const FALLBACK_TYPE = 'Normal';
 
 export const TINT_STRENGTH = 18;
 const SINGLE_TYPE_FADE_STRENGTH = 7;
 
-// Constants from the WCAG 2 definition of relative luminance and contrast.
-const HEX_RADIX = 16;
-const CHANNEL_MAX = 255;
-const LINEAR_THRESHOLD = 0.03928;
-const LINEAR_DIVISOR = 12.92;
-const GAMMA_OFFSET = 0.055;
-const GAMMA_DIVISOR = 1.055;
-const GAMMA_EXPONENT = 2.4;
-const RED_WEIGHT = 0.2126;
-const GREEN_WEIGHT = 0.7152;
-const BLUE_WEIGHT = 0.0722;
-const CONTRAST_FLARE = 0.05;
+export const POKEMON_TYPES = Object.keys(TYPE_STYLES);
 
-export const POKEMON_TYPES = Object.keys(TYPE_COLORS);
+function styleFor(type: string): { background: string; ink: string } {
+  return TYPE_STYLES[type] ?? TYPE_STYLES[FALLBACK_TYPE];
+}
 
 function colorFor(type: string): string {
-  return TYPE_COLORS[type] ?? TYPE_COLORS[FALLBACK_TYPE];
-}
-
-function linearChannel(hexPair: string): number {
-  const channel = parseInt(hexPair, HEX_RADIX) / CHANNEL_MAX;
-  return channel <= LINEAR_THRESHOLD
-    ? channel / LINEAR_DIVISOR
-    : ((channel + GAMMA_OFFSET) / GAMMA_DIVISOR) ** GAMMA_EXPONENT;
-}
-
-function luminance(hex: string): number {
-  const [red, green, blue] = (hex.match(/[0-9a-f]{2}/gi) ?? []).map(linearChannel);
-  return RED_WEIGHT * red + GREEN_WEIGHT * green + BLUE_WEIGHT * blue;
-}
-
-export function contrastRatio(first: string, second: string): number {
-  const [lighter, darker] = [luminance(first), luminance(second)].sort(
-    (a, b): number => b - a,
-  );
-  return (lighter + CONTRAST_FLARE) / (darker + CONTRAST_FLARE);
-}
-
-function readableInk(background: string): string {
-  return contrastRatio(background, INK_DARK) >= contrastRatio(background, INK_LIGHT)
-    ? INK_DARK
-    : INK_LIGHT;
+  return styleFor(type).background;
 }
 
 export function typeBadge(type: string): { background: string; color: string } {
-  const background = colorFor(type);
-  return { background, color: readableInk(background) };
+  const { background, ink } = styleFor(type);
+  return { background, color: ink };
 }
 
 function tint(color: string, strength: number): string {
-  return `color-mix(in srgb, ${color} ${strength}%, #ffffff)`;
+  return `color-mix(in srgb, ${color} ${strength}%, var(--card))`;
 }
 
 export function cardTint(types: string[]): string {
