@@ -77,7 +77,6 @@
   --space-ask-tail: calc(var(--size-ask-launcher) / 2 - var(--size-ask-tail) / 2 - var(--size-panel-border));
   --space-ask-bubble-gap: 0.875rem;
   --size-ask-bubble: 35rem;
-  --size-ask-bubble-footer: 3rem;
   /* Matches the padding Atomic sets on the answer text, which has no CSS part. */
   --space-ask-answer-inset: 1.5rem;
   --motion-ask-idle: 2.4s;
@@ -301,11 +300,6 @@ atomic-generated-answer::part(citation):hover {
   border-color: var(--border-strong);
 }
 
-/* Set here because --ask-room is measured for this element, and a custom property resolves where it is declared. */
-[data-slot='ask-bubble'] {
-  --size-ask-bubble-content: calc(var(--ask-room) - var(--space-ask-bubble-gap) - var(--size-ask-bubble-footer));
-}
-
 [data-slot='ask-bubble'] atomic-generated-answer::part(container) {
   margin-bottom: 0;
   background: transparent;
@@ -331,8 +325,7 @@ atomic-generated-answer::part(citation):hover {
   font-weight: 600;
 }
 
-[data-slot='ask-bubble'] atomic-generated-answer::part(citations-label),
-[data-slot='ask-bubble'] atomic-generated-answer::part(feedback-and-copy-buttons) {
+[data-slot='ask-bubble'] atomic-generated-answer::part(citations-label) {
   display: none;
 }
 

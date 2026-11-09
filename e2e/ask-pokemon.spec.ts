@@ -17,7 +17,7 @@ const TAIL_GAP_TOLERANCE_PX = 2;
 const INSIDE_OFFSET_PX = 8;
 const NO_REQUESTS = 0;
 const MIN_BUBBLE_WIDTH_PX = 540;
-const TYPICAL_ANSWER_REPEATS = 24;
+const FEEDBACK_BUTTON_COUNT = 2;
 const MAX_CORNER_INSET_PX = 24;
 const NAME = 'Charizard';
 const ANSWER_TEXT = 'Charizard flies in search of strong opponents.';
@@ -68,6 +68,14 @@ function answer(page: Page): Locator {
 
 function backToQuestions(page: Page): Locator {
   return bubble(page).getByRole('button', { name: 'Ask something else' });
+}
+
+function feedbackButtons(page: Page): Locator {
+  return bubble(page).locator('atomic-generated-answer [part~="feedback-button"]');
+}
+
+function showMore(page: Page): Locator {
+  return bubble(page).locator('atomic-generated-answer [part~="answer-show-button"]');
 }
 
 function status(page: Page): Locator {
@@ -292,7 +300,22 @@ test('offers a retry in the bubble when the request fails', async ({ page }): Pr
   await expect(retry).toHaveCount(NO_REQUESTS);
 });
 
-test('scrolls a long answer inside the bubble and keeps the way back in view', async ({ page }): Promise<void> => {
+test('shows a short answer in full with the feedback buttons', async ({ page }): Promise<void> => {
+  await stubAnswer(page, ANSWER_TEXT, CITATION);
+  await page.setViewportSize({ width: LAPTOP_WIDTH, height: WINDOW_HEIGHT });
+  await openDetail(page);
+  await openBubble(page);
+  await question(page).click();
+  await expect(answer(page)).toContainText(ANSWER_TEXT, { timeout: NETWORK_TIMEOUT });
+
+  await expect(feedbackButtons(page)).toHaveCount(FEEDBACK_BUTTON_COUNT);
+  for (const button of await feedbackButtons(page).all()) {
+    await expect(button).toBeVisible();
+  }
+  await expect(showMore(page)).toBeHidden();
+});
+
+test('collapses a long answer behind Show more instead of scrolling inside the bubble', async ({ page }): Promise<void> => {
   await stubAnswer(page, `${ANSWER_TEXT} `.repeat(LONG_ANSWER_REPEATS), CITATION);
   await page.setViewportSize({ width: LAPTOP_WIDTH, height: WINDOW_HEIGHT });
   await openDetail(page);
@@ -301,46 +324,25 @@ test('scrolls a long answer inside the bubble and keeps the way back in view', a
 
   await question(page).click();
   await expect(answer(page)).toContainText(ANSWER_TEXT, { timeout: NETWORK_TIMEOUT });
-
-  const content = bubble(page).locator('[data-slot="ask-content"]');
-  await expect
-    .poll(() => content.evaluate((element): number => element.scrollHeight - element.clientHeight))
-    .toBeGreaterThan(NO_REQUESTS);
-  await content.evaluate((element): void => element.scrollTo({ top: element.scrollHeight }));
+  await expect(showMore(page)).toBeVisible({ timeout: NETWORK_TIMEOUT });
   await expect(backToQuestions(page)).toBeInViewport();
-  expect(await page.evaluate((): number => window.scrollY)).toBe(pageScrollBefore);
-});
-
-test('shows a typical answer in full without inner scrolling', async ({ page }): Promise<void> => {
-  await stubAnswer(page, `${ANSWER_TEXT} `.repeat(TYPICAL_ANSWER_REPEATS), CITATION);
-  await page.setViewportSize({ width: LAPTOP_WIDTH, height: SHORT_WINDOW_HEIGHT });
-  await openDetail(page);
-  await openBubble(page);
-  await question(page).click();
-  await expect(answer(page)).toContainText(ANSWER_TEXT, { timeout: NETWORK_TIMEOUT });
-
   const content = bubble(page).locator('[data-slot="ask-content"]');
-  await expect
-    .poll(() => content.evaluate((element): number => element.scrollHeight - element.clientHeight))
-    .toBeLessThanOrEqual(NO_REQUESTS);
-});
+  expect(await content.evaluate((element): number => element.scrollHeight - element.clientHeight)).toBeLessThanOrEqual(
+    NO_REQUESTS,
+  );
+  expect(await page.evaluate((): number => window.scrollY)).toBe(pageScrollBefore);
 
-test('grows with a short answer instead of filling its maximum height', async ({ page }): Promise<void> => {
-  await stubAnswer(page, ANSWER_TEXT, CITATION);
-  await page.setViewportSize({ width: LAPTOP_WIDTH, height: WINDOW_HEIGHT });
-  await openDetail(page);
-  await openBubble(page);
-  const before = await bubble(page).boundingBox();
+  const collapsedHeight = (await bubble(page).boundingBox())?.height ?? 0;
+  await showMore(page).click();
 
-  await question(page).click();
-  await expect(answer(page)).toContainText(ANSWER_TEXT, { timeout: NETWORK_TIMEOUT });
-
-  const maximum = await bubble(page)
-    .locator('[data-slot="ask-content"]')
-    .evaluate((element): number => parseFloat(getComputedStyle(element).maxHeight));
-  const after = await bubble(page).boundingBox();
-  expect(before?.height ?? 0).toBeLessThan(maximum);
-  expect(after?.height ?? maximum).toBeLessThan(maximum);
+  await expect.poll(async () => (await bubble(page).boundingBox())?.height ?? 0).toBeGreaterThan(collapsedHeight);
+  await expect(feedbackButtons(page)).toHaveCount(FEEDBACK_BUTTON_COUNT);
+  for (const button of await feedbackButtons(page).all()) {
+    await expect(button).toBeVisible();
+  }
+  expect(await content.evaluate((element): number => element.scrollHeight - element.clientHeight)).toBeLessThanOrEqual(
+    NO_REQUESTS,
+  );
 });
 
 test('closes with Escape, returns focus, and keeps the answer without asking again', async ({ page }): Promise<void> => {
@@ -446,6 +448,7 @@ for (const width of WIDTHS) {
       await openBubble(page);
       await question(page).click();
       await expect(answer(page)).toContainText(ANSWER_TEXT, { timeout: NETWORK_TIMEOUT });
+      await expect(showMore(page)).toBeVisible();
       const box = await bubble(page).boundingBox();
       expect(box?.x ?? -1).toBeGreaterThanOrEqual(NO_REQUESTS);
       expect(box?.y ?? -1).toBeGreaterThanOrEqual(NO_REQUESTS);
@@ -467,6 +470,7 @@ test('keeps the bubble on screen after the page is scrolled', async ({ page }): 
   await openBubble(page);
   await question(page).click();
   await expect(answer(page)).toContainText(ANSWER_TEXT, { timeout: NETWORK_TIMEOUT });
+  await expect(showMore(page)).toBeVisible();
 
   const box = await bubble(page).boundingBox();
   expect(box?.y ?? -1).toBeGreaterThanOrEqual(NO_REQUESTS);
