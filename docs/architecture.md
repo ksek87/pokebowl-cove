@@ -135,7 +135,7 @@ The main cost is less control over appearance, because styling is limited to the
 | Coveo indexing extension | Python, tested with pytest |
 | CI/CD | GitHub Actions |
 | Coveo configuration export | Coveo CLI |
-| Hosting | To be decided |
+| Hosting | Vercel |
 
 We use TypeScript for the application, tests and scripts. The one exception is the indexing extension, because Coveo runs extensions as Python. We considered Python for evals, mainly for its LLM evaluation libraries. We do not need those libraries because answers are checked against expected facts and citations. Eval speed depends on Coveo's API response times, so the language does not affect performance.
 

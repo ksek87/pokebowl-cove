@@ -67,13 +67,13 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 - [ ] 🟡 User rebuilds the full source (1,028 items), then rebuilds the RGA and Semantic Encoder models
 - [ ] Answer evals run after the rebuild and show the base-form facts are right
 
-### 2. Interface fixes (in progress)
+### 2. Interface fixes
 
-- [ ] Feedback buttons always shown on generated answers, including the detail page bubble
-- [ ] Long answers in the detail page bubble use Atomic's Show more
-- [ ] Shorter number lookup notice
-- [ ] Only the two Coveo values reach the browser bundle, not Vercel's build values
-- [ ] Atomic layout overrides reduced to what Atomic documents (PC-79)
+- [x] Feedback buttons always shown on generated answers, including the detail page bubble. Atomic shows them only once a long answer is expanded with Show more; there is no option to change this
+- [x] Long answers in the detail page bubble use Atomic's Show more
+- [x] Shorter number lookup notice
+- [x] Only the two Coveo values reach the browser bundle, not Vercel's build values
+- [x] Atomic layout overrides reduced to what Atomic documents: all five `!important` rules removed, one documented exception kept (PC-79)
 
 ### 3. Wrap-up
 
@@ -116,6 +116,7 @@ Considered and dropped, because neither the assessment nor the demo needs them. 
 | Screen reader and non-Chromium browser testing | Production practice |
 | The small layout shift on load (0.033, within its 0.05 target) and a separate card stylesheet | Gains too small to matter |
 | The header logo label and the duplicate icon file | Not visible in the demo |
+| Showing feedback buttons while a long answer is collapsed | Atomic has no option for it; raising `max-collapsed-height` would only collapse fewer answers |
 
 ### Talking points for the panel
 
@@ -537,7 +538,7 @@ Tailwind and shadcn/ui are the approved tools for our interface code. Atomic com
 
 - [x] Header, result cards and Type badges use Tailwind and shadcn/ui; page sizes now use Atomic's control
 - [x] Result cards render correctly inside Atomic's Shadow DOM
-- [ ] Overrides of Atomic's page layout are reduced to what the documentation supports (loose values are named; the user decides whether to restructure, because it could disturb the page centering)
+- [x] Overrides of Atomic's page layout are reduced to what the documentation supports (all `!important` rules removed; the filter popover margin rule is kept, with its reason in `docs/architecture.md`)
 - [x] Browser tests and a visual check pass at desktop widths
 
 ### PC-77: Polish the remaining experiences
