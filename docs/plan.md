@@ -58,12 +58,12 @@ If Passage Retrieval access has not arrived, write PC-83 and add PC-82 only if a
 
 Only what the assessment or the panel demo needs. Everything else is listed under Not doing, with the reason.
 
-### 1. Correct generated answer content
+### 1. Correct generated answer content (full source rebuilding)
 
 Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each form's data table in the indexed body had no form name. PR #14 rewrites those rows as named sentences, adds the Pokémon's name to form labels, and adds "is weak to" sentences.
 
 - [x] Extension change built test-first, with answer eval questions that catch another form's values (PR #14)
-- [ ] 🟡 User pastes the new extension into Coveo, rebuilds the single-Pokémon test source, and checks that Charizard's body names each form and that all 16 fields still populate
+- [x] 🟡 User pastes the new extension into Coveo, rebuilds the single-Pokémon test source, and checks that Charizard's body names each form and that all 16 fields still populate (done 2026-11-09: all 10 required sentences and all 16 fields present)
 - [ ] 🟡 User rebuilds the full source (1,028 items), then rebuilds the RGA and Semantic Encoder models
 - [ ] Answer evals run after the rebuild and show the base-form facts are right
 
