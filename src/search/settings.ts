@@ -36,6 +36,9 @@ export const POKEMON_FIELDS = {
   generation: 'pokemon_generation',
 } as const;
 
+// Query ranking modifier for names that start with a one-word search. Chosen by npm run eval:prefix-benchmark.
+export const NAME_PREFIX_BOOST = 300;
+
 export const POKEDEX_NUMBER_WIDTH = 4;
 export const UNKNOWN_POKEDEX_NUMBER = '???';
 

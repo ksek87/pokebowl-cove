@@ -26,6 +26,21 @@ export function reciprocalRank(ranked: string[], relevant: string[]): number {
   return position < 0 ? 0 : 1 / (position + 1);
 }
 
+/** 1 when the top min(relevant count, K) positions are all relevant, otherwise 0. MRR sees only the first hit. */
+export function namesFirst(ranked: string[], relevant: string[], k: number): number {
+  const wanted = new Set(relevant);
+  const positions = Math.min(relevant.length, k);
+  const top = ranked.slice(0, positions);
+  return top.length === positions && top.every((id): boolean => wanted.has(id)) ? 1 : 0;
+}
+
+/** Share of the results shown in the top K that are relevant. */
+export function precisionAtK(ranked: string[], relevant: string[], k: number): number {
+  const wanted = new Set(relevant);
+  const top = ranked.slice(0, k);
+  return top.length ? top.filter((id): boolean => wanted.has(id)).length / top.length : 0;
+}
+
 /** Nearest-rank percentile, so every reported value was actually observed. */
 export function percentile(values: number[], rank: number): number {
   if (!values.length) {

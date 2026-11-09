@@ -1,16 +1,16 @@
 {
-  "measuredAt": "2026-11-09T14:13:31.912Z",
-  "method": "Recall@K counts hits out of the relevant items that can fit in K. Text queries run in pokebowl-search with analytics capture off.",
+  "measuredAt": "2026-11-09T19:17:07.974Z",
+  "method": "Recall@K counts hits out of the relevant items that can fit in K. Queries run in pokebowl-search with analytics capture off, through the same request rewrite as the application.",
   "ks": [
     3,
     12
   ],
   "overall": {
     "queries": 123,
-    "mrr": 0.9010162601626015,
+    "mrr": 0.9470867208672086,
     "recall": {
-      "3": 0.8956639566395663,
-      "12": 0.9072862774082285
+      "3": 0.9457994579945799,
+      "12": 0.9552537570830253
     }
   },
   "byCategory": {
@@ -56,10 +56,10 @@
     },
     "partial": {
       "queries": 16,
-      "mrr": 0.6458333333333333,
+      "mrr": 1,
       "recall": {
-        "3": 0.6145833333333333,
-        "12": 0.63125
+        "3": 1,
+        "12": 1
       }
     },
     "descriptive": {
@@ -81,58 +81,6 @@
   },
   "failures": [
     {
-      "query": "pika",
-      "category": "partial",
-      "ranked": [
-        "Pikipek"
-      ],
-      "reciprocalRank": 0,
-      "recall": {
-        "3": 0,
-        "12": 0
-      }
-    },
-    {
-      "query": "balt",
-      "category": "partial",
-      "ranked": [],
-      "reciprocalRank": 0,
-      "recall": {
-        "3": 0,
-        "12": 0
-      }
-    },
-    {
-      "query": "panp",
-      "category": "partial",
-      "ranked": [],
-      "reciprocalRank": 0,
-      "recall": {
-        "3": 0,
-        "12": 0
-      }
-    },
-    {
-      "query": "inka",
-      "category": "partial",
-      "ranked": [],
-      "reciprocalRank": 0,
-      "recall": {
-        "3": 0,
-        "12": 0
-      }
-    },
-    {
-      "query": "mabo",
-      "category": "partial",
-      "ranked": [],
-      "reciprocalRank": 0,
-      "recall": {
-        "3": 0,
-        "12": 0
-      }
-    },
-    {
       "query": "grass fire",
       "category": "descriptive",
       "judgment": "A Type pair is taken to mean Pokémon with both Types.",
@@ -144,8 +92,8 @@
         "Houndoom",
         "Quilava",
         "Cyndaquil",
-        "Fomantis",
         "Fuecoco",
+        "Fomantis",
         "Darmanitan",
         "Litten",
         "Pombon"
@@ -539,8 +487,8 @@
       "category": "name",
       "ranked": [
         "Flutter Mane",
-        "Rapidash",
         "Misdreavus",
+        "Rapidash",
         "Dartrix",
         "Meowstic",
         "Aerodactyl",
@@ -618,8 +566,8 @@
         "Tarountula",
         "Rellor",
         "Shedinja",
-        "Beautifly",
         "Parasect",
+        "Beautifly",
         "Vivillon",
         "Cutiefly",
         "Yanmega"
@@ -683,8 +631,8 @@
         "Electabuzz",
         "Luxio",
         "Manectric",
-        "Electivire",
         "Magnemite",
+        "Electivire",
         "Elekid",
         "Electrike",
         "Electrode",
@@ -730,14 +678,14 @@
         "Kubfu",
         "Grapploct",
         "Hawlucha",
-        "Timburr",
         "Hitmontop",
+        "Timburr",
         "Pawmot",
         "Crabrawler",
         "Tyrogue",
         "Sneasler",
-        "Pawmo",
-        "Tauros"
+        "Tauros",
+        "Pawmo"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -800,8 +748,8 @@
         "Dreepy",
         "Sinistcha",
         "Misdreavus",
-        "Litwick",
         "Spiritomb",
+        "Litwick",
         "Haunter",
         "Cofagrigus",
         "Pumpkaboo",
@@ -820,8 +768,8 @@
       "ranked": [
         "Floragato",
         "Sprigatito",
-        "Lurantis",
         "Fomantis",
+        "Lurantis",
         "Browt",
         "Brambleghast",
         "Skiddo",
@@ -913,11 +861,11 @@
         "Nidoran♂ (male)",
         "Nidoran♀ (female)",
         "Garbodor",
-        "Clodsire",
         "Nidorino",
+        "Clodsire",
         "Foongus",
-        "Toxicroak",
         "Weezing",
+        "Toxicroak",
         "Koffing",
         "Toxel",
         "Skrelp",
@@ -1011,8 +959,8 @@
         "Drizzile",
         "Palpitoad",
         "Wugtrio",
-        "Simipour",
         "Dondozo",
+        "Simipour",
         "Araquanid"
       ],
       "reciprocalRank": 1,
@@ -1238,8 +1186,8 @@
         "Jolteon",
         "Drampa",
         "Zygarde",
-        "Passimian",
         "Omanyte",
+        "Passimian",
         "Mamoswine",
         "Pyroar",
         "Piplup",
@@ -1264,8 +1212,8 @@
         "Glimmora",
         "Wiglett",
         "Beedrill",
-        "Silvally",
         "Noctowl",
+        "Silvally",
         "Lucario"
       ],
       "reciprocalRank": 1,
@@ -1347,8 +1295,8 @@
         "Sprigatito",
         "Maractus",
         "Toedscruel",
-        "Lilligant",
-        "Pelipper"
+        "Pelipper",
+        "Lilligant"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1365,8 +1313,8 @@
         "Arctibax",
         "Cubone",
         "Mawile",
-        "Shieldon",
         "Glastrier",
+        "Shieldon",
         "Gligar",
         "Druddigon",
         "Yamask",
@@ -1408,7 +1356,7 @@
         "Fraxure",
         "Axew",
         "Emboar",
-        "Throh"
+        "Pancham"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1520,8 +1468,8 @@
         "Beheeyem",
         "Elgyem",
         "Exeggutor",
-        "Oranguru",
         "Latias",
+        "Oranguru",
         "Latios",
         "Rabsca",
         "Dottler"
@@ -1555,9 +1503,9 @@
         "Drifloon",
         "Wurmple",
         "Chansey",
-        "Rufflet",
         "Machop",
         "Rampardos",
+        "Rufflet",
         "Electrode",
         "Pelipper",
         "Morpeko"
@@ -1580,8 +1528,8 @@
         "Bellibolt",
         "Bellossom",
         "Chatot",
-        "Morpeko",
         "Exeggutor",
+        "Morpeko",
         "Chikorita",
         "Flutter Mane"
       ],
@@ -1597,16 +1545,16 @@
       "ranked": [
         "Hatenna",
         "Blissey",
-        "Meganium",
         "Tauros",
         "Dragonite",
+        "Meganium",
         "Pelipper",
         "Arboliva",
         "Sylveon",
         "Gloom",
-        "Igglybuff",
         "Mantine",
-        "Donphan"
+        "Donphan",
+        "Lycanroc"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1623,8 +1571,8 @@
         "Swirlix",
         "Eldegoss",
         "Swablu",
-        "Ribombee",
         "Whimsicott",
+        "Ribombee",
         "Jigglypuff",
         "Tentacool",
         "Squirtle",
@@ -1696,8 +1644,8 @@
         "Ho-oh",
         "Wynaut",
         "Hattrem",
-        "Charmander",
         "Kirlia",
+        "Charmander",
         "Indeedee"
       ],
       "reciprocalRank": 1,
@@ -1744,7 +1692,7 @@
         "Machamp",
         "Darmanitan",
         "Tinkaton",
-        "Electivire"
+        "Voltorb"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1789,8 +1737,8 @@
         "Jigglypuff",
         "Poipole",
         "Overqwil",
-        "Basculegion",
-        "Umbreon"
+        "Umbreon",
+        "Basculegion"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1807,8 +1755,8 @@
         "Vivillon",
         "Talonflame",
         "Scyther",
-        "Scovillain",
         "Vileplume",
+        "Scovillain",
         "Dustox",
         "Scraggy",
         "Scrafty",
@@ -1894,28 +1842,31 @@
       "query": "char",
       "category": "partial",
       "ranked": [
-        "Thundurus",
-        "Magmar",
         "Charcadet",
         "Charjabug",
-        "Charizard"
+        "Charizard",
+        "Charmander",
+        "Charmeleon",
+        "Thundurus",
+        "Magmar"
       ],
-      "reciprocalRank": 0.3333333333333333,
+      "reciprocalRank": 1,
       "recall": {
-        "3": 0.3333333333333333,
-        "12": 0.6
+        "3": 1,
+        "12": 1
       }
     },
     {
       "query": "pika",
       "category": "partial",
       "ranked": [
+        "Pikachu",
         "Pikipek"
       ],
-      "reciprocalRank": 0,
+      "reciprocalRank": 1,
       "recall": {
-        "3": 0,
-        "12": 0
+        "3": 1,
+        "12": 1
       }
     },
     {
@@ -2005,11 +1956,13 @@
     {
       "query": "balt",
       "category": "partial",
-      "ranked": [],
-      "reciprocalRank": 0,
+      "ranked": [
+        "Baltoy"
+      ],
+      "reciprocalRank": 1,
       "recall": {
-        "3": 0,
-        "12": 0
+        "3": 1,
+        "12": 1
       }
     },
     {
@@ -2028,11 +1981,13 @@
     {
       "query": "panp",
       "category": "partial",
-      "ranked": [],
-      "reciprocalRank": 0,
+      "ranked": [
+        "Panpour"
+      ],
+      "reciprocalRank": 1,
       "recall": {
-        "3": 0,
-        "12": 0
+        "3": 1,
+        "12": 1
       }
     },
     {
@@ -2050,11 +2005,13 @@
     {
       "query": "inka",
       "category": "partial",
-      "ranked": [],
-      "reciprocalRank": 0,
+      "ranked": [
+        "Inkay"
+      ],
+      "reciprocalRank": 1,
       "recall": {
-        "3": 0,
-        "12": 0
+        "3": 1,
+        "12": 1
       }
     },
     {
@@ -2084,22 +2041,25 @@
       "query": "hatt",
       "category": "partial",
       "ranked": [
-        "Hatterene"
+        "Hatterene",
+        "Hattrem"
       ],
       "reciprocalRank": 1,
       "recall": {
-        "3": 0.5,
-        "12": 0.5
+        "3": 1,
+        "12": 1
       }
     },
     {
       "query": "mabo",
       "category": "partial",
-      "ranked": [],
-      "reciprocalRank": 0,
+      "ranked": [
+        "Mabosstiff"
+      ],
+      "reciprocalRank": 1,
       "recall": {
-        "3": 0,
-        "12": 0
+        "3": 1,
+        "12": 1
       }
     },
     {
@@ -2135,8 +2095,8 @@
         "Obstagoon",
         "Linoone",
         "Darkrai",
-        "Kingambit",
         "Sableye",
+        "Kingambit",
         "Zigzagoon",
         "Zorua",
         "Krokorok",
@@ -2185,10 +2145,10 @@
         "Quilava",
         "Litleo",
         "Fletchinder",
-        "Vaporeon",
         "Magmar",
-        "Darmanitan",
         "Typhlosion",
+        "Darmanitan",
+        "Vaporeon",
         "Lampent",
         "Charizard"
       ],
@@ -2210,8 +2170,8 @@
         "Houndoom",
         "Quilava",
         "Cyndaquil",
-        "Fomantis",
         "Fuecoco",
+        "Fomantis",
         "Darmanitan",
         "Litten",
         "Pombon"
@@ -2230,8 +2190,8 @@
         "Piloswine",
         "Mamoswine",
         "Abomasnow",
-        "Wooper",
         "Swinub",
+        "Wooper",
         "Snover",
         "Snom",
         "Avalugg",
@@ -2308,9 +2268,9 @@
         "Sandshrew",
         "Electabuzz",
         "Magnemite",
-        "Jolteon",
         "Raticate",
-        "Electrode"
+        "Jolteon",
+        "Marill"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2331,8 +2291,8 @@
         "Zorua",
         "Thievul",
         "Litten",
-        "Gouging Fire",
         "Litwick",
+        "Gouging Fire",
         "Fuecoco",
         "Moltres"
       ],
@@ -2357,8 +2317,8 @@
         "Finizen",
         "Goldeen",
         "Gecqua",
-        "Wugtrio",
-        "Poliwhirl"
+        "Poliwhirl",
+        "Wugtrio"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2452,8 +2412,8 @@
         "Magnezone",
         "Garbodor",
         "Azumarill",
-        "Tinkatink",
         "Magcargo",
+        "Tinkatink",
         "Darmanitan"
       ],
       "reciprocalRank": 1,
@@ -2472,8 +2432,8 @@
         "Mudsdale",
         "Swampert",
         "Mudbray",
-        "Dewott",
         "Muk",
+        "Dewott",
         "Pombon",
         "Barboach",
         "Camerupt",
@@ -2496,8 +2456,8 @@
         "Dusclops",
         "Dedenne",
         "Drowzee",
-        "Toxtricity",
         "Togekiss",
+        "Toxtricity",
         "Delcatty",
         "Cutiefly",
         "Delphox",
@@ -2525,8 +2485,8 @@
         "Fidough",
         "Bonsly",
         "Vivillon",
-        "Darmanitan",
-        "Volcarona"
+        "Tentacruel",
+        "Darmanitan"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2550,7 +2510,7 @@
         "Koraidon",
         "Regidrago",
         "Remoraid",
-        "Vivillon"
+        "Mantyke"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2569,10 +2529,10 @@
         "Solrock",
         "Gloom",
         "Jynx",
-        "Cutiefly",
         "Buizel",
-        "Celesteela",
+        "Cutiefly",
         "Snubbull",
+        "Celesteela",
         "Arctozolt",
         "Tandemaus"
       ],
