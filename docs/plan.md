@@ -23,7 +23,7 @@ The assessment defines four tiers of required work and a panel presentation. A t
 | Essential | Show each Pokémon's picture in results | Done | PC-21 |
 | Intermediate | Host the code on GitHub and share the link | Code is on GitHub; not yet shared | PC-31 |
 | Intermediate | Host the search application | Not started | PC-30 |
-| Advanced | Generative answers with Relevance Generative Answering | Models built and associated; application work not started | PC-61, PC-62 |
+| Advanced | Generative answers with Relevance Generative Answering | Answers and citations work in the application; tuning and evals remain | PC-61, PC-62 |
 | Advanced | Preload a Query Suggestions model for type-ahead | Complete: model active, default queries live, and suggestions confirmed in a real browser | PC-50, PC-51 |
 | Advanced | Pokémon detail page | Built on `integration/overnight`, not yet merged to `main` | PC-70 |
 | Advanced | Technical deep dive presentation | Not started | PC-100 |
@@ -315,8 +315,8 @@ Owner: You, guided by Agent · Estimate: 45 min, plus model build time · Depend
 
 Owner: Agent · Estimate: 45 min · Depends on: PC-61
 
-- [ ] Answers and citations display for suitable queries
-- [ ] Search still works when no answer is generated
+- [x] Answers and citations display for suitable queries
+- [x] Search still works when no answer is generated
 
 ### PC-63: Tune answers and add reporting
 
@@ -383,7 +383,7 @@ Tailwind and shadcn/ui are the approved tools for our interface code. The first 
 
 Owner: Agent· Depends on: PC-75, PC-62, PC-70
 
-- [ ] Generated answers, type-ahead and the detail page match the search page design
+- [x] Generated answers, type-ahead and the detail page match the search page design
 - [ ] The bonus feature matches the design, if it is built
 
 ### PC-78: Review quality across the application

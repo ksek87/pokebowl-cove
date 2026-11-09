@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: November 8, 2026 at 10:02 PM EST. Update this file, including the time, before ending a work session.
+Last updated: November 9, 2026 at 8:05 AM EST. Update this file, including the time, before ending a work session.
 
 ## Read first
 
@@ -21,7 +21,7 @@ The target is to finish almost everything quickly, with Friday, November 13, 202
 | Index | PC-14 is verified at 1,028 items, with all fields populated. The body review (PC-60) passed. |
 | Query routing | Dedicated `pokebowl-search` pipeline, condition Search Hub contains `pokebowl-`, filtered to `pokemondb-pokemon`. No Coveo project was created; it is optional. |
 | Search interface | Results, Type and Generation facets, page sizes, pager, query correction, Pokédex lookup for number-only searches and Pokédex order on the home page work. The sort control is broken on `main` and fixed on the fix branch. Page sizes now use Atomic's `atomic-results-per-page`. Tailwind and shadcn/ui are in place. |
-| Tests | On the fix branch, 96 unit, 52 browser and 11 Python tests pass. Browser tests run locally only. |
+| Tests | On `integration/overnight`, 186 unit, 109 browser and 11 Python tests pass. Browser tests run locally only and use a stubbed answer stream. |
 | Rerail | No repository rules were added, by the user's decision. |
 
 There are two streams of remaining work. Stream A is for subagents and is **on hold until the user releases it**. Stream B needs the user, because it involves the Coveo console, Vercel or the user's judgment.
@@ -37,7 +37,7 @@ Do not launch any of these until the user says so. The user may release them one
 | 3 | PC-40, PC-41 | Eval reference data and index checks | `integration/overnight` | Done and combined. Index check passed: 1,028 items and 40 sampled pages matched. The user still hand-checks 11 difficult pages |
 | 4 | PC-76 | Designed loading, no-results and error states | `feature/ui-states` | Yes |
 | 5 | PC-42 | Relevance evals | `feature/evals` | Needs the eval API key from Stream B |
-| 6 | PC-62, then PC-77 | Generated answers in the application, in the same design | `feature/generated-answers` | Needs the models from Stream B |
+| 6 | PC-62, then PC-77 | Generated answers in the application, in the same design | `integration/overnight` | Done. PC-63 tuning and PC-44 answer evals remain |
 | Any time | Rerail fixes | Fix findings from a scan, for review afterwards | `chore/rerail-fixes` | When a scan has agreed fixes |
 
 **PC-70 content, confirmed by the user:** artwork, name, number, Types, Generation, species, height, weight, abilities and all stats, built with shadcn/ui, with a shareable URL for each Pokémon and a clear not-found state. New Pokémon have `???` as their number and no stats. An exact lookup with `@pokemon_name=="Mr. Mime"` returns one item.

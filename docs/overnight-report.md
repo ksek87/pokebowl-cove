@@ -57,6 +57,24 @@ Screenshots of the search page and the detail page were taken at 1100, 1440, 192
 
 Code commit: `9467215`. Full-page screenshots were taken at 1100, 1440, 1920 and 2560 pixels for the home page, search, correction, number lookup, no results, error, loading, and the detail page in normal, not-found, loading and error states. They were reviewed on one contact sheet per width, with individual pages viewed for no results and loading. The page numbers stayed centered on the page at every width, and both facets started collapsed. Images from pokemondb.net were blocked, so artwork shows the fallback Pokéball.
 
+## Item 4: generated answers (PC-62, PC-77)
+
+Added Atomic's generated answer at the top of the results, styled through its CSS parts, with Atomic's disclaimer, citations and a collapsible long answer. The type-ahead panel now matches the search box.
+
+**Real answers used (3 distinct questions, plus one earlier direct API check):**
+
+| Question | Result |
+|---|---|
+| what type is charizard | Answer streamed with a citation. After sorting by Name A to Z, the answer disappeared and the results stayed, with no error |
+| which pokemon evolves into charizard | Answer streamed with a citation |
+| who won the 1998 world cup | The page showed no result cards, so no answer was checked |
+
+**Stubbed:** every check in the browser suite, including all four widths. Answer text in those screenshots is test text.
+
+**Results:** type check clean, build succeeds, 186 unit, 109 browser and 11 Python tests pass. The key scan found 0 matches.
+
+**Not checked:** a real query that has results but no answer, other than the sorted case. Answer quality is left to PC-63 and PC-44. Real answers can repeat source quotations, such as the "This information is directly supported" wording seen in one answer.
+
 ## To discuss
 
 **Wording to review (UI-01, UI-02):**
@@ -80,5 +98,8 @@ Code commit: `9467215`. Full-page screenshots were taken at 1100, 1440, 1920 and
 - UI-19: whether to hide sort and page size for very small result sets.
 - UI-20: the wording of the number lookup notice.
 - UI-24: whether to keep filters or search in view on long pages.
+
+- Generated answers: the answer disappears on a non-relevance sort, as Coveo documents. Confirm that is acceptable, or consider hiding the sort while an answer shows.
+- Generated answers: whether a citation should open the application's detail page rather than pokemondb.net. It opens the source page now.
 
 **Noted, no decision needed yet:** with the Semantic Encoder active, a nonsense text query can still return results.

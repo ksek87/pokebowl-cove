@@ -403,3 +403,22 @@ Not confirmed: real artwork on the page, and that the click event reaches Coveo 
 **Atomic detail:** the type documentation lists the search box part as `input`, but the rendered part is `textarea`, so the styles target `textarea`.
 
 **Finding to keep in mind:** with the Semantic Encoder active, a nonsense text query can still return results, so a no-results page is now reached mainly through number lookups and filters.
+
+## Generated answers
+
+**Decision: use Atomic's `atomic-generated-answer` at the top of the results section, with `collapsible` on.** The answer sits below the fixed controls row and above the result cards. It keeps Atomic's disclaimer, citations, feedback and copy actions, and is styled only through its documented CSS parts.
+
+**Coveo documentation:** [Configure a search interface for RGA](https://docs.coveo.com/en/nb6a0037/) states that an Atomic page must include this component, that the component does not appear when no answer is generated, that the hosted builders place it at the top of the results, that a disclaimer is part of the component, and that results not sorted by relevance may produce no answer. [RGA content requirements](https://docs.coveo.com/en/nb6a0008/) strongly recommends a disclaimer. The installed Atomic 3.65 source requests `text/markdown` first, with `text/plain` as the fallback, so the association's rich text option is used.
+
+**Our inference:** `collapsible` keeps a long answer from pushing the results far down. We left the no-answer slot empty, so a query without an answer shows normal results and no empty box. An answer that arrives still moves the cards down, because the page cannot know in advance whether an answer will exist.
+
+**Observed behavior, November 9, 2026:**
+
+- With Best match, `what type is charizard` and `which pokemon evolves into charizard` streamed answers with a citation to the Charizard page.
+- After changing that first search to Name A to Z, the answer disappeared and the sorted results stayed, with no error. This matches Coveo's documentation.
+- The search response carries a `generativeQuestionAnsweringId` for a text query even when the request does not include the answer format parameter. Coveo does not state when an answer counts against the allowance.
+
+**Testing:** every browser test uses a stubbed answer stream from `e2e/fixtures.ts`, so the suite reads no real answers from the allowance. The real end-to-end checks above were run separately.
+
+The type-ahead panel now shares the search box's edges, border and radius, and uses the main text color, through Atomic's `suggestions-wrapper` and `query-suggestion-text` parts.
+

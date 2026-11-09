@@ -224,6 +224,8 @@ On `fix/code-review-findings`, a card links to pokemondb.net in the same tab. Th
 
 At 96 results per page the document is 7891 px tall, and neither the search box nor the filters stay available while scrolling. Screenshot: `/private/tmp/claude-501/-Users-keelinsekerka-Dev-pokebowl-cove/808181cd-25b2-4575-b225-736be614d5af/scratchpad/ui-audit/size96-1440.png`. **Owner decision:** whether to keep the facets or search box in view.
 
+**Later status:** the UI-18 panel alignment and text color are fixed. Whether an empty box shows suggestions is still open.
+
 ## Decisions needed from the owner
 
 | Finding | Decision |
