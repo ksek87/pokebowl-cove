@@ -400,7 +400,7 @@ Not confirmed: real artwork on the page, and that the click event reaches Coveo 
 
 **Decision: the no-results and error views are rendered from Headless search status, in place of `atomic-no-results` and `atomic-query-error`.** Atomic's error view prints the organization endpoint and offers no retry, and its no-results text cannot vary by query, and its documented parts can restyle these but cannot change them. The rejected alternative was restyling Atomic's parts, which would keep the service URL visible. Atomic still marks the page with its no-results and error classes, which center the message on the page.
 
-**Decision: first-load placeholders match the real result cards.** Atomic's placeholders have a generic shape and cannot be reshaped through its parts, so result cards use a matching placeholder. The filter row uses `atomic-popover`'s own placeholder, sized to the real control.
+**Decision: first-load placeholders match the real result cards.** Atomic's placeholders have a generic shape and cannot be reshaped through its parts, so result cards use a matching placeholder. The filter row uses the `atomic-popover` placeholder, sized to the real control.
 
 **Decision: one solid focus outline, using the foreground color with an offset, for all controls.** Atomic's ring variable points to the same token. The former translucent ring measured 1.69:1, below the 3:1 that WCAG 1.4.11 requires.
 
