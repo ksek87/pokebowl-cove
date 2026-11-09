@@ -25,7 +25,7 @@ The assessment defines four tiers of required work and a panel presentation. A t
 | Intermediate | Host the search application | Not started | PC-30 |
 | Advanced | Generative answers with Relevance Generative Answering | Models built and associated; application work not started | PC-61, PC-62 |
 | Advanced | Preload a Query Suggestions model for type-ahead | Complete: model active, default queries live, and suggestions confirmed in a real browser | PC-50, PC-51 |
-| Advanced | Pokémon detail page | Built on `feature/detail-page`, not yet merged | PC-70 |
+| Advanced | Pokémon detail page | Built on `integration/overnight`, not yet merged to `main` | PC-70 |
 | Advanced | Technical deep dive presentation | Not started | PC-100 |
 | Advanced | Enterprise customer value presentation | Not started | PC-102 |
 | Bonus | Passage Retrieval: at minimum, understand it and hold a point of view | Not started; access must be requested | PC-02, PC-80 to PC-83 |

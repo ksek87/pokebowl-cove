@@ -16,7 +16,7 @@ The target is to finish almost everything quickly, with Friday, November 13, 202
 
 | Area | State |
 |---|---|
-| Git | PRs #1 to #5 are merged. Pushed branches without pull requests: `fix/code-review-findings` (review fixes, centering, model records and documentation), `feature/passage-retrieval-pov`, `feature/evals`, `feature/query-suggestions-file` and `feature/detail-page`. Merge `fix/code-review-findings` first. `feature/detail-page` holds a snapshot of the fix branch, so keep the fix branch's versions of shared files and apply only the detail page changes. The ranked suggestions file and `docs/ui-audit.md` are still being produced. Reconcile on merge: field names repeated in `evals/` and `src/tooling/` should use `POKEMON_FIELDS`, and `vite.config.ts` overlaps. |
+| Git | PRs #1 to #5 are merged. `integration/overnight` is the combined branch: the review fixes, centering, model records, UI audit, detail page, evals, ranked suggestions file and Passage Retrieval document, merged and tested together. Merge that branch to bring all of this work to `main`; the separate feature branches remain for history. `docs/overnight-report.md` records the overnight work. |
 | Assessment tiers | Essential is complete. Intermediate, Advanced and Bonus are not. |
 | Index | PC-14 is verified at 1,028 items, with all fields populated. The body review (PC-60) passed. |
 | Query routing | Dedicated `pokebowl-search` pipeline, condition Search Hub contains `pokebowl-`, filtered to `pokemondb-pokemon`. No Coveo project was created; it is optional. |
@@ -32,9 +32,9 @@ Do not launch any of these until the user says so. The user may release them one
 
 | Priority | Ticket | Goal | Branch | Ready? |
 |---|---|---|---|---|
-| 1 | PC-70 | Pokémon detail page | `feature/detail-page` | Built and pushed, not merged. Runs on port 5174 during development |
-| 2 | PC-83 | Passage Retrieval point of view | `feature/passage-retrieval-pov` | Written and pushed. Linked pages such as the full API reference still need reading before the panel |
-| 3 | PC-40, PC-41 | Eval reference data and index checks | `feature/evals` | Done and pushed. Index check passed: 1,028 items and 40 sampled pages matched. The user still hand-checks 11 difficult pages |
+| 1 | PC-70 | Pokémon detail page | `integration/overnight` | Built and combined with the other work, not merged to `main` |
+| 2 | PC-83 | Passage Retrieval point of view | `integration/overnight` | Written and combined. Linked pages such as the full API reference still need reading before the panel |
+| 3 | PC-40, PC-41 | Eval reference data and index checks | `integration/overnight` | Done and combined. Index check passed: 1,028 items and 40 sampled pages matched. The user still hand-checks 11 difficult pages |
 | 4 | PC-76 | Designed loading, no-results and error states | `feature/ui-states` | Yes |
 | 5 | PC-42 | Relevance evals | `feature/evals` | Needs the eval API key from Stream B |
 | 6 | PC-62, then PC-77 | Generated answers in the application, in the same design | `feature/generated-answers` | Needs the models from Stream B |

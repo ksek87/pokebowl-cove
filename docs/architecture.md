@@ -368,7 +368,7 @@ Query Suggestions is the type-ahead list in the search box. Its model learns fro
 
 **Learning interval:** a 1-month data period with daily builds, which Coveo's table lists as a valid pairing. We changed it from the default so that a rebuild picks up the uploaded file soon after upload. Immediately after the upload, the Query Suggestion API returned only a learned query. After the rebuild it returned the file's queries, which supports our inference that the file takes effect on a rebuild. Coveo does not document this.
 
-**Ranking:** the user chose to add the file's optional importance column by category, so that Pokémon names come before abilities and species. The first upload had equal importance, and `char` listed `charm` first and Charizard seventh. These values rank categories and do not claim to be popularity. Upload of the ranked file is pending.
+**Ranking:** the user chose to add the file's optional importance column by category, so that Pokémon names come before abilities and species. The first upload had equal importance, and `char` listed `charm` first and Charizard seventh. The ranked file has 2,236 queries, with importance 1000 for Pokémon names, 500 for Types and Generations, 200 for Type pairs, and 100 for abilities and species. These values rank categories and do not claim to be popularity. Upload of the ranked file is pending.
 
 ### In production
 
@@ -388,4 +388,4 @@ A query parameter needs no rewrite rules on Vercel and does not interfere with t
 
 The page reads one item through a separate Headless engine with analytics off, using an exact match on the name. Coveo's `==` operator treated `?` and `*` as wildcards in our testing, so the page also checks that the returned name equals the requested name. Pokémon with `???` as their number hide it and state that base stats are not available. Result cards use Atomic's link templates, so a card click still logs Atomic's click event.
 
-The work is on `feature/detail-page`, which must merge after `fix/code-review-findings`. Not confirmed: real artwork on the page, and that the click event reaches Coveo in production.
+Not confirmed: real artwork on the page, and that the click event reaches Coveo in production.
