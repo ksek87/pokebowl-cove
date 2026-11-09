@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { Result } from '@coveo/headless';
 import { type JSX, useState } from 'react';
+import { pokemonDetailHref } from './pokemonDetail.ts';
 import { cardTint, readTypes, typeBadge } from './pokemonTypes.ts';
 import { POKEBALL_IMAGE, POKEMON_FIELDS, UNKNOWN_POKEDEX_NUMBER } from './settings.ts';
 import { useShadowStyles } from './useShadowStyles.ts';
@@ -13,7 +14,7 @@ function text(value: unknown): string {
   return typeof value === 'string' ? value : '';
 }
 
-function PokemonImage({ image, name }: { image: string; name: string }): JSX.Element {
+export function PokemonImage({ image, name }: { image: string; name: string }): JSX.Element {
   const [failed, setFailed] = useState(false);
   const usesFallback = failed || !image;
 
@@ -43,6 +44,11 @@ function CardMeta({ number, generation }: { number: string; generation: string }
   );
 }
 
+/** The link Atomic's grid follows when any part of the card is clicked. */
+export function PokemonResultLink({ result }: { result: Result }): JSX.Element {
+  return <AtomicResultLink hrefTemplate={pokemonDetailHref(text(result.raw[POKEMON_FIELDS.name]))} />;
+}
+
 export function PokemonResult({ result }: { result: Result }): JSX.Element {
   const { raw } = result;
   const name = text(raw[POKEMON_FIELDS.name]);
@@ -64,7 +70,7 @@ export function PokemonResult({ result }: { result: Result }): JSX.Element {
       <div className="px-4 pt-3.5 pb-4">
         <CardMeta number={text(raw[POKEMON_FIELDS.number])} generation={text(raw[POKEMON_FIELDS.generation])} />
         <h2 className="mt-0.5 mb-2.5 text-lg/snug font-extrabold text-foreground">
-          <AtomicResultLink>{name}</AtomicResultLink>
+          <AtomicResultLink hrefTemplate={pokemonDetailHref(name)}>{name}</AtomicResultLink>
         </h2>
         <ul className="flex flex-wrap gap-1.5">
           {types.map((type) => (

@@ -2,11 +2,14 @@ import type { Result } from '@coveo/headless';
 import { fireEvent, render, screen } from '@testing-library/react';
 import type { JSX, ReactNode } from 'react';
 import { expect, it, vi } from 'vitest';
-import { PokemonResult } from './PokemonResult.tsx';
+import { pokemonDetailHref } from './pokemonDetail.ts';
+import { PokemonResult, PokemonResultLink } from './PokemonResult.tsx';
 import { POKEBALL_IMAGE, POKEMON_FIELDS, UNKNOWN_POKEDEX_NUMBER } from './settings.ts';
 
 vi.mock('@coveo/atomic-react', () => ({
-  AtomicResultLink: ({ children }: { children?: ReactNode }): JSX.Element => <a href="#result">{children}</a>,
+  AtomicResultLink: ({ children, hrefTemplate }: { children?: ReactNode; hrefTemplate?: string }): JSX.Element => (
+    <a href={hrefTemplate}>{children}</a>
+  ),
 }));
 
 function pokemon(raw: Record<string, unknown>): Result {
@@ -20,10 +23,16 @@ const charizard = pokemon({
   [POKEMON_FIELDS.generation]: 'Generation 1',
 });
 
-it('links the Pokémon name to the result', (): void => {
+it('sends a click anywhere on the card to the detail page', (): void => {
+  render(<PokemonResultLink result={charizard} />);
+
+  expect(screen.getByRole('link')).toHaveAttribute('href', pokemonDetailHref('Charizard'));
+});
+
+it('opens the detail page through the result link', (): void => {
   render(<PokemonResult result={charizard} />);
 
-  expect(screen.getByRole('link', { name: 'Charizard' })).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'Charizard' })).toHaveAttribute('href', pokemonDetailHref('Charizard'));
 });
 
 it('shows the picture with the name as alt text', (): void => {

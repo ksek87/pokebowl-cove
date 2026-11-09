@@ -49,3 +49,26 @@ export const SORT_OPTIONS = [
 ];
 
 export const POKEBALL_IMAGE = '/pokeball.svg';
+
+// The detail page is a query parameter, so a static host needs no rewrite rules.
+export const POKEMON_DETAIL_PARAM = 'pokemon';
+
+export const POKEMON_DETAIL_ONLY_FIELDS = {
+  species: 'pokemon_species',
+  height: 'pokemon_height',
+  weight: 'pokemon_weight',
+  abilities: 'pokemon_abilities',
+  total: 'pokemon_total',
+} as const;
+
+export const POKEMON_STATS = [
+  { field: 'pokemon_hp', label: 'HP' },
+  { field: 'pokemon_attack', label: 'Attack' },
+  { field: 'pokemon_defense', label: 'Defense' },
+  { field: 'pokemon_sp_atk', label: 'Sp. Atk' },
+  { field: 'pokemon_sp_def', label: 'Sp. Def' },
+  { field: 'pokemon_speed', label: 'Speed' },
+];
+
+// The highest value a single base stat can have in the games.
+export const STAT_BAR_MAXIMUM = 255;
