@@ -1,4 +1,5 @@
 import type { CoveoConfig } from '../src/config.ts';
+import { POKEMON_FIELDS } from '../src/search/settings.ts';
 
 export interface IndexedItem {
   clickUri: string;
@@ -6,7 +7,7 @@ export interface IndexedItem {
 }
 
 const LARGEST_PAGE = 1000;
-const FIELDS = ['pokemon_name', 'pokemon_number', 'pokemon_type', 'pokemon_generation', 'pokemon_image'];
+const FIELDS = Object.values(POKEMON_FIELDS);
 
 /** Reads every item the search key can see, without recording analytics. */
 export async function fetchIndexedItems(
@@ -24,7 +25,7 @@ export async function fetchIndexedItems(
         q: '',
         firstResult: items.length,
         numberOfResults: pageSize,
-        sortCriteria: '@pokemon_number ascending',
+        sortCriteria: `@${POKEMON_FIELDS.number} ascending`,
         fieldsToInclude: FIELDS,
         analytics: { capture: false },
         maximumAge: 0,

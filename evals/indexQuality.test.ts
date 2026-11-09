@@ -1,3 +1,4 @@
+import { POKEMON_FIELDS } from '../src/search/settings.ts';
 import { expect, it } from 'vitest';
 import { buildIndexReport, isPokemonPage } from './indexQuality.ts';
 
@@ -21,11 +22,11 @@ function indexed(raw: Record<string, unknown> = {}): { clickUri: string; raw: Re
   return {
     clickUri: `${URL_BASE}/${NAME}`,
     raw: {
-      pokemon_name: 'Mr. Mime',
-      pokemon_number: '0122',
-      pokemon_type: ['Fairy', 'Psychic'],
-      pokemon_generation: 'Generation 1',
-      pokemon_image: 'https://img.pokemondb.net/artwork/mr-mime.jpg',
+      [POKEMON_FIELDS.name]: 'Mr. Mime',
+      [POKEMON_FIELDS.number]: '0122',
+      [POKEMON_FIELDS.type]: ['Fairy', 'Psychic'],
+      [POKEMON_FIELDS.generation]: 'Generation 1',
+      [POKEMON_FIELDS.image]: 'https://img.pokemondb.net/artwork/mr-mime.jpg',
       ...raw,
     },
   };
@@ -53,9 +54,9 @@ it('passes when values match, ignoring the order of Types', (): void => {
 });
 
 it.each([
-  ['types', { pokemon_type: ['Psychic'] }],
-  ['generation', { pokemon_generation: 'Generation 2' }],
-  ['image', { pokemon_image: 'https://img.pokemondb.net/artwork/other.jpg' }],
+  ['types', { [POKEMON_FIELDS.type]: ['Psychic'] }],
+  ['generation', { [POKEMON_FIELDS.generation]: 'Generation 2' }],
+  ['image', { [POKEMON_FIELDS.image]: 'https://img.pokemondb.net/artwork/other.jpg' }],
 ])('reports a wrong %s', (field, raw): void => {
   const report = buildIndexReport([indexed(raw)], reference, ONE_ITEM);
 
@@ -64,7 +65,7 @@ it.each([
 });
 
 it('reads Types returned as one separated string', (): void => {
-  const report = buildIndexReport([indexed({ pokemon_type: 'Psychic;Fairy' })], reference, ONE_ITEM);
+  const report = buildIndexReport([indexed({ [POKEMON_FIELDS.type]: 'Psychic;Fairy' })], reference, ONE_ITEM);
 
   expect(report.mismatches).toEqual([]);
 });

@@ -1,15 +1,17 @@
+import { POKEMON_DETAIL_ONLY_FIELDS, POKEMON_FIELDS, UNKNOWN_POKEDEX_NUMBER } from '../search/settings.ts';
+
 export const FIELDS = {
-  name: 'pokemon_name',
-  type: 'pokemon_type',
-  generation: 'pokemon_generation',
-  abilities: 'pokemon_abilities',
-  species: 'pokemon_species',
+  name: POKEMON_FIELDS.name,
+  type: POKEMON_FIELDS.type,
+  generation: POKEMON_FIELDS.generation,
+  abilities: POKEMON_DETAIL_ONLY_FIELDS.abilities,
+  species: POKEMON_DETAIL_ONLY_FIELDS.species,
 } as const;
 
 // Coveo considers at most this many default queries per language.
 export const MAX_DEFAULT_QUERIES = 5000;
 
-const UNKNOWN_VALUE = '???';
+const UNKNOWN_VALUE = UNKNOWN_POKEDEX_NUMBER;
 const TYPE_PAIR_LENGTH = 2;
 
 type Category = 'name' | 'type' | 'generation' | 'typePair' | 'ability' | 'species';

@@ -1,3 +1,4 @@
+import { POKEMON_FIELDS } from '../src/search/settings.ts';
 import type { IndexedItem } from './coveoIndex.ts';
 import type { PokemonValues } from './pokemonPage.ts';
 
@@ -37,11 +38,11 @@ function readTypes(value: unknown): string[] {
 
 function compare(page: string, expected: PokemonValues, item: IndexedItem): Mismatch[] {
   const actual = {
-    name: item.raw.pokemon_name,
-    number: item.raw.pokemon_number,
-    types: readTypes(item.raw.pokemon_type),
-    generation: item.raw.pokemon_generation,
-    image: item.raw.pokemon_image,
+    name: item.raw[POKEMON_FIELDS.name],
+    number: item.raw[POKEMON_FIELDS.number],
+    types: readTypes(item.raw[POKEMON_FIELDS.type]),
+    generation: item.raw[POKEMON_FIELDS.generation],
+    image: item.raw[POKEMON_FIELDS.image],
   };
   const wanted = { ...expected, types: [...expected.types].sort() };
 
