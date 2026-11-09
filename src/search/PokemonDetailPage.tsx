@@ -9,13 +9,15 @@ import {
   type SearchEngine,
   type SearchStatusState,
 } from '@coveo/headless';
-import { type JSX, type MouseEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
+import { type JSX, type MouseEvent, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import type { CoveoConfig } from '../config.ts';
+import { CONTROL_BUTTON_CLASS } from './controlStyles.ts';
 import { toEngineConfiguration } from './engine.ts';
+import { DetailPlaceholder } from './LoadingPlaceholders.tsx';
 import {
   exactNameExpression,
   findRequestedPokemon,
@@ -36,7 +38,7 @@ const STAT_ROW_LAYOUT = 'grid grid-cols-[5rem_3rem_1fr] items-center gap-2';
 function usePokemonLookup(
   config: CoveoConfig,
   name: string,
-): { results: ResultListState['results']; status: SearchStatusState } {
+): { results: ResultListState['results']; status: SearchStatusState; runLookup: () => void } {
   const { engine, resultList, searchStatus } = useMemo(() => {
     const lookupEngine: SearchEngine = buildSearchEngine({
       configuration: { ...toEngineConfiguration(config), analytics: { enabled: false } },
@@ -53,7 +55,7 @@ function usePokemonLookup(
   useEffect(() => resultList.subscribe((): void => setResults(resultList.state.results)), [resultList]);
   useEffect(() => searchStatus.subscribe((): void => setStatus(searchStatus.state)), [searchStatus]);
 
-  useEffect((): void => {
+  const runLookup = useCallback((): void => {
     const { updateAdvancedSearchQueries } = loadAdvancedSearchQueryActions(engine);
     const { executeSearch } = loadSearchActions(engine);
     const { logInterfaceLoad } = loadSearchAnalyticsActions(engine);
@@ -61,7 +63,9 @@ function usePokemonLookup(
     engine.dispatch(executeSearch(logInterfaceLoad()));
   }, [engine, name]);
 
-  return { results, status };
+  useEffect(runLookup, [runLookup]);
+
+  return { results, status, runLookup };
 }
 
 function goBackToSearch(event: MouseEvent<HTMLAnchorElement>): void {
@@ -90,8 +94,10 @@ function Stats({ detail }: { detail: PokemonDetail }): JSX.Element {
       {detail.stats.map(({ label, value }) => (
         <div key={label} data-slot="pokemon-stat" className={STAT_ROW_LAYOUT}>
           <dt className="font-bold text-muted-foreground">{label}</dt>
-          <dd className="text-right font-extrabold">{value}</dd>
-          <Progress aria-label={label} value={Math.min(PERCENT, (value / STAT_BAR_MAXIMUM) * PERCENT)} />
+          <dd className="contents">
+            <span className="text-right font-extrabold">{value}</span>
+            <Progress aria-hidden="true" value={Math.min(PERCENT, (value / STAT_BAR_MAXIMUM) * PERCENT)} />
+          </dd>
         </div>
       ))}
       {Boolean(detail.total) && (
@@ -112,14 +118,14 @@ function PokemonDetails({ detail }: { detail: PokemonDetail }): JSX.Element {
           className="flex aspect-square items-center lg:aspect-auto justify-center p-10"
           style={{ background: cardTint(detail.types) }}
         >
-          <PokemonImage image={detail.image} name={detail.name} />
+          <PokemonImage image={detail.image} name={detail.name} className="size-auto max-h-full max-w-full" />
         </div>
         <div className="grid content-start gap-5 p-8">
           <div>
             {Boolean(detail.number) && (
               <p className="text-(length:--text-label) font-bold text-muted-foreground">#{detail.number}</p>
             )}
-            <h2 className="text-4xl font-black tracking-tight">{detail.name}</h2>
+            <h1 className="text-4xl font-black tracking-tight">{detail.name}</h1>
             <ul className="mt-3 flex flex-wrap gap-1.5">
               {detail.types.map((type) => (
                 <li key={type}>
@@ -138,7 +144,7 @@ function PokemonDetails({ detail }: { detail: PokemonDetail }): JSX.Element {
             <Fact label="Abilities">{detail.abilities.join(', ')}</Fact>
           </dl>
           <section aria-label="Base stats">
-            <h3 className="mb-2 text-lg font-extrabold">Base stats</h3>
+            <h2 className="mb-2 text-lg font-extrabold">Base stats</h2>
             <Stats detail={detail} />
           </section>
           <a className="font-bold text-primary underline" href={detail.sourceUrl}>
@@ -152,9 +158,9 @@ function PokemonDetails({ detail }: { detail: PokemonDetail }): JSX.Element {
 
 function Message({ title, children }: { title: string; children?: ReactNode }): JSX.Element {
   return (
-    <div className="flex flex-col items-center gap-2 py-16 text-center">
-      <h2 className="text-2xl font-black">{title}</h2>
-      {Boolean(children) && <p className="text-muted-foreground">{children}</p>}
+    <div className="flex flex-col items-center gap-3 py-16 text-center">
+      <h1 className="text-2xl font-black">{title}</h1>
+      {children}
     </div>
   );
 }
@@ -163,23 +169,38 @@ function renderContent(
   name: string,
   results: ResultListState['results'],
   { firstSearchExecuted, isLoading, hasError }: SearchStatusState,
+  retry: () => void,
 ): JSX.Element {
   if (hasError) {
-    return <Message title="Something went wrong">The Pokémon could not be loaded. Please try again.</Message>;
+    return (
+      <Message title="Something went wrong">
+        <p className="text-muted-foreground">The Pokémon could not be loaded.</p>
+        <Button variant="outline" className={CONTROL_BUTTON_CLASS} onClick={retry}>
+          Try again
+        </Button>
+      </Message>
+    );
   }
   if (!firstSearchExecuted || isLoading) {
-    return <Message title="Loading…" />;
+    return (
+      <>
+        <span className="sr-only">Loading {name}</span>
+        <DetailPlaceholder />
+      </>
+    );
   }
   const result = findRequestedPokemon(results, name);
   return result ? (
     <PokemonDetails detail={toPokemonDetail(result)} />
   ) : (
-    <Message title="Pokémon not found">No Pokémon is named “{name}”.</Message>
+    <Message title="Pokémon not found">
+      <p className="text-muted-foreground">No Pokémon is named “{name}”.</p>
+    </Message>
   );
 }
 
 export function PokemonDetailPage({ config, name }: { config: CoveoConfig; name: string }): JSX.Element {
-  const { results, status } = usePokemonLookup(config, name);
+  const { results, status, runLookup } = usePokemonLookup(config, name);
 
   useEffect((): void => {
     document.title = `${name} | ${SITE_TITLE}`;
@@ -187,16 +208,16 @@ export function PokemonDetailPage({ config, name }: { config: CoveoConfig; name:
 
   return (
     <>
-      <SiteHeader />
-      <main className="mx-auto min-h-screen w-full max-w-5xl px-(--size-gutter) pb-16">
+      <SiteHeader isPageHeading={false} />
+      <main className="mx-auto w-full max-w-5xl flex-1 px-(--size-gutter) pb-16">
         <div className="mb-4">
-          <Button asChild variant="outline" className="border-border">
+          <Button asChild variant="outline" className={CONTROL_BUTTON_CLASS}>
             <a href="/" onClick={goBackToSearch}>
               Back to search
             </a>
           </Button>
         </div>
-        {renderContent(name, results, status)}
+        <div role="status">{renderContent(name, results, status, runLookup)}</div>
       </main>
     </>
   );

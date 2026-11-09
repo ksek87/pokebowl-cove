@@ -52,6 +52,11 @@
   --size-search: 720px;
   --size-filters: 272px;
   --size-gutter: 24px;
+  --size-control: 40px;
+  --size-status-row: 44px;
+  --size-state-image: 96px;
+  --size-facet-closed: 70px;
+  --size-grid-gap: 20px;
   --size-sort-select: 190px;
   --size-sort-arrow-space: 48px;
   --size-search-box: 60px;
@@ -61,12 +66,23 @@
   --border-panel: var(--size-panel-border) solid var(--border);
   --radius-panel: 20px;
   --radius-control: 12px;
+  --radius-checkbox: 6px;
+  --space-control-inset: 6px;
+  --space-status-row: 8px;
+  --space-status-column: 12px;
+  --space-panel: 16px;
+  --focus-ring: var(--foreground);
+  --focus-width: 2px;
+  --focus-offset: 2px;
+  --motion-fast: 150ms;
+  --motion-reveal: 220ms;
+  --press-scale: 0.96;
   --text-small: 13px;
   --text-label: 15px;
   --atomic-primary: #d1352b;
   --atomic-primary-light: #e8574c;
   --atomic-primary-dark: #a92820;
-  --atomic-ring-primary: rgba(209, 53, 43, 0.35);
+  --atomic-ring-primary: var(--focus-ring);
   --atomic-primary-background: #fdecea;
   --atomic-background: var(--card);
   --atomic-on-background: var(--foreground);
@@ -126,9 +142,9 @@ atomic-layout-section[section='status'] {
   display: flex !important;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 12px;
-  min-height: 44px;
-  margin-bottom: 16px;
+  gap: var(--space-status-row) var(--space-status-column);
+  min-height: var(--size-status-row);
+  margin-bottom: var(--space-status-row);
 }
 
 atomic-layout-section[section='status'] > * {
@@ -165,13 +181,32 @@ atomic-search-box::part(textarea-spacer) {
   display: none;
 }
 
-atomic-search-box::part(input) {
+/* Atomic documents this element as the input part, but it renders the part name textarea. */
+atomic-search-box::part(textarea) {
+  color: var(--foreground);
   font-size: 1.125rem;
   font-weight: 600;
 }
 
+atomic-search-box::part(textarea)::placeholder {
+  color: var(--muted-foreground);
+  font-weight: 400;
+}
+
+atomic-search-box::part(submit-button),
+atomic-search-box::part(clear-button) {
+  width: var(--size-control);
+  height: var(--size-control);
+}
+
+atomic-search-box::part(clear-icon) {
+  color: var(--foreground);
+  stroke: currentColor;
+  stroke-width: 1;
+}
+
 atomic-search-box::part(submit-button) {
-  margin: 6px;
+  margin: var(--space-control-inset);
   color: var(--atomic-on-primary);
   background: var(--atomic-primary);
   border-radius: var(--radius-control);
@@ -182,7 +217,7 @@ atomic-search-box::part(submit-icon) {
 }
 
 atomic-facet::part(facet) {
-  padding: 16px;
+  padding: var(--space-panel);
   background: var(--card);
   border: var(--border-panel);
   border-radius: var(--radius-panel);
@@ -193,21 +228,27 @@ atomic-facet::part(label-button) {
   font-weight: 800;
 }
 
+atomic-facet::part(label-button):hover {
+  color: var(--atomic-primary-dark);
+}
+
 atomic-facet::part(value-label) {
   font-weight: 600;
 }
 
 atomic-facet::part(value-checkbox) {
-  border-radius: 6px;
+  border-radius: var(--radius-checkbox);
 }
 
-atomic-result-list::part(result-list) {
+atomic-result-list::part(result-list),
+[data-slot='result-placeholders'] {
   grid-template-columns: repeat(var(--result-columns-narrow), minmax(0, 1fr));
-  gap: 20px;
+  gap: var(--size-grid-gap);
 }
 
 @media (min-width: 1280px) {
-  atomic-result-list::part(result-list) {
+  atomic-result-list::part(result-list),
+  [data-slot='result-placeholders'] {
     grid-template-columns: repeat(var(--result-columns-wide), minmax(0, 1fr));
   }
 }
@@ -229,7 +270,7 @@ atomic-result-list::part(result-list-grid-clickable-container):hover {
 atomic-sort-dropdown::part(select) {
   width: var(--size-sort-select);
   padding-right: var(--size-sort-arrow-space);
-  height: 40px;
+  height: var(--size-control);
   background: var(--card);
   border: var(--border-panel);
   border-radius: var(--radius-control);
@@ -238,6 +279,31 @@ atomic-sort-dropdown::part(select) {
 
 atomic-layout-section[section='status'] > atomic-did-you-mean {
   flex-basis: 100%;
+}
+
+atomic-sort-dropdown::part(label),
+atomic-results-per-page::part(label) {
+  align-self: center;
+  margin: 0;
+  color: var(--foreground);
+  font-size: var(--text-small);
+  font-weight: var(--atomic-font-bold);
+  line-height: normal;
+}
+
+atomic-results-per-page::part(label)::after {
+  content: ':';
+}
+
+atomic-results-per-page::part(buttons) {
+  align-items: center;
+}
+
+/* Below the width where the grid gains a column, the row needs this space for the summary. */
+@media (max-width: 1279.98px) {
+  atomic-results-per-page::part(label) {
+    display: none;
+  }
 }
 
 atomic-query-summary::part(container) {
@@ -255,6 +321,7 @@ atomic-pager::part(next-button) {
 atomic-results-per-page::part(button) {
   border: var(--border-panel);
   border-radius: var(--radius-control);
+  font-size: var(--text-label);
   font-weight: 800;
 }
 
@@ -265,7 +332,123 @@ atomic-results-per-page::part(active-button) {
   border-color: var(--atomic-primary);
 }
 
+/* One focus style, offset so it stays visible on the red selected controls. */
+atomic-search-box::part(submit-button):focus-visible,
+atomic-search-box::part(clear-button):focus-visible,
+atomic-sort-dropdown::part(select):focus-visible,
+atomic-results-per-page::part(button):focus-visible,
+atomic-pager::part(page-button):focus-visible,
+atomic-pager::part(previous-button):focus-visible,
+atomic-pager::part(next-button):focus-visible,
+atomic-facet::part(label-button):focus-visible,
+atomic-facet::part(value-checkbox):focus-visible,
+atomic-result-list::part(result-list-grid-clickable):focus-visible,
+[data-slot='pokemon-card'] a:focus-visible,
+[data-slot='home-link']:focus-visible {
+  outline: var(--focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+atomic-pager::part(page-button):hover,
+atomic-pager::part(previous-button):hover,
+atomic-pager::part(next-button):hover,
+atomic-results-per-page::part(button):hover,
+atomic-sort-dropdown::part(select):hover {
+  border-color: var(--border-strong);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  atomic-pager::part(page-button),
+  atomic-pager::part(previous-button),
+  atomic-pager::part(next-button),
+  atomic-results-per-page::part(button),
+  atomic-sort-dropdown::part(select),
+  atomic-search-box::part(submit-button),
+  atomic-facet::part(label-button) {
+    transition:
+      background-color var(--motion-fast),
+      border-color var(--motion-fast),
+      color var(--motion-fast),
+      transform var(--motion-fast);
+  }
+
+  atomic-pager::part(page-button):active,
+  atomic-pager::part(previous-button):active,
+  atomic-pager::part(next-button):active,
+  atomic-results-per-page::part(button):active,
+  atomic-search-box::part(submit-button):active {
+    transform: scale(var(--press-scale));
+  }
+
+  atomic-result-list::part(outline),
+  atomic-facet::part(values) {
+    animation: reveal var(--motion-reveal) ease-out;
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Placeholders fill the gap before the first response, and Atomic's placeholders are hidden in favor of them. */
+[data-slot='result-placeholders'],
+[data-slot='facet-placeholders'] {
+  display: none;
+}
+
+atomic-search-interface:not(
+    .atomic-search-interface-search-executed,
+    .atomic-search-interface-no-results,
+    .atomic-search-interface-error
+  )
+  :is([data-slot='result-placeholders']) {
+  display: grid;
+}
+
+atomic-search-interface:not(
+    .atomic-search-interface-search-executed,
+    .atomic-search-interface-no-results,
+    .atomic-search-interface-error
+  )
+  [data-slot='facet-placeholders'] {
+  display: block;
+}
+
+atomic-search-interface:not(
+    .atomic-search-interface-search-executed,
+    .atomic-search-interface-no-results,
+    .atomic-search-interface-error
+  )
+  :is(atomic-result-list, atomic-facet-manager, atomic-did-you-mean, atomic-breadbox) {
+  display: none;
+}
+
+atomic-sort-dropdown::part(placeholder) {
+  height: var(--size-control);
+  margin: 0;
+}
+
+[data-slot='facet-placeholders'] [data-slot='facet-placeholder'] > span {
+  margin-bottom: 0;
+}
+
+[data-slot='facet-placeholder'] {
+  height: var(--size-facet-closed);
+  padding: var(--space-panel);
+  background: var(--card);
+  border: var(--border-panel);
+  border-radius: var(--radius-panel);
+}
+
 @layer base {
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+  }
+
   body {
     background: var(--background);
     color: var(--foreground);

@@ -24,6 +24,8 @@ export const FACET_VALUE_LIMIT = 100;
 // Atomic collapses every facet after this many, so zero starts them all collapsed.
 export const EXPANDED_FACETS_AT_LOAD = 0;
 
+export const FACET_PLACEHOLDER_COUNT = 2;
+
 export const SEARCH_HUB = 'pokebowl-search';
 
 export const POKEMON_FIELDS = {

@@ -1,4 +1,5 @@
 import {
+  loadBreadcrumbActions,
   loadPaginationActions,
   loadQueryActions,
   loadSearchActions,
@@ -18,6 +19,27 @@ function isSearchBoxClearClick(event: Event): boolean {
   );
 }
 
+/** Runs the search for everything, from the first page. */
+export function showAll(engine: SearchEngine, { clearFilters = false } = {}): void {
+  if (clearFilters) {
+    engine.dispatch(loadBreadcrumbActions(engine).deselectAllBreadcrumbs());
+  }
+  const { updatePage } = loadPaginationActions(engine);
+  const { updateQuery } = loadQueryActions(engine);
+  const { executeSearch } = loadSearchActions(engine);
+  const { logSearchboxSubmit } = loadSearchAnalyticsActions(engine);
+  engine.dispatch(updateQuery({ q: '' }));
+  engine.dispatch(updatePage(FIRST_PAGE));
+  engine.dispatch(executeSearch(logSearchboxSubmit()));
+}
+
+/** Runs the current search again after a failure. */
+export function retrySearch(engine: SearchEngine): void {
+  const { executeSearch } = loadSearchActions(engine);
+  const { logInterfaceLoad } = loadSearchAnalyticsActions(engine);
+  engine.dispatch(executeSearch(logInterfaceLoad()));
+}
+
 /**
  * Atomic's clear button only empties the text, and the previous results stay
  * on screen. This runs the search for everything when that button is used.
@@ -28,13 +50,7 @@ export function showAllWhenCleared(engine: SearchEngine): () => void {
     if (!isSearchBoxClearClick(event) || !engine.state.query?.q) {
       return;
     }
-    const { updatePage } = loadPaginationActions(engine);
-    const { updateQuery } = loadQueryActions(engine);
-    const { executeSearch } = loadSearchActions(engine);
-    const { logSearchboxSubmit } = loadSearchAnalyticsActions(engine);
-    engine.dispatch(updateQuery({ q: '' }));
-    engine.dispatch(updatePage(FIRST_PAGE));
-    engine.dispatch(executeSearch(logSearchboxSubmit()));
+    showAll(engine);
   }
 
   document.addEventListener('click', onClick);

@@ -1,21 +1,16 @@
-import { buildSearchStatus, type SearchEngine } from '@coveo/headless';
-import { type JSX, useEffect, useMemo, useState } from 'react';
+import type { SearchEngine } from '@coveo/headless';
+import { type JSX, useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { parsePokedexNumber } from './queryRewrite.ts';
+import { useSearchStatus } from './useSearchStatus.ts';
 
 export function PokedexLookupNotice({ engine }: { engine: SearchEngine }): JSX.Element | null {
-  const statusController = useMemo(() => buildSearchStatus(engine), [engine]);
-  const [{ hasResults, hasError }, setStatus] = useState(statusController.state);
+  const { hasResults, hasError } = useSearchStatus(engine);
   const [query, setQuery] = useState(engine.state.query?.q ?? '');
 
   useEffect(
     () => engine.subscribe((): void => setQuery(engine.state.query?.q ?? '')),
     [engine],
-  );
-
-  useEffect(
-    () => statusController.subscribe((): void => setStatus(statusController.state)),
-    [statusController],
   );
 
   const pokedexNumber = parsePokedexNumber(query);

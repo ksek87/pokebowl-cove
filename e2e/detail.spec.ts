@@ -13,7 +13,7 @@ test.beforeEach(async ({ page }): Promise<void> => {
 
 async function openDetail(page: Page, name: string): Promise<void> {
   await page.goto(pokemonDetailHref(name));
-  await expect(page.getByRole('heading', { level: 2, name })).toBeVisible({ timeout: NETWORK_TIMEOUT });
+  await expect(page.getByRole('heading', { level: 1, name })).toBeVisible({ timeout: NETWORK_TIMEOUT });
 }
 
 test('shows every detail of a Pokémon at a shareable URL', async ({ page }): Promise<void> => {
@@ -67,7 +67,7 @@ test('opens from a search result, logs the click, and returns to the search', as
 
   await click;
   await expect(page).toHaveURL(/\?pokemon=Charizard/);
-  await expect(page.getByRole('heading', { level: 2, name: 'Charizard' })).toBeVisible({ timeout: NETWORK_TIMEOUT });
+  await expect(page.getByRole('heading', { level: 1, name: 'Charizard' })).toBeVisible({ timeout: NETWORK_TIMEOUT });
 
   await page.getByRole('link', { name: /back to search/i }).click();
 

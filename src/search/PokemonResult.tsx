@@ -14,7 +14,15 @@ function text(value: unknown): string {
   return typeof value === 'string' ? value : '';
 }
 
-export function PokemonImage({ image, name }: { image: string; name: string }): JSX.Element {
+export function PokemonImage({
+  image,
+  name,
+  className,
+}: {
+  image: string;
+  name: string;
+  className?: string;
+}): JSX.Element {
   const [failed, setFailed] = useState(false);
   const usesFallback = failed || !image;
 
@@ -23,6 +31,7 @@ export function PokemonImage({ image, name }: { image: string; name: string }): 
       data-slot="pokemon-image"
       className={cn(
         'size-full object-contain mix-blend-multiply transition-transform duration-150 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100',
+        className,
         usesFallback && 'size-[45%] opacity-50 mix-blend-normal',
       )}
       src={usesFallback ? POKEBALL_IMAGE : image}
@@ -59,7 +68,7 @@ export function PokemonResult({ result }: { result: Result }): JSX.Element {
     <article
       ref={shadowStyles}
       data-slot="pokemon-card"
-      className="group flex h-full flex-col overflow-hidden rounded-(--radius-panel) border-2 border-b-(length:--size-card-edge) border-border bg-card font-sans transition duration-150 hover:-translate-y-1 hover:border-border-strong motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+      className="group flex h-full flex-col overflow-hidden rounded-(--radius-panel) border-2 border-b-(length:--size-card-edge) border-border bg-card font-sans transition duration-150 hover:-translate-y-1 hover:border-border-strong active:translate-y-0 active:scale-[0.99] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100"
     >
       <div
         className="flex aspect-[4/3] items-center justify-center overflow-hidden p-3.5"

@@ -1,12 +1,13 @@
 import type { SearchEngine } from '@coveo/headless';
 import { afterEach, expect, it, type Mock, vi } from 'vitest';
-import { showAllWhenCleared } from './showAllWhenCleared.ts';
+import { retrySearch, showAll, showAllWhenCleared } from './showAllWhenCleared.ts';
 
 vi.mock('@coveo/headless', () => ({
+  loadBreadcrumbActions: (): object => ({ deselectAllBreadcrumbs: (): string => 'clear-filters' }),
   loadPaginationActions: (): object => ({ updatePage: (page: unknown): object => ({ updatePage: page }) }),
   loadQueryActions: (): object => ({ updateQuery: (payload: unknown): object => ({ updateQuery: payload }) }),
   loadSearchActions: (): object => ({ executeSearch: (action: unknown): object => ({ executeSearch: action }) }),
-  loadSearchAnalyticsActions: (): object => ({ logSearchboxSubmit: (): string => 'submit' }),
+  loadSearchAnalyticsActions: (): object => ({ logSearchboxSubmit: (): string => 'submit', logInterfaceLoad: (): string => 'load' }),
 }));
 
 const FIRST_PAGE = 1;
@@ -78,4 +79,25 @@ it('stops listening when cleaned up', (): void => {
   click(addButton('atomic-search-box', 'clear-button'));
 
   expect(engine.dispatch).not.toHaveBeenCalled();
+});
+
+it('can also remove every filter when showing all', (): void => {
+  const engine = { state: { query: { q: 'zzz' } }, dispatch: vi.fn() };
+
+  showAll(engine as unknown as SearchEngine, { clearFilters: true });
+
+  expect(engine.dispatch.mock.calls.map(([action]) => action)).toEqual([
+    'clear-filters',
+    { updateQuery: { q: '' } },
+    { updatePage: FIRST_PAGE },
+    { executeSearch: 'submit' },
+  ]);
+});
+
+it('runs the same search again on retry', (): void => {
+  const engine = { state: { query: { q: 'zzz' } }, dispatch: vi.fn() };
+
+  retrySearch(engine as unknown as SearchEngine);
+
+  expect(engine.dispatch.mock.calls.map(([action]) => action)).toEqual([{ executeSearch: 'load' }]);
 });

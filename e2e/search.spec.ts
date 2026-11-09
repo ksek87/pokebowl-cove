@@ -274,7 +274,7 @@ test('clearing a search on a later page returns to the first page', async ({ pag
 test('hides the Pokédex notice and page size when a number matches nothing', async ({ page }): Promise<void> => {
   await page.goto('/#q=9999');
 
-  await expect(page.locator('atomic-no-results')).toContainText(/.+/, { timeout: NETWORK_TIMEOUT });
+  await expect(page.locator('[data-slot="search-state"]')).toContainText(/.+/, { timeout: NETWORK_TIMEOUT });
   await expect(page.getByText('Pokédex lookup')).toBeHidden();
   await expect(pageSizeChoices(page)).toHaveCount(NO_RESULTS);
 });
@@ -412,7 +412,7 @@ for (const width of DESKTOP_WIDTHS) {
   test(`centers the no-results message on the page at ${width}px`, async ({ page }): Promise<void> => {
     await page.setViewportSize({ width, height: WINDOW_HEIGHT });
     await page.goto('/#q=9999');
-    const message = page.locator('atomic-no-results [part="no-results"]');
+    const message = page.locator('[data-slot="search-state"]');
     await expect(message).toBeVisible({ timeout: NETWORK_TIMEOUT });
 
     expect(Math.abs(centerOf(await boxOf(message)) - width / HALF)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
@@ -423,7 +423,7 @@ for (const width of DESKTOP_WIDTHS) {
     await page.setViewportSize({ width, height: WINDOW_HEIGHT });
     await page.route(/\/rest\/search\/v2(?:\?|$)/, async (route): Promise<void> => route.abort());
     await page.goto('/');
-    const message = page.locator('atomic-query-error [part="icon"]');
+    const message = page.locator('[data-slot="search-state"]');
     await expect(message).toBeVisible({ timeout: NETWORK_TIMEOUT });
 
     expect(Math.abs(centerOf(await boxOf(message)) - width / HALF)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);

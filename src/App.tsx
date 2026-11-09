@@ -4,9 +4,7 @@ import {
   AtomicFacet,
   AtomicFacetManager,
   AtomicLayoutSection,
-  AtomicNoResults,
   AtomicPager,
-  AtomicQueryError,
   AtomicQuerySummary,
   AtomicRefineToggle,
   AtomicResultList,
@@ -33,6 +31,8 @@ import {
   SORT_OPTIONS,
 } from './search/settings.ts';
 import { PokedexLookupNotice } from './search/PokedexLookupNotice.tsx';
+import { FacetPlaceholders, ResultPlaceholders } from './search/LoadingPlaceholders.tsx';
+import { SearchStateMessage } from './search/SearchStateMessage.tsx';
 import { SiteHeader } from './search/SiteHeader.tsx';
 
 const GRID_SETTINGS = {
@@ -55,13 +55,14 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto min-h-screen max-w-(--size-content)" style={GRID_SETTINGS}>
+      <main className="mx-auto w-full max-w-(--size-content) flex-1" style={GRID_SETTINGS}>
         <AtomicSearchInterface engine={engine} fieldsToInclude={POKEMON_RESULT_FIELDS}>
           <AtomicSearchLayout>
             <AtomicLayoutSection section="search">
               <AtomicSearchBox />
             </AtomicLayoutSection>
             <AtomicLayoutSection section="facets">
+              <FacetPlaceholders />
               <AtomicFacetManager collapseFacetsAfter={EXPANDED_FACETS_AT_LOAD}>
                 <AtomicFacet
                   field={POKEMON_FIELDS.type}
@@ -81,29 +82,29 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
             </AtomicLayoutSection>
             <AtomicLayoutSection section="main">
               <AtomicLayoutSection section="status">
-                <AtomicBreadbox />
-              <PokedexLookupNotice engine={engine} />
-              <AtomicDidYouMean />
                 <AtomicQuerySummary />
-              <AtomicSortDropdown>
-                {SORT_OPTIONS.map(({ label, expression }) => (
-                  <AtomicSortExpression key={label} label={label} expression={expression} />
-                ))}
-              </AtomicSortDropdown>
-              <AtomicResultsPerPage
-                choicesDisplayed={PAGE_SIZES.join(',')}
-                initialChoice={DEFAULT_PAGE_SIZE}
-              />
+                <AtomicSortDropdown>
+                  {SORT_OPTIONS.map(({ label, expression }) => (
+                    <AtomicSortExpression key={label} label={label} expression={expression} />
+                  ))}
+                </AtomicSortDropdown>
+                <AtomicResultsPerPage
+                  choicesDisplayed={PAGE_SIZES.join(',')}
+                  initialChoice={DEFAULT_PAGE_SIZE}
+                />
+                <AtomicDidYouMean />
+                <PokedexLookupNotice engine={engine} />
+                <AtomicBreadbox />
                 <AtomicRefineToggle />
               </AtomicLayoutSection>
               <AtomicLayoutSection section="results">
+                <ResultPlaceholders />
                 <AtomicResultList
                   display="grid"
                   imageSize="none"
                   template={renderResult}
                 />
-                <AtomicNoResults />
-                <AtomicQueryError />
+                <SearchStateMessage engine={engine} />
               </AtomicLayoutSection>
             </AtomicLayoutSection>
             <AtomicLayoutSection section="pagination">

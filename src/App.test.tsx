@@ -59,6 +59,8 @@ vi.mock('@coveo/atomic-react', () => {
   };
 });
 
+vi.mock('./search/SearchStateMessage.tsx', () => ({ SearchStateMessage: (): null => null }));
+
 vi.mock('./search/PokedexLookupNotice.tsx', () => ({ PokedexLookupNotice: (): null => null }));
 
 const config = { organizationId: 'test-org', searchApiKey: 'test-key' };

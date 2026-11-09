@@ -1,7 +1,9 @@
 import type { JSX } from 'react';
 import { POKEBALL_IMAGE } from './settings.ts';
 
-export function SiteHeader(): JSX.Element {
+export function SiteHeader({ isPageHeading = true }: { isPageHeading?: boolean }): JSX.Element {
+  const Title = isPageHeading ? 'h1' : 'p';
+
   return (
     <header className="flex flex-col items-center px-(--size-gutter) pt-10 pb-4 text-center">
       <a
@@ -15,7 +17,7 @@ export function SiteHeader(): JSX.Element {
           src={POKEBALL_IMAGE}
           alt=""
         />
-        <h1 className="text-5xl/14 font-black tracking-tight">Pokémon Search</h1>
+        <Title className="text-5xl/14 font-black tracking-tight">Pokémon Search</Title>
       </a>
     </header>
   );
