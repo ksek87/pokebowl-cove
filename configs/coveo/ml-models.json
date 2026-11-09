@@ -33,7 +33,8 @@
         "configurationType": "DEFAULT_QUERIES",
         "languageCode": "en",
         "appliedThrough": "Machine Learning API, Advanced Model Configurations, PUT configs/{configurationType}",
-        "result": "HTTP 200 reported by the user; queries served by the Query Suggestion API after the rebuild"
+        "result": "HTTP 200 reported by the user; queries served by the Query Suggestion API after the rebuild",
+        "pending": "The ranked version of the file has not been uploaded"
       }
     }
   ],

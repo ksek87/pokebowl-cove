@@ -28,7 +28,7 @@ The assessment defines four tiers of required work and a panel presentation. A t
 | Advanced | Pokémon detail page | Built on `integration/overnight`, not yet merged to `main` | PC-70 |
 | Advanced | Technical deep dive presentation | Not started | PC-100 |
 | Advanced | Enterprise customer value presentation | Not started | PC-102 |
-| Bonus | Passage Retrieval: at minimum, understand it and hold a point of view | Not started; access must be requested | PC-02, PC-80 to PC-83 |
+| Bonus | Passage Retrieval: at minimum, understand it and hold a point of view | Point of view written (`docs/passage-retrieval.md`); hands-on setup needs access | PC-02, PC-80 to PC-83 |
 
 Evals, performance baselines and interface polish are additions we chose and are not assessment requirements. They support the presentation.
 

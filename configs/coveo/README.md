@@ -11,7 +11,7 @@ Copies of the configuration applied in the Coveo Administration Console. The con
 | `extensions/reconstruct_body.py` | Pre-conversion extension that rewrites stat tables and type grids as sentences | Exact script pasted into the `pre-reconstruct-body` extension, which requests only **Original file** item data. Tests are in `test_reconstruct_body.py` |
 | `query-pipeline.json` | The `pokebowl-search` query pipeline, its condition and filter rule | Our record of the console settings, not a Coveo import format |
 | `ml-models.json` | The Semantic Encoder and RGA models, their content and pipeline association | Our record of the console settings, not a Coveo import format |
-| `query-suggestions-default-queries.csv` | Suggestion candidates for the Query Suggestions model: Pokémon names, Types, Generations, Type pairs, abilities and species | Exact file uploaded through the Advanced Model Configurations API as `DEFAULT_QUERIES` for `en`. Generated, do not edit by hand |
+| `query-suggestions-default-queries.csv` | Suggestion candidates for the Query Suggestions model: Pokémon names, Types, Generations, Type pairs, abilities and species | File for upload through the Advanced Model Configurations API as `DEFAULT_QUERIES` for `en`. Coveo has the first version, without importance values, until the ranked version is uploaded. Generated, do not edit by hand |
 | `api-keys.json` | Settings of the browser search key, without its value | Our record of the console settings, not a Coveo import format |
 | `test-source.json` | Settings of the single-Pokémon test source | Our record of the console settings, not a Coveo import format |
 

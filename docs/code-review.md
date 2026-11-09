@@ -1,8 +1,8 @@
 # Code Review
 
-This document reviews the Pokémon search application in this repository. The application is built with React and Vite on Coveo Atomic and Headless, and it searches an index of pokemondb.net pages. The findings below were written before any fixes.
+This document reviews the Pokémon search application in this repository. The application is built with React and Vite on Coveo Atomic and Headless, and it searches an index of pokemondb.net pages. The findings below were written before any fixes, so they name files and states as they were then. `src/search/ResultsPerPage.tsx` has since been replaced by Atomic's control.
 
-**Fix status, November 8, 2026.** On branch `fix/code-review-findings`, each with a test written first where behavior changed:
+**Fix status, November 8, 2026.** On branch `integration/overnight`, each with a test written first where behavior changed:
 
 - **Fixed:** CR-01, CR-02, CR-03, CR-04, CR-05, CR-06, CR-07, CR-08, CR-09, CR-10, CR-12, CR-13, CR-14, CR-15 and CR-19.
 - **Fixed by decision:** CR-16. Best match stays the default label, following the common industry pattern. See `docs/architecture.md`, section Search behavior.
