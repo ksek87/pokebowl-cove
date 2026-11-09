@@ -15,9 +15,15 @@ const LARGE_DESKTOP = 2560;
 const DESKTOP_WIDTHS = [NARROW_DESKTOP, LAPTOP, FULL_HD, LARGE_DESKTOP];
 const NEXT_PAGE_SIZE = PAGE_SIZES.find((size): boolean => size !== DEFAULT_PAGE_SIZE);
 const HALF = 2;
+// Whole cards visible before filters moved out of the left column.
+const MEASURED_LAPTOP_HEIGHT = 800;
+const MEASURED_LAPTOP_CARDS = 4;
+const MEASURED_FULL_HD_HEIGHT = 1080;
+const MEASURED_FULL_HD_CARDS = 8;
+const MEASURED_LARGE_HEIGHT = 1440;
+const MEASURED_LARGE_CARDS = 12;
 const PAGES_SKIPPED = 2;
 const MIN_SPACE_BELOW_PAGER_PX = 24;
-const FIRST_INDEX = 0;
 const SETTLE_MS = 1_000;
 const LONG_QUERY_REPEATS = 4;
 const LONG_QUERY = 'which fire type pokemon can learn to fly and also resist grass attacks '.repeat(
@@ -46,8 +52,12 @@ function facet(page: Page, field: string): Locator {
   return page.locator(`atomic-facet[field="${field}"]`);
 }
 
+function filterButton(page: Page, field: string): Locator {
+  return page.locator(`atomic-popover:has(atomic-facet[field="${field}"]) [part~="popover-button"]`);
+}
+
 async function expandFacet(page: Page, field: string): Promise<void> {
-  await facet(page, field).locator('[part="label-button"]').click({ timeout: NETWORK_TIMEOUT });
+  await filterButton(page, field).click({ timeout: NETWORK_TIMEOUT });
 }
 
 async function openDesktopPage(page: Page, width: number): Promise<void> {
@@ -138,14 +148,11 @@ for (const width of DESKTOP_WIDTHS) {
     const windowWidth = await page.evaluate((): number => document.documentElement.clientWidth);
     const search = await boxOf(page.locator('atomic-search-box'));
     const header = await boxOf(page.locator('[data-slot="home-link"]'));
-    const facets = await boxOf(page.locator('atomic-facet').first());
     const results = await boxOf(page.locator('atomic-result-list'));
-    const status = await boxOf(page.locator("atomic-layout-section[section='status']"));
 
     expect(Math.abs(search.x + search.x + search.width - windowWidth)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
     expect(Math.abs(header.x + header.x + header.width - windowWidth)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
-    expect(Math.abs(facets.x + results.x + results.width - windowWidth)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
-    expect(Math.abs(facets.y - status.y)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
+    expect(Math.abs(results.x + results.x + results.width - windowWidth)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
     expect(search.width).toBeLessThan(results.width);
   });
 }
@@ -349,13 +356,11 @@ function centerOf(box: Box): number {
 
 async function expectPagerCenteredBelowColumns(page: Page, width: number): Promise<void> {
   const pager = await boxOf(page.locator('atomic-pager [part="buttons"]'));
-  const facets = await boxOf(page.locator('atomic-layout-section[section="facets"]'));
   const grid = await boxOf(page.locator('atomic-result-list'));
   const logoAndTitle = await boxOf(page.locator('[data-slot="home-link"]'));
 
   expect(Math.abs(centerOf(pager) - width / HALF)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
   expect(Math.abs(centerOf(pager) - centerOf(logoAndTitle))).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
-  expect(pager.y).toBeGreaterThanOrEqual(facets.y + facets.height);
   expect(pager.y).toBeGreaterThanOrEqual(grid.y + grid.height);
 
   const pageHeight = await page.evaluate((): number => document.documentElement.scrollHeight);
@@ -380,19 +385,35 @@ for (const width of DESKTOP_WIDTHS) {
     await expectPagerCenteredBelowColumns(page, width);
   });
 
-  test(`keeps the pager centered below taller open facets at ${width}px`, async ({ page }): Promise<void> => {
+  test(`keeps the filters in one centered row below the search box at ${width}px`, async ({ page }): Promise<void> => {
     await openDesktopPage(page, width);
-    await expect(page.locator('atomic-pager [part="buttons"]')).toBeVisible();
-    const headers = page.locator('atomic-facet [part="label-button"]');
-    const facetCount = await headers.count();
-    for (let index = FIRST_INDEX; index < facetCount; index += ONE_RESULT) {
-      await headers.nth(index).click();
-    }
-    await expect(page.locator('atomic-facet').first().getByRole('checkbox').first()).toBeVisible();
+    await expect(filterButton(page, POKEMON_FIELDS.type)).toBeVisible();
 
-    const facets = await boxOf(page.locator('atomic-layout-section[section="facets"]'));
-    const grid = await boxOf(page.locator('atomic-result-list'));
-    expect(facets.height).toBeGreaterThan(grid.height);
+    const search = await boxOf(page.locator('atomic-search-box'));
+    const first = await boxOf(filterButton(page, POKEMON_FIELDS.type));
+    const second = await boxOf(filterButton(page, POKEMON_FIELDS.generation));
+    const rowCenter = (first.x + second.x + second.width) / HALF;
+
+    expect(Math.abs(first.y - second.y)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
+    expect(first.y).toBeGreaterThanOrEqual(search.y + search.height);
+    expect(Math.abs(rowCenter - centerOf(search))).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
+  });
+
+  test(`shows an open filter above the results at ${width}px`, async ({ page }): Promise<void> => {
+    await openDesktopPage(page, width);
+    await expandFacet(page, POKEMON_FIELDS.type);
+    const option = facet(page, POKEMON_FIELDS.type).getByRole('checkbox', { name: /Fire/ });
+    await expect(option).toBeVisible();
+
+    const box = await boxOf(option);
+    const isOnTop = await option.evaluate(
+      (element, point): boolean => {
+        const hit = document.elementFromPoint(point.x, point.y);
+        return hit !== null && (hit === (element.getRootNode() as ShadowRoot).host || hit.closest('atomic-popover') !== null);
+      },
+      { x: box.x + box.width / HALF, y: box.y + box.height / HALF },
+    );
+    expect(isOnTop).toBe(true);
     await expectPagerCenteredBelowColumns(page, width);
   });
 
@@ -434,11 +455,60 @@ for (const width of DESKTOP_WIDTHS) {
 for (const field of [POKEMON_FIELDS.type, POKEMON_FIELDS.generation]) {
   test(`starts the ${field} facet collapsed and expands it on click`, async ({ page }): Promise<void> => {
     await openDesktopPage(page, LAPTOP);
-    await expect(facet(page, field).locator('[part="label-button"]')).toBeVisible({ timeout: NETWORK_TIMEOUT });
+    await expect(filterButton(page, field)).toBeVisible({ timeout: NETWORK_TIMEOUT });
     await expect(facet(page, field).getByRole('checkbox')).toHaveCount(NO_RESULTS);
 
     await expandFacet(page, field);
 
     await expect(facet(page, field).getByRole('checkbox').first()).toBeVisible();
   });
+}
+
+for (const [width, height, cardsBefore] of [
+  [LAPTOP, MEASURED_LAPTOP_HEIGHT, MEASURED_LAPTOP_CARDS],
+  [FULL_HD, MEASURED_FULL_HD_HEIGHT, MEASURED_FULL_HD_CARDS],
+  [LARGE_DESKTOP, MEASURED_LARGE_HEIGHT, MEASURED_LARGE_CARDS],
+]) {
+  test(`shows more whole cards than the left-column layout, up to the page size, at ${width}x${height}`, async ({ page }): Promise<void> => {
+    await page.setViewportSize({ width, height });
+    await page.goto('/');
+    await expect(page.locator('[data-slot="pokemon-card"]').first()).toBeVisible({ timeout: NETWORK_TIMEOUT });
+    await expect(page.locator('[data-slot="pokemon-card"]')).toHaveCount(DEFAULT_PAGE_SIZE);
+
+    const whole = await page.locator('[data-slot="pokemon-card"]').evaluateAll(
+      (cards): number =>
+        cards.filter((card) => {
+          const { top, bottom } = card.getBoundingClientRect();
+          return top >= 0 && bottom <= window.innerHeight;
+        }).length,
+    );
+    // The default page size caps the count, so a window that already showed them all can only match it.
+    expect(whole).toBeGreaterThanOrEqual(Math.min(cardsBefore + ONE_RESULT, DEFAULT_PAGE_SIZE));
+  });
+}
+
+test('shows exactly the default number of cards on the home page', async ({ page }): Promise<void> => {
+  await page.goto('/');
+
+  await expect(page.locator('atomic-result')).toHaveCount(DEFAULT_PAGE_SIZE, { timeout: NETWORK_TIMEOUT });
+});
+
+for (const width of [NARROW_DESKTOP, LAPTOP]) {
+  for (const size of PAGE_SIZES) {
+    test(`fills every row at ${width}px with ${size} results`, async ({ page }): Promise<void> => {
+      await page.setViewportSize({ width, height: WINDOW_HEIGHT });
+      await page.goto(`/#numberOfResults=${size}`);
+      await expect(page.locator('atomic-result')).toHaveCount(size, { timeout: NETWORK_TIMEOUT });
+
+      const tops = await page
+        .locator('atomic-result')
+        .evaluateAll((results): number[] => results.map((r): number => Math.round(r.getBoundingClientRect().top)));
+      const rowCounts = new Map<number, number>();
+      tops.forEach((top): void => {
+        rowCounts.set(top, (rowCounts.get(top) ?? NO_RESULTS) + ONE_RESULT);
+      });
+      expect([...rowCounts.keys()].length * Math.max(...rowCounts.values())).toBe(size);
+      expect(new Set(rowCounts.values()).size).toBe(ONE_RESULT);
+    });
+  }
 }

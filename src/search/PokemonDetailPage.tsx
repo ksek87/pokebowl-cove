@@ -115,22 +115,28 @@ function Stats({ detail }: { detail: PokemonDetail }): JSX.Element {
   );
 }
 
-function PokemonDetails({ detail }: { detail: PokemonDetail }): JSX.Element {
+function PokemonDetails({ config, detail }: { config: CoveoConfig; detail: PokemonDetail }): JSX.Element {
   return (
-    <Card className={PANEL_CARD_CLASS}>
-      <CardContent className="grid p-0 lg:grid-cols-2">
+    <Card className={`relative ${PANEL_CARD_CLASS} overflow-visible`}>
+      {detail.stats.length ? (
+        <div className="absolute top-3 right-3 z-10">
+          <AskAboutPokemon config={config} name={detail.name} />
+        </div>
+      ) : null}
+      <CardContent className="grid p-0 lg:grid-cols-(--detail-columns)">
         <div
-          className="flex aspect-square items-center lg:aspect-auto justify-center p-10"
+          data-slot="detail-artwork"
+          className="flex items-center justify-center rounded-t-(--radius-panel) p-6 lg:rounded-tr-none lg:rounded-bl-(--radius-panel)"
           style={{ background: cardTint(detail.types) }}
         >
           <PokemonImage image={detail.image} name={detail.name} className="size-auto max-h-full max-w-full" />
         </div>
-        <div className="grid content-start gap-5 p-8">
+        <div data-slot="detail-facts" className="grid content-start gap-4 p-6">
           <div>
             {Boolean(detail.number) && (
               <p className="text-(length:--text-label) font-bold text-muted-foreground">#{detail.number}</p>
             )}
-            <h1 className="text-4xl font-black tracking-tight">{detail.name}</h1>
+            <h1 className="min-w-0 text-4xl font-black tracking-tight">{detail.name}</h1>
             <ul className="mt-3 flex flex-wrap gap-1.5">
               {detail.types.map((type) => (
                 <li key={type}>
@@ -147,7 +153,7 @@ function PokemonDetails({ detail }: { detail: PokemonDetail }): JSX.Element {
               ))}
             </ul>
           </div>
-          <dl className="grid grid-cols-2 gap-4">
+          <dl className="grid grid-cols-2 gap-3">
             <Fact label="Species">{detail.species}</Fact>
             <Fact label="Generation">
               <a
@@ -162,14 +168,14 @@ function PokemonDetails({ detail }: { detail: PokemonDetail }): JSX.Element {
             <Fact label="Weight">{detail.weight}</Fact>
             <Fact label="Abilities">{detail.abilities.join(', ')}</Fact>
           </dl>
-          <section aria-label="Base stats">
-            <h2 className="mb-2 text-lg font-extrabold">Base stats</h2>
-            <Stats detail={detail} />
-          </section>
           <a className="font-bold text-primary underline" href={detail.sourceUrl}>
             {sourceLinkLabel(detail.name)}
           </a>
         </div>
+        <section data-slot="detail-stats" aria-label="Base stats" className="p-6">
+          <h2 className="mb-2 text-lg font-extrabold">Base stats</h2>
+          <Stats detail={detail} />
+        </section>
       </CardContent>
     </Card>
   );
@@ -189,6 +195,7 @@ function renderContent(
   results: ResultListState['results'],
   { firstSearchExecuted, isLoading, hasError }: SearchStatusState,
   retry: () => void,
+  config: CoveoConfig,
 ): JSX.Element {
   if (hasError) {
     return (
@@ -210,7 +217,7 @@ function renderContent(
   }
   const result = findRequestedPokemon(results, name);
   return result ? (
-    <PokemonDetails detail={toPokemonDetail(result)} />
+    <PokemonDetails config={config} detail={toPokemonDetail(result)} />
   ) : (
     <Message title="Pokémon not found">
       <p className="text-muted-foreground">No Pokémon is named “{name}”.</p>
@@ -230,7 +237,7 @@ export function PokemonDetailPage({ config, name }: { config: CoveoConfig; name:
   return (
     <>
       <SiteHeader isPageHeading={false} />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-(--size-gutter) pb-16">
+      <main className="mx-auto w-full max-w-(--size-content) flex-1 px-(--size-gutter) pb-16">
         <div className="mb-4">
           <Button asChild variant="outline" className={CONTROL_BUTTON_CLASS}>
             <a href="/" onClick={goBackToSearch}>
@@ -238,9 +245,8 @@ export function PokemonDetailPage({ config, name }: { config: CoveoConfig; name:
             </a>
           </Button>
         </div>
-        <div role="status">{renderContent(name, results, status, runLookup)}</div>
+        <div role="status">{renderContent(name, results, status, runLookup, config)}</div>
         {result ? <PokedexEntries engine={engine} result={result} sourceUrl={result.clickUri} /> : null}
-        {result && toPokemonDetail(result).stats.length ? <AskAboutPokemon config={config} name={name} /> : null}
       </main>
     </>
   );

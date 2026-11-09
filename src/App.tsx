@@ -2,10 +2,10 @@ import {
   AtomicBreadbox,
   AtomicDidYouMean,
   AtomicFacet,
-  AtomicFacetManager,
   AtomicGeneratedAnswer,
   AtomicLayoutSection,
   AtomicPager,
+  AtomicPopover,
   AtomicQuerySummary,
   AtomicRefineToggle,
   AtomicResultList,
@@ -24,7 +24,6 @@ import { showAllWhenCleared } from './search/showAllWhenCleared.ts';
 import { POKEMON_RESULT_FIELDS, PokemonResult, PokemonResultLink } from './search/PokemonResult.tsx';
 import {
   DEFAULT_PAGE_SIZE,
-  EXPANDED_FACETS_AT_LOAD,
   FACET_VALUE_LIMIT,
   PAGE_SIZES,
   POKEMON_FIELDS,
@@ -32,7 +31,7 @@ import {
   SORT_OPTIONS,
 } from './search/settings.ts';
 import { PokedexLookupNotice } from './search/PokedexLookupNotice.tsx';
-import { FacetPlaceholders, ResultPlaceholders } from './search/LoadingPlaceholders.tsx';
+import { ResultPlaceholders } from './search/LoadingPlaceholders.tsx';
 import { SearchStateMessage } from './search/SearchStateMessage.tsx';
 import { SiteHeader } from './search/SiteHeader.tsx';
 
@@ -62,26 +61,27 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
             <AtomicLayoutSection section="search">
               <AtomicSearchBox />
             </AtomicLayoutSection>
-            <AtomicLayoutSection section="facets">
-              <FacetPlaceholders />
-              <AtomicFacetManager collapseFacetsAfter={EXPANDED_FACETS_AT_LOAD}>
-                <AtomicFacet
-                  field={POKEMON_FIELDS.type}
-                  label="Type"
-                  sortCriteria="alphanumeric"
-                  numberOfValues={FACET_VALUE_LIMIT}
-                  withSearch={false}
-                />
-                <AtomicFacet
-                  field={POKEMON_FIELDS.generation}
-                  label="Generation"
-                  sortCriteria="alphanumericNatural"
-                  numberOfValues={FACET_VALUE_LIMIT}
-                  withSearch={false}
-                />
-              </AtomicFacetManager>
-            </AtomicLayoutSection>
             <AtomicLayoutSection section="main">
+              <AtomicLayoutSection section="horizontal-facets">
+                <AtomicPopover>
+                  <AtomicFacet
+                    field={POKEMON_FIELDS.type}
+                    label="Type"
+                    sortCriteria="alphanumeric"
+                    numberOfValues={FACET_VALUE_LIMIT}
+                    withSearch={false}
+                  />
+                </AtomicPopover>
+                <AtomicPopover>
+                  <AtomicFacet
+                    field={POKEMON_FIELDS.generation}
+                    label="Generation"
+                    sortCriteria="alphanumericNatural"
+                    numberOfValues={FACET_VALUE_LIMIT}
+                    withSearch={false}
+                  />
+                </AtomicPopover>
+              </AtomicLayoutSection>
               <AtomicLayoutSection section="status">
                 <AtomicQuerySummary />
                 <AtomicSortDropdown>
@@ -108,9 +108,9 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
                 />
                 <SearchStateMessage engine={engine} />
               </AtomicLayoutSection>
-            </AtomicLayoutSection>
-            <AtomicLayoutSection section="pagination">
-              <AtomicPager />
+              <AtomicLayoutSection section="pagination">
+                <AtomicPager />
+              </AtomicLayoutSection>
             </AtomicLayoutSection>
           </AtomicSearchLayout>
         </AtomicSearchInterface>

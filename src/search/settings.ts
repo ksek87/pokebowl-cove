@@ -1,8 +1,13 @@
-const NARROW_RESULT_COLUMNS = 3;
-const WIDE_RESULT_COLUMNS = 4;
+const NARROW_RESULT_COLUMNS = 4;
+const WIDE_RESULT_COLUMNS = 6;
+
+function greatestCommonDivisor(first: number, second: number): number {
+  return second ? greatestCommonDivisor(second, first % second) : first;
+}
 
 // Page sizes are multiples of this, so every row is full at both column counts.
-const FULL_ROW_UNIT = NARROW_RESULT_COLUMNS * WIDE_RESULT_COLUMNS;
+const FULL_ROW_UNIT =
+  (NARROW_RESULT_COLUMNS * WIDE_RESULT_COLUMNS) / greatestCommonDivisor(NARROW_RESULT_COLUMNS, WIDE_RESULT_COLUMNS);
 const MEDIUM_PAGE_MULTIPLE = 2;
 const LARGE_PAGE_MULTIPLE = 4;
 const LARGEST_PAGE_MULTIPLE = 8;
@@ -20,11 +25,6 @@ export const PAGE_SIZES = [
 
 // A ceiling well above any facet's values, so that new values are never hidden.
 export const FACET_VALUE_LIMIT = 100;
-
-// Atomic collapses every facet after this many, so zero starts them all collapsed.
-export const EXPANDED_FACETS_AT_LOAD = 0;
-
-export const FACET_PLACEHOLDER_COUNT = 2;
 
 export const SEARCH_HUB = 'pokebowl-search';
 

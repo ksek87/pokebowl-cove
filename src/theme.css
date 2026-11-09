@@ -48,15 +48,13 @@
   --border-strong: #d9d0bd;
   --card: #ffffff;
   --background: #fbf8f1;
-  --size-content: 1360px;
+  --size-content: 1800px;
   --size-search: 720px;
-  --size-filters: 272px;
   --size-gutter: 24px;
   --size-control: 40px;
   --size-status-row: 44px;
   --size-state-image: 96px;
-  --size-facet-closed: 70px;
-  --size-grid-gap: 20px;
+  --size-grid-gap: 16px;
   --size-sort-select: 190px;
   --size-sort-arrow-space: 48px;
   --size-search-box: 60px;
@@ -67,20 +65,23 @@
   --radius-panel: 20px;
   --radius-control: 12px;
   --radius-checkbox: 6px;
+  --detail-columns: minmax(0, 0.9fr) minmax(0, 1.1fr) minmax(0, 1.1fr);
   --space-control-inset: 6px;
   --space-status-row: 8px;
   --space-control-label: 8px;
   --space-control-group: 24px;
   --space-panel: 16px;
-  /* The launcher plus its edge space must fit in the margin beside the detail page content at the narrowest width. */
-  --size-chat-launcher: 3rem;
-  --space-chat-edge: 0.5rem;
-  --space-chat-panel-gap: 0.75rem;
-  --space-chat-panel-bottom: calc(var(--space-chat-edge) + var(--size-chat-launcher) + var(--space-chat-panel-gap));
-  --size-chat-panel: 26rem;
-  --size-chat-panel-height: min(40rem, calc(100dvh - var(--space-chat-panel-bottom) - var(--space-chat-edge)));
-  --motion-chat-idle: 2.4s;
-  --motion-chat-typing: 0.9s;
+  --size-ask-launcher: 3rem;
+  --size-ask-tail: 0.875rem;
+  --size-ask-tail-offset: calc(var(--size-ask-tail) / 2 + var(--size-panel-border));
+  --space-ask-tail: calc(var(--size-ask-launcher) / 2 - var(--size-ask-tail) / 2 - var(--size-panel-border));
+  --space-ask-bubble-gap: 0.875rem;
+  --size-ask-bubble: 35rem;
+  --size-ask-bubble-footer: 3rem;
+  /* Matches the padding Atomic sets on the answer text, which has no CSS part. */
+  --space-ask-answer-inset: 1.5rem;
+  --motion-ask-idle: 2.4s;
+  --motion-ask-thinking: 0.9s;
   --focus-ring: var(--foreground);
   --focus-width: 2px;
   --focus-offset: 2px;
@@ -109,43 +110,38 @@
   --atomic-layout-max-search-box-input-width: var(--size-search);
 }
 
+/* Atomic's generated layout rules left-align this section at desktop widths, and are scoped by a generated id. */
 atomic-layout-section[section='search'] {
   justify-self: center !important;
   width: 100% !important;
-  max-width: var(--size-search) !important;
-  margin-top: 0 !important;
   min-height: var(--size-search-row);
+}
+
+atomic-search-layout atomic-layout-section[section='search'] {
+  margin-top: 0;
 }
 
 /* Media queries cannot read variables. This width must match Atomic's mobile breakpoint. */
 @media (min-width: 1024px) {
+  /* Atomic centers one main column in its grid areas, so only the gutters are ours. */
   atomic-search-layout {
-    grid-template-areas:
-      '. atomic-section-search atomic-section-search .'
-      '. atomic-section-facets atomic-section-main .'
-      '. atomic-section-pagination atomic-section-pagination .' !important;
-    grid-template-columns:
-      var(--size-gutter) var(--size-filters) minmax(0, 1fr)
-      var(--size-gutter) !important;
-    column-gap: 0 !important;
+    grid-template-columns: var(--size-gutter) minmax(0, 1fr) var(--size-gutter);
   }
+}
 
-  atomic-layout-section[section='main'] {
-    margin-left: var(--size-gutter);
-  }
+atomic-layout-section[section='pagination'] {
+  margin-bottom: var(--size-gutter);
+}
 
-  /* A row across both columns, so the pager centers on the page whatever the facets width. */
-  atomic-layout-section[section='pagination'] {
-    grid-area: atomic-section-pagination;
-    margin-bottom: var(--size-gutter);
-  }
+/* Atomic spaces popovers with a right margin, which would push the row off center. */
+atomic-search-interface atomic-search-layout atomic-layout-section[section='horizontal-facets'] > atomic-popover {
+  margin-right: 0;
+}
 
-  /* Atomic empties the facets on these states, so the message takes the full width and centers on the page. */
-  atomic-search-interface:is(.atomic-search-interface-no-results, .atomic-search-interface-error)
-    atomic-layout-section[section='main'] {
-    grid-column: 2 / -2;
-    margin-left: 0;
-  }
+atomic-layout-section[section='horizontal-facets'] {
+  justify-content: center;
+  gap: var(--space-status-row);
+  margin-bottom: var(--space-status-row);
 }
 
 atomic-layout-section[section='status'] {
@@ -169,10 +165,6 @@ atomic-layout-section[section='status'] > atomic-breadbox {
 atomic-layout-section[section='status'] > atomic-query-summary {
   flex: 1 1 0;
   min-width: 0;
-}
-
-atomic-layout-section[section='facets'] > atomic-facet-manager > :last-child {
-  margin-bottom: 0;
 }
 
 atomic-search-box::part(wrapper) {
@@ -248,13 +240,22 @@ atomic-facet::part(facet) {
   border-radius: var(--radius-panel);
 }
 
-atomic-facet::part(label-button) {
-  font-size: 1.0625rem;
+atomic-popover::part(popover-button) {
+  height: var(--size-control);
+  background: var(--card);
+  border: var(--border-panel);
+  border-radius: var(--radius-control);
   font-weight: 800;
 }
 
-atomic-facet::part(label-button):hover {
+atomic-popover::part(popover-button):hover {
   color: var(--atomic-primary-dark);
+  border-color: var(--border-strong);
+}
+
+atomic-popover::part(placeholder) {
+  height: var(--size-control);
+  border-radius: var(--radius-control);
 }
 
 atomic-facet::part(value-label) {
@@ -300,16 +301,39 @@ atomic-generated-answer::part(citation):hover {
   border-color: var(--border-strong);
 }
 
-[data-slot='ask-thread'] atomic-generated-answer::part(container) {
-  margin-bottom: 0;
-  background: var(--muted);
-  border: 0;
-  border-radius: var(--radius-control);
+/* Set here because --ask-room is measured for this element, and a custom property resolves where it is declared. */
+[data-slot='ask-bubble'] {
+  --size-ask-bubble-content: calc(var(--ask-room) - var(--space-ask-bubble-gap) - var(--size-ask-bubble-footer));
 }
 
-[data-slot='ask-thread'] atomic-generated-answer::part(header) {
-  padding-block: 0;
-  padding-inline: var(--space-control-label);
+[data-slot='ask-bubble'] atomic-generated-answer::part(container) {
+  margin-bottom: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+[data-slot='ask-bubble'] atomic-generated-answer::part(header) {
+  display: none;
+}
+
+[data-slot='ask-bubble'] atomic-generated-answer::part(generated-content-container) {
+  padding: 0;
+}
+
+[data-slot='ask-bubble'] atomic-generated-answer::part(generated-text) {
+  font-size: var(--text-small);
+}
+
+[data-slot='ask-bubble'] atomic-generated-answer::part(citation) {
+  border-width: 1px;
+  font-size: var(--text-small);
+  font-weight: 600;
+}
+
+[data-slot='ask-bubble'] atomic-generated-answer::part(citations-label),
+[data-slot='ask-bubble'] atomic-generated-answer::part(feedback-and-copy-buttons) {
+  display: none;
 }
 
 atomic-result-list::part(result-list),
@@ -410,7 +434,7 @@ atomic-results-per-page::part(button):focus-visible,
 atomic-pager::part(page-button):focus-visible,
 atomic-pager::part(previous-button):focus-visible,
 atomic-pager::part(next-button):focus-visible,
-atomic-facet::part(label-button):focus-visible,
+atomic-popover::part(popover-button):focus-visible,
 atomic-facet::part(value-checkbox):focus-visible,
 atomic-result-list::part(result-list-grid-clickable):focus-visible,
 [data-slot='pokemon-card'] a:focus-visible,
@@ -434,7 +458,7 @@ atomic-sort-dropdown::part(select):hover {
   atomic-results-per-page::part(button),
   atomic-sort-dropdown::part(select),
   atomic-search-box::part(submit-button),
-  atomic-facet::part(label-button) {
+  atomic-popover::part(popover-button) {
     transition:
       background-color var(--motion-fast),
       border-color var(--motion-fast),
@@ -456,11 +480,27 @@ atomic-sort-dropdown::part(select):hover {
   }
 
   [data-slot='ask-launcher'] img {
-    animation: ask-wobble var(--motion-chat-idle) ease-in-out infinite;
+    animation: ask-wobble var(--motion-ask-idle) ease-in-out infinite;
   }
 
-  [data-slot='ask-typing'] img {
-    animation: ask-wobble var(--motion-chat-typing) ease-in-out infinite;
+  [data-slot='ask-launcher'][data-thinking='true'] img {
+    animation-duration: var(--motion-ask-thinking);
+  }
+
+  [data-slot='ask-bubble'] {
+    animation: ask-pop var(--motion-reveal) ease-out;
+    transform-origin: top right;
+  }
+
+  [data-slot='ask-bubble'][data-side='above'] {
+    transform-origin: bottom right;
+  }
+}
+
+@keyframes ask-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
   }
 }
 
@@ -486,8 +526,7 @@ atomic-sort-dropdown::part(select):hover {
 }
 
 /* Placeholders fill the gap before the first response, and Atomic's placeholders are hidden in favor of them. */
-[data-slot='result-placeholders'],
-[data-slot='facet-placeholders'] {
+[data-slot='result-placeholders'] {
   display: none;
 }
 
@@ -505,34 +544,13 @@ atomic-search-interface:not(
     .atomic-search-interface-no-results,
     .atomic-search-interface-error
   )
-  [data-slot='facet-placeholders'] {
-  display: block;
-}
-
-atomic-search-interface:not(
-    .atomic-search-interface-search-executed,
-    .atomic-search-interface-no-results,
-    .atomic-search-interface-error
-  )
-  :is(atomic-result-list, atomic-facet-manager, atomic-did-you-mean, atomic-breadbox) {
+  :is(atomic-result-list, atomic-did-you-mean, atomic-breadbox) {
   display: none;
 }
 
 atomic-sort-dropdown::part(placeholder) {
   height: var(--size-control);
   margin: 0;
-}
-
-[data-slot='facet-placeholders'] [data-slot='facet-placeholder'] > span {
-  margin-bottom: 0;
-}
-
-[data-slot='facet-placeholder'] {
-  height: var(--size-facet-closed);
-  padding: var(--space-panel);
-  background: var(--card);
-  border: var(--border-panel);
-  border-radius: var(--radius-panel);
 }
 
 @layer base {

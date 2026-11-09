@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: November 9, 2026 at 8:53 AM EST. Update this file, including the time, before ending a work session.
+Last updated: November 9, 2026 at 1:17 PM EST. Update this file, including the time, before ending a work session.
 
 ## Read first
 
@@ -18,12 +18,12 @@ The target is Friday, November 13, 2026.
 
 | Area | State |
 |---|---|
-| Git | **PR #6 is open:** `integration/overnight` into `main`. It contains the review fixes, detail page, generated answers, evals, suggestions generator and Passage Retrieval document, so no other PR is needed. |
-| Uncommitted on `integration/overnight` | The detail page link rewording, its tests, and the documentation reconciliation with this archive. Commit and push only when the user asks. |
+| Git | **PR #6 is open:** `integration/overnight` into `main`. It contains all finished work, including the review fixes, detail page, generated answers, evals, suggestions generator and Passage Retrieval document, so no other PR is needed. |
+| Where the code is | `integration/overnight` is checked out in the worktree `.claude/worktrees/agent-ab7730beca57611ff`, so open that folder, or remove that worktree before switching the main checkout to the branch. Everything is committed and pushed. |
 | Assessment | Essential is done. Generated answers, Query Suggestions and the detail page are built in PR #6. Hosting, sharing the repository and the presentations remain. |
 | Coveo | Index verified at 1,028 items. `pokebowl-search` pipeline has the Semantic Encoder, RGA and Query Suggestions models, all recorded in `configs/coveo/ml-models.json`. |
 | Query Suggestions | The live file has equal importance. The ranked file in `configs/coveo/` needs uploading and a build. |
-| Tests | Last full run on `integration/overnight`: 186 unit, 117 browser and 11 Python tests passed. The link rewording then brought unit tests to 187, with 8 of 8 detail browser tests passing. Browser tests run locally only and use a stubbed answer stream. |
+| Tests | See the final results in the PR description. Browser tests run locally only and use a stubbed answer stream. |
 
 **To run the application:** check out `integration/overnight`, run `fnm use`, `npm ci` and `npm run dev`, and open http://localhost:5173/. A local `.env` must hold the two values listed in `.env.example`. A detail page opens at a URL such as http://localhost:5173/?pokemon=Charizard.
 
@@ -35,12 +35,12 @@ Read the relevant Coveo or Vercel documentation in full before giving steps, and
 |---|---|---|---|
 | 1 | Upload the ranked suggestions file (PC-50) | 🟡 User | Advanced Model Configurations `PUT configs/{configurationType}`, `DEFAULT_QUERIES`, `en`. The daily build picks it up |
 | 2 | Merge PR #6 | 🟡 User | Use **Create a merge commit** |
-| 3 | Partial-name search (PC-52) | Both | Waiting on the user's go-ahead for research |
-| 4 | Pokémon links in generated answers (PC-64) | Both | Waiting on the user's choice of approach |
+| 3 | Partial-name search (PC-52) | Agent, after the user's go-ahead | Researched and tested; the recommendation is in the ticket. Code only, no console change |
+| 4 | Pokémon links in generated answers (PC-64) | Both | Waiting on the user's choice. A prompt instruction is the recommended first approach |
 | 5 | Host on Vercel (PC-30), then share the repository (PC-31) | 🟡 User, guided | Set the two Coveo values as build variables and use Node 24. The free plan is for non-commercial use and projects can pause, so check the link before the panel. Merged commits still carry an older local email |
-| 6 | Create the eval key | 🟡 User, guided | Search hub containing `pokebowl-`, such as `pokebowl-evals`. Unblocks PC-42, PC-44 and browser tests in CI. Record it in `configs/coveo/api-keys.json` without its value |
-| 7 | Relevance and answer evals, tuning (PC-42, PC-44, PC-63) | Both | Needs the eval key |
-| 8 | Performance baseline (PC-43) | Agent | After hosting |
+| 6 | Create the eval key | 🟡 User, guided | Search hub containing `pokebowl-`, such as `pokebowl-evals`. Needed for browser tests in CI and for querying outside the `pokebowl-search` hub. Record it in `configs/coveo/api-keys.json` without its value |
+| 7 | Review flagged answer evals, then tune (PC-44, PC-63) | Both | Evals ran with the browser key and analytics capture off. 10 answer cases are flagged for a person in `evals/reports/answers.json` |
+| 8 | Measure performance from the hosted site (PC-43) | Agent | After hosting. The local baseline is in `evals/reports/performance.json` |
 | Last | PC-78, PC-90, PC-91, PC-100 to PC-103 | Both | The user chooses the enterprise customer for PC-102. Plan for 45 minutes including questions. Any skipped tier item needs a justification |
 
 Passage Retrieval hands-on work (PC-80 to PC-82) depends on Coveo enabling access. The Hosted MCP idea is a concept only and is not planned work.
@@ -50,7 +50,10 @@ Passage Retrieval hands-on work (PC-80 to PC-82) depends on Coveo enabling acces
 - The interface questions listed under PC-78.
 - Whether to restructure Atomic layout overrides (PC-79).
 - Whether an answer disappearing on a non-relevance sort is acceptable (PC-63).
-- Which detail page enhancements to make. A UI/UX ideation report was in progress when this was written.
+- Remaining detail page ideas: evolution line, stat percentiles, Type matchups. Pokédex entries and Type and Generation links are built.
+- Before the site is public, check pokemondb.net's terms for quoting Pokédex text (PC-70).
+- Real answers can still scroll inside the bubble, because RGA returns long answers. Options: Atomic's collapse with Show more, different question wording, or a prompt instruction.
+- Whether feedback buttons should return to the bubble. They are hidden to keep it quiet.
 - `npm audit`: the recommendation below.
 
 ## Open checks
@@ -67,6 +70,7 @@ Passage Retrieval hands-on work (PC-80 to PC-82) depends on Coveo enabling acces
 - Text typed right after the clear button, before the search returns, can be replaced, because Headless copies the executed query into the search box. No public option prevents it.
 - An arriving generated answer moves the cards down, because the page cannot know in advance whether an answer will exist.
 - Searching `char` returns few results until PC-52 is done.
+- Suggestion order improves only after the ranked file is uploaded and a build runs.
 - With the Semantic Encoder active, a nonsense text query can still return results.
 - Body text has repeated Pokédex entries and game labels such as "Let's Go Pikachu". Any fix belongs in the extension.
 - **Questions the panel may ask:** automatic mapping is on although Coveo advises keeping it off for native sources; the request hook is used although Coveo recommends an advanced query action for `aq`; some Atomic layout overrides use `!important`. Each has a recorded reason.
@@ -119,6 +123,8 @@ Passage Retrieval hands-on work (PC-80 to PC-82) depends on Coveo enabling acces
 - Prefer a Coveo API over repeated console steps, and record the API used.
 - Keep `docs/plan.md` and all docs current as work finishes.
 - Commit and push only when asked. Never add Claude attribution.
+- Always use Atomic properly. Check its components, settings and CSS parts before building custom interface code.
+- Center things on the page, and keep the whole page on one center line.
 - Write directly, such as "our settings". Do not write "our own X" or "X's own Y".
 - Merge pull requests with **Create a merge commit**. Delete a branch only after confirming it is on `main`.
 - Do not quote hour or day estimates. Order work by dependency, and name only real waits such as crawls and model builds.

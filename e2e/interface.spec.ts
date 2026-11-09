@@ -92,7 +92,7 @@ test.describe('focus', () => {
     await expectVisibleFocus(page, page.locator('atomic-sort-dropdown select'));
     await expectVisibleFocus(page, page.locator('atomic-search-box [part="clear-button"]'));
     await expectVisibleFocus(page, page.locator('atomic-search-box [part="submit-button"]'));
-    await expectVisibleFocus(page, page.locator('atomic-facet [part="label-button"]').first());
+    await expectVisibleFocus(page, page.locator('atomic-popover [part~="popover-button"]').first());
     await expectVisibleFocus(page, page.locator('[data-slot="pokemon-card"] a').first());
     await expectVisibleFocus(page, page.locator('[data-slot="home-link"]'));
   });
@@ -205,9 +205,9 @@ test.describe('search box', () => {
   });
 });
 
-test('facet header hover stays readable', async ({ page }): Promise<void> => {
+test('filter button hover stays readable', async ({ page }): Promise<void> => {
   await openResults(page, LAPTOP);
-  const header = page.locator('atomic-facet [part="label-button"]').first();
+  const header = page.locator('atomic-popover [part~="popover-button"]').first();
   await header.hover();
   await expect
     .poll(async () => contrast(await header.evaluate((element) => getComputedStyle(element).color), 'rgb(255, 255, 255)'))
@@ -246,24 +246,22 @@ test.describe('loading', () => {
 
     const placeholder = page.locator('[data-slot="result-placeholder"]');
     await expect(placeholder).toHaveCount(DEFAULT_PAGE_SIZE, { timeout: NETWORK_TIMEOUT });
-    await expect(page.locator('[data-slot="facet-placeholder"]').first()).toBeVisible();
+    await expect(page.locator('atomic-popover [part="placeholder"]').first()).toBeVisible();
     const skeleton = await placeholder.first().boundingBox();
-    const facet = await page.locator('[data-slot="facet-placeholder"]').first().boundingBox();
-    const secondFacet = await page.locator('[data-slot="facet-placeholder"]').nth(1).boundingBox();
+    const filter = await page.locator('atomic-popover [part="placeholder"]').first().boundingBox();
 
     await expect(page.locator('atomic-result').first()).toBeVisible({ timeout: NETWORK_TIMEOUT });
     await expect(placeholder.first()).toBeHidden();
     await page.waitForTimeout(SLOW_RESPONSE_MS / 2);
 
     const card = await page.locator('[data-slot="pokemon-card"]').first().boundingBox();
-    const realFacet = await page.locator('atomic-facet').first().boundingBox();
-    const realSecondFacet = await page.locator('atomic-facet').nth(1).boundingBox();
-    expect(Math.abs((secondFacet?.y ?? 0) - (realSecondFacet?.y ?? 0))).toBeLessThanOrEqual(TOLERANCE_PX);
+    const realFilter = await page.locator('atomic-popover [part~="popover-button"]').first().boundingBox();
     expect(Math.abs((skeleton?.x ?? 0) - (card?.x ?? 0))).toBeLessThanOrEqual(TOLERANCE_PX);
     expect(Math.abs((skeleton?.y ?? 0) - (card?.y ?? 0))).toBeLessThanOrEqual(TOLERANCE_PX);
     expect(Math.abs((skeleton?.width ?? 0) - (card?.width ?? 0))).toBeLessThanOrEqual(TOLERANCE_PX);
     expect(Math.abs((skeleton?.height ?? 0) - (card?.height ?? 0))).toBeLessThanOrEqual(TOLERANCE_PX);
-    expect(Math.abs((facet?.y ?? 0) - (realFacet?.y ?? 0))).toBeLessThanOrEqual(TOLERANCE_PX);
+    expect(Math.abs((filter?.y ?? 0) - (realFilter?.y ?? 0))).toBeLessThanOrEqual(TOLERANCE_PX);
+    expect(Math.abs((filter?.height ?? 0) - (realFilter?.height ?? 0))).toBeLessThanOrEqual(TOLERANCE_PX);
     expect(await page.evaluate((): number => (window as unknown as { shift: number }).shift)).toBeLessThan(MAX_LAYOUT_SHIFT);
   });
 });

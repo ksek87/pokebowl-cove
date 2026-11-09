@@ -71,14 +71,14 @@ export function PokemonResult({ result }: { result: Result }): JSX.Element {
       className="group flex h-full flex-col overflow-hidden rounded-(--radius-panel) border-2 border-b-(length:--size-card-edge) border-border bg-card font-sans transition duration-150 hover:-translate-y-1 hover:border-border-strong active:translate-y-0 active:scale-[0.99] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100"
     >
       <div
-        className="flex aspect-[4/3] items-center justify-center overflow-hidden p-3.5"
+        className="flex aspect-[3/2] items-center justify-center overflow-hidden p-2.5"
         style={{ background: cardTint(types) }}
       >
         <PokemonImage image={text(raw[POKEMON_FIELDS.image])} name={name} />
       </div>
-      <div className="px-4 pt-3.5 pb-4">
+      <div className="px-3 pt-2.5 pb-3">
         <CardMeta number={text(raw[POKEMON_FIELDS.number])} generation={text(raw[POKEMON_FIELDS.generation])} />
-        <h2 className="mt-0.5 mb-2.5 text-lg/snug font-extrabold text-foreground">
+        <h2 className="mt-0.5 mb-1.5 text-base/snug font-extrabold text-foreground">
           <AtomicResultLink hrefTemplate={pokemonDetailHref(name)}>{name}</AtomicResultLink>
         </h2>
         <ul className="flex flex-wrap gap-1.5">

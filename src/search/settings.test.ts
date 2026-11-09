@@ -17,3 +17,19 @@ it.each(SORT_OPTIONS)('Headless can build a valid request from the $label sort',
   expect(request).not.toContain('@@');
   expect(request).toBe(expression.includes(' ') ? `@${expression}` : expression);
 });
+
+it('uses the smallest page size that fills rows at both column counts', (): void => {
+  const smaller = Array.from({ length: DEFAULT_PAGE_SIZE - 1 }, (_, index) => index + 1);
+
+  expect(smaller.filter((size) => !(size % RESULT_COLUMNS.narrow) && !(size % RESULT_COLUMNS.wide))).toEqual([]);
+});
+
+it('starts on the least common multiple of the two column counts', (): void => {
+  const { narrow, wide } = RESULT_COLUMNS;
+  let multiple = wide;
+  while (multiple % narrow) {
+    multiple += wide;
+  }
+
+  expect(DEFAULT_PAGE_SIZE).toBe(multiple);
+});

@@ -189,3 +189,25 @@ test('shows a visible focus outline on a Type link', async ({ page }): Promise<v
   await expect(link).toBeFocused();
   await expect(link).toHaveCSS('outline-style', 'solid');
 });
+
+for (const [width, height] of [
+  [1440, 800],
+  [1920, 1080],
+] as const) {
+  test(`fits the details side by side in a ${width}x${height} window`, async ({ page }): Promise<void> => {
+    await page.setViewportSize({ width, height });
+    await page.goto('/?pokemon=Charizard');
+    const facts = page.locator('[data-slot="detail-facts"]');
+    await expect(facts).toBeVisible({ timeout: 15_000 });
+
+    const artwork = await page.locator('[data-slot="detail-artwork"]').boundingBox();
+    const factsBox = await facts.boundingBox();
+    const stats = await page.locator('[data-slot="detail-stats"]').boundingBox();
+
+    expect(artwork?.y).toBe(factsBox?.y);
+    expect(factsBox?.y).toBe(stats?.y);
+    expect((artwork?.x ?? 0) + (artwork?.width ?? 0)).toBeLessThanOrEqual(factsBox?.x ?? 0);
+    expect((factsBox?.x ?? 0) + (factsBox?.width ?? 0)).toBeLessThanOrEqual(stats?.x ?? 0);
+    expect((stats?.y ?? 0) + (stats?.height ?? 0)).toBeLessThanOrEqual(height);
+  });
+}

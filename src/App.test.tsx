@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import type { JSX, ReactNode } from 'react';
 import { expect, it, vi } from 'vitest';
 import { App } from './App.tsx';
-import { DEFAULT_PAGE_SIZE, PAGE_SIZES, SORT_OPTIONS, EXPANDED_FACETS_AT_LOAD } from './search/settings.ts';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES, SORT_OPTIONS } from './search/settings.ts';
 
 vi.mock('@coveo/headless', async (importActual) => ({
   ...(await importActual<object>()),
@@ -15,18 +15,10 @@ vi.mock('@coveo/atomic-react', () => {
   return {
     AtomicSearchInterface: passthrough,
     AtomicSearchLayout: passthrough,
-    AtomicLayoutSection: passthrough,
-    AtomicFacetManager: ({
-      children,
-      collapseFacetsAfter,
-    }: {
-      children?: ReactNode;
-      collapseFacetsAfter: number;
-    }): JSX.Element => (
-      <div data-testid="facet-manager" data-collapse-after={collapseFacetsAfter}>
-        {children}
-      </div>
+    AtomicLayoutSection: ({ section, children }: { section: string; children?: ReactNode }): JSX.Element => (
+      <div data-testid={`section-${section}`}>{children}</div>
     ),
+    AtomicPopover: ({ children }: { children?: ReactNode }): JSX.Element => <div data-testid="popover">{children}</div>,
     AtomicFacet: ({
       field,
       label,
@@ -66,6 +58,7 @@ vi.mock('./search/SearchStateMessage.tsx', () => ({ SearchStateMessage: (): null
 
 vi.mock('./search/PokedexLookupNotice.tsx', () => ({ PokedexLookupNotice: (): null => null }));
 
+const FILTER_COUNT = 2;
 const config = { organizationId: 'test-org', searchApiKey: 'test-key' };
 
 it('renders the application heading', (): void => {
@@ -74,10 +67,13 @@ it('renders the application heading', (): void => {
   expect(screen.getByRole('heading', { name: 'Pokémon Search' })).toBeInTheDocument();
 });
 
-it('starts with the configured number of facets expanded', (): void => {
+it('offers each filter as an Atomic popover in the horizontal facets section', (): void => {
   render(<App config={config} />);
 
-  expect(screen.getByTestId('facet-manager')).toHaveAttribute('data-collapse-after', String(EXPANDED_FACETS_AT_LOAD));
+  const section = screen.getByTestId('section-horizontal-facets');
+  expect(section.querySelectorAll('[data-testid="popover"]')).toHaveLength(FILTER_COUNT);
+  expect(section).toContainElement(screen.getByTestId('facet-pokemon_type'));
+  expect(section).toContainElement(screen.getByTestId('facet-pokemon_generation'));
 });
 
 it('offers a Type facet', (): void => {

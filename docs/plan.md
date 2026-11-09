@@ -52,7 +52,7 @@ Work with a waiting time, such as Coveo's response or a model build, starts as e
 | 1. Merge and upload | PR #6, PC-50 | Merge first, so later branches start from it. The ranked suggestions file waits for upload and a build |
 | 2. Search quality | PC-52, PC-64 | Partial-name search and links in generated answers |
 | 3. Complete the Intermediate tier | PC-30, PC-31 | Hosting also unblocks PC-43 |
-| 4. Evals and tuning | PC-40, PC-42, PC-44, PC-63 | PC-42 and PC-44 need the eval API key |
+| 4. Evals and tuning | PC-40, PC-44, PC-63 | Evals exist. What remains is the human review of flagged answers, the hand-checks and tuning |
 | 5. Bonus | PC-80 to PC-82 | Depends on Coveo enabling access |
 | 6. Wrap up | PC-43, PC-78, PC-79, PC-90, PC-91, PC-100 to PC-103 | Business value work comes last |
 
@@ -300,7 +300,10 @@ Owner: Both · Depends on: PC-14
 
 Searching `char` returns only 5 items, with Charizard last and Charmander missing, because `char` is not a whole word in most names. A ranking expression rule can only reorder what a query already returns, so finding partial names needs a separate method.
 
-- [ ] Coveo's documented options for prefix matching and name boosts read in full and a recommendation agreed
+**Research result.** For one-word searches of two or more letters or digits, keep `q` unchanged and add, in the request hook, `wildcards: true`, `dq: @pokemon_name=char*`, and a `$qre` boost with modifier 100 in `aq`. On 16 partial-name queries, MRR rose from 0.65 to 1.00 and Recall@12 from 0.63 to 1.00. Across 123 queries MRR rose from 0.90 to 0.95, with p95 at 184 ms. Sending `char*` as `q` was rejected, because it matched all 1,028 items and changes the text sent to RGA. Test targets: partial MRR at least 0.95, Recall@12 of 1.00, overall MRR at least 0.95, no category below baseline, and search p95 within 250 ms.
+
+- [x] Coveo's documented options for prefix matching and name boosts read in full, with a recommendation prepared
+- [ ] The user approves the recommendation
 - [ ] Expected results defined for partial-name queries
 - [ ] Change applied in `pokebowl-search` and recorded in `configs/coveo/`
 - [ ] Expected results verified against live data
@@ -338,13 +341,13 @@ Owner: Agent · Estimate: 45 min · Depends on: PC-61
 
 Owner: Agent · Depends on: PC-62, PC-70
 
-An animated Pokéball at the bottom right of the detail page opens a chat panel with suggested questions. Each generates an answer about that Pokémon only when a person picks it, and answers build up as a thread. Coveo documents RGA in a custom interface, and that answers regenerate when results are filtered. Combining these to scope an answer to one item is our inference, checked on seven real questions across six Pokémon.
+An animated Pokéball at the top-right corner of the detail page's main card opens a compact speech bubble with suggested questions. Picking one replaces the questions with an answer about that Pokémon, generated only then, and only one thing shows at a time. Coveo documents RGA in a custom interface, and that answers regenerate when results are filtered. Combining these to scope an answer to one item is our inference, checked on seven real questions across six Pokémon.
 
 - [x] Answers cite only the Pokémon shown, checked on a small question set
 - [x] No answer is generated on page load
 - [x] Citations, disclaimer and feedback match the search page
-- [x] Waiting, no-answer and failed states are handled in the thread
-- [x] The chat opens from a launcher that does not cover page content, and stays closed on load
+- [x] Waiting, no-answer and failed states are handled in the bubble
+- [x] The bubble opens to the left of a Pokéball visible on load at the card corner, overlays the page without pushing content, stays on screen at each width, and stays closed on load
 
 ### PC-63: Tune answers and add reporting
 
@@ -411,6 +414,8 @@ Owner: Agent· Depends on: PC-75
 
 ### PC-79: Move custom interface code to Tailwind and shadcn/ui
 
+The move to one centered column with Atomic's `horizontal-facets` section removed the page grid overrides from audit finding UI-14. A few `!important` rules remain for the search box section and status row.
+
 Owner: Agent · Depends on: PC-76
 
 Tailwind and shadcn/ui are the approved tools for our interface code. Atomic components stay on Atomic theme variables and CSS parts, because Atomic uses Shadow DOM.
@@ -438,7 +443,7 @@ Owner: Both· Depends on: PC-76, PC-77
 - [ ] Real screen reader and a non-Chromium browser checked
 - [ ] User decides the open interface questions:
   - Keep the search box centered on the page, or span it across the results column
-  - Add a wider layout above 1920 px
+  - Addressed: the content width grew and wide windows show 6 columns
   - Suggest close matches on the detail not-found page
   - Add a search box to the detail page
   - Show suggestions on an empty search box

@@ -318,13 +318,13 @@ The interface is polished yet playful: a calm, spacious structure with a friendl
 - Type badge text is chosen for contrast, and a unit test holds every badge to at least 4.5:1.
 - The layout, colors and components are original and do not copy official Pokémon styling.
 
-Page sizes and result columns are defined once in `src/search/settings.ts`, and page sizes are multiples of both column counts so that every row is full. The default of 12 and the 3 and 4 column layouts are desktop choices; phone layouts were dropped from scope at the user's request.
+Page sizes and result columns are defined once in `src/search/settings.ts`. Page sizes are multiples of the least common multiple of the two column counts, 4 and 6, so every row is full and the default stays at 12 cards. A product of the two counts would give 24. The content width is one named value, which also answers the earlier finding that very wide windows left half the screen unused. Phone layouts were dropped from scope at the user's request.
 
 Our markup uses Tailwind and shadcn/ui. Atomic's components are styled through [theme variables and CSS parts](https://docs.coveo.com/en/atomic/latest/usage/themes-and-visual-customization/), because they use Shadow DOM and Tailwind classes cannot reach inside them. Result cards are rendered inside Atomic's Shadow DOM, so one shared stylesheet is adopted there instead of copying styles into each result. Some rules that override Atomic's page layout use `!important`, which Coveo does not document as an approach; they remain because the layout has no documented setting for a single centered content block.
 
 Atomic's clear button only empties the text, so the application runs a search for everything, from the first page, when that button is used. Emptying the box by keyboard follows Atomic's behavior and waits for Enter, which avoids unrequested searches and false submit events in analytics. The search uses the `searchboxSubmit` event because Headless has no public event for clearing, and it fires only on the explicit button. Facets request up to a fixed ceiling so that a new Generation or Type is never hidden.
 
-**Decision: center the page numbers on the page.** The pager has a full-width row below the facets and results, on the same axis as the title and search box. The `pagination` layout section is a direct child of `atomic-search-layout` with a dedicated grid area, so its position does not depend on the facets width. The rejected alternative was centering it under the results column, which put it off the page axis.
+**Decision: one centered column.** The title, search box, filters, results and page numbers share one center line. Type and Generation are `atomic-popover` dropdowns in Atomic's `horizontal-facets` layout section, inside `main`, so results use the full content width and there is no left column. The rejected alternative was keeping a left column and only widening the page, which keeps the results off the page's center line. The trade-off is that filter values are one click away. Atomic's layout rules are generated only for a facets section, so this layout needs a single column override and removes the earlier grid-area overrides.
 
 **Decision: use Atomic's `atomic-results-per-page` for page sizes.** It hides itself on errors and empty results, so we do not maintain that logic. It replaced a custom dropdown built on Headless and shadcn/ui. It shows buttons instead of a dropdown, and it is styled through CSS parts to match the pager.
 
@@ -334,7 +334,7 @@ Atomic's clear button only empties the text, so the application runs a search fo
 
 ## Search behavior
 
-The Type and Generation facets start collapsed at the user's request, set with one value on Atomic's facet manager (`collapseFacetsAfter`, 0 collapses all facets).
+Type and Generation filters are closed until a person opens their dropdown, so no collapse setting is needed.
 
 Three behaviors are added on top of Coveo's default relevance search.
 
@@ -400,7 +400,7 @@ Not confirmed: real artwork on the page, and that the click event reaches Coveo 
 
 **Decision: the no-results and error views are rendered from Headless search status, in place of `atomic-no-results` and `atomic-query-error`.** Atomic's error view prints the organization endpoint and offers no retry, and its no-results text cannot vary by query, and its documented parts can restyle these but cannot change them. The rejected alternative was restyling Atomic's parts, which would keep the service URL visible. Atomic still marks the page with its no-results and error classes, which center the message on the page.
 
-**Decision: first-load placeholders match the real result cards and facets.** Atomic's placeholders have a generic shape and cannot be reshaped through parts, so `atomic-result-list` and `atomic-facet-manager` are hidden until Atomic marks the first search as done, and placeholders with the same text sizes as a real card are shown instead.
+**Decision: first-load placeholders match the real result cards.** Atomic's placeholders have a generic shape and cannot be reshaped through its parts, so result cards use a matching placeholder. The filter row uses `atomic-popover`'s own placeholder, sized to the real control.
 
 **Decision: one solid focus outline, using the foreground color with an offset, for all controls.** Atomic's ring variable points to the same token. The former translucent ring measured 1.69:1, below the 3:1 that WCAG 1.4.11 requires.
 
@@ -440,14 +440,34 @@ The type-ahead panel now shares the search box's edges, border and radius, and u
 
 ## Ask about this Pokémon
 
-**Decision: the detail page has a chat assistant, opened from an animated Pokéball fixed at the bottom right.** The user chose this shopping-site pattern over a card on the page. The panel stays closed on load. It greets the person and offers three suggested questions, defined once in `src/search/settings.ts`. Picking one adds it to a thread, shows the Pokéball as a typing indicator, then streams the answer as an assistant message. Suggestions already asked are removed, so a person can ask the rest, and the thread scrolls inside the panel.
+**Decision: the detail page has a compact speech bubble, opened from a wobbling Pokéball at the top-right corner of the main card.** The user chose this over a card on the page, then over a chat window, and placed the Pokéball in the card so it is visible on load without scrolling. A fixed bottom-corner launcher was rejected for being less visible. The bubble stays closed on load, shows three suggested questions defined once in `src/search/settings.ts`, and shows one thing at a time. Picking a question replaces the questions with its answer, while the Pokéball wobbles faster and the bubble says it is thinking. "Ask something else" returns to the questions. There is no greeting, header or message history.
 
 An answer is generated only when a person picks a question. Generating on load was rejected, because it would use the generative allowance on every view and add seconds of waiting. Free-text input was rejected, because question wording strongly affected speed and quality.
 
-Each question and answer pair uses its own `atomic-generated-answer` in an `atomic-search-interface` with its own search engine, because Atomic shows one answer per engine. A thread holds at most one interface per suggested question. This keeps Atomic's citations, disclaimer, feedback and copy buttons, styled through CSS parts to read as a chat message. The rejected alternative was the Headless `GeneratedAnswer` controller with one engine, which would have required rebuilding those features and rendering Markdown safely. The engine sends the question as `q` and an exact name match as `aq`, does not write to the URL and runs no first search. Citations stay on pokemondb.net. Pokémon with no stats, which have little indexed text, show no launcher.
+Only one `atomic-generated-answer` exists at a time, in an `atomic-search-interface` with a search engine created for that question, so an earlier answer cannot remain visible. This keeps Atomic's citations, disclaimer and Markdown rendering, styled through CSS parts. Its header, feedback, copy and citations label are hidden to keep the bubble quiet. The rejected alternative was the Headless `GeneratedAnswer` controller, which would have required rebuilding those features and rendering Markdown safely. The engine sends the question as `q` and an exact name match as `aq`, does not write to the URL and runs no first search. Citations stay on pokemondb.net. Pokémon with no stats have no Pokéball.
 
-The launcher plus its edge space fits in the margin beside the page content at 1100 px, so it does not cover content while closed. The panel is a non-modal dialog: Escape and the close button return focus to the launcher, and each exchange has a status region for screen readers. Failed requests offer a retry in the thread. The Pokéball animations stop when reduced motion is requested.
+The bubble is positioned against the Pokéball with its tail pointing at it, so it overlays the card and does not push content. It opens toward whichever side of the window has more room, and its content height is limited to that room, so it stays on screen however the page is scrolled. A long answer scrolls inside the bubble, with "Ask something else" kept in view. The bubble is a non-modal dialog: Escape and clicking outside return focus to the Pokéball, and a status region announces progress. Failed requests offer a retry. The animations stop when reduced motion is requested, and the bubble still says it is thinking.
 
 **Coveo documentation:** [Configure a search interface for RGA](https://docs.coveo.com/en/nb6a0037/) states that a custom interface uses `atomic-generated-answer` or the Headless `GeneratedAnswer` controller, and that an answer regenerates when filters narrow the results. [Filter: Query pipeline feature](https://docs.coveo.com/en/1440/) describes how `aq` combines with `q`.
 
 **Our inference:** Coveo has no guide for scoping an answer to one item. Combining `aq` with RGA to do so is our design. On ten real questions across six Pokémon, each answer cited only the Pokémon shown. First text appeared after about 1.8 to 2.6 seconds, and full answers took about 3 to 9 seconds. The sample is small. Several Atomic interfaces on one page is also our design: Coveo's guidance is one Search API call per user search, and each interface here sends one only when a person picks a question.
+
+## Detail page layout
+
+**Decision: artwork, facts and base stats sit side by side in one card at desktop widths**, with Pokédex entries below, so the main content fits in the window. The Pokéball sits at the top-right corner of the card. Its speech bubble opens to the left of it, 35rem wide, and uses the room below it, scrolling inside only when an answer is longer than that room.
+
+Measured at 1440×800: answers of about 200 words fit with no inner scroll. Real generated answers can be longer than the window. For Charizard they measured 325, 956 and 1,689 px of content against 556 px visible, because RGA returns headed, listed answers for broad questions. A wider bubble cannot remove that scrolling. Shorter answers would need different question wording or a prompt instruction.
+
+## Performance
+
+**Decision: measure first, and make no performance change the numbers do not support.** A small, sequential and paced baseline was recorded in `evals/reports/performance.json`, because Coveo requires [load tests to be planned with and authorized by Coveo](https://docs.coveo.com/en/1948/). These are local, pre-hosting numbers.
+
+| Measure | p50 | p95 |
+|---|---|---|
+| Search | 182 ms | 205 ms |
+| Type-ahead | 56 ms | 62 ms |
+| First result visible | 369 ms | 424 ms |
+| Generated answer, first text | 2.0 s | 2.6 s |
+| Generated answer, complete | 3.1 s | 10.6 s |
+
+Coveo's [response time guide](https://docs.coveo.com/en/1948/) lists several optimizations. We did not apply the sort cache, a page size limit or pipeline simplification, because sorted queries were no slower than relevance, 96 results cost about 25 ms, and search is already within target. Coveo publishes no latency figures or tuning guide for generated answers, and its advanced association settings are presented for answer quality. Our inference is that the slow tail tracks long answers, so fixed, short questions are the practical control. Answers stream, so the time to first text is what a person feels most.
