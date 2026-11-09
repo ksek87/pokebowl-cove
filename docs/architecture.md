@@ -523,6 +523,29 @@ Not confirmed: real artwork on the page, and that the click event reaches Coveo 
 - **Generated answer citations:** they stay on pokemondb.net, because in enterprise search a citation sends a person to the full source.
 - **Detail page source link:** it reads "Learn more about" followed by the Pokémon's name, and opens the pokemondb.net page.
 
+## Semantic Encoder results for unrelated queries
+
+**Decision: keep the Semantic Encoder's similarity threshold at its current value, and accept that some nonsense queries return Pokémon.** The user accepted this as a tuning tradeoff for an application that is not yet a production system.
+
+**What happens.** The query `qqqzzzxxxvvv` matches no text in the index, but returns 8 Pokémon such as Qwilfish. The Search API debug report shows each of those results carries the Semantic Encoder's vector ranking function, with a cosine similarity of about 0.81 against a minimum of 0.8. Unrelated text such as `asdfghjkl`, `lorem ipsum dolor`, `hello world` and `pizza` returns no results, so the no-results state still appears.
+
+**Coveo documentation:** [About Semantic Encoder (SE)](https://docs.coveo.com/en/nb6a0483/) states that the model retrieves items that are semantically similar to the query alongside lexical search, and that the results show the most relevant items from both. [Create and manage SE models](https://docs.coveo.com/en/nb890247/) states that only items above a minimum similarity threshold are retrieved, and warns that a threshold set too high can exclude relevant items, while one set too low can retrieve items that are not relevant.
+
+**Measurement.** Similarity scores were read from the debug ranking information on 2026-11-09, with analytics capture off:
+
+| Queries | Similarity of returned items |
+|---|---|
+| Nonsense and off-topic results (`qqqzzzxxxvvv`, `car insurance`) | Up to 0.817 |
+| Relevant results for the 13 descriptive eval queries | Lowest 0.804, 10th percentile 0.812, median 0.828 |
+
+**Our inference.** The two ranges overlap. A threshold of about 0.82 would remove these nonsense results but also drop many relevant results for descriptive queries such as `fire fox` and `bug dark`, which are already the weakest category. For the presentation, this shows hybrid search at work: the vector side offers the nearest Pokémon for unclear text, while clearly unrelated text returns no results.
+
+**Rejected: raising the similarity threshold.** It trades a cosmetic issue for worse results on real descriptive queries.
+
+**Not investigated further:** `zzqxvkjw` and `xkcd blorp` return results without a vector score, so a lexical match brings them in. It does not affect real queries.
+
+**Production path:** tune the threshold against real query logs and a labelled set that includes negative queries, rather than a small sample.
+
 ## Generated answers
 
 **Decision: use Atomic's `atomic-generated-answer` at the top of the results section, with `collapsible` on.** The answer sits below the fixed controls row and above the result cards. It keeps Atomic's disclaimer, citations, feedback and copy actions, and is styled only through its documented CSS parts.
