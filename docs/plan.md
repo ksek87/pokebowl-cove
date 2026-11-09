@@ -82,9 +82,10 @@ The indexing extension leaves each form's Pokédex data table (Type, height, wei
 - [ ] Pokémon names in answers link to detail pages, while citations keep linking to pokemondb.net (PC-64)
 - [ ] Answers tuned using the answer eval results (PC-63)
 
-### 4. Performance (in progress, PC-43)
+### 4. Performance (PC-43)
 
-- [ ] Performance measured from the hosted site, with the partial-name rewrite applied, and targets set from the results
+- [x] Performance measured from the hosted site, with the partial-name rewrite applied, and targets set from the results. Search p95 is 198 ms, type-ahead 63 ms, the first result shows at 575 ms, and the first answer text arrives at 2.8 s
+- [ ] Pass only the two Coveo values from `src/main.tsx` to `readCoveoConfig`. It passes all of `import.meta.env`, so the hosted bundle carries Vercel's build values, such as the commit message and author name. They are not secrets, but they do not belong in the browser
 
 ### 5. 🟡 Console checks for the user
 
@@ -121,6 +122,8 @@ These were considered and dropped, because neither the assessment nor the demo n
 - Screen reader and non-Chromium browser testing
 - The header logo label and the duplicate icon file
 - Checking when a generated answer counts against the allowance
+- Removing the small layout shift on load (0.033, within its 0.05 target)
+- A separate card stylesheet, which would save under 1% of the bundle
 
 ---
 
@@ -337,7 +340,7 @@ Owner: Agent · Estimate: 45 min · Depends on: PC-30
 - [x] Reports saved as JSON
 
 These are pre-hosting numbers from one local network, in `evals/reports/performance.json`. Measure again from the hosted application. The numbers did not support the sort cache, a page size limit, pipeline simplification or tuning answer settings for speed.
-- [ ] Bundle size reviewed, including whether a smaller stylesheet for cards is worthwhile (the inline copy is about 2.5% of the gzipped JavaScript)
+- [x] Bundle size reviewed, including whether a smaller stylesheet for cards is worthwhile (the inline copy is about 2.5% of the gzipped JavaScript)
 
 ### PC-44: Add generated answer evals
 
