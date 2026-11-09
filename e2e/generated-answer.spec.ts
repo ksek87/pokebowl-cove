@@ -9,6 +9,7 @@ const LAPTOP = 1440;
 const TOLERANCE_PX = 2;
 const CHECK_WAIT_MS = 1_000;
 const HALF = 2;
+const FEEDBACK_BUTTON_COUNT = 2;
 const QUESTION = '/#q=what%20type%20is%20charizard';
 const ANSWER_TEXT = 'Charizard is a Fire and Flying type.';
 const CITATION = { title: 'Charizard Pokédex', clickUri: 'https://pokemondb.net/pokedex/charizard' };
@@ -61,6 +62,18 @@ test('shows the answer, a citation and a disclaimer', async ({ page }): Promise<
   const citation = panel.locator('[part~="citation"]').first();
   await expect(citation).toContainText(CITATION.title);
   await expect(citation).toHaveAttribute('href', new RegExp(CITATION.clickUri));
+});
+
+test('shows the feedback buttons on the answer', async ({ page }): Promise<void> => {
+  await stubAnswer(page, ANSWER_TEXT, CITATION);
+  await open(page, LAPTOP, QUESTION);
+  await expect(answerPanel(page)).toContainText(ANSWER_TEXT, { timeout: NETWORK_TIMEOUT });
+
+  const buttons = page.locator('atomic-generated-answer [part~="feedback-button"]');
+  await expect(buttons).toHaveCount(FEEDBACK_BUTTON_COUNT);
+  for (const button of await buttons.all()) {
+    await expect(button).toBeVisible();
+  }
 });
 
 test('places the answer between the controls and the results', async ({ page }): Promise<void> => {

@@ -332,7 +332,7 @@ test('uses the default page size when the URL has one that is not offered', asyn
 test('reserves exactly the height of the search box', async ({ page }): Promise<void> => {
   await openDesktopPage(page, LAPTOP);
 
-  const section = await boxOf(page.locator('atomic-layout-section[section="search"]'));
+  const section = await boxOf(page.locator('[data-slot="search-row"]'));
   const box = await boxOf(page.locator('atomic-search-box'));
 
   expect(Math.abs(section.height - box.height)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
@@ -372,7 +372,7 @@ for (const width of DESKTOP_WIDTHS) {
     await openDesktopPage(page, width);
 
     const grid = await boxOf(page.locator('atomic-result-list'));
-    const status = await boxOf(page.locator('atomic-layout-section[section="status"]'));
+    const status = await boxOf(page.locator('[data-slot="status-row"]'));
 
     expect(Math.abs(status.x - grid.x)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);
     expect(Math.abs(status.width - grid.width)).toBeLessThanOrEqual(ALIGNMENT_TOLERANCE_PX);

@@ -23,7 +23,7 @@ The assessment defines four tiers of required work and a panel presentation. A t
 | Essential | Show each Pokémon's picture in results | Done | PC-21 |
 | Intermediate | Host the code on GitHub and share the link | Code is on GitHub; not yet shared | PC-31 |
 | Intermediate | Host the search application | Done: https://pokebowl-cove.vercel.app/ | PC-30 |
-| Advanced | Generative answers with Relevance Generative Answering | Built in PR #6; tuning and evals remain | PC-61, PC-62, PC-63, PC-44 |
+| Advanced | Generative answers with Relevance Generative Answering | Built and live. A body text fix for answers that mixed Pokémon forms is in PR #14 and needs a Coveo rebuild | PC-61, PC-62, PC-63, PC-44 |
 | Advanced | Preload a Query Suggestions model for type-ahead | Done: model active and the ranked default queries are live. After the rebuild, Pokémon names lead the suggestions | PC-50, PC-51 |
 | Advanced | Pokémon detail page | Done, live on the hosted site | PC-70 |
 | Advanced | Technical deep dive presentation | Not started | PC-100 |
@@ -38,7 +38,6 @@ Evals, performance baselines and interface polish are additions we chose and are
 - A ticket is done when all of its acceptance criteria are checked.
 - Tests or expected results are defined before implementation.
 - The user makes all Coveo platform changes, with guidance from the agent.
-- Estimates are upper limits for active time and will be revised as we learn the real pace.
 
 **Owners:** *You* is the user, *Agent* is the coding agent and *Both* means the work is done together.
 
@@ -51,56 +50,41 @@ Work with a waiting time, such as Coveo's response or a model build, starts as e
 | Done | PC-01, PC-03, PC-04, PC-10 to PC-15, PC-20 to PC-23, PC-30, PC-40, PC-41, PC-50 to PC-52, PC-60 to PC-62, PC-70, PC-75, PC-76, PC-83 | Index, search application, models, detail page and generated answers. Items after PC-23 are in PR #6 |
 | Now | See Remaining work | The ordered list of everything left |
 
-If Passage Retrieval access has not arrived, write PC-83 and add PC-82 only if access arrives later. If time runs short, drop the stretch goal.
+If Passage Retrieval access has not arrived, write PC-83 and add PC-82 only if access arrives later.
 
 ---
 
 ## Remaining work
 
-Everything still to do, in order. Each item is needed for an assessment requirement or for something a panel would see in the demo. Tickets below hold the detail.
+Only what the assessment or the panel demo needs. Everything else is listed under Not doing, with the reason.
 
-### 1. Correct generated answer content (in progress)
+### 1. Correct generated answer content (full source rebuilding)
 
-The indexing extension leaves each form's Pokédex data table (Type, height, weight, abilities) without the form's name, so answers give Mega Charizard X's 110.5 kg as Charizard's weight. 181 of 1,028 pages are affected, and 5 of 23 multi-form test answers were wrong. The fix rewrites those tables as sentences that name each form, adds the Pokémon's name to form labels such as "Attack Forme", and adds "is weak to" sentences, because "Is Charizard weak to water?" gets no answer today.
+Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each form's data table in the indexed body had no form name. PR #14 rewrites those rows as named sentences, adds the Pokémon's name to form labels, and adds "is weak to" sentences.
 
-- [ ] Extension change built test-first, with answer eval questions that catch another form's values
-- [ ] 🟡 User pastes the extension into Coveo and rebuilds the single-Pokémon test source; the Charizard body and all 16 fields are checked
-- [ ] 🟡 User rebuilds the full source, then rebuilds the RGA and Semantic Encoder models
-- [ ] Answer evals run and show the base-form facts are right
+- [x] Extension change built test-first, with answer eval questions that catch another form's values (PR #14)
+- [x] 🟡 User pastes the new extension into Coveo, rebuilds the single-Pokémon test source, and checks that Charizard's body names each form and that all 16 fields still populate (done 2026-11-09: all 10 required sentences and all 16 fields present)
+- [ ] 🟡 User rebuilds the full source (1,028 items), then rebuilds the RGA and Semantic Encoder models
+- [ ] Answer evals run after the rebuild and show the base-form facts are right
 
-### 2. Search page
+### 2. Interface fixes
 
-- [x] Find why nonsense queries such as `qqqzzzxxxvvv` return Pokémon. Cause: the Semantic Encoder returns items above its 0.8 similarity threshold. Accepted as a tuning tradeoff, because raising the threshold would drop relevant descriptive results. See `docs/architecture.md`
-- [ ] Improve descriptive queries such as `water turtle` (MRR 0.717; `grass fire` finds nothing relevant)
-- [ ] Shorten the number lookup notice
-- [ ] Restructure the Atomic layout overrides, so `!important` overrides do not need defending (PC-79)
+- [x] Feedback buttons always shown on generated answers, including the detail page bubble. Atomic shows them only once a long answer is expanded with Show more; there is no option to change this
+- [x] Long answers in the detail page bubble use Atomic's Show more
+- [x] Shorter number lookup notice
+- [x] Only the two Coveo values reach the browser bundle, not Vercel's build values
+- [x] Atomic layout overrides reduced to what Atomic documents: all five `!important` rules removed, one documented exception kept (PC-79)
 
-### 3. Generated answers in the interface
-
-- [ ] Feedback buttons always shown on generated answers, including the detail page bubble
-- [ ] Long answers in the detail page bubble use Atomic's Show more
-- [ ] Pokémon names in answers link to detail pages, while citations keep linking to pokemondb.net (PC-64)
-- [ ] Answers tuned using the answer eval results (PC-63)
-
-### 4. Performance (PC-43)
-
-- [x] Performance measured from the hosted site, with the partial-name rewrite applied, and targets set from the results. Search p95 is 198 ms, type-ahead 63 ms, the first result shows at 575 ms, and the first answer text arrives at 2.8 s
-- [ ] Pass only the two Coveo values from `src/main.tsx` to `readCoveoConfig`. It passes all of `import.meta.env`, so the hosted bundle carries Vercel's build values, such as the commit message and author name. They are not secrets, but they do not belong in the browser
-
-### 5. 🟡 Console checks for the user
-
-One visit to Coveo's Visit Browser or Data Explorer:
-
-- [ ] Search `25` on the live site and check whether the search event shows `25` or an empty query
-- [ ] Click a result card and check that Coveo stored the click event
-
-### 6. Wrap-up
+### 3. Wrap-up
 
 - [ ] User looks through the live site at the usual window widths (PC-78)
-- [ ] Final documentation (PC-91)
-- [ ] Technical presentation, production evaluation approach and demo rehearsal (PC-100, PC-101)
+- [ ] Final documentation and README (PC-91)
+- [ ] Technical deep dive and demo script, using the talking points below (PC-100)
+- [ ] Production evaluation approach (PC-101)
+- [ ] Demo rehearsed
 - [ ] Business case, started only after the technical work (Epic 11)
-- [ ] Final submission: Coveo configuration export, materials, then sharing the repository (PC-90, PC-103, PC-31)
+- [ ] Coveo configuration exported with the Coveo CLI, at the very end (PC-90)
+- [ ] Materials submitted, then the repository shared (PC-103, PC-31)
 
 ### Decisions made
 
@@ -116,15 +100,50 @@ One visit to Coveo's Visit Browser or Data Explorer:
 
 ### Not doing
 
-These were considered and dropped, because neither the assessment nor the demo needs them:
+Considered and dropped, because neither the assessment nor the demo needs them. Each can be a talking point instead.
 
-- Evolution sentences in the body, and correcting answers drawn from the "Changes" section
-- Browser tests in CI, branch protection and a failing-test check
-- Screen reader and non-Chromium browser testing
-- The header logo label and the duplicate icon file
-- Checking when a generated answer counts against the allowance
-- Removing the small layout shift on load (0.033, within its 0.05 target)
-- A separate card stylesheet, which would save under 1% of the bundle
+| Item | Reason |
+|---|---|
+| Improving descriptive queries such as `water turtle` (MRR 0.717) | Tuning work with no real queries to tune against. Explained as a tradeoff instead |
+| Linking Pokémon names in answers to detail pages (PC-64) | Not required, and Coveo does not guarantee a prompt instruction is followed |
+| General answer tuning and RGA reporting (PC-63) | The body text fix covers the visible errors; reporting needs real traffic |
+| Evolution answers, and answers drawn from the "Changes" section | Evolution charts vary in structure; these questions can be left out of the demo |
+| Grader fixes for the Gengar ability and Mewtwo Type cases | The grader checks facts are present; the cases are known and documented |
+| Hands-on Passage Retrieval (PC-80 to PC-82) | The written point of view meets the bonus minimum, and access depends on Coveo |
+| Answer rating stretch goal (PC-S1) | Covered by the feedback buttons in the interface fixes |
+| Console checks of the `25` search event and card clicks | Talking points about analytics, not demo needs |
+| Browser tests in CI, branch protection and a failing-test check | Production practice |
+| Screen reader and non-Chromium browser testing | Production practice |
+| The small layout shift on load (0.033, within its 0.05 target) and a separate card stylesheet | Gains too small to matter |
+| The header logo label and the duplicate icon file | Not visible in the demo |
+| Showing feedback buttons while a long answer is collapsed | Atomic has no option for it; raising `max-collapsed-height` would only collapse fewer answers |
+
+### Talking points for the panel
+
+**What we built and why.** A Sitemap source limited to individual Pokémon pages, web scraping into 16 fields, and a Python pre-conversion extension that rewrites tables as sentences so search and generated answers can use them. A dedicated `pokebowl-search` pipeline reached through the search hub. Atomic React with Type and Generation facets, type-ahead, generated answers and a detail page, hosted on Vercel. Evals for index quality, relevance, answers and performance.
+
+**Tradeoffs to be ready to explain**
+
+- The request hook sets `aq`, `dq` and `wildcards` per request, although Coveo recommends the advanced query action for `aq`, because the values depend on the typed text in the same request.
+- Partial names use a `$qre` boost of 300, above Coveo's typical range, chosen by benchmark. Facet values are repeated in `dq` so filters still apply to prefix matches.
+- The Semantic Encoder threshold stays at 0.8, so some nonsense queries return near matches, because raising it would drop relevant descriptive results.
+- Query Suggestions start from a default queries file built from index values, the method Coveo documents for low-traffic environments, and the importance values rank categories, not real popularity.
+- Generated answers depend on clean body text: the form mix-up came from tables, and a fix needs a source rebuild and model rebuilds.
+- Overall MRR is 0.947 against a 0.95 target; the gap is descriptive queries.
+- Automatic field mapping is on, and a few Atomic layout overrides remain, each with a recorded reason.
+
+**Where this goes in production, with real users and data**
+
+Confirm each Coveo capability against current Coveo documentation before presenting it.
+
+- **Learn from behaviour.** Real queries and clicks replace the synthetic default queries file in Query Suggestions, and allow Automatic Relevance Tuning to boost what people actually choose. This needs search hubs and analytics set up per interface, which the application already sends.
+- **Tune with evidence.** Use real query logs and a labelled set that includes negative queries to tune the Semantic Encoder threshold, the partial-name boost and descriptive queries, and A/B test pipeline changes before rolling them out.
+- **Close the loop on answers.** Feedback buttons and RGA reporting show which answers fail. Sampled answers are reviewed by a person, and failing questions are added to the answer evals.
+- **Run evals over time.** Index, relevance, answer and performance evals run on a schedule and in CI, with alerts when a score drops, so a content or configuration change cannot quietly break answers.
+- **Manage configuration as code.** The Coveo CLI exports the organization configuration, so changes are reviewed and promoted between a test and a production organization.
+- **Keep content fresh and structured.** Schedule recrawls as pokemondb.net changes, or move to the Push API with structured data, which would also remove the table-parsing risk behind the answer fix.
+- **Secure access per user.** Use search tokens issued by a backend instead of a shared search-only API key once there are signed-in users.
+- **Extend to agents.** Passage Retrieval or Coveo's Hosted MCP Server could ground an AI assistant in the same index (see `docs/passage-retrieval.md`).
 
 ---
 
@@ -134,14 +153,14 @@ These were considered and dropped, because neither the assessment nor the demo n
 
 ### PC-01: Add repository skeleton
 
-Owner: Agent · Estimate: done
+Owner: Agent
 
 - [x] `.gitignore` excludes secrets, dependencies and build output
 - [x] `.env.example` lists required variables without values
 
 ### PC-02: Request Passage Retrieval access
 
-Owner: You · Estimate: 5 min · Send as soon as possible
+Owner: You · Send as soon as possible
 
 Passage Retrieval must be enabled by Coveo before the bonus work can start.
 
@@ -150,21 +169,21 @@ Passage Retrieval must be enabled by Coveo before the bonus work can start.
 
 ### PC-03: Scaffold the application
 
-Owner: Agent · Estimate: 30 min
+Owner: Agent
 
 - [x] React, TypeScript and Vite application runs locally
 - [x] Coveo values load from local environment variables
 
 ### PC-04: Add test tooling
 
-Owner: Agent · Estimate: 30 min · Depends on: PC-03
+Owner: Agent · Depends on: PC-03
 
 - [x] Vitest and React Testing Library run with `npm test`
 - [x] One sample test proves the setup works
 
 ### PC-05: Add continuous integration
 
-Owner: Agent · Estimate: 30 min · Depends on: PC-04
+Owner: Agent · Depends on: PC-04
 
 - [x] GitHub Actions runs tests and the build on every pull request
 
@@ -176,7 +195,7 @@ Owner: Agent · Estimate: 30 min · Depends on: PC-04
 
 ### PC-10: Decide the indexing approach
 
-Owner: Both · Estimate: 45 min
+Owner: Both
 
 - [x] Source type chosen: Web, Sitemap or Push
 - [x] Handling of alternate forms, such as Mega Evolutions, chosen
@@ -185,14 +204,14 @@ Owner: Both · Estimate: 45 min
 
 ### PC-11: Define expected index results
 
-Owner: Both · Estimate: 30 min · Depends on: PC-10
+Owner: Both · Depends on: PC-10
 
 - [x] Expected title, Type, Generation and image written down for a few Pokémon, including Charizard, whose Mega form has a different Type (see `docs/indexing-expected-results.md`)
 - [x] List of URLs that must not be indexed, such as moves and list pages
 
 ### PC-12: Create a single-Pokémon test source
 
-Owner: You, guided by Agent · Estimate: 30 min · Depends on: PC-10
+Owner: You, guided by Agent · Depends on: PC-10
 
 This source lets us test configuration without waiting for a full crawl.
 
@@ -201,7 +220,7 @@ This source lets us test configuration without waiting for a full crawl.
 
 ### PC-13: Configure extraction, fields and mappings
 
-Owner: You, guided by Agent · Estimate: 2 h · Depends on: PC-11, PC-12
+Owner: You, guided by Agent · Depends on: PC-11, PC-12
 
 - [x] Web scraping configuration applied to the test source
 - [x] Page clutter is removed from the indexed body
@@ -211,7 +230,7 @@ Owner: You, guided by Agent · Estimate: 2 h · Depends on: PC-11, PC-12
 
 ### PC-15: Reconstruct readable body text
 
-Owner: Both · Estimate: 1.5 h · Depends on: PC-13
+Owner: Both · Depends on: PC-13
 
 Type effectiveness grids and stat tables lose their meaning when flattened into text. A pre-conversion indexing pipeline extension rewrites them as sentences so they are useful to search and generated answers.
 
@@ -221,7 +240,7 @@ Type effectiveness grids and stat tables lose their meaning when flattened into 
 
 ### PC-14: Run and verify the full crawl
 
-Owner: You, guided by Agent · Estimate: 1 h, plus about 40 min of crawl time · Depends on: PC-13, PC-15
+Owner: You, guided by Agent · Depends on: PC-13, PC-15
 
 The crawl stays within the site's requested rate of one page every 2 seconds.
 
@@ -237,28 +256,28 @@ The crawl stays within the site's requested rate of one page every 2 seconds.
 
 ### PC-20: Connect the application to Coveo
 
-Owner: Both · Estimate: 30 min · Depends on: PC-03, PC-12
+Owner: Both · Depends on: PC-03, PC-12
 
 - [x] Search-only API key created and stored locally
 - [x] Atomic search interface returns results from our organization
 
 ### PC-21: Display results with pictures
 
-Owner: Agent · Estimate: 1 h · Depends on: PC-13, PC-20
+Owner: Agent · Depends on: PC-13, PC-20
 
 - [x] Each result shows the Pokémon's name and picture
 - [x] A missing image does not break the result
 
 ### PC-22: Add Type and Generation facets
 
-Owner: Agent · Estimate: 45 min · Depends on: PC-13, PC-20
+Owner: Agent · Depends on: PC-13, PC-20
 
 - [x] Type facet filters results correctly
 - [x] Generation facet filters results correctly
 
 ### PC-23: Add browser tests for search
 
-Owner: Agent · Estimate: 45 min · Depends on: PC-21, PC-22
+Owner: Agent · Depends on: PC-21, PC-22
 
 - [x] Playwright covers searching, filtering and viewing a result
 
@@ -270,7 +289,7 @@ Owner: Agent · Estimate: 45 min · Depends on: PC-21, PC-22
 
 ### PC-30: Host the application
 
-Owner: Both · Estimate: 45 min · Depends on: PC-21
+Owner: Both · Depends on: PC-21
 
 - [x] Hosting provider chosen and recorded in `docs/architecture.md`
 - [x] Application is publicly reachable and returns results, at https://pokebowl-cove.vercel.app/
@@ -278,7 +297,7 @@ Owner: Both · Estimate: 45 min · Depends on: PC-21
 
 ### PC-31: Share the repository with Coveo
 
-Owner: You · Estimate: 15 min · Depends on: PC-30, PC-100, PC-101, PC-102
+Owner: You · Depends on: PC-30, PC-100, PC-101, PC-102
 
 This is part of the final submission. The repository stays private until the presentations and demo are prepared.
 
@@ -296,7 +315,7 @@ Evals run on demand with `npm run eval`. The index quality check turns analytics
 
 ### PC-40: Create eval reference data
 
-Owner: Both · Estimate: 1 h
+Owner: Both
 
 - [x] Script pulls 30 to 50 sample pages at the site's requested rate
 - [x] Expected values are saved as JSON and raw HTML stays out of Git
@@ -320,21 +339,21 @@ Owner: Both · Estimate: 1 h
 
 ### PC-41: Add index quality checks
 
-Owner: Agent · Estimate: 30 min · Depends on: PC-14, PC-40
+Owner: Agent · Depends on: PC-14, PC-40
 
 - [x] Indexed Type, Generation and image values are compared with reference data
 - [x] The run reports any non-Pokémon pages in the index
 
 ### PC-42: Add relevance evals
 
-Owner: Both · Estimate: 1 h · Depends on: PC-14
+Owner: Both · Depends on: PC-14
 
 - [x] Labelled query set created
 - [x] Recall@K and MRR are reported
 
 ### PC-43: Establish the performance baseline
 
-Owner: Agent · Estimate: 45 min · Depends on: PC-30
+Owner: Agent · Depends on: PC-30
 
 - [x] p50 and p95 latency recorded for search, type-ahead, answers and page load
 - [x] Performance targets set from the baseline
@@ -345,7 +364,7 @@ These are pre-hosting numbers from one local network, in `evals/reports/performa
 
 ### PC-44: Add generated answer evals
 
-Owner: Both · Estimate: 1 h · Depends on: PC-62
+Owner: Both · Depends on: PC-62
 
 - [x] Questions cover expected facts, citations and unanswerable cases
 - [x] Results are saved in a report
@@ -358,7 +377,7 @@ Owner: Both · Estimate: 1 h · Depends on: PC-62
 
 ### PC-50: Pre-populate suggestions
 
-Owner: Both · Estimate: 1 h · Depends on: PC-20, and the model from PC-51
+Owner: Both · Depends on: PC-20, and the model from PC-51
 
 The application has no real users, so the model has no search history to learn from. Coveo's documented method for a low-traffic environment is a default queries file. See `docs/architecture.md`, section Query Suggestions.
 
@@ -370,7 +389,7 @@ The application has no real users, so the model has no search history to learn f
 
 ### PC-51: Build the model and enable type-ahead
 
-Owner: Both · Estimate: 45 min, plus model build time · Depends on: PC-20
+Owner: Both · Depends on: PC-20
 
 The model is created first, because the default queries file attaches to an existing model.
 
@@ -414,7 +433,7 @@ The overall target is not met. The gap is in descriptive, Generation, ability an
 
 ### PC-60: Confirm content quality
 
-Owner: Both · Estimate: 30 min · Depends on: PC-14
+Owner: Both · Depends on: PC-14
 
 Generated answers use only an item's body text, so that text must be clean and meaningful.
 
@@ -423,14 +442,14 @@ Generated answers use only an item's body text, so that text must be clean and m
 
 ### PC-61: Create and associate the models
 
-Owner: You, guided by Agent · Estimate: 45 min, plus model build time · Depends on: PC-60
+Owner: You, guided by Agent · Depends on: PC-60
 
 - [x] Semantic Encoder and Relevance Generative Answering (RGA) models use the same content, limited to the full source
 - [x] Both models are associated with the `pokebowl-search` query pipeline
 
 ### PC-62: Add generated answers to the application
 
-Owner: Agent · Estimate: 45 min · Depends on: PC-61
+Owner: Agent · Depends on: PC-61
 
 - [x] Answers and citations display for suitable queries
 - [x] Search still works when no answer is generated
@@ -449,10 +468,10 @@ An animated Pokéball at the top-right corner of the detail page's main card ope
 
 ### PC-63: Tune answers and add reporting
 
-Owner: Both · Estimate: 45 min · Depends on: PC-62
+Owner: Both · Depends on: PC-62
 
-- [ ] RGA reporting is configured
-- [ ] Configuration is tuned using PC-44 results
+- Not doing: RGA reporting is configured
+- Not doing: Configuration is tuned using PC-44 results
 - [x] User decides whether an answer disappearing on a non-relevance sort is acceptable (accepted; Coveo documents this behavior)
 
 ### PC-64: Link Pokémon names in generated answers to detail pages
@@ -462,8 +481,8 @@ Owner: Both · Depends on: PC-62
 Pokémon mentioned in an answer should link to our detail page, while citations keep linking to pokemondb.net. Atomic has no option to customize how answer text renders. The proposed first approach is a custom prompt instruction that asks for Markdown links. Coveo states such an instruction is not guaranteed to be followed. The alternative is rendering the answer with Headless.
 
 - [x] Approach agreed by the user: try it
-- [ ] Links tested on a small question set, including that relative links render
-- [ ] Citations still link to pokemondb.net
+- Not doing: Links tested on a small question set, including that relative links render
+- Not doing: Citations still link to pokemondb.net
 
 ---
 
@@ -473,7 +492,7 @@ Pokémon mentioned in an answer should link to our detail page, while citations 
 
 ### PC-70: Build the Pokémon detail page
 
-Owner: Agent · Estimate: 2 h · Depends on: PC-21
+Owner: Agent · Depends on: PC-21
 
 - [x] Data shown on the page agreed
 - [x] Each result links to a page with a shareable URL
@@ -493,14 +512,14 @@ The application is shown live to a panel, so it needs a deliberate, finished des
 
 ### PC-75: Agree the visual direction
 
-Owner: Both· Depends on: PC-22
+Owner: Both · Depends on: PC-22
 
 - [x] Layout, colour, type and tone agreed before styling starts
 - [x] Direction recorded in `docs/architecture.md`
 
 ### PC-76: Polish the search page
 
-Owner: Agent· Depends on: PC-75
+Owner: Agent · Depends on: PC-75
 
 - [x] Header and page layout are designed, with no browser default styling
 - [x] Result cards have consistent, correctly sized pictures and show name, number, Type and Generation
@@ -519,23 +538,23 @@ Tailwind and shadcn/ui are the approved tools for our interface code. Atomic com
 
 - [x] Header, result cards and Type badges use Tailwind and shadcn/ui; page sizes now use Atomic's control
 - [x] Result cards render correctly inside Atomic's Shadow DOM
-- [ ] Overrides of Atomic's page layout are reduced to what the documentation supports (loose values are named; the user decides whether to restructure, because it could disturb the page centering)
+- [x] Overrides of Atomic's page layout are reduced to what the documentation supports (all `!important` rules removed; the filter popover margin rule is kept, with its reason in `docs/architecture.md`)
 - [x] Browser tests and a visual check pass at desktop widths
 
 ### PC-77: Polish the remaining experiences
 
-Owner: Agent· Depends on: PC-75, PC-62, PC-70
+Owner: Agent · Depends on: PC-75, PC-62, PC-70
 
 - [x] Generated answers, type-ahead and the detail page match the search page design
-- [ ] The bonus feature matches the design, if it is built
+- Not doing: The bonus feature matches the design, if it is built
 
 ### PC-78: Review quality across the application
 
-Owner: Both· Depends on: PC-76, PC-77
+Owner: Both · Depends on: PC-76, PC-77
 
 - [ ] Reviewed in a real browser by the user, with screenshots at each width
 - [x] Keyboard use, focus states, colour contrast and image alt text checked (automated, on the hosted site at 1100, 1440, 1920 and 2560 px; no defects found)
-- [ ] Page load is measured against PC-43 so polish does not harm performance
+- [x] Page load is measured against PC-43 so polish does not harm performance (hosted measurement, PC-43)
 - [x] User decided the open interface questions (see Decisions made under Remaining work)
 
 ---
@@ -548,27 +567,27 @@ The Passage Retrieval API returns ranked text passages from indexed content, mai
 
 ### PC-80: Set up Passage Retrieval
 
-Owner: You, guided by Agent · Estimate: 45 min · Depends on: PC-02, PC-61
+Owner: You, guided by Agent · Depends on: PC-02, PC-61
 
-- [ ] Passage Retrieval model created and associated with the query pipeline
-- [ ] A test API call returns relevant passages
+- Not doing: Passage Retrieval model created and associated with the query pipeline
+- Not doing: A test API call returns relevant passages
 
 ### PC-81: Choose the feature concept
 
-Owner: Both · Estimate: 30 min · Depends on: PC-80
+Owner: Both · Depends on: PC-80
 
-- [ ] Concept agreed and recorded in `docs/architecture.md`
+- Not doing: Concept agreed and recorded in `docs/architecture.md`
 
 ### PC-82: Build the feature
 
-Owner: Agent · Estimate: 3 h · Depends on: PC-81
+Owner: Agent · Depends on: PC-81
 
-- [ ] Feature is built test-first and works in the hosted application
-- [ ] Credentials are not exposed beyond what is safe for the browser
+- Not doing: Feature is built test-first and works in the hosted application
+- Not doing: Credentials are not exposed beyond what is safe for the browser
 
 ### PC-83: Write a point of view on Passage Retrieval
 
-Owner: Both · Estimate: 30 min
+Owner: Both
 
 This is the minimum outcome for the bonus.
 
@@ -583,14 +602,14 @@ This is the minimum outcome for the bonus.
 
 ### PC-90: Export the Coveo configuration
 
-Owner: Both · Estimate: 45 min · Depends on: PC-14, PC-61
+Owner: Both · Depends on: PC-14, PC-61
 
 - [ ] Configuration exported to the repository with the Coveo CLI
 - [ ] No secrets appear in the export
 
 ### PC-91: Finish the documentation
 
-Owner: Agent · Estimate: 1 h · Depends on: PC-90
+Owner: Agent · Depends on: PC-90
 
 - [ ] `docs/architecture.md` reflects the final configuration and decisions
 - [ ] README explains how to set up, run, test and evaluate the project
@@ -603,7 +622,7 @@ Owner: Agent · Estimate: 1 h · Depends on: PC-90
 
 ### PC-100: Prepare the technical deep dive and demo
 
-Owner: Both · Estimate: 2 h · Depends on: PC-44, PC-91
+Owner: Both · Depends on: PC-44, PC-91
 
 - [ ] Covers what we built, the Coveo configuration, architecture choices and lessons learned
 - [ ] Includes eval results
@@ -611,13 +630,13 @@ Owner: Both · Estimate: 2 h · Depends on: PC-44, PC-91
 
 ### PC-101: Prepare the production evaluation approach
 
-Owner: Both · Estimate: 1 h
+Owner: Both
 
 - [ ] Explains evals over time, end-user feedback, sampling and A/B testing, using Coveo's tools where possible
 
 ### PC-103: Submit the presentation materials
 
-Owner: You · Estimate: 15 min · Depends on: PC-100, PC-101, PC-102
+Owner: You · Depends on: PC-100, PC-101, PC-102
 
 - [ ] Materials submitted before the session
 
@@ -629,7 +648,7 @@ Owner: You · Estimate: 15 min · Depends on: PC-100, PC-101, PC-102
 
 ### PC-102: Develop the customer business case
 
-Owner: You, supported by Agent · Estimate: 2 h
+Owner: You, supported by Agent
 
 - [ ] Enterprise customer chosen from past or present experience
 - [ ] Solution and value proposition prepared for that customer
@@ -640,10 +659,10 @@ Owner: You, supported by Agent · Estimate: 2 h
 
 ### PC-S1: Add end-user feedback on generated answers
 
-Owner: Agent · Estimate: 1 h · Depends on: PC-62
+Owner: Agent · Depends on: PC-62
 
-- [ ] Users can rate an answer (Atomic's generated answer shows feedback buttons; not tested yet)
-- [ ] Ratings are captured somewhere we can review them (not verified)
+- Not doing: Users can rate an answer (Atomic's generated answer shows feedback buttons; not tested yet)
+- Not doing: Ratings are captured somewhere we can review them (not verified)
 
 ## Parked
 

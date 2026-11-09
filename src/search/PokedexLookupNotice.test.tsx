@@ -22,10 +22,10 @@ beforeEach((): void => {
   status.hasError = false;
 });
 
-it('explains a number-only search', (): void => {
+it('explains a number-only search in one short sentence', (): void => {
   render(<PokedexLookupNotice engine={engineWith('3')} />);
 
-  expect(screen.getByRole('status')).toHaveTextContent('Showing Pokédex number #0003');
+  expect(screen.getByRole('status')).toHaveTextContent(/^Pokédex lookup\s*Showing #0003\. Use words to search descriptions\.$/);
 });
 
 it('stays hidden for a text search', (): void => {

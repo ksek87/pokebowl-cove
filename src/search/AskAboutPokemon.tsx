@@ -7,7 +7,7 @@ import {
   loadSearchAnalyticsActions,
   type SearchEngine,
 } from '@coveo/headless';
-import { type CSSProperties, type JSX, memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { type JSX, memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { CoveoConfig } from '../config.ts';
@@ -42,7 +42,7 @@ const AnswerInterface = memo(function AnswerInterface({
 }): JSX.Element {
   return (
     <AtomicSearchInterface engine={engine} reflectStateInUrl={false} onReady={onReady}>
-      <AtomicGeneratedAnswer />
+      <AtomicGeneratedAnswer collapsible />
     </AtomicSearchInterface>
   );
 });
@@ -107,15 +107,11 @@ function AskAnswer({
   );
 }
 
-interface BubblePlacement {
-  side: 'below' | 'above';
-  room: number;
-}
+type BubbleSide = 'below' | 'above';
 
 /** The bubble extends down from the Pokéball, or up when more room is above, so it stays on screen after scrolling. */
-function readPlacement(anchor: DOMRect): BubblePlacement {
-  const below = window.innerHeight - anchor.top;
-  return below >= anchor.bottom ? { side: 'below', room: below } : { side: 'above', room: anchor.bottom };
+function readSide(anchor: DOMRect): BubbleSide {
+  return window.innerHeight - anchor.top >= anchor.bottom ? 'below' : 'above';
 }
 
 function pathIncludes(event: Event, element: Element | null): boolean {
@@ -133,7 +129,7 @@ export function AskAboutPokemon({ config, name }: { config: CoveoConfig; name: s
   const attempts = useRef(0);
   const title = `Ask about ${name}`;
   const questions = ASK_POKEMON_QUESTIONS.map((template) => askPokemonQuestion(template, name));
-  const [placement, setPlacement] = useState<BubblePlacement>({ side: 'below', room: 0 });
+  const [side, setSide] = useState<BubbleSide>('below');
   const isThinking = asked !== null && progress === 'waiting';
 
   const close = useCallback((): void => {
@@ -153,7 +149,7 @@ export function AskAboutPokemon({ config, name }: { config: CoveoConfig; name: s
     }
     const place = (): void => {
       if (launcher.current) {
-        setPlacement(readPlacement(launcher.current.getBoundingClientRect()));
+        setSide(readSide(launcher.current.getBoundingClientRect()));
       }
     };
     place();
@@ -202,18 +198,17 @@ export function AskAboutPokemon({ config, name }: { config: CoveoConfig; name: s
           aria-modal="false"
           aria-label={title}
           data-slot="ask-bubble"
-          data-side={placement.side}
-          style={{ '--ask-room': `${placement.room}px` } as CSSProperties}
+          data-side={side}
           className={cn(
             'absolute right-full z-50 mr-(--space-ask-bubble-gap) w-(--size-ask-bubble) flex-col rounded-(--radius-panel) border-(length:--size-panel-border) border-border bg-card text-sm shadow-xl',
-            placement.side === 'below' ? 'top-0' : 'bottom-0',
+            side === 'below' ? 'top-0' : 'bottom-0',
             isOpen ? 'flex' : 'hidden',
           )}
         >
           <div
             data-slot="ask-content"
             className={cn(
-              'grid max-h-(--size-ask-bubble-content) gap-2 overflow-y-auto rounded-(--radius-panel)',
+              'grid gap-2 rounded-(--radius-panel)',
               !asked && 'p-3',
               asked && progress !== 'answered' && 'p-(--space-ask-answer-inset)',
             )}
@@ -262,7 +257,7 @@ export function AskAboutPokemon({ config, name }: { config: CoveoConfig; name: s
             aria-hidden="true"
             className={cn(
               '-right-(--size-ask-tail-offset) absolute size-(--size-ask-tail) rotate-45 border-t-(length:--size-panel-border) border-r-(length:--size-panel-border) border-border bg-card',
-              placement.side === 'below' ? 'top-(--space-ask-tail)' : 'bottom-(--space-ask-tail)',
+              side === 'below' ? 'top-(--space-ask-tail)' : 'bottom-(--space-ask-tail)',
             )}
           />
         </div>
