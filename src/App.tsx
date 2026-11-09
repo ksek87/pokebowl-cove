@@ -57,10 +57,14 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
       <SiteHeader />
       <main className="mx-auto w-full max-w-(--size-content) flex-1" style={GRID_SETTINGS}>
         <AtomicSearchInterface engine={engine} fieldsToInclude={POKEMON_RESULT_FIELDS}>
+          {/* Atomic's optional search section aligns the box with the results, so the box is centered in our markup instead. */}
+          <div
+            data-slot="search-row"
+            className="mx-auto my-(--atomic-layout-spacing-y) min-h-(--size-search-row) w-full max-w-(--size-search)"
+          >
+            <AtomicSearchBox />
+          </div>
           <AtomicSearchLayout>
-            <AtomicLayoutSection section="search">
-              <AtomicSearchBox />
-            </AtomicLayoutSection>
             <AtomicLayoutSection section="main">
               <AtomicLayoutSection section="horizontal-facets">
                 <AtomicPopover>
@@ -82,9 +86,14 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
                   />
                 </AtomicPopover>
               </AtomicLayoutSection>
-              <AtomicLayoutSection section="status">
-                <AtomicQuerySummary />
-                <AtomicSortDropdown>
+              {/* Atomic's status section is a fixed grid with no place for page sizes, so this row is our markup. */}
+              <div
+                data-slot="status-row"
+                className="mb-(--space-status-row) flex min-h-(--size-status-row) flex-wrap items-center gap-x-(--space-control-group) gap-y-(--space-status-row)"
+              >
+                {/* A zero basis lets the summary wrap, so a long query cannot push the controls to a second row. */}
+                <AtomicQuerySummary className="min-w-0 flex-1" />
+                <AtomicSortDropdown className="max-lg:hidden">
                   {SORT_OPTIONS.map(({ label, expression }) => (
                     <AtomicSortExpression key={label} label={label} expression={expression} />
                   ))}
@@ -93,11 +102,12 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
                   choicesDisplayed={PAGE_SIZES.join(',')}
                   initialChoice={DEFAULT_PAGE_SIZE}
                 />
-                <AtomicDidYouMean />
+                <AtomicDidYouMean className="basis-full" />
                 <PokedexLookupNotice engine={engine} />
-                <AtomicBreadbox />
-                <AtomicRefineToggle />
-              </AtomicLayoutSection>
+                <AtomicBreadbox className="basis-full" />
+                {/* Below Tailwind's lg breakpoint, Atomic's default mobile breakpoint of 1024px, sorting and facets move into this modal. */}
+                <AtomicRefineToggle className="lg:hidden" />
+              </div>
               <AtomicLayoutSection section="results">
                 <AtomicGeneratedAnswer collapsible />
                 <ResultPlaceholders />

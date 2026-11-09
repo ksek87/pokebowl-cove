@@ -106,33 +106,18 @@
   --atomic-border-radius-md: 0.75rem;
   --atomic-border-radius-lg: 1rem;
   --atomic-border-radius-xl: 1.5rem;
-  --atomic-layout-max-search-box-input-width: var(--size-search);
-}
-
-/* Atomic's generated layout rules left-align this section at desktop widths, and are scoped by a generated id. */
-atomic-layout-section[section='search'] {
-  justify-self: center !important;
-  width: 100% !important;
-  min-height: var(--size-search-row);
-}
-
-atomic-search-layout atomic-layout-section[section='search'] {
-  margin-top: 0;
-}
-
-/* Media queries cannot read variables. This width must match Atomic's mobile breakpoint. */
-@media (min-width: 1024px) {
-  /* Atomic centers one main column in its grid areas, so only the gutters are ours. */
-  atomic-search-layout {
-    grid-template-columns: var(--size-gutter) minmax(0, 1fr) var(--size-gutter);
-  }
+  /* Atomic's layout uses this theme variable for the gutters on each side of the main column. */
+  --atomic-layout-spacing-x: var(--size-gutter);
 }
 
 atomic-layout-section[section='pagination'] {
   margin-bottom: var(--size-gutter);
 }
 
-/* Atomic spaces popovers with a right margin, which would push the row off center. */
+/*
+ * Atomic's layout stylesheet gives each popover a right margin and offers no setting for it, so the row would sit off
+ * center. This selector is one element more specific than Atomic's rule, which is what lets it apply.
+ */
 atomic-search-interface atomic-search-layout atomic-layout-section[section='horizontal-facets'] > atomic-popover {
   margin-right: 0;
 }
@@ -140,34 +125,11 @@ atomic-search-interface atomic-search-layout atomic-layout-section[section='hori
 atomic-layout-section[section='horizontal-facets'] {
   justify-content: center;
   gap: var(--space-status-row);
-  margin-bottom: var(--space-status-row);
 }
 
-atomic-layout-section[section='status'] {
-  display: flex !important;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-status-row) var(--space-control-group);
-  min-height: var(--size-status-row);
-  margin-bottom: var(--space-status-row);
-}
-
-atomic-layout-section[section='status'] > * {
-  margin-bottom: 0 !important;
-}
-
-atomic-layout-section[section='status'] > atomic-breadbox {
-  flex-basis: 100%;
-}
-
-/* A zero basis lets the summary wrap, so a long query cannot push the controls to a second row. */
-atomic-layout-section[section='status'] > atomic-query-summary {
-  flex: 1 1 0;
-  min-width: 0;
-}
-
+/* Atomic positions the box over a spacer; a styled wrapper that grows with the text replaces the spacer. */
 atomic-search-box::part(wrapper) {
-  position: relative !important;
+  position: relative;
   display: flex;
   align-items: center;
   min-height: var(--size-search-box);
@@ -364,10 +326,6 @@ atomic-sort-dropdown::part(select) {
   border: var(--border-panel);
   border-radius: var(--radius-control);
   font-weight: 800;
-}
-
-atomic-layout-section[section='status'] > atomic-did-you-mean {
-  flex-basis: 100%;
 }
 
 atomic-sort-dropdown::part(label),
