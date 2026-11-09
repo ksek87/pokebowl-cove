@@ -48,35 +48,79 @@ Work with a waiting time, such as Coveo's response or a model build, starts as e
 
 | Order | Tickets | Notes |
 |---|---|---|
-| Done | PC-01, PC-03, PC-04, PC-10 to PC-15, PC-20 to PC-23, PC-41, PC-51, PC-60 to PC-62, PC-70, PC-75, PC-76, PC-83 | Index, search application, models, detail page and generated answers. Items after PC-23 are in PR #6 |
-| 1. Merge and upload | PR #6, PC-50 | Merge first, so later branches start from it. The ranked suggestions file waits for upload and a build |
-| 2. Search quality | PC-52, PC-64 | Partial-name search and links in generated answers |
-| 3. Host the application | PC-30 | Done. Hosting also unblocks PC-43 |
-| 4. Evals and tuning | PC-40, PC-44, PC-63 | Evals exist. What remains is the human review of flagged answers, the hand-checks and tuning |
-| 5. Bonus | PC-80 to PC-82 | Depends on Coveo enabling access |
-| 6. Wrap up | PC-43, PC-78, PC-79, PC-90, PC-91, PC-100 to PC-102 | Business value work comes last |
-| 7. Final submission | PC-103, PC-31 | The repository is shared only after the presentations and demo are prepared |
+| Done | PC-01, PC-03, PC-04, PC-10 to PC-15, PC-20 to PC-23, PC-30, PC-40, PC-41, PC-50 to PC-52, PC-60 to PC-62, PC-70, PC-75, PC-76, PC-83 | Index, search application, models, detail page and generated answers. Items after PC-23 are in PR #6 |
+| Now | See Remaining work | The ordered list of everything left |
 
 If Passage Retrieval access has not arrived, write PC-83 and add PC-82 only if access arrives later. If time runs short, drop the stretch goal.
 
 ---
 
-## Open problems
+## Remaining work
 
-Problems found during testing that still need work. Each stays here until it is fixed or the user decides to accept it.
+Everything still to do, in order. Each item is needed for an assessment requirement or for something a panel would see in the demo. Tickets below hold the detail.
 
-**Must fix before the presentation**
+### 1. Correct generated answer content (in progress)
 
-- [ ] **Generated answers mix Pokémon forms (Epic 6, with PC-44 and PC-63).** The answer for `charizard` gives 110.5 kg and Tough Claws, which are Mega Charizard X values, beside base Charizard's Type and stats. The correct weight is 90.5 kg, as the detail page shows. The likely cause is that one page's body text holds several forms in the same format, but this is not confirmed. Any fix to the body text belongs in the indexing extension.
+The indexing extension leaves each form's Pokédex data table (Type, height, weight, abilities) without the form's name, so answers give Mega Charizard X's 110.5 kg as Charizard's weight. 181 of 1,028 pages are affected, and 5 of 23 multi-form test answers were wrong. The fix rewrites those tables as sentences that name each form, adds the Pokémon's name to form labels such as "Attack Forme", and adds "is weak to" sentences, because "Is Charizard weak to water?" gets no answer today.
 
-**Check or decide**
+- [ ] Extension change built test-first, with answer eval questions that catch another form's values
+- [ ] 🟡 User pastes the extension into Coveo and rebuilds the single-Pokémon test source; the Charizard body and all 16 fields are checked
+- [ ] 🟡 User rebuilds the full source, then rebuilds the RGA and Semantic Encoder models
+- [ ] Answer evals run and show the base-form facts are right
 
-- [x] **`char` shows "Did you mean: chart" (PC-52). Accepted by the user.** It predates the partial-name change: the Search API returns the same correction with and without it. Turning off `queryCorrection` for one-word prefix searches is untested and would also remove corrections for genuine one-word typos.
-- [x] **Order within matching names is not meaningful (PC-52). Accepted by the user.** `char` ranks Charcadet and Charjabug above Charizard, because the order comes from Coveo's relevance score. Ranking popular Pokémon higher would need a popularity signal that does not exist without real traffic.
-- [ ] **Descriptive queries score low (Epic 4).** MRR is 0.717, the main reason overall MRR is 0.947 against a target of 0.95. The query `grass fire` returns no relevant result. Decide whether to improve this or explain it in the presentation.
-- [ ] **The performance eval does not apply the partial-name rewrite (PC-43).** `evals/reports/performance.json` does not reflect shipped search behaviour. Apply the rewrite and measure from the hosted site.
-- [ ] **Browser tests do not run in CI, and failed checks do not block merges (PC-05).** The first needs the eval API key. The second needs branch protection on `main`, set by the user.
-- [ ] **Duplicate icon (optional).** `public/pokeball.svg` and `docs/assets/pokeball.svg` are identical.
+### 2. Search page
+
+- [ ] Find why nonsense queries such as `qqqzzzxxxvvv` return Pokémon, so the no-results state never shows. The partial-name rewrite and query correction do not cause it. Fix or explain it
+- [ ] Improve descriptive queries such as `water turtle` (MRR 0.717; `grass fire` finds nothing relevant)
+- [ ] Shorten the number lookup notice
+- [ ] Restructure the Atomic layout overrides, so `!important` overrides do not need defending (PC-79)
+
+### 3. Generated answers in the interface
+
+- [ ] Feedback buttons always shown on generated answers, including the detail page bubble
+- [ ] Long answers in the detail page bubble use Atomic's Show more
+- [ ] Pokémon names in answers link to detail pages, while citations keep linking to pokemondb.net (PC-64)
+- [ ] Answers tuned using the answer eval results (PC-63)
+
+### 4. Performance (in progress, PC-43)
+
+- [ ] Performance measured from the hosted site, with the partial-name rewrite applied, and targets set from the results
+
+### 5. 🟡 Console checks for the user
+
+One visit to Coveo's Visit Browser or Data Explorer:
+
+- [ ] Search `25` on the live site and check whether the search event shows `25` or an empty query
+- [ ] Click a result card and check that Coveo stored the click event
+
+### 6. Wrap-up
+
+- [ ] User looks through the live site at the usual window widths (PC-78)
+- [ ] Final documentation (PC-91)
+- [ ] Technical presentation, production evaluation approach and demo rehearsal (PC-100, PC-101)
+- [ ] Business case, started only after the technical work (Epic 11)
+- [ ] Final submission: Coveo configuration export, materials, then sharing the repository (PC-90, PC-103, PC-31)
+
+### Decisions made
+
+- Search box stays centered; sort and page size stay visible for small result sets; filters and search are not pinned on long pages.
+- Suggestions on an empty search box: yes, and already live.
+- Detail page is complete for the demo: no close-match suggestions on the not-found page, no search box, no evolution line, stat percentiles or Type matchups.
+- An answer disappearing when sorting away from Best match is accepted, because Coveo documents this behaviour.
+- `char` showing "Did you mean: chart" is accepted. It predates the partial-name change, and turning correction off would also remove corrections for real typos.
+- The order of names matching a prefix comes from Coveo's relevance score and is accepted, because there is no real traffic to rank popular Pokémon higher.
+- `npm audit` findings in Coveo's packages are left until Coveo releases new packages.
+- Two fake answer events reached analytics during an automated check (`answerId` `72f54f33-6af6-4960-9336-c7078ef976c7`). Exclude this answer if answer reports are shown.
+
+### Not doing
+
+These were considered and dropped, because neither the assessment nor the demo needs them:
+
+- Evolution sentences in the body, and correcting answers drawn from the "Changes" section
+- Browser tests in CI, branch protection and a failing-test check
+- Screen reader and non-Chromium browser testing
+- The header logo label and the duplicate icon file
+- Checking when a generated answer counts against the allowance
 
 ---
 
@@ -119,7 +163,6 @@ Owner: Agent · Estimate: 30 min · Depends on: PC-03
 Owner: Agent · Estimate: 30 min · Depends on: PC-04
 
 - [x] GitHub Actions runs tests and the build on every pull request
-- [ ] A failing test blocks a passing status
 
 ---
 
@@ -253,7 +296,23 @@ Owner: Both · Estimate: 1 h
 
 - [x] Script pulls 30 to 50 sample pages at the site's requested rate
 - [x] Expected values are saved as JSON and raw HTML stays out of Git
-- [ ] Difficult cases are verified by hand (5 match `docs/indexing-expected-results.md`; 11 remain, such as Farfetch'd, Nidoran♀ and Type: Null)
+- [x] Difficult cases are verified by hand. 5 match `docs/indexing-expected-results.md`. The user compared most of the other 11 on our live detail pages against pokemondb.net, found no differences, and closed the item on 2026-11-09
+
+  The eval compares Coveo's index with values our script read from pokemondb.net, so a script error on a difficult page would pass unnoticed. A person confirms the script's values by opening each page. The list of difficult pages is `DIFFICULT_PAGES` in `evals/buildReference.ts`; confirmed pages go into `evals/reference/hand-verified.json` and `docs/indexing-expected-results.md`. Check the name, number, Types, Generation and that the artwork matches:
+
+  | Page | Number | Types | Generation |
+  |---|---|---|---|
+  | [Gecqua](https://pokemondb.net/pokedex/gecqua) | ??? | Water | 10 |
+  | [Pombon](https://pokemondb.net/pokedex/pombon) | ??? | Fire | 10 |
+  | [Farfetch'd](https://pokemondb.net/pokedex/farfetchd) | 0083 | Normal, Flying | 1 |
+  | [Nidoran♀ (female)](https://pokemondb.net/pokedex/nidoran-f) | 0029 | Poison | 1 |
+  | [Ho-oh](https://pokemondb.net/pokedex/ho-oh) | 0250 | Fire, Flying | 2 |
+  | [Type: Null](https://pokemondb.net/pokedex/type-null) | 0772 | Normal | 7 |
+  | [Flabébé](https://pokemondb.net/pokedex/flabebe) | 0669 | Fairy | 6 |
+  | [Deoxys](https://pokemondb.net/pokedex/deoxys) | 0386 | Psychic | 3 |
+  | [Wormadam](https://pokemondb.net/pokedex/wormadam) | 0413 | Bug, Grass | 4 |
+  | [Urshifu](https://pokemondb.net/pokedex/urshifu) | 0892 | Fighting, Dark | 8 |
+  | [Zygarde](https://pokemondb.net/pokedex/zygarde) | 0718 | Dragon, Ground | 6 |
 
 ### PC-41: Add index quality checks
 
@@ -286,8 +345,6 @@ Owner: Both · Estimate: 1 h · Depends on: PC-62
 
 - [x] Questions cover expected facts, citations and unanswerable cases
 - [x] Results are saved in a report
-- [ ] A real query with results but no answer is checked
-- [ ] When a generated answer counts against the allowance is confirmed
 
 ---
 
@@ -304,7 +361,7 @@ The application has no real users, so the model has no search history to learn f
 - [x] Preload approach chosen and recorded
 - [x] Contents of the default queries file confirmed by the user
 - [x] File generated from index values and uploaded to the model
-- [ ] Ranked file (2,236 queries with category importance) uploaded, and a model build has picked it up
+- [x] Ranked file (2,236 queries with category importance) uploaded, and a model build has picked it up
 - [x] Scripted fallback not needed: the model became active
 
 ### PC-51: Build the model and enable type-ahead
@@ -392,7 +449,7 @@ Owner: Both · Estimate: 45 min · Depends on: PC-62
 
 - [ ] RGA reporting is configured
 - [ ] Configuration is tuned using PC-44 results
-- [ ] User decides whether an answer disappearing on a non-relevance sort is acceptable (Coveo documents this behavior)
+- [x] User decides whether an answer disappearing on a non-relevance sort is acceptable (accepted; Coveo documents this behavior)
 
 ### PC-64: Link Pokémon names in generated answers to detail pages
 
@@ -400,7 +457,7 @@ Owner: Both · Depends on: PC-62
 
 Pokémon mentioned in an answer should link to our detail page, while citations keep linking to pokemondb.net. Atomic has no option to customize how answer text renders. The proposed first approach is a custom prompt instruction that asks for Markdown links. Coveo states such an instruction is not guaranteed to be followed. The alternative is rendering the answer with Headless.
 
-- [ ] Approach agreed by the user
+- [x] Approach agreed by the user: try it
 - [ ] Links tested on a small question set, including that relative links render
 - [ ] Citations still link to pokemondb.net
 
@@ -421,7 +478,6 @@ Owner: Agent · Estimate: 2 h · Depends on: PC-21
 - [x] New Pokémon with unknown numbers or empty stats display cleanly
 - [x] Pokédex entries from the stored page are shown, with a credit to the source
 - [x] Type and Generation link to the filtered search page
-- [ ] pokemondb.net terms for quoting the Pokédex text checked
 
 ---
 
@@ -474,19 +530,9 @@ Owner: Agent· Depends on: PC-75, PC-62, PC-70
 Owner: Both· Depends on: PC-76, PC-77
 
 - [ ] Reviewed in a real browser by the user, with screenshots at each width
-- [ ] Keyboard use, focus states, colour contrast and image alt text checked
+- [x] Keyboard use, focus states, colour contrast and image alt text checked (automated, on the hosted site at 1100, 1440, 1920 and 2560 px; no defects found)
 - [ ] Page load is measured against PC-43 so polish does not harm performance
-- [ ] A card click event is confirmed to reach Coveo in production
-- [ ] Real screen reader and a non-Chromium browser checked
-- [ ] User decides the open interface questions:
-  - Keep the search box centered on the page, or span it across the results column
-  - Addressed: the content width grew and wide windows show 6 columns
-  - Suggest close matches on the detail not-found page
-  - Add a search box to the detail page
-  - Show suggestions on an empty search box
-  - Hide sort and page size for very small result sets
-  - Shorten the number lookup notice
-  - Keep filters or search in view on long pages
+- [x] User decided the open interface questions (see Decisions made under Remaining work)
 
 ---
 
@@ -547,7 +593,7 @@ Owner: Agent · Estimate: 1 h · Depends on: PC-90
 
 ---
 
-## Epic 10: Presentation and business value
+## Epic 10: Technical presentation
 
 **Branch:** `feature/presentation`, if materials are stored in the repository
 
@@ -565,18 +611,24 @@ Owner: Both · Estimate: 1 h
 
 - [ ] Explains evals over time, end-user feedback, sampling and A/B testing, using Coveo's tools where possible
 
+### PC-103: Submit the presentation materials
+
+Owner: You · Estimate: 15 min · Depends on: PC-100, PC-101, PC-102
+
+- [ ] Materials submitted before the session
+
+---
+
+## Epic 11: Business case
+
+**Not a priority yet.** All business case and enterprise customer work belongs here and starts only after the application and technical work are done.
+
 ### PC-102: Develop the customer business case
 
 Owner: You, supported by Agent · Estimate: 2 h
 
 - [ ] Enterprise customer chosen from past or present experience
 - [ ] Solution and value proposition prepared for that customer
-
-### PC-103: Submit the presentation materials
-
-Owner: You · Estimate: 15 min · Depends on: PC-100, PC-101, PC-102
-
-- [ ] Materials submitted before the session
 
 ---
 
