@@ -22,10 +22,10 @@ The assessment defines four tiers of required work and a panel presentation. A t
 | Essential | Filter by Pokémon Generation | Done | PC-22 |
 | Essential | Show each Pokémon's picture in results | Done | PC-21 |
 | Intermediate | Host the code on GitHub and share the link | Code is on GitHub; not yet shared | PC-31 |
-| Intermediate | Host the search application | Not started | PC-30 |
+| Intermediate | Host the search application | Done: https://pokebowl-cove.vercel.app/ | PC-30 |
 | Advanced | Generative answers with Relevance Generative Answering | Built in PR #6; tuning and evals remain | PC-61, PC-62, PC-63, PC-44 |
-| Advanced | Preload a Query Suggestions model for type-ahead | Built: model active and default queries live, confirmed in a real browser. The ranked file still needs uploading | PC-50, PC-51 |
-| Advanced | Pokémon detail page | Built in PR #6, not yet merged to `main` | PC-70 |
+| Advanced | Preload a Query Suggestions model for type-ahead | Done: model active and the ranked default queries are live. After the rebuild, Pokémon names lead the suggestions | PC-50, PC-51 |
+| Advanced | Pokémon detail page | Done, live on the hosted site | PC-70 |
 | Advanced | Technical deep dive presentation | Not started | PC-100 |
 | Advanced | Enterprise customer value presentation | Not started | PC-102 |
 | Bonus | Passage Retrieval: at minimum, understand it and hold a point of view | Point of view written (`docs/passage-retrieval.md`); hands-on setup needs access | PC-02, PC-80 to PC-83 |
@@ -51,10 +51,11 @@ Work with a waiting time, such as Coveo's response or a model build, starts as e
 | Done | PC-01, PC-03, PC-04, PC-10 to PC-15, PC-20 to PC-23, PC-41, PC-51, PC-60 to PC-62, PC-70, PC-75, PC-76, PC-83 | Index, search application, models, detail page and generated answers. Items after PC-23 are in PR #6 |
 | 1. Merge and upload | PR #6, PC-50 | Merge first, so later branches start from it. The ranked suggestions file waits for upload and a build |
 | 2. Search quality | PC-52, PC-64 | Partial-name search and links in generated answers |
-| 3. Complete the Intermediate tier | PC-30, PC-31 | Hosting also unblocks PC-43 |
+| 3. Host the application | PC-30 | Done. Hosting also unblocks PC-43 |
 | 4. Evals and tuning | PC-40, PC-44, PC-63 | Evals exist. What remains is the human review of flagged answers, the hand-checks and tuning |
 | 5. Bonus | PC-80 to PC-82 | Depends on Coveo enabling access |
-| 6. Wrap up | PC-43, PC-78, PC-79, PC-90, PC-91, PC-100 to PC-103 | Business value work comes last |
+| 6. Wrap up | PC-43, PC-78, PC-79, PC-90, PC-91, PC-100 to PC-102 | Business value work comes last |
+| 7. Final submission | PC-103, PC-31 | The repository is shared only after the presentations and demo are prepared |
 
 If Passage Retrieval access has not arrived, write PC-83 and add PC-82 only if access arrives later. If time runs short, drop the stretch goal.
 
@@ -67,14 +68,12 @@ Problems found during testing that still need work. Each stays here until it is 
 **Must fix before the presentation**
 
 - [ ] **Generated answers mix Pokémon forms (Epic 6, with PC-44 and PC-63).** The answer for `charizard` gives 110.5 kg and Tough Claws, which are Mega Charizard X values, beside base Charizard's Type and stats. The correct weight is 90.5 kg, as the detail page shows. The likely cause is that one page's body text holds several forms in the same format, but this is not confirmed. Any fix to the body text belongs in the indexing extension.
-- [ ] **Ranked Query Suggestions are not confirmed live (PC-50).** The ranked file was uploaded with a 200 response, but suggestions still came back in the old order: abilities and species above Pokémon names, and only 1 of 12 test prefixes in importance order. A build is running. Re-check after it finishes, then record the result in `configs/coveo/ml-models.json`. If the order does not change, find out why in Coveo's documentation before uploading again.
 
 **Check or decide**
 
 - [x] **`char` shows "Did you mean: chart" (PC-52). Accepted by the user.** It predates the partial-name change: the Search API returns the same correction with and without it. Turning off `queryCorrection` for one-word prefix searches is untested and would also remove corrections for genuine one-word typos.
 - [x] **Order within matching names is not meaningful (PC-52). Accepted by the user.** `char` ranks Charcadet and Charjabug above Charizard, because the order comes from Coveo's relevance score. Ranking popular Pokémon higher would need a popularity signal that does not exist without real traffic.
 - [ ] **Descriptive queries score low (Epic 4).** MRR is 0.717, the main reason overall MRR is 0.947 against a target of 0.95. The query `grass fire` returns no relevant result. Decide whether to improve this or explain it in the presentation.
-- [ ] **Facets are untested on the hosted site (PC-30).** Search, the home page and the detail page were checked on the live site, but facets were not. Check them after PC-52 merges.
 - [ ] **The performance eval does not apply the partial-name rewrite (PC-43).** `evals/reports/performance.json` does not reflect shipped search behaviour. Apply the rewrite and measure from the hosted site.
 - [ ] **Browser tests do not run in CI, and failed checks do not block merges (PC-05).** The first needs the eval API key. The second needs branch protection on `main`, set by the user.
 - [ ] **Duplicate icon (optional).** `public/pokeball.svg` and `docs/assets/pokeball.svg` are identical.
@@ -232,7 +231,9 @@ Owner: Both · Estimate: 45 min · Depends on: PC-21
 
 ### PC-31: Share the repository with Coveo
 
-Owner: You · Estimate: 15 min · Depends on: PC-30
+Owner: You · Estimate: 15 min · Depends on: PC-30, PC-100, PC-101, PC-102
+
+This is part of the final submission. The repository stays private until the presentations and demo are prepared.
 
 - [x] History and files checked for secrets
 - [ ] Repository made public or reviewers invited
