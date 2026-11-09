@@ -16,7 +16,7 @@ Use Passage Retrieval when **we control the language model, the prompt and the d
 
 The value of Passage Retrieval is that retrieval still runs through the query pipeline, with the same content, permissions and most relevance rules as search. The cost is that we are then responsible for everything after retrieval: the prompt, the LLM, the citations, the quality checks and the guardrails.
 
-For this application, RGA is the right tool for answers in the search page. The best use of Passage Retrieval is giving an external AI agent access to the Pokémon index, which is the concept we propose for PC-81.
+For this application, RGA is the right tool for answers in the search page. Passage Retrieval fits best where an LLM outside Coveo needs the Pokémon index. One example is sketched at the end of this document as a concept only. It is not planned work.
 
 ## How it works
 
@@ -26,7 +26,9 @@ For this application, RGA is the right tool for answers in the search page. The 
 
 **Required parts.** An implementation [must include a CPR model and a Semantic Encoder (SE) model](https://docs.coveo.com/en/oaoe7068/) that use the same content and are associated with the same query pipeline. Coveo [recommends one CPR model per pipeline](https://docs.coveo.com/en/oaie6403/).
 
-**Content.** The model [embeds only the `body` field](https://docs.coveo.com/en/oaie5476/). Text that exists only in `title` or other fields is not considered during passage retrieval. Models rebuild weekly, and content retrieval is English only by default, with beta support for other languages.
+**Content.** The model [embeds only the `body` field](https://docs.coveo.com/en/oaie5476/). Text that exists only in `title` or other fields is not considered during passage retrieval. A query that matches only a `title` won't retrieve passages from that item [unless the body is semantically relevant](https://docs.coveo.com/en/oaod5329/). Each item needs a unique `permanentid`, which standard sources provide, and HTML is a supported file type. Models rebuild weekly, and content retrieval is English only by default, with beta support for other languages.
+
+**Content guidance.** Coveo [recommends](https://docs.coveo.com/en/oaod5329/) shorter documents focused on one topic, content designed to answer questions, a reasonably sized dataset, and avoiding multiple documents with similar content. Boilerplate should be removed from the body at indexing.
 
 **Chunking.** Models created since October 2025 [use structure-aware chunking by default](https://docs.coveo.com/en/oaie5476/), and Coveo recommends it for LLM and RAG systems. Chunks average 400 tokens, with a minimum of 200 and a maximum of 500. An item can produce up to 1,000 chunks by default.
 
@@ -36,6 +38,8 @@ For this application, RGA is the right tool for answers in the search page. The 
 2. **Second stage, passages.** The CPR model searches its embeddings for the most similar passages, considering only the items from the first stage.
 3. **Score fusion.** Reciprocal Rank Fusion adjusts passage ranking using the relevance of the source item, so lexical, behavioral and business-rule signals are not lost. It is on by default for new models.
 4. **Passage merging.** With structure-aware chunking, nearby passages from the same item are merged, up to 10 at a time. Coveo warns that this can raise the average tokens per passage by up to 25% and the maximum by up to 200%.
+
+The second stage considers [40 items by default, and up to 100](https://docs.coveo.com/en/oaie6403/), through the `numberOfDocumentsToConsider` association parameter. Passages must also [meet a minimum relevancy threshold](https://docs.coveo.com/en/oaod5329/). If none do, no passages are made available to the LLM application, so a client must handle an empty result.
 
 Content permissions are [enforced during retrieval](https://docs.coveo.com/en/oaie5277/).
 
@@ -50,17 +54,18 @@ Content-Type: application/json
 | Request property | Meaning |
 |---|---|
 | `query` (required) | The basic query expression |
-| `searchHub` (required in the body or the token) | The interface sending the request |
+| `searchHub` (required in the body or the token) | The interface sending the request. [The API reference](https://docs.coveo.com/en/13/) says a search token that enforces a pipeline or a routing search hub overrides it |
 | `localization.locale` (required) | The locale of the search |
-| `filter` | A filter expression, such as one limiting the source |
+| `filter` | A filter expression [applied during first-stage retrieval](https://docs.coveo.com/en/13/), such as one limiting the source |
+| `pipeline` | A pipeline for the request, listed in the [API reference](https://docs.coveo.com/en/13/). The usage guide does not describe it |
 | `additionalFields` | Up to 20 more document fields in the response |
 | `maxPassages` | From 1 to 20 |
 | `context` | Custom key-value context |
 | `analytics` | Options including `capture`, `clientId` and `userAgent` |
 
-The response contains `items`, each with the passage `text`, a `relevanceScore` based on cosine similarity, and the source `document`, which includes its title and `primaryid` by default. It also has a `responseId` for logs. Passages are sorted by descending relevance, and the [total response is limited to 540 KB](https://docs.coveo.com/en/o86c8334/). Coveo notes that the score computation may change.
+The response contains `items`, each with the passage `text`, a `relevanceScore` based on cosine similarity, and the source `document`, which includes its title and `primaryid` by default. It also has a `responseId` for logs. Passages are sorted by descending relevance, and the [total response is limited to 540 KB](https://docs.coveo.com/en/o86c8334/). The [reference](https://docs.coveo.com/en/13/) describes the score as ranging from -1 (semantic opposite) through 0 (not similar) to 1 (similar), and warns that the computation and range may change. It also lists a separate debug endpoint, `/rest/search/alpha/passages/retrieve/debug`, which is in alpha. The API returns 400, 401, 403, 422, 429, 500 and 503 errors, so a client must handle rate limiting and outages.
 
-**Authentication.** The API [accepts OAuth 2.0, API keys, platform tokens and search tokens](https://docs.coveo.com/en/o86c8334/).
+**Authentication.** The API [accepts OAuth 2.0, API keys, platform tokens and search tokens](https://docs.coveo.com/en/o86c8334/). The [API reference](https://docs.coveo.com/en/13/) lists one required privilege for the operation, `EXECUTE_QUERY`. The [Anonymous search key template](https://docs.coveo.com/en/1718/) includes **Execute queries: Allowed**.
 
 **Query pipeline support is partial**, per the [feature support table](https://docs.coveo.com/en/o86c8334/):
 
@@ -77,7 +82,9 @@ The response contains `items`, each with the passage `text`, a `relevanceScore` 
 ### Our inference
 
 - Our existing `pokebowl-search` pipeline should work. Its condition is on the search hub and its filter is a supported feature.
-- Passage quality depends on our `body` field, as RGA does. Our indexing rewrites stat tables and Type grids as sentences, which should help here too. Whether it is enough has not been measured.
+- By its privileges, the `pokebowl-search-browser` key should be able to call this API. A public key would only be used for public content like ours.
+- Passage quality depends on our `body` field, as RGA does. Pokémon pages are short and each covers one Pokémon, which fits Coveo's guidance. They are reference data and not written to answer questions, which does not. Our indexing rewrites stat tables and Type grids as sentences, because Coveo warns that table text parses unpredictably. Whether this is enough has not been measured.
+- Alternate forms are already kept in one item per Pokémon, which follows the advice to avoid similar documents.
 - Merging makes passage size less predictable, so a client should budget prompt space from measured sizes and not assume 400 tokens per passage.
 
 ## When to use it
@@ -114,25 +121,11 @@ Once access is enabled (PC-02), PC-80 would:
 
 1. Create one CPR model limited to the `pokemondb-pokemon` source, with the default structure-aware chunking.
 2. Associate it with `pokebowl-search`, which already has the Semantic Encoder. Coveo states that [the same SE model and pipeline can serve both RGA and CPR tools](https://docs.coveo.com/en/q1mb0212/).
-3. Send a test request with a separate search hub starting with `pokebowl-`, for example `pokebowl-passages`. It would route to the pipeline and keep this traffic separate from the application's analytics.
+3. Send a test request with a separate search hub starting with `pokebowl-`, for example `pokebowl-passages`. It would route to the pipeline and keep this traffic separate from the application's analytics. This needs a second key, because the browser key enforces the `pokebowl-search` hub.
 
-Define expected results before testing, as for all our configuration. For example, "what abilities does Charizard have?" should return a passage from the Charizard page containing its abilities, and an unrelated question should return low scores.
+Define expected results before testing, as for all our configuration. For example, "what abilities does Charizard have?" should return a passage from the Charizard page containing its abilities, and an unrelated question should return no passages, or only low-scoring ones.
 
 One difference to plan for: number-only searches are rewritten by a hook in the browser application, so they would not apply to Passage Retrieval requests.
-
-### Proposed concept for PC-81: the Pokémon index as an agent tool
-
-**What Coveo states.** The [Hosted MCP Server](https://docs.coveo.com/en/pboe0358/) lets LLM applications and agent frameworks call Coveo tools without custom integration. It offers Search, Fetch, Answer and Passage Retrieval tools. [Search and Fetch work with any query pipeline](https://docs.coveo.com/en/q1mb0212/). The Passage Retrieval tool needs CPR and SE models on the pipeline, and the Answer tool needs RGA, SE and an answer configuration, which requires Knowledge Hub access. An [Anonymous API key is the recommended authentication for public sources](https://docs.coveo.com/en/q1mb0212/). Coveo lists [current limitations](https://docs.coveo.com/en/pboe0358/): tool selection depends on clear tool descriptions, direct debugging is not available, and filters such as facets are not available.
-
-**Our proposal.** Point a Hosted MCP Server at `pokebowl-search` with the Search, Fetch and Passage Retrieval tools, and connect a supported AI client. A person could then ask for something a search page cannot do in one step, such as "build a team that covers Charizard's weaknesses". The agent would retrieve passages, reason over them, and cite the Pokémon pages.
-
-**Why this concept.**
-
-- It shows the real strength of Passage Retrieval, grounding an LLM that is not Coveo's, with no prompt or model work duplicated from RGA.
-- It needs no server of ours, so no LLM credential can reach the browser.
-- It requires no Knowledge Hub access, because it does not use the Answer tool. Search and Fetch could be demonstrated before Passage Retrieval is enabled.
-
-**The alternative we would reject for now** is an in-application assistant calling the API. It needs a backend to hold the LLM key and adds prompts, citations and evals to maintain, for little gain over RGA on the same page.
 
 ### In production
 
@@ -144,9 +137,18 @@ For a client product, we would add:
 - **Monitoring:** log each `responseId`, passage count, token count and latency. Coveo notes that [performance falls as passages per document rise](https://docs.coveo.com/en/o86c8334/), which is why the baseline must be measured.
 - **Safety:** treat retrieved text as data in the prompt, not as instructions, and require citations.
 
+## Concept only: the index as an agent tool
+
+This is an idea for discussion, not planned work.
+
+**What Coveo states.** The [Hosted MCP Server](https://docs.coveo.com/en/pboe0358/) lets LLM applications call Coveo Search, Fetch, Answer and Passage Retrieval tools without custom integration. [Search and Fetch work with any query pipeline, and Passage Retrieval needs CPR and SE models on it](https://docs.coveo.com/en/q1mb0212/). [An Anonymous API key is recommended for public sources](https://docs.coveo.com/en/q1mb0212/), and Coveo [lists the clients it has tested](https://docs.coveo.com/en/pbog0163/), such as Claude Desktop, Cursor and Visual Studio Code.
+
+**Our inference.** An MCP server on `pokebowl-search` could let an AI client do multi-step work that a search page cannot, such as choosing a team to cover a Pokémon's weaknesses, with no server or LLM credential for us to manage.
+
 ## Not confirmed
 
-- Whether the existing `pokebowl-search-browser` key can call this API. The documentation lists API keys as accepted, but we did not find the exact privilege that a key needs.
+- Whether the browser key works in practice. The documented privilege matches, but nothing has been called. The "Allow content preview" privilege in the [usage guide](https://docs.coveo.com/en/o86c8334/) is listed for the model, and we did not confirm what, if anything, it means for a key.
 - Latency, passage quality and passage size on our content. These need access and measurement.
-- The exact arguments of the Hosted MCP Passage Retrieval tool, and which AI clients suit a demonstration. The MCP client reference still needs to be read for PC-81.
+- The value of the minimum relevancy threshold. Coveo does not publish it.
 - Whether Passage Retrieval is licensed for this organization once requested.
+- The input arguments of the Hosted MCP Passage Retrieval tool. Coveo's MCP pages do not list them.
