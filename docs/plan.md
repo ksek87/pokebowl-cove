@@ -70,7 +70,7 @@ The indexing extension leaves each form's Pokédex data table (Type, height, wei
 
 ### 2. Search page
 
-- [ ] Find why nonsense queries such as `qqqzzzxxxvvv` return Pokémon, so the no-results state never shows. The partial-name rewrite and query correction do not cause it. Fix or explain it
+- [x] Find why nonsense queries such as `qqqzzzxxxvvv` return Pokémon. Cause: the Semantic Encoder returns items above its 0.8 similarity threshold. Accepted as a tuning tradeoff, because raising the threshold would drop relevant descriptive results. See `docs/architecture.md`
 - [ ] Improve descriptive queries such as `water turtle` (MRR 0.717; `grass fire` finds nothing relevant)
 - [ ] Shorten the number lookup notice
 - [ ] Restructure the Atomic layout overrides, so `!important` overrides do not need defending (PC-79)
@@ -111,6 +111,7 @@ One visit to Coveo's Visit Browser or Data Explorer:
 - `char` showing "Did you mean: chart" is accepted. It predates the partial-name change, and turning correction off would also remove corrections for real typos.
 - The order of names matching a prefix comes from Coveo's relevance score and is accepted, because there is no real traffic to rank popular Pokémon higher.
 - `npm audit` findings in Coveo's packages are left until Coveo releases new packages.
+- Nonsense queries that land near a Pokémon in vector space return results. Accepted as a tuning tradeoff for a system that is not yet in production.
 - Two fake answer events reached analytics during an automated check (`answerId` `72f54f33-6af6-4960-9336-c7078ef976c7`). Exclude this answer if answer reports are shown.
 
 ### Not doing
