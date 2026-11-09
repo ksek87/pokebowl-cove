@@ -1,6 +1,6 @@
 import { expect, it, vi } from 'vitest';
 import { SEARCH_HUB } from '../src/search/settings.ts';
-import { buildSearchBody, querySuggest, readAnswerStream, timedSearch } from './coveoQueries.ts';
+import { buildSearchBody, querySuggest, readAnswerStream, timedAnswer, timedSearch } from './coveoQueries.ts';
 
 const CONFIG = { organizationId: 'org', searchApiKey: 'key' };
 const START = 0;
@@ -108,4 +108,24 @@ it('sends the request through a rewrite when one is given', async (): Promise<vo
   await timedSearch(CONFIG, { q: 'fire' }, { api: api as typeof fetch, rewrite });
 
   expect(JSON.parse(String(api.mock.calls[0]?.[1]?.body))).toMatchObject({ q: 'fire', wildcards: true, analytics: { capture: false } });
+});
+
+it('times a generated answer from the moment the search is sent', async (): Promise<void> => {
+  const api = vi.fn(async (url: string): Promise<Response> =>
+    url.includes('/streaming/')
+      ? streamOf(event('genqa.messageType', { textDelta: 'Fire' }), event('genqa.endOfStreamType', { answerGenerated: true }))
+      : new Response(JSON.stringify({ results: [], extendedResults: { generativeQuestionAnsweringId: 'stream' } })),
+  );
+
+  const result = await timedAnswer(CONFIG, { q: 'What type is Charizard?' }, { api: api as unknown as typeof fetch, clock: clockFrom(100, 120, 130, 140, 150) });
+
+  expect(result).toMatchObject({ text: 'Fire', answerGenerated: true, firstTextMs: 40, totalMs: 50 });
+});
+
+it('reports no answer when the search returns no stream', async (): Promise<void> => {
+  const api = vi.fn(async (): Promise<Response> => new Response(JSON.stringify({ results: [] })));
+
+  const result = await timedAnswer(CONFIG, { q: 'x' }, { api: api as typeof fetch, clock: clockFrom(10, 20, 40) });
+
+  expect(result).toEqual({ text: '', citations: [], answerGenerated: false, firstTextMs: null, totalMs: 30 });
 });

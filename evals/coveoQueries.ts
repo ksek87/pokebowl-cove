@@ -49,7 +49,7 @@ interface Dependencies {
 
 export type SearchRequestBody = Record<string, unknown> & { q: string; aq?: string; sortCriteria?: string };
 
-interface TimedSearchDependencies extends Dependencies {
+export interface TimedSearchDependencies extends Dependencies {
   /** Applied to the request body, so an eval can run the same rewrite as the application. */
   rewrite?: (body: SearchRequestBody) => SearchRequestBody;
 }
@@ -189,4 +189,25 @@ export async function readAnswerStream(
     firstTextMs: state.firstTextAt === null ? null : state.firstTextAt - startedAt,
     totalMs: clock() - startedAt,
   };
+}
+
+/** Answers are throttled at 2 queries per second, so evals stay far below that, one at a time. */
+export const ANSWER_PACING_MS = 3000;
+
+const NO_ANSWER = { text: '', citations: [], answerGenerated: false, firstTextMs: null };
+
+/** Sends a search that asks for an answer, then reads the stream. Times run from sending the search. */
+export async function timedAnswer(
+  config: CoveoConfig,
+  options: Omit<SearchOptions, 'generative'>,
+  dependencies: TimedSearchDependencies = {},
+): Promise<AnswerStreamResult> {
+  const clock = dependencies.clock ?? now;
+  const startedAt = clock();
+  const { response } = await timedSearch(config, { ...options, generative: true }, dependencies);
+  const streamId = response.extendedResults?.generativeQuestionAnsweringId;
+  if (!streamId) {
+    return { ...NO_ANSWER, totalMs: clock() - startedAt };
+  }
+  return readAnswerStream(config, { streamId, startedAt }, dependencies);
 }
