@@ -28,8 +28,8 @@ function state(search: Partial<Search> = {}, answer: Partial<Answer> = {}): Answ
   };
 }
 
-it('shows while the answer stream is opening', (): void => {
-  expect(shouldShowAnswerPlaceholder(state({}, { isLoading: true }))).toBe(true);
+it('waits while the answer stream is opening, because a stream with no answer ends right after its header', (): void => {
+  expect(shouldShowAnswerPlaceholder(state({}, { isLoading: true }))).toBe(false);
 });
 
 it('shows while the stream runs before any text arrives', (): void => {
@@ -49,9 +49,9 @@ it.each([
   ['a citation arrives', { isStreaming: true, citations: [{ id: 'citation' }] }],
   ['Coveo cannot answer', { cannotAnswer: true }],
   ['the stream ends', { isAnswerGenerated: true }],
-  ['the stream fails', { isLoading: true, error: { message: 'Error opening stream' } }],
-  ['answers are disabled', { isLoading: true, isEnabled: false }],
-  ['the answer is hidden', { isLoading: true, isVisible: false }],
+  ['the stream fails', { error: { message: 'Error opening stream' } }],
+  ['answers are disabled', { isEnabled: false }],
+  ['the answer is hidden', { isVisible: false }],
 ])('hides once %s', (_name, answer): void => {
   expect(shouldShowAnswerPlaceholder(state({}, answer))).toBe(false);
 });

@@ -33,17 +33,25 @@ function hasEnded({ cannotAnswer, isAnswerGenerated, error }: AnswerState): bool
 }
 
 /**
+ * Headless clears `isLoading` when the stream's first message, its header, arrives. A stream with no answer ends
+ * right after its header, so waiting for the header keeps the placeholder from flashing on those searches.
+ */
+function hasHeader({ isLoading }: AnswerState): boolean {
+  return !isLoading;
+}
+
+/**
  * Headless sets neither `isLoading` nor `isStreaming` between the stream's header and its first text, so the stream
  * ID from the search response covers that gap.
  */
-function isPreparing(search: SearchState, answer: AnswerState): boolean {
-  return answer.isLoading || answer.isStreaming || Boolean(search.extendedResults.generativeQuestionAnsweringId);
+function isOpen(search: SearchState, answer: AnswerState): boolean {
+  return answer.isStreaming || Boolean(search.extendedResults.generativeQuestionAnsweringId);
 }
 
-/** True while Coveo prepares an answer that Atomic does not show yet. */
+/** True once Coveo's answer stream has sent its header and Atomic shows no answer yet. */
 export function shouldShowAnswerPlaceholder({ search, generatedAnswer: answer }: AnswerPlaceholderState): boolean {
   if (!search || !answer || search.isLoading || !isAnswerShown(answer)) {
     return false;
   }
-  return !hasContent(answer) && !hasEnded(answer) && isPreparing(search, answer);
+  return !hasContent(answer) && !hasEnded(answer) && hasHeader(answer) && isOpen(search, answer);
 }
