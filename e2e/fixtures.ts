@@ -32,8 +32,12 @@ async function fulfillStream(route: Route, messages: StreamMessage[]): Promise<v
   });
 }
 
+function noAnswerMessages(): StreamMessage[] {
+  return [headerMessage(), endMessage(false)];
+}
+
 export async function fulfillNoAnswer(route: Route): Promise<void> {
-  await fulfillStream(route, [headerMessage(), endMessage(false)]);
+  await fulfillStream(route, noAnswerMessages());
 }
 
 export interface StubCitation {
@@ -41,7 +45,7 @@ export interface StubCitation {
   clickUri: string;
 }
 
-export async function stubAnswer(page: Page, text: string, citation: StubCitation): Promise<void> {
+function answerMessages(text: string, citation: StubCitation): StreamMessage[] {
   const citations = [
     {
       id: 'citation-1',
@@ -53,14 +57,38 @@ export async function stubAnswer(page: Page, text: string, citation: StubCitatio
       text: 'Cited passage',
     },
   ];
+  return [
+    headerMessage(),
+    { payloadType: 'genqa.messageType', payload: JSON.stringify({ textDelta: text }) },
+    { payloadType: 'genqa.citationsType', payload: JSON.stringify({ citations }) },
+    endMessage(true),
+  ];
+}
+
+export async function stubAnswer(page: Page, text: string, citation: StubCitation): Promise<void> {
   await page.route(ANSWER_STREAM_ROUTE, async (route): Promise<void> => {
-    await fulfillStream(route, [
-      headerMessage(),
-      { payloadType: 'genqa.messageType', payload: JSON.stringify({ textDelta: text }) },
-      { payloadType: 'genqa.citationsType', payload: JSON.stringify({ citations }) },
-      endMessage(true),
-    ]);
+    await fulfillStream(route, answerMessages(text, citation));
   });
+}
+
+export interface HeldAnswer {
+  answer: (text: string, citation: StubCitation) => void;
+  noAnswer: () => void;
+}
+
+/** Holds the answer stream open until the test releases it, so the wait before the first text can be checked. */
+export async function holdAnswer(page: Page): Promise<HeldAnswer> {
+  let release: (messages: StreamMessage[]) => void = (): void => undefined;
+  const released = new Promise<StreamMessage[]>((resolve): void => {
+    release = resolve;
+  });
+  await page.route(ANSWER_STREAM_ROUTE, async (route): Promise<void> => {
+    await fulfillStream(route, await released);
+  });
+  return {
+    answer: (text, citation): void => release(answerMessages(text, citation)),
+    noAnswer: (): void => release(noAnswerMessages()),
+  };
 }
 
 /** Answers come from a limited allowance, so no browser test reads a real answer stream. */

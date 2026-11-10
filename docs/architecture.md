@@ -618,7 +618,35 @@ Not confirmed: real artwork on the page, and that the click event reaches Coveo 
 
 **Coveo documentation:** [Configure a search interface for RGA](https://docs.coveo.com/en/nb6a0037/) states that an Atomic page must include this component, that the component does not appear when no answer is generated, that the hosted builders place it at the top of the results, that a disclaimer is part of the component, and that results not sorted by relevance may produce no answer. [RGA content requirements](https://docs.coveo.com/en/nb6a0008/) strongly recommends a disclaimer. The installed Atomic 3.65 source requests `text/markdown` first, with `text/plain` as the fallback, so the association's rich text option is used.
 
-**Our inference:** `collapsible` keeps a long answer from pushing the results far down. We left the no-answer slot empty, so a query without an answer shows normal results and no empty box. An answer that arrives still moves the cards down, because the page cannot know in advance whether an answer will exist.
+**Our inference:** `collapsible` keeps a long answer from pushing the results far down. We left the no-answer slot empty, so a query without an answer shows normal results and no empty box. An answer that arrives still moves the cards down, because the page cannot know in advance whether an answer will exist; the placeholder below reduces this.
+
+**Decision: a placeholder holds the answer's place while Coveo prepares an answer (user decision, November 10, 2026).** It shows for every text search where Coveo starts an answer, not only for searches that look like questions. Guessing which searches are questions was rejected, because Coveo decides whether to answer and the application cannot know in advance.
+
+**Atomic behavior it works around:** `atomic-generated-answer` in Atomic 3.65 renders nothing until the answer has text or a citation (`hasNoAnswerGenerated` in `generated-answer-controller.js`, used by `render()` in `atomic-generated-answer.js` in `@coveo/atomic`). Atomic has no option for a loading card. Its "Generating answer…" label exists only inside a card that is already showing. [Configure a search interface for RGA](https://docs.coveo.com/en/nb6a0037/) states that the component does not appear when no answer is generated and that RGA generates the answer in real time. It does not describe a loading state, streaming, or the `isLoading` and `isStreaming` values.
+
+**How it works.** `AnswerPlaceholder` in `src/search/LoadingPlaceholders.tsx` subscribes to the same engine that Atomic uses and reads the generated answer state that Atomic's request fills, so it sends no Search API or answer request of its own. The rule is the pure function `shouldShowAnswerPlaceholder` in `src/search/showAnswerPlaceholder.ts`. It shows the placeholder when answers are enabled and visible, no search is running, the answer has no text or citation yet, and the stream has not ended (`cannotAnswer`, `isAnswerGenerated` and `error` are all unset), while `isLoading` or `isStreaming` is true or the search response carries a stream ID (`generativeQuestionAnsweringId`). It hides the placeholder in every other case, so it disappears in the same frame that Atomic's card appears.
+
+**Why the stream ID is part of the rule.** The agreed rule was `isLoading`, or `isStreaming` with no text and no citations. Measured against live Coveo, Headless clears `isLoading` when the stream's first message (its header) arrives, but sets `isStreaming` only with the first text or citation. For `pikachu` and `strongest dragon pokemon`, neither flag was true for about 620 to 650 ms in the middle of the wait, so that rule would hide the placeholder and show it again. The Headless source confirms this (`streamAnswer` in `generated-answer-actions.js` and `generated-answer-slice.js` in `@coveo/headless` 3.58). The stream ID with no end, error or content covers that gap. This is our inference from the source, not documented behavior.
+
+**Accessibility.** Atomic announces "Generating answer" through its shared `atomic-aria-live` region as soon as `isStreaming` is true, before its card is rendered (seen in the browser about 400 to 500 ms before the card). The placeholder is therefore `aria-hidden`, so a screen reader hears one announcement. Its skeleton lines pulse, the pulse stops when reduced motion is requested, and the text stays.
+
+**Look.** The placeholder shares the answer card's background, border, radius and bottom margin through one CSS rule in `src/theme.css`, and uses the same inset as Atomic's answer text (`--space-answer-inset`, also used by the detail page bubble). It is 115 px tall at every checked width, and the answer card replaces it at the same top position.
+
+**Measurements, November 10, 2026,** against live Coveo in headless Chromium at 1440×900. Times are from page start; one run each.
+
+| Search | Results | Stream opened (`isLoading`) | Header, flags both false | First text | Ended | Answer |
+|---|---|---|---|---|---|---|
+| `pikachu` | 918 ms | 943 to 1,836 ms | 1,836 to 2,460 ms | 3,041 ms | 11,385 ms | Yes |
+| `char` | 581 ms | 594 to 678 ms | none | none | 678 ms | No (`cannotAnswer`) |
+| `fire` | 610 ms | 637 to 707 ms | none | none | 708 ms | No (`cannotAnswer`) |
+| `what type is charizard` | 601 ms | 619 to 1,650 ms | 2 ms | 2,153 ms | 3,381 ms | Yes |
+| `which pokemon evolves into charizard` | 545 ms | 562 to 1,605 ms | 2 ms | 2,205 ms | 4,206 ms | Yes |
+| `strongest dragon pokemon` | 608 ms | 632 to 1,198 ms | 1,198 to 1,848 ms | 2,361 ms | 4,642 ms | Yes |
+| `asdfghjkl` (no results) | none | 564 to 620 ms | none | none | 621 ms | No (`cannotAnswer`) |
+
+Every text search, including names, single words and nonsense, started an answer stream. With the placeholder built, it showed for 1.6 to 2.0 seconds before a real answer and was replaced at the same position. For a search that ends with no answer it shows briefly: on `char` it showed for 65 ms (5 frames) and moved the results down by its height for that time. Based on the stream timings above, `fire` and `asdfghjkl` would show it for about 60 to 85 ms. Whether this brief flash is acceptable is an open user decision.
+
+**Known limit.** If a stream closed without an end message or an error, nothing in the Headless state would mark it as finished, and the placeholder would stay. No such case was seen.
 
 **Observed behavior, November 9, 2026:**
 
@@ -626,7 +654,7 @@ Not confirmed: real artwork on the page, and that the click event reaches Coveo 
 - After changing that first search to Name A to Z, the answer disappeared and the sorted results stayed, with no error. This matches Coveo's documentation.
 - The search response carries a `generativeQuestionAnsweringId` for a text query even when the request does not include the answer format parameter. Coveo does not state when an answer counts against the allowance.
 
-**Testing:** every browser test uses a stubbed answer stream from `e2e/fixtures.ts`, so the suite reads no real answers from the allowance. The real end-to-end checks above were run separately.
+**Testing:** every browser test uses a stubbed answer stream from `e2e/fixtures.ts`, so the suite reads no real answers from the allowance. `holdAnswer` keeps the stubbed stream open until the test releases it, which tests the placeholder before the first text. The real end-to-end checks above were run separately.
 
 The type-ahead panel now shares the search box's edges, border and radius, and uses the main text color, through Atomic's `suggestions-wrapper` and `query-suggestion-text` parts.
 

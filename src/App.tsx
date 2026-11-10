@@ -31,7 +31,7 @@ import {
   SORT_OPTIONS,
 } from './search/settings.ts';
 import { PokedexLookupNotice } from './search/PokedexLookupNotice.tsx';
-import { ResultPlaceholders } from './search/LoadingPlaceholders.tsx';
+import { AnswerPlaceholder, ResultPlaceholders } from './search/LoadingPlaceholders.tsx';
 import { SearchStateMessage } from './search/SearchStateMessage.tsx';
 import { SiteHeader } from './search/SiteHeader.tsx';
 
@@ -109,6 +109,7 @@ export function App({ config }: { config: CoveoConfig }): JSX.Element {
                 <AtomicRefineToggle className="lg:hidden" />
               </div>
               <AtomicLayoutSection section="results">
+                <AnswerPlaceholder engine={engine} />
                 <AtomicGeneratedAnswer collapsible />
                 <ResultPlaceholders />
                 <AtomicResultList

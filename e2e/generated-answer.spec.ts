@@ -1,6 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 import { DEFAULT_PAGE_SIZE } from '../src/search/settings.ts';
-import { ANSWER_STREAM_ROUTE, expect, stubAnswer, test } from './fixtures.ts';
+import { ANSWER_STREAM_ROUTE, expect, holdAnswer, stubAnswer, test } from './fixtures.ts';
 
 const NETWORK_TIMEOUT = 15_000;
 const WINDOW_HEIGHT = 900;
@@ -16,6 +16,17 @@ const CITATION = { title: 'Charizard Pokédex', clickUri: 'https://pokemondb.net
 
 function answerPanel(page: Page): Locator {
   return page.locator('atomic-generated-answer [part~="container"]');
+}
+
+function answerPlaceholder(page: Page): Locator {
+  return page.locator('[data-slot="answer-placeholder"]');
+}
+
+async function lineAnimation(page: Page): Promise<string> {
+  return answerPlaceholder(page)
+    .locator('[data-slot="answer-placeholder-line"]')
+    .first()
+    .evaluate((line): string => getComputedStyle(line).animationName);
 }
 
 async function open(page: Page, width: number, path: string): Promise<void> {
@@ -172,3 +183,67 @@ for (const width of WIDTHS) {
     expect(Math.abs((panel?.width ?? 0) - (results?.width ?? 0))).toBeLessThanOrEqual(TOLERANCE_PX);
   });
 }
+
+test('holds the answer place while the answer is prepared, then shows the answer there', async ({ page }): Promise<void> => {
+  const held = await holdAnswer(page);
+  await open(page, LAPTOP, QUESTION);
+
+  const placeholder = answerPlaceholder(page);
+  await expect(placeholder).toBeVisible({ timeout: NETWORK_TIMEOUT });
+  await expect(placeholder).toHaveText('Generating an answer…');
+  await expect(answerPanel(page)).toHaveCount(0);
+  expect(await lineAnimation(page)).not.toBe('none');
+  const placeholderTop = await top(placeholder);
+
+  held.answer(ANSWER_TEXT, CITATION);
+
+  await expect(answerPanel(page)).toContainText(ANSWER_TEXT, { timeout: NETWORK_TIMEOUT });
+  await expect(placeholder).toHaveCount(0);
+  expect(Math.abs((await top(answerPanel(page))) - placeholderTop)).toBeLessThanOrEqual(TOLERANCE_PX);
+});
+
+test('removes the placeholder when no answer is generated', async ({ page }): Promise<void> => {
+  const held = await holdAnswer(page);
+  await open(page, LAPTOP, QUESTION);
+  await expect(answerPlaceholder(page)).toBeVisible({ timeout: NETWORK_TIMEOUT });
+
+  held.noAnswer();
+
+  await expect(answerPlaceholder(page)).toHaveCount(0);
+  await expect(answerPanel(page)).toHaveCount(0);
+  await expect(page.locator('atomic-result')).toHaveCount(DEFAULT_PAGE_SIZE);
+});
+
+test('shows no placeholder for an empty search', async ({ page }): Promise<void> => {
+  await holdAnswer(page);
+  await open(page, LAPTOP, '/');
+  await page.waitForTimeout(CHECK_WAIT_MS);
+
+  await expect(answerPlaceholder(page)).toHaveCount(0);
+});
+
+test('stops the placeholder animation when reduced motion is requested', async ({ page }): Promise<void> => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await holdAnswer(page);
+  await open(page, LAPTOP, QUESTION);
+
+  await expect(answerPlaceholder(page)).toHaveText('Generating an answer…', { timeout: NETWORK_TIMEOUT });
+  expect(await lineAnimation(page)).toBe('none');
+});
+
+test('gives the placeholder the edges of the answer card', async ({ page }): Promise<void> => {
+  const held = await holdAnswer(page);
+  await open(page, LAPTOP, QUESTION);
+  const edges = async (locator: Locator): Promise<string> =>
+    locator.evaluate((element): string => {
+      const style = getComputedStyle(element);
+      return [style.borderTopWidth, style.borderTopColor, style.borderTopLeftRadius, style.backgroundColor, style.marginBottom].join(' ');
+    });
+  await expect(answerPlaceholder(page)).toBeVisible({ timeout: NETWORK_TIMEOUT });
+  const placeholderEdges = await edges(answerPlaceholder(page));
+
+  held.answer(ANSWER_TEXT, CITATION);
+  await expect(answerPanel(page)).toBeVisible({ timeout: NETWORK_TIMEOUT });
+
+  expect(placeholderEdges).toBe(await edges(answerPanel(page)));
+});

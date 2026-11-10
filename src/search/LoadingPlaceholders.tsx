@@ -1,7 +1,9 @@
-import type { JSX } from 'react';
+import type { SearchEngine } from '@coveo/headless';
+import { type JSX, useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { DEFAULT_PAGE_SIZE } from './settings.ts';
+import { type AnswerPlaceholderState, shouldShowAnswerPlaceholder } from './showAnswerPlaceholder.ts';
 
 const BLOCK = 'rounded bg-muted text-transparent';
 const PULSE = 'animate-pulse motion-reduce:animate-none';
@@ -56,5 +58,31 @@ export function DetailPlaceholder(): JSX.Element {
         </div>
       </div>
     </Card>
+  );
+}
+
+function readShowAnswerPlaceholder(engine: SearchEngine): boolean {
+  return shouldShowAnswerPlaceholder(engine.state as AnswerPlaceholderState);
+}
+
+/**
+ * Atomic renders no answer card until the first text arrives, so this card holds its place meanwhile. It reads the
+ * state of the answer that Atomic requests on the same engine, so it sends no request of its own. It is hidden from
+ * screen readers because Atomic already announces that an answer is generating.
+ */
+export function AnswerPlaceholder({ engine }: { engine: SearchEngine }): JSX.Element | null {
+  const [isShown, setIsShown] = useState(() => readShowAnswerPlaceholder(engine));
+
+  useEffect(() => engine.subscribe((): void => setIsShown(readShowAnswerPlaceholder(engine))), [engine]);
+
+  if (!isShown) {
+    return null;
+  }
+  return (
+    <div data-slot="answer-placeholder" aria-hidden="true" className="grid gap-2 p-(--space-answer-inset)">
+      <p className="text-(length:--text-label) font-semibold text-muted-foreground">Generating an answer…</p>
+      <span data-slot="answer-placeholder-line" className={`h-3 rounded bg-muted ${PULSE}`} />
+      <span data-slot="answer-placeholder-line" className={`h-3 w-2/3 rounded bg-muted ${PULSE}`} />
+    </div>
   );
 }

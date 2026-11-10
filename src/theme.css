@@ -78,7 +78,7 @@
   --space-ask-bubble-gap: 0.875rem;
   --size-ask-bubble: 35rem;
   /* Matches the padding Atomic sets on the answer text, which has no CSS part. */
-  --space-ask-answer-inset: 1.5rem;
+  --space-answer-inset: 1.5rem;
   --motion-ask-idle: 2.4s;
   --motion-ask-thinking: 0.9s;
   --focus-ring: var(--foreground);
@@ -227,7 +227,9 @@ atomic-facet::part(value-checkbox) {
   border-radius: var(--radius-checkbox);
 }
 
-atomic-generated-answer::part(container) {
+/* The placeholder takes the answer card's place until the first text arrives, so it shares the card's edges. */
+atomic-generated-answer::part(container),
+[data-slot='answer-placeholder'] {
   margin-bottom: var(--size-grid-gap);
   background: var(--card);
   border: var(--border-panel);
