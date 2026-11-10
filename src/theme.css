@@ -25,6 +25,15 @@
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
+  --animate-answer-open: answer-open var(--motion-answer-open) ease-out;
+
+  /* The row grows from zero height, so the results below glide down while the card fades in. */
+  @keyframes answer-open {
+    from {
+      grid-template-rows: 0fr;
+      opacity: 0;
+    }
+  }
 }
 
 :root {
@@ -78,7 +87,7 @@
   --space-ask-bubble-gap: 0.875rem;
   --size-ask-bubble: 35rem;
   /* Matches the padding Atomic sets on the answer text, which has no CSS part. */
-  --space-ask-answer-inset: 1.5rem;
+  --space-answer-inset: 1.5rem;
   --motion-ask-idle: 2.4s;
   --motion-ask-thinking: 0.9s;
   --focus-ring: var(--foreground);
@@ -86,6 +95,7 @@
   --focus-offset: 2px;
   --motion-fast: 150ms;
   --motion-reveal: 220ms;
+  --motion-answer-open: 200ms;
   --press-scale: 0.96;
   --text-small: 13px;
   --text-label: 15px;
@@ -227,7 +237,9 @@ atomic-facet::part(value-checkbox) {
   border-radius: var(--radius-checkbox);
 }
 
-atomic-generated-answer::part(container) {
+/* The placeholder takes the answer card's place until the first text arrives, so it shares the card's edges. */
+atomic-generated-answer::part(container),
+[data-slot='answer-placeholder'] {
   margin-bottom: var(--size-grid-gap);
   background: var(--card);
   border: var(--border-panel);
