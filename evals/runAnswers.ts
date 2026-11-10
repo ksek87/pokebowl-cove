@@ -1,5 +1,5 @@
 import { readCoveoConfig } from '../src/config.ts';
-import { gradeAnswer, summarizeAnswers, type AnswerCase, type GradedAnswer } from './answerEvals.ts';
+import { gradedEntry, summarizeAnswers, type AnswerCase, type GradedAnswer } from './answerEvals.ts';
 import { ANSWER_PACING_MS, timedAnswer } from './coveoQueries.ts';
 import { pause, readEvalJson, runMain, writeEvalJson } from './runner.ts';
 
@@ -9,16 +9,7 @@ async function main(): Promise<void> {
   const graded: GradedAnswer[] = [];
   for (const testCase of cases) {
     const outcome = await timedAnswer(config, { q: testCase.question, aq: testCase.scope });
-    graded.push({
-      ...gradeAnswer(testCase, outcome),
-      id: testCase.id,
-      category: testCase.category,
-      question: testCase.question,
-      firstTextMs: outcome.firstTextMs,
-      totalMs: outcome.totalMs,
-      text: outcome.text,
-      citations: outcome.citations,
-    });
+    graded.push(gradedEntry(testCase, outcome));
     await pause(ANSWER_PACING_MS);
   }
   const summary = summarizeAnswers(graded);

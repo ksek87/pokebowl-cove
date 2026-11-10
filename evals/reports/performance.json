@@ -1,71 +1,71 @@
 {
-  "measuredAt": "2026-11-09T23:12:34.833Z",
+  "measuredAt": "2026-11-10T04:00:43.850Z",
   "context": "Measured from one developer machine on a home network, not from users. API timings are sent from Node straight to Coveo with the same request bodies as the application, including the partial-name and Pokédex number rewrite, maximumAge 0 and analytics capture off. Requests are sequential and paced. Page timings load https://pokebowl-cove.vercel.app/ in headless Chromium with no CPU or network throttling, a cold cache and a 1440×900 window. Each run then types one partial name and, in the first 5 runs, asks one question. Artwork from pokemondb.net is fetched once and served from memory for every card, to respect its crawl rate, so artwork download time is not included. Playwright answers CORS preflight requests itself when it intercepts a request, so browser request timings do not include a preflight.",
   "search": {
     "count": 40,
-    "p50": 174.36566700000185,
-    "p95": 197.7689590000009,
-    "min": 148.71566600000006,
-    "max": 304.859583
+    "p50": 187.5326669999995,
+    "p95": 224.59520799999882,
+    "min": 152.66762500000186,
+    "max": 298.48654200000004
   },
   "typeAhead": {
     "count": 28,
-    "p50": 51.442417000002024,
-    "p95": 62.62333399999625,
-    "min": 47.217499999998836,
-    "max": 62.99804099999892
+    "p50": 55.00024999999732,
+    "p95": 68.44075000000157,
+    "min": 51.33354200000031,
+    "max": 91.36100000000079
   },
   "variants": {
     "relevance": {
       "count": 15,
-      "p50": 177.8017089999994,
-      "p95": 233.6134579999998,
-      "min": 159.35708299999533,
-      "max": 233.6134579999998
+      "p50": 183.0702919999967,
+      "p95": 650.8465829999986,
+      "min": 159.8125,
+      "max": 650.8465829999986
     },
     "sortedByPokedexNumber": {
       "count": 15,
-      "p50": 169.0460830000011,
-      "p95": 234.65412500000093,
-      "min": 152.3131249999933,
-      "max": 234.65412500000093
+      "p50": 179.53049999999348,
+      "p95": 202.18124999999418,
+      "min": 161.48570800000016,
+      "max": 202.18124999999418
     },
     "sortedByName": {
       "count": 15,
-      "p50": 169.3863330000022,
-      "p95": 174.55679099999543,
-      "min": 152.87850000000617,
-      "max": 174.55679099999543
+      "p50": 199.84491600000183,
+      "p95": 280.54499999999825,
+      "min": 157.70112499999232,
+      "max": 280.54499999999825
     },
     "smallestPageHome": {
       "count": 15,
-      "p50": 75.83920800000487,
-      "p95": 90.54524999999558,
-      "min": 67.69170799999847,
-      "max": 90.54524999999558
+      "p50": 75.74154099999578,
+      "p95": 103.01350000000093,
+      "min": 65.10949999999139,
+      "max": 103.01350000000093
     },
     "largestPageHome": {
       "count": 15,
-      "p50": 96.74925000000803,
-      "p95": 105.2979159999959,
-      "min": 86.69879200001014,
-      "max": 105.2979159999959
+      "p50": 99.72029199999815,
+      "p95": 119.55145900000934,
+      "min": 95.15975000000617,
+      "max": 119.55145900000934
     }
   },
   "answer": {
     "firstText": {
       "count": 19,
-      "p50": 2087.5362909999967,
-      "p95": 2983.944749999995,
-      "min": 1698.4424159999762,
-      "max": 2983.944749999995
+      "p50": 2116.122250000015,
+      "p95": 4947.688417000012,
+      "min": 1807.0877920000057,
+      "max": 4947.688417000012
     },
     "complete": {
       "count": 19,
-      "p50": 3102.226584000018,
-      "p95": 7673.401125000004,
-      "min": 2119.2412919999915,
-      "max": 7673.401125000004
+      "p50": 3115.222207999992,
+      "p95": 7224.542625000002,
+      "min": 2214.731375000003,
+      "max": 7224.542625000002
     },
     "withoutAnswer": 1
   },
@@ -74,87 +74,87 @@
     "firstContentfulPaint": {
       "count": 10,
       "p50": 260,
-      "p95": 292,
+      "p95": 1060,
       "min": 248,
-      "max": 292
+      "max": 1060
     },
     "load": {
       "count": 10,
-      "p50": 221.10000002384186,
-      "p95": 254.19999992847443,
-      "min": 211.20000004768372,
-      "max": 254.19999992847443
+      "p50": 221.79999995231628,
+      "p95": 1003.1999999284744,
+      "min": 209,
+      "max": 1003.1999999284744
     },
     "largestContentfulPaint": {
       "count": 10,
       "p50": 260,
-      "p95": 292,
+      "p95": 1060,
       "min": 248,
-      "max": 292
+      "max": 1060
     },
     "cumulativeLayoutShift": {
       "count": 10,
-      "p50": 0.033476297193822876,
-      "p95": 0.033476297193822876,
-      "min": 0.032861886399927126,
-      "max": 0.033476297193822876
+      "p50": 0.03489111200863769,
+      "p95": 0.03489111200863769,
+      "min": 0.03427670121474194,
+      "max": 0.03489111200863769
     },
     "firstResult": {
       "count": 10,
-      "p50": 537,
-      "p95": 575,
-      "min": 494,
-      "max": 575
+      "p50": 543,
+      "p95": 1896,
+      "min": 472,
+      "max": 1896
     },
     "typeAheadRequest": {
       "count": 10,
-      "p50": 48.700000047683716,
-      "p95": 70.60000002384186,
-      "min": 46.10000002384186,
-      "max": 70.60000002384186
+      "p50": 48.10000002384186,
+      "p95": 285.8000000715256,
+      "min": 45.10000002384186,
+      "max": 285.8000000715256
     },
     "searchRequest": {
       "count": 10,
-      "p50": 171.80000007152557,
-      "p95": 220.39999997615814,
-      "min": 161,
-      "max": 220.39999997615814
+      "p50": 173.29999995231628,
+      "p95": 328.2999999523163,
+      "min": 156.29999995231628,
+      "max": 328.2999999523163
     },
     "answerFirstText": {
       "count": 5,
-      "p50": 2342.1999999284744,
-      "p95": 2830.8000000715256,
-      "min": 2307.5,
-      "max": 2830.8000000715256
+      "p50": 2370.899999976158,
+      "p95": 3348.7999999523163,
+      "min": 1832.7000000476837,
+      "max": 3348.7999999523163
     },
     "answerComplete": {
       "count": 5,
-      "p50": 3053.899999976158,
-      "p95": 3656.8000000715256,
-      "min": 2433.600000023842,
-      "max": 3656.8000000715256
+      "p50": 3124.4000000953674,
+      "p95": 3400.1999999284744,
+      "min": 2414.7000000476837,
+      "max": 3400.1999999284744
     },
     "sentSearches": {
-      "total": 62,
+      "total": 65,
       "partialNameRewritten": 9
     }
   },
   "proposedTargets": {
     "method": "Each target is the measured p95 plus 20%, rounded up to the next 50 ms. Layout shift is rounded up to two decimals and is never below 0.01.",
-    "searchMs": 250,
+    "searchMs": 300,
     "typeAheadMs": 100,
-    "answerFirstTextMs": 3600,
-    "answerCompleteMs": 9250,
+    "answerFirstTextMs": 5950,
+    "answerCompleteMs": 8700,
     "hosted": {
-      "firstContentfulPaint": 400,
-      "load": 350,
-      "largestContentfulPaint": 400,
+      "firstContentfulPaint": 1300,
+      "load": 1250,
+      "largestContentfulPaint": 1300,
       "cumulativeLayoutShift": 0.05,
-      "firstResult": 700,
-      "typeAheadRequest": 100,
-      "searchRequest": 300,
-      "answerFirstText": 3400,
-      "answerComplete": 4400
+      "firstResult": 2300,
+      "typeAheadRequest": 350,
+      "searchRequest": 400,
+      "answerFirstText": 4050,
+      "answerComplete": 4100
     }
   }
 }
