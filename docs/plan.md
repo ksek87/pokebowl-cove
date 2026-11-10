@@ -105,7 +105,7 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 - [ ] Technical deep dive and demo script, using the talking points below (PC-100)
 - [ ] Production evaluation approach (PC-101)
 - [ ] Demo rehearsed
-- [ ] Performance re-measured on a quiet network before the demo. On 2026-11-09 after the rebuild, every p50 matched the baseline but two runs had p95 values over target, including page measures the index cannot affect (see `docs/architecture.md`, Performance)
+- [x] ~~Performance re-measured on a quiet network~~ Dropped by the user on 2026-11-10: the 2026-11-09 runs were already made on a quiet network. Every p50 matched the baseline; the p95 misses stay documented (see `docs/architecture.md`, Performance)
 - [ ] Business case, started only after the technical work (Epic 11)
 - [ ] Coveo configuration exported with the Coveo CLI, at the very end (PC-90)
 - [ ] Materials submitted, then the repository shared (PC-103, PC-31)
