@@ -81,6 +81,10 @@ export const STAT_BAR_MAXIMUM = 255;
 // How long the detail page waits for the stored page before hiding the Pokédex entries.
 export const POKEDEX_ENTRIES_TIMEOUT_MS = 8000;
 
+// How long the answer placeholder waits after the answer stream's header. A stream with no answer ended within 13 ms
+// of its header on live Coveo, and a real answer's first text came 1.2 to 1.5 s after it.
+export const ANSWER_PLACEHOLDER_PAUSE_MS = 75;
+
 // {name} is replaced with the Pokémon's name. Short descriptive questions gave the best answers in testing.
 export const ASK_POKEMON_QUESTIONS = [
   'Describe the appearance and behavior of {name}',

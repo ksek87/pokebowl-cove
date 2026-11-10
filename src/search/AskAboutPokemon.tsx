@@ -210,7 +210,7 @@ export function AskAboutPokemon({ config, name }: { config: CoveoConfig; name: s
             className={cn(
               'grid gap-2 rounded-(--radius-panel)',
               !asked && 'p-3',
-              asked && progress !== 'answered' && 'p-(--space-ask-answer-inset)',
+              asked && progress !== 'answered' && 'p-(--space-answer-inset)',
             )}
           >
             {asked ? (
@@ -241,7 +241,7 @@ export function AskAboutPokemon({ config, name }: { config: CoveoConfig; name: s
             )}
           </div>
           {asked ? (
-            <div className="px-(--space-ask-answer-inset) py-2">
+            <div className="px-(--space-answer-inset) py-2">
               <button
                 ref={backLink}
                 type="button"

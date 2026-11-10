@@ -1,6 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
-import { DEFAULT_PAGE_SIZE } from '../src/search/settings.ts';
-import { ANSWER_STREAM_ROUTE, expect, stubAnswer, test } from './fixtures.ts';
+import { ANSWER_PLACEHOLDER_PAUSE_MS, DEFAULT_PAGE_SIZE } from '../src/search/settings.ts';
+import { ANSWER_STREAM_ROUTE, expect, holdAnswer, stubAnswer, test } from './fixtures.ts';
 
 const NETWORK_TIMEOUT = 15_000;
 const WINDOW_HEIGHT = 900;
@@ -13,9 +13,71 @@ const FEEDBACK_BUTTON_COUNT = 2;
 const QUESTION = '/#q=what%20type%20is%20charizard';
 const ANSWER_TEXT = 'Charizard is a Fire and Flying type.';
 const CITATION = { title: 'Charizard Pokédex', clickUri: 'https://pokemondb.net/pokedex/charizard' };
+// On live Coveo, a stream with no answer sent its header up to 350 ms after the results, and ended within 13 ms of it.
+const HEADER_WAIT_MS = 350;
+const HEADER_TO_END_MS = 13;
+// Frames are sampled once per animation frame, so a time can be off by about one frame.
+const FRAME_MS = 20;
+
+interface Frame {
+  time: number;
+  cardTop: number | null;
+  hasPlaceholder: boolean;
+}
+
+declare global {
+  interface Window {
+    answerFrames: Frame[];
+  }
+}
+
+/** Records, on every animation frame, where the first result card is and whether the placeholder is on the page. */
+async function recordFrames(page: Page): Promise<void> {
+  await page.addInitScript((): void => {
+    const findDeep = (root: ParentNode, selector: string): Element | null => {
+      const found = root.querySelector(selector);
+      if (found) {
+        return found;
+      }
+      for (const element of root.querySelectorAll('*')) {
+        const inner = element.shadowRoot ? findDeep(element.shadowRoot, selector) : null;
+        if (inner) {
+          return inner;
+        }
+      }
+      return null;
+    };
+    window.answerFrames = [];
+    const sample = (time: number): void => {
+      const card = findDeep(document, 'atomic-result');
+      window.answerFrames.push({
+        time,
+        cardTop: card ? card.getBoundingClientRect().top : null,
+        hasPlaceholder: document.querySelector('[data-slot="answer-placeholder"]') !== null,
+      });
+      requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+  });
+}
+
+async function readFrames(page: Page): Promise<Frame[]> {
+  return page.evaluate((): Frame[] => window.answerFrames);
+}
 
 function answerPanel(page: Page): Locator {
   return page.locator('atomic-generated-answer [part~="container"]');
+}
+
+function answerPlaceholder(page: Page): Locator {
+  return page.locator('[data-slot="answer-placeholder"]');
+}
+
+async function lineAnimation(page: Page): Promise<string> {
+  return answerPlaceholder(page)
+    .locator('[data-slot="answer-placeholder-line"]')
+    .first()
+    .evaluate((line): string => getComputedStyle(line).animationName);
 }
 
 async function open(page: Page, width: number, path: string): Promise<void> {
@@ -172,3 +234,120 @@ for (const width of WIDTHS) {
     expect(Math.abs((panel?.width ?? 0) - (results?.width ?? 0))).toBeLessThanOrEqual(TOLERANCE_PX);
   });
 }
+
+test('holds the answer place while the answer is prepared, then shows the answer there', async ({ page }): Promise<void> => {
+  const held = await holdAnswer(page);
+  await open(page, LAPTOP, QUESTION);
+  await held.header();
+
+  const placeholder = answerPlaceholder(page);
+  await expect(placeholder).toBeVisible({ timeout: NETWORK_TIMEOUT });
+  await expect(placeholder).toHaveText('Generating an answer…');
+  await expect(answerPanel(page)).toHaveCount(0);
+  expect(await lineAnimation(page)).not.toBe('none');
+  const placeholderTop = await top(placeholder);
+
+  await held.answer(ANSWER_TEXT, CITATION);
+
+  await expect(answerPanel(page)).toContainText(ANSWER_TEXT, { timeout: NETWORK_TIMEOUT });
+  await expect(placeholder).toHaveCount(0);
+  expect(Math.abs((await top(answerPanel(page))) - placeholderTop)).toBeLessThanOrEqual(TOLERANCE_PX);
+});
+
+test('shows the placeholder only after the stream header and the pause, and opens it from zero height', async ({ page }): Promise<void> => {
+  await recordFrames(page);
+  const held = await holdAnswer(page);
+  await open(page, LAPTOP, QUESTION);
+  await page.waitForTimeout(CHECK_WAIT_MS);
+  await expect(answerPlaceholder(page)).toHaveCount(0);
+
+  await held.header();
+  await expect(answerPlaceholder(page)).toBeVisible({ timeout: NETWORK_TIMEOUT });
+  const opening = page.locator('[data-slot="answer-placeholder-opening"]');
+
+  expect(await opening.evaluate((element): string => getComputedStyle(element).animationName)).toBe('answer-open');
+  const headerAt = await page.evaluate((): number => window.heldAnswer.headerAt ?? 0);
+  const shownAt = (await readFrames(page)).find((frame): boolean => frame.hasPlaceholder)?.time ?? 0;
+  expect(shownAt - headerAt).toBeGreaterThanOrEqual(ANSWER_PLACEHOLDER_PAUSE_MS - FRAME_MS);
+});
+
+test('never shows the placeholder or moves the results when the stream ends right after its header', async ({ page }): Promise<void> => {
+  await recordFrames(page);
+  const held = await holdAnswer(page);
+  await open(page, LAPTOP, QUESTION);
+  await page.waitForTimeout(HEADER_WAIT_MS);
+  await held.header();
+  await page.waitForTimeout(HEADER_TO_END_MS);
+  await held.noAnswer();
+  await page.waitForTimeout(CHECK_WAIT_MS);
+
+  const frames = (await readFrames(page)).filter((frame): boolean => frame.cardTop !== null);
+  expect(frames.some((frame): boolean => frame.hasPlaceholder)).toBe(false);
+  const tops = frames.map((frame): number => frame.cardTop ?? 0);
+  expect(Math.max(...tops) - Math.min(...tops)).toBeLessThanOrEqual(TOLERANCE_PX);
+});
+
+test('removes the placeholder when no answer is generated', async ({ page }): Promise<void> => {
+  const held = await holdAnswer(page);
+  await open(page, LAPTOP, QUESTION);
+  await held.header();
+  await expect(answerPlaceholder(page)).toBeVisible({ timeout: NETWORK_TIMEOUT });
+
+  await held.noAnswer();
+
+  await expect(answerPlaceholder(page)).toHaveCount(0);
+  await expect(answerPanel(page)).toHaveCount(0);
+  await expect(page.locator('atomic-result')).toHaveCount(DEFAULT_PAGE_SIZE);
+});
+
+test('shows no placeholder for an empty search', async ({ page }): Promise<void> => {
+  await holdAnswer(page);
+  await open(page, LAPTOP, '/');
+  await page.waitForTimeout(CHECK_WAIT_MS);
+
+  await expect(answerPlaceholder(page)).toHaveCount(0);
+});
+
+test('shows the placeholder with no animation when reduced motion is requested', async ({ page }): Promise<void> => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const held = await holdAnswer(page);
+  await open(page, LAPTOP, QUESTION);
+  await held.header();
+
+  await expect(answerPlaceholder(page)).toHaveText('Generating an answer…', { timeout: NETWORK_TIMEOUT });
+  expect(await lineAnimation(page)).toBe('none');
+  const opening = page.locator('[data-slot="answer-placeholder-opening"]');
+  const style = await opening.evaluate((element) => {
+    const computed = getComputedStyle(element);
+    const card = element.querySelector('[data-slot="answer-placeholder"]');
+    const cardBox = card ? card.getBoundingClientRect().height + parseFloat(getComputedStyle(card).marginBottom) : 0;
+    return {
+      animation: computed.animationName,
+      transition: computed.transitionDuration,
+      opacity: computed.opacity,
+      missingHeight: cardBox - element.getBoundingClientRect().height,
+    };
+  });
+  expect(style.animation).toBe('none');
+  expect(style.transition).toBe('0s');
+  expect(style.opacity).toBe('1');
+  expect(style.missingHeight).toBeLessThanOrEqual(TOLERANCE_PX);
+});
+
+test('gives the placeholder the edges of the answer card', async ({ page }): Promise<void> => {
+  const held = await holdAnswer(page);
+  await open(page, LAPTOP, QUESTION);
+  const edges = async (locator: Locator): Promise<string> =>
+    locator.evaluate((element): string => {
+      const style = getComputedStyle(element);
+      return [style.borderTopWidth, style.borderTopColor, style.borderTopLeftRadius, style.backgroundColor, style.marginBottom].join(' ');
+    });
+  await held.header();
+  await expect(answerPlaceholder(page)).toBeVisible({ timeout: NETWORK_TIMEOUT });
+  const placeholderEdges = await edges(answerPlaceholder(page));
+
+  await held.answer(ANSWER_TEXT, CITATION);
+  await expect(answerPanel(page)).toBeVisible({ timeout: NETWORK_TIMEOUT });
+
+  expect(placeholderEdges).toBe(await edges(answerPanel(page)));
+});
