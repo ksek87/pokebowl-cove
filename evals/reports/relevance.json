@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-11-09T19:17:07.974Z",
+  "measuredAt": "2026-11-10T03:44:20.475Z",
   "method": "Recall@K counts hits out of the relevant items that can fit in K. Queries run in pokebowl-search with analytics capture off, through the same request rewrite as the application.",
   "ks": [
     3,
@@ -7,10 +7,10 @@
   ],
   "overall": {
     "queries": 123,
-    "mrr": 0.9470867208672086,
+    "mrr": 0.9466124661246612,
     "recall": {
-      "3": 0.9457994579945799,
-      "12": 0.9552537570830253
+      "3": 0.9566395663956639,
+      "12": 0.9676336536092633
     }
   },
   "byCategory": {
@@ -27,23 +27,23 @@
       "mrr": 1,
       "recall": {
         "3": 1,
-        "12": 0.9907407407407409
+        "12": 1
       }
     },
     "generation": {
       "queries": 10,
-      "mrr": 0.95,
+      "mrr": 1,
       "recall": {
-        "3": 0.8666666666666668,
-        "12": 0.825
+        "3": 1,
+        "12": 0.975
       }
     },
     "ability": {
       "queries": 15,
-      "mrr": 0.9222222222222223,
+      "mrr": 0.9,
       "recall": {
-        "3": 0.9111111111111111,
-        "12": 0.9025252525252525
+        "3": 0.9333333333333332,
+        "12": 0.9262626262626262
       }
     },
     "species": {
@@ -64,10 +64,10 @@
     },
     "descriptive": {
       "queries": 13,
-      "mrr": 0.7173076923076922,
+      "mrr": 0.7,
       "recall": {
-        "3": 0.6923076923076923,
-        "12": 0.8365384615384616
+        "3": 0.6666666666666667,
+        "12": 0.7980769230769231
       }
     },
     "natural": {
@@ -81,22 +81,46 @@
   },
   "failures": [
     {
+      "query": "fire normal",
+      "category": "descriptive",
+      "judgment": "A Type pair is taken to mean Pokémon with both Types.",
+      "ranked": [
+        "Flareon",
+        "Gouging Fire",
+        "Charmander",
+        "Quilava",
+        "Vaporeon",
+        "Magmar",
+        "Fuecoco",
+        "Darmanitan",
+        "Cyndaquil",
+        "Ceruledge",
+        "Magcargo",
+        "Leafeon"
+      ],
+      "reciprocalRank": 0,
+      "recall": {
+        "3": 0,
+        "12": 0
+      }
+    },
+    {
       "query": "grass fire",
       "category": "descriptive",
       "judgment": "A Type pair is taken to mean Pokémon with both Types.",
       "ranked": [
         "Gouging Fire",
-        "Fletchinder",
         "Flareon",
         "Ponyta",
-        "Houndoom",
+        "Fletchinder",
         "Quilava",
         "Cyndaquil",
+        "Houndoom",
         "Fuecoco",
-        "Fomantis",
         "Darmanitan",
-        "Litten",
-        "Pombon"
+        "Sprigatito",
+        "Floragato",
+        "Magmar"
       ],
       "reciprocalRank": 0,
       "recall": {
@@ -382,13 +406,13 @@
       "ranked": [
         "Sylveon",
         "Umbreon",
-        "Leafeon",
         "Glaceon",
         "Espeon",
-        "Vaporeon",
-        "Eevee",
+        "Leafeon",
         "Flareon",
-        "Jolteon"
+        "Jolteon",
+        "Vaporeon",
+        "Eevee"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -429,9 +453,9 @@
         "Corviknight",
         "Corvisquire",
         "Rookidee",
+        "Tinkaton",
         "Bunnelby",
         "Braviary",
-        "Tinkaton",
         "Skarmory"
       ],
       "reciprocalRank": 1,
@@ -561,16 +585,16 @@
       "ranked": [
         "Blipbug",
         "Nymble",
-        "Venonat",
         "Spidops",
+        "Rabsca",
         "Tarountula",
         "Rellor",
-        "Shedinja",
-        "Parasect",
+        "Accelgor",
+        "Lokix",
+        "Dottler",
         "Beautifly",
-        "Vivillon",
-        "Cutiefly",
-        "Yanmega"
+        "Venonat",
+        "Vivillon"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -582,18 +606,18 @@
       "query": "dark type",
       "category": "type",
       "ranked": [
-        "Darkrai",
         "Umbreon",
         "Mabosstiff",
-        "Vullaby",
+        "Darkrai",
         "Maschiff",
-        "Krokorok",
-        "Sableye",
-        "Kingambit",
-        "Ting-Lu",
-        "Thievul",
+        "Liepard",
         "Nickit",
-        "Obstagoon"
+        "Thievul",
+        "Krokorok",
+        "Vullaby",
+        "Meowscarada",
+        "Lokix",
+        "Overqwil"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -606,17 +630,17 @@
       "category": "type",
       "ranked": [
         "Dragonite",
-        "Regidrago",
         "Dragonair",
+        "Regidrago",
+        "Flapple",
         "Goomy",
-        "Dragalge",
-        "Drampa",
-        "Tatsugiri",
         "Frigibax",
-        "Dracozolt",
-        "Kyurem",
+        "Naganadel",
+        "Dragalge",
         "Arctibax",
-        "Gouging Fire"
+        "Applin",
+        "Noibat",
+        "Garchomp"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -630,16 +654,16 @@
       "ranked": [
         "Electabuzz",
         "Luxio",
-        "Manectric",
-        "Magnemite",
         "Electivire",
         "Elekid",
-        "Electrike",
         "Electrode",
+        "Electrike",
         "Pichu",
         "Flaaffy",
+        "Magnemite",
         "Tynamo",
-        "Pawmi"
+        "Pawmi",
+        "Eelektrik"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -654,15 +678,15 @@
         "Clefable",
         "Milcery",
         "Flabébé",
+        "Slurpuff",
         "Togepi",
         "Florges",
         "Clefairy",
-        "Wigglytuff",
         "Dachsbun",
-        "Jigglypuff",
-        "Togekiss",
         "Alcremie",
-        "Whimsicott"
+        "Togekiss",
+        "Fidough",
+        "Floette"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -674,23 +698,23 @@
       "query": "fighting type",
       "category": "type",
       "ranked": [
-        "Annihilape",
         "Kubfu",
-        "Grapploct",
-        "Hawlucha",
-        "Hitmontop",
-        "Timburr",
-        "Pawmot",
+        "Annihilape",
         "Crabrawler",
+        "Clobbopus",
+        "Grapploct",
+        "Pawmot",
+        "Pawmo",
+        "Timburr",
+        "Hitmontop",
         "Tyrogue",
-        "Sneasler",
-        "Tauros",
-        "Pawmo"
+        "Mankey",
+        "Conkeldurr"
       ],
       "reciprocalRank": 1,
       "recall": {
         "3": 1,
-        "12": 0.9166666666666666
+        "12": 1
       }
     },
     {
@@ -701,14 +725,14 @@
         "Charcadet",
         "Darmanitan",
         "Crocalor",
-        "Fletchinder",
         "Flareon",
-        "Pombon",
         "Fuecoco",
-        "Typhlosion",
-        "Armarouge",
+        "Vulpix",
+        "Cyndaquil",
         "Simisear",
-        "Cyndaquil"
+        "Quilava",
+        "Armarouge",
+        "Pansear"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -726,12 +750,12 @@
         "Pidgeotto",
         "Staravia",
         "Archeops",
-        "Sigilyph",
         "Pidgeot",
         "Pelipper",
         "Wingull",
         "Dodrio",
-        "Yanmega"
+        "Yanmega",
+        "Fearow"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -745,16 +769,16 @@
       "ranked": [
         "Houndstone",
         "Greavard",
-        "Dreepy",
-        "Sinistcha",
+        "Gholdengo",
+        "Polteageist",
         "Misdreavus",
-        "Spiritomb",
-        "Litwick",
-        "Haunter",
+        "Dreepy",
         "Cofagrigus",
-        "Pumpkaboo",
-        "Flutter Mane",
-        "Aegislash"
+        "Runerigus",
+        "Gimmighoul",
+        "Skeledirge",
+        "Sinistea",
+        "Mismagius"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -768,16 +792,16 @@
       "ranked": [
         "Floragato",
         "Sprigatito",
-        "Fomantis",
         "Lurantis",
-        "Browt",
-        "Brambleghast",
-        "Skiddo",
+        "Meowscarada",
+        "Fomantis",
         "Arboliva",
-        "Whimsicott",
+        "Skiddo",
+        "Pansage",
+        "Snivy",
         "Sawsbuck",
-        "Rowlet",
-        "Meowscarada"
+        "Brambleghast",
+        "Servine"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -789,18 +813,18 @@
       "query": "ground type",
       "category": "type",
       "ranked": [
+        "Torterra",
         "Toedscruel",
+        "Dugtrio",
         "Toedscool",
         "Seismitoad",
-        "Torterra",
-        "Dugtrio",
-        "Rhydon",
-        "Gabite",
-        "Landorus",
-        "Clodsire",
-        "Rhyhorn",
         "Silicobra",
-        "Marshtomp"
+        "Diglett",
+        "Gabite",
+        "Drilbur",
+        "Rhydon",
+        "Clodsire",
+        "Sandaconda"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -814,16 +838,16 @@
       "ranked": [
         "Vanillish",
         "Glaceon",
-        "Cryogonal",
         "Eiscue",
-        "Spheal",
-        "Abomasnow",
-        "Regice",
-        "Vanillite",
-        "Avalugg",
+        "Frigibax",
         "Glalie",
+        "Vanillite",
         "Bergmite",
-        "Cubchoo"
+        "Cubchoo",
+        "Cryogonal",
+        "Beartic",
+        "Cetoddle",
+        "Regice"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -838,20 +862,20 @@
         "Type: Null",
         "Silvally",
         "Terapagos",
+        "Purugly",
+        "Patrat",
         "Dubwool",
-        "Wigglytuff",
+        "Watchog",
         "Arboliva",
-        "Castform",
+        "Wigglytuff",
         "Maushold",
-        "Azurill",
-        "Whismur",
-        "Zorua",
-        "Porygon-Z"
+        "Farigiraf",
+        "Whismur"
       ],
       "reciprocalRank": 1,
       "recall": {
         "3": 1,
-        "12": 0.9166666666666666
+        "12": 1
       }
     },
     {
@@ -862,14 +886,14 @@
         "Nidoran♀ (female)",
         "Garbodor",
         "Nidorino",
-        "Clodsire",
-        "Foongus",
-        "Weezing",
-        "Toxicroak",
+        "Naganadel",
         "Koffing",
-        "Toxel",
-        "Skrelp",
-        "Drapion"
+        "Clodsire",
+        "Poipole",
+        "Muk",
+        "Foongus",
+        "Glimmet",
+        "Toxel"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -882,17 +906,17 @@
       "category": "type",
       "ranked": [
         "Beheeyem",
-        "Kirlia",
         "Kadabra",
-        "Gardevoir",
         "Espathra",
         "Abra",
-        "Espurr",
         "Flittle",
+        "Espeon",
         "Elgyem",
-        "Farigiraf",
+        "Kirlia",
         "Gothita",
-        "Wyrdeer"
+        "Meowstic",
+        "Espurr",
+        "Gardevoir"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -906,16 +930,16 @@
       "ranked": [
         "Roggenrola",
         "Regirock",
-        "Dwebble",
-        "Rhyperior",
-        "Rockruff",
-        "Graveler",
-        "Stonjourner",
-        "Omastar",
         "Garganacl",
-        "Rhydon",
+        "Dwebble",
+        "Naclstack",
+        "Cranidos",
         "Carkol",
-        "Naclstack"
+        "Nacli",
+        "Graveler",
+        "Sudowoodo",
+        "Stonjourner",
+        "Rhydon"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -927,18 +951,18 @@
       "query": "steel type",
       "category": "type",
       "ranked": [
-        "Steelix",
         "Perrserker",
-        "Kingambit",
-        "Archaludon",
+        "Steelix",
+        "Klinklang",
+        "Klink",
+        "Copperajah",
+        "Cufant",
+        "Melmetal",
         "Tinkatink",
-        "Cobalion",
+        "Archaludon",
         "Aron",
         "Orthworm",
-        "Magnemite",
-        "Forretress",
-        "Melmetal",
-        "Scizor"
+        "Magnemite"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -951,17 +975,17 @@
       "category": "type",
       "ranked": [
         "Seel",
-        "Panpour",
+        "Buizel",
         "Finizen",
         "Vaporeon",
-        "Buizel",
-        "Lotad",
+        "Panpour",
         "Drizzile",
-        "Palpitoad",
+        "Lotad",
         "Wugtrio",
-        "Dondozo",
+        "Palpitoad",
+        "Mudkip",
         "Simipour",
-        "Araquanid"
+        "Seismitoad"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -973,18 +997,64 @@
       "query": "generation 1",
       "category": "generation",
       "ranked": [
+        "Mewtwo",
+        "Tauros",
+        "Weezing",
+        "Marowak",
+        "Meowth",
+        "Raichu",
         "Flareon",
-        "Jolteon",
-        "Scyther",
-        "Electrode",
-        "Ponyta",
-        "Tentacruel",
-        "Magnemite",
-        "Tentacool",
         "Ninetales",
-        "Vileplume",
         "Gloom",
-        "Mew"
+        "Mew",
+        "Arceus",
+        "Watchog"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 0.8333333333333334
+      }
+    },
+    {
+      "query": "generation 2",
+      "category": "generation",
+      "ranked": [
+        "Donphan",
+        "Houndoom",
+        "Pineco",
+        "Wooper",
+        "Typhlosion",
+        "Furret",
+        "Meganium",
+        "Qwilfish",
+        "Tynamo",
+        "Elekid",
+        "Heracross",
+        "Yanma"
+      ],
+      "reciprocalRank": 1,
+      "recall": {
+        "3": 1,
+        "12": 0.9166666666666666
+      }
+    },
+    {
+      "query": "generation 3",
+      "category": "generation",
+      "ranked": [
+        "Rayquaza",
+        "Latios",
+        "Latias",
+        "Groudon",
+        "Kyogre",
+        "Absol",
+        "Castform",
+        "Camerupt",
+        "Aggron",
+        "Manectric",
+        "Mawile",
+        "Blaziken"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -993,67 +1063,21 @@
       }
     },
     {
-      "query": "generation 2",
-      "category": "generation",
-      "ranked": [
-        "Pineco",
-        "Qwilfish",
-        "Weezing",
-        "Tynamo",
-        "Elekid",
-        "Heracross",
-        "Yanma",
-        "Flaaffy",
-        "Jolteon",
-        "Scyther",
-        "Electrode",
-        "Ponyta"
-      ],
-      "reciprocalRank": 1,
-      "recall": {
-        "3": 0.6666666666666666,
-        "12": 0.5
-      }
-    },
-    {
-      "query": "generation 3",
-      "category": "generation",
-      "ranked": [
-        "Cacturne",
-        "Swalot",
-        "Kangaskhan",
-        "Cradily",
-        "Lileep",
-        "Armaldo",
-        "Anorith",
-        "Crawdaunt",
-        "Corphish",
-        "Cloyster",
-        "Shellder",
-        "Kabutops"
-      ],
-      "reciprocalRank": 1,
-      "recall": {
-        "3": 0.6666666666666666,
-        "12": 0.6666666666666666
-      }
-    },
-    {
       "query": "generation 4",
       "category": "generation",
       "ranked": [
-        "Phione",
+        "Arceus",
         "Cresselia",
         "Darkrai",
-        "Regigigas",
-        "Dialga",
-        "Heatran",
-        "Azelf",
         "Rotom",
-        "Palkia",
         "Mesprit",
+        "Regigigas",
         "Uxie",
-        "Gallade"
+        "Heatran",
+        "Phione",
+        "Dialga",
+        "Palkia",
+        "Azelf"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1065,23 +1089,23 @@
       "query": "generation 5",
       "category": "generation",
       "ranked": [
-        "Exploud",
+        "Heatmor",
+        "Bouffalant",
+        "Accelgor",
+        "Shelmet",
         "Beartic",
         "Eelektross",
-        "Leavanny",
-        "Scolipede",
-        "Seismitoad",
-        "Woobat",
-        "Zebstrika",
-        "Unfezant",
-        "Samurott",
-        "Oshawott",
-        "Snivy"
+        "Ferrothorn",
+        "Klink",
+        "Klinklang",
+        "Karrablast",
+        "Duosion",
+        "Reuniclus"
       ],
-      "reciprocalRank": 0.5,
+      "reciprocalRank": 1,
       "recall": {
-        "3": 0.6666666666666666,
-        "12": 0.9166666666666666
+        "3": 1,
+        "12": 1
       }
     },
     {
@@ -1091,15 +1115,15 @@
         "Diancie",
         "Volcanion",
         "Xerneas",
+        "Goodra",
+        "Swirlix",
+        "Aromatisse",
+        "Slurpuff",
+        "Spritzee",
         "Gogoat",
-        "Flabébé",
-        "Florges",
-        "Vivillon",
-        "Greninja",
+        "Espurr",
         "Skiddo",
-        "Chesnaught",
-        "Quilladin",
-        "Delphox"
+        "Florges"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1112,22 +1136,22 @@
       "category": "generation",
       "ranked": [
         "Melmetal",
-        "Decidueye",
-        "Greninja",
-        "Diancie",
-        "Volcanion",
-        "Florges",
-        "Vivillon",
-        "Chesnaught",
-        "Delphox",
-        "Eelektross",
-        "Samurott",
-        "Heatran"
+        "Xurkitree",
+        "Cosmoem",
+        "Dhelmise",
+        "Silvally",
+        "Salazzle",
+        "Tsareena",
+        "Dewpider",
+        "Shiinotic",
+        "Araquanid",
+        "Ribombee",
+        "Crabrawler"
       ],
       "reciprocalRank": 1,
       "recall": {
-        "3": 0.6666666666666666,
-        "12": 0.16666666666666666
+        "3": 1,
+        "12": 1
       }
     },
     {
@@ -1135,17 +1159,17 @@
       "category": "generation",
       "ranked": [
         "Sneasler",
+        "Spectrier",
+        "Regieleki",
         "Glastrier",
         "Regidrago",
-        "Regieleki",
         "Kubfu",
-        "Spectrier",
-        "Alcremie",
+        "Pincurchin",
+        "Stonjourner",
+        "Cufant",
         "Milcery",
-        "Perrserker",
-        "Grapploct",
-        "Boltund",
-        "Thievul"
+        "Copperajah",
+        "Polteageist"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1158,17 +1182,17 @@
       "category": "generation",
       "ranked": [
         "Dondozo",
-        "Cetoddle",
         "Houndstone",
-        "Orthworm",
-        "Finizen",
-        "Espathra",
         "Wugtrio",
+        "Orthworm",
+        "Espathra",
         "Flittle",
+        "Finizen",
         "Rellor",
+        "Cetoddle",
         "Capsakid",
         "Klawf",
-        "Mabosstiff"
+        "Maschiff"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1184,14 +1208,14 @@
         "Gecqua",
         "Browt",
         "Jolteon",
-        "Drampa",
         "Zygarde",
-        "Omanyte",
+        "Drampa",
         "Passimian",
+        "Omanyte",
         "Mamoswine",
-        "Pyroar",
         "Piplup",
-        "Mareanie"
+        "Mareanie",
+        "Combusken"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1203,46 +1227,46 @@
       "query": "Adaptability",
       "category": "ability",
       "ranked": [
-        "Eevee",
         "Corphish",
+        "Eevee",
         "Porygon-Z",
-        "Basculin",
         "Basculegion",
+        "Basculin",
         "Kabutops",
-        "Glimmora",
         "Wiglett",
-        "Beedrill",
         "Noctowl",
-        "Silvally",
-        "Lucario"
+        "Glimmora",
+        "Yungoos",
+        "Gumshoos",
+        "Dragalge"
       ],
       "reciprocalRank": 1,
       "recall": {
         "3": 1,
-        "12": 0.45454545454545453
+        "12": 0.7272727272727273
       }
     },
     {
       "query": "Blaze",
       "category": "ability",
       "ranked": [
-        "Typhlosion",
-        "Blaziken",
-        "Quilava",
-        "Torracat",
-        "Litten",
-        "Rapidash",
         "Tauros",
-        "Charmander",
+        "Quilava",
+        "Typhlosion",
+        "Rapidash",
+        "Litten",
+        "Blaziken",
         "Pignite",
         "Tepig",
         "Cyndaquil",
-        "Pombon"
+        "Charmander",
+        "Darmanitan",
+        "Torracat"
       ],
-      "reciprocalRank": 1,
+      "reciprocalRank": 0.5,
       "recall": {
-        "3": 1,
-        "12": 0.8333333333333334
+        "3": 0.6666666666666666,
+        "12": 0.75
       }
     },
     {
@@ -1251,16 +1275,16 @@
       "ranked": [
         "Shroomish",
         "Parasect",
-        "Poliwag",
+        "Frillish",
         "Quagsire",
+        "Poliwag",
+        "Jellicent",
         "Wooper",
         "Politoed",
         "Poliwrath",
         "Poliwhirl",
-        "Frillish",
-        "Jellicent",
-        "Panpour",
-        "Paras"
+        "Paras",
+        "Drifloon"
       ],
       "reciprocalRank": 0.5,
       "recall": {
@@ -1313,13 +1337,13 @@
         "Arctibax",
         "Cubone",
         "Mawile",
-        "Glastrier",
         "Shieldon",
         "Gligar",
+        "Glastrier",
         "Druddigon",
-        "Yamask",
         "Bastiodon",
-        "Smoochum"
+        "Smoochum",
+        "Buizel"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1332,8 +1356,8 @@
       "category": "ability",
       "ranked": [
         "Raboot",
-        "Scorbunny",
-        "Cinderace"
+        "Cinderace",
+        "Scorbunny"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1345,37 +1369,37 @@
       "query": "Mold Breaker",
       "category": "ability",
       "ranked": [
-        "Basculin",
         "Basculegion",
-        "Ogerpon",
+        "Basculin",
         "Veluza",
         "Tinkatink",
         "Pinsir",
-        "Tinkaton",
+        "Ogerpon",
         "Tinkatuff",
+        "Tinkaton",
         "Fraxure",
         "Axew",
-        "Emboar",
-        "Pancham"
+        "Sawk",
+        "Throh"
       ],
       "reciprocalRank": 1,
       "recall": {
-        "3": 0.6666666666666666,
-        "12": 0.8333333333333334
+        "3": 1,
+        "12": 0.9166666666666666
       }
     },
     {
       "query": "Pickpocket",
       "category": "ability",
       "ranked": [
-        "Shroodle",
         "Tinkatink",
+        "Shroodle",
         "Sneasel",
-        "Tinkaton",
         "Tinkatuff",
+        "Tinkaton",
+        "Impidimp",
         "Grimmsnarl",
         "Morgrem",
-        "Impidimp",
         "Barbaracle",
         "Binacle",
         "Nuzleaf",
@@ -1425,18 +1449,18 @@
       "query": "Slow Start",
       "category": "ability",
       "ranked": [
-        "Regigigas",
         "Varoom",
+        "Regigigas",
         "Rhyhorn",
         "Feebas",
-        "Lugia",
         "Whismur",
+        "Lugia",
         "Ivysaur",
         "Dratini",
         "Manaphy",
         "Volcarona",
-        "Dragapult",
-        "Mienshao"
+        "Mienshao",
+        "Quilladin"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1462,22 +1486,22 @@
       "category": "ability",
       "ranked": [
         "Exeggcute",
-        "Solosis",
         "Dialga",
         "Palkia",
-        "Beheeyem",
-        "Elgyem",
         "Exeggutor",
-        "Latias",
-        "Oranguru",
-        "Latios",
         "Rabsca",
-        "Dottler"
+        "Blipbug",
+        "Dottler",
+        "Solosis",
+        "Latias",
+        "Orbeetle",
+        "Tapu Fini",
+        "Tapu Koko"
       ],
-      "reciprocalRank": 0.3333333333333333,
+      "reciprocalRank": 0.5,
       "recall": {
-        "3": 0.3333333333333333,
-        "12": 0.5833333333333334
+        "3": 0.6666666666666666,
+        "12": 0.6666666666666666
       }
     },
     {
@@ -1503,9 +1527,9 @@
         "Drifloon",
         "Wurmple",
         "Chansey",
-        "Machop",
         "Rampardos",
         "Rufflet",
+        "Machop",
         "Electrode",
         "Pelipper",
         "Morpeko"
@@ -1528,8 +1552,8 @@
         "Bellibolt",
         "Bellossom",
         "Chatot",
-        "Exeggutor",
         "Morpeko",
+        "Exeggutor",
         "Chikorita",
         "Flutter Mane"
       ],
@@ -1545,16 +1569,16 @@
       "ranked": [
         "Hatenna",
         "Blissey",
-        "Tauros",
         "Dragonite",
-        "Meganium",
         "Pelipper",
         "Arboliva",
         "Sylveon",
+        "Meganium",
         "Gloom",
-        "Mantine",
         "Donphan",
-        "Lycanroc"
+        "Mantine",
+        "Lycanroc",
+        "Slowking"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1596,9 +1620,9 @@
         "Rampardos",
         "Electabuzz",
         "Phantump",
+        "Heracross",
         "Natu",
         "Aipom",
-        "Heracross",
         "Treecko",
         "Grovyle"
       ],
@@ -1616,8 +1640,8 @@
         "Mudsdale",
         "Magneton",
         "Rattata",
-        "Tentacruel",
         "Barboach",
+        "Tentacruel",
         "Gastly",
         "Koffing",
         "Victreebel",
@@ -1643,10 +1667,10 @@
         "Mismagius",
         "Ho-oh",
         "Wynaut",
-        "Hattrem",
         "Kirlia",
         "Charmander",
-        "Indeedee"
+        "Indeedee",
+        "Clefable"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1683,8 +1707,8 @@
       "ranked": [
         "Garchomp",
         "Pidgeot",
-        "Golurk",
         "Inteleon",
+        "Golurk",
         "Dragapult",
         "Gyarados",
         "Machoke",
@@ -1692,7 +1716,7 @@
         "Machamp",
         "Darmanitan",
         "Tinkaton",
-        "Voltorb"
+        "Electivire"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1735,10 +1759,10 @@
         "Igglybuff",
         "Chikorita",
         "Jigglypuff",
-        "Poipole",
         "Overqwil",
-        "Umbreon",
-        "Basculegion"
+        "Poipole",
+        "Basculegion",
+        "Umbreon"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -1755,8 +1779,8 @@
         "Vivillon",
         "Talonflame",
         "Scyther",
-        "Vileplume",
         "Scovillain",
+        "Vileplume",
         "Dustox",
         "Scraggy",
         "Scrafty",
@@ -1801,11 +1825,11 @@
         "Smeargle",
         "Pikachu",
         "Togepi",
-        "Persian",
         "Luvdisc",
+        "Persian",
+        "Cofagrigus",
         "Murkrow",
         "Darumaka",
-        "Cofagrigus",
         "Klang",
         "Swoobat"
       ],
@@ -1845,8 +1869,8 @@
         "Charcadet",
         "Charjabug",
         "Charizard",
-        "Charmander",
         "Charmeleon",
+        "Charmander",
         "Thundurus",
         "Magmar"
       ],
@@ -2019,17 +2043,17 @@
       "category": "partial",
       "ranked": [
         "Type: Null",
-        "Dondozo",
-        "Orthworm",
-        "Zeraora",
-        "Xerneas",
-        "Victini",
+        "Silicobra",
         "Numel",
         "Ogerpon",
+        "Gholdengo",
+        "Arctibax",
+        "Frigibax",
+        "Dondozo",
         "Houndstone",
-        "Espathra",
-        "Flittle",
-        "Mabosstiff"
+        "Varoom",
+        "Glimmet",
+        "Orthworm"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2069,16 +2093,16 @@
       "ranked": [
         "Lokix",
         "Venonat",
-        "Shedinja",
-        "Mabosstiff",
-        "Maschiff",
-        "Thievul",
-        "Nickit",
-        "Wyrdeer",
-        "Parasect",
         "Iron Valiant",
-        "Sneasel",
-        "Darkrai"
+        "Shedinja",
+        "Maschiff",
+        "Mabosstiff",
+        "Nickit",
+        "Thievul",
+        "Liepard",
+        "Umbreon",
+        "Parasect",
+        "Mr. Rime"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2093,16 +2117,16 @@
       "ranked": [
         "Umbreon",
         "Obstagoon",
+        "Gengar",
+        "Zorua",
         "Linoone",
         "Darkrai",
-        "Sableye",
-        "Kingambit",
+        "Haunter",
         "Zigzagoon",
-        "Zorua",
-        "Krokorok",
-        "Gengar",
+        "Maschiff",
         "Mabosstiff",
-        "Maschiff"
+        "Nickit",
+        "Thievul"
       ],
       "reciprocalRank": 0.5,
       "recall": {
@@ -2116,19 +2140,19 @@
       "judgment": "A Type pair is taken to mean Pokémon with both Types.",
       "ranked": [
         "Jolteon",
-        "Magnemite",
         "Electabuzz",
-        "Magneton",
-        "Manectric",
-        "Pikachu",
+        "Magnemite",
         "Pichu",
-        "Heliolisk",
         "Electrode",
+        "Magneton",
         "Flaaffy",
-        "Raichu",
-        "Luxio"
+        "Pikachu",
+        "Luxio",
+        "Heliolisk",
+        "Elekid",
+        "Mareep"
       ],
-      "reciprocalRank": 0.125,
+      "reciprocalRank": 0.1,
       "recall": {
         "3": 0,
         "12": 0.5
@@ -2143,19 +2167,19 @@
         "Gouging Fire",
         "Charmander",
         "Quilava",
-        "Litleo",
-        "Fletchinder",
-        "Magmar",
-        "Typhlosion",
-        "Darmanitan",
         "Vaporeon",
-        "Lampent",
-        "Charizard"
+        "Magmar",
+        "Fuecoco",
+        "Darmanitan",
+        "Cyndaquil",
+        "Ceruledge",
+        "Magcargo",
+        "Leafeon"
       ],
-      "reciprocalRank": 0.2,
+      "reciprocalRank": 0,
       "recall": {
         "3": 0,
-        "12": 0.5
+        "12": 0
       }
     },
     {
@@ -2164,17 +2188,17 @@
       "judgment": "A Type pair is taken to mean Pokémon with both Types.",
       "ranked": [
         "Gouging Fire",
-        "Fletchinder",
         "Flareon",
         "Ponyta",
-        "Houndoom",
+        "Fletchinder",
         "Quilava",
         "Cyndaquil",
+        "Houndoom",
         "Fuecoco",
-        "Fomantis",
         "Darmanitan",
-        "Litten",
-        "Pombon"
+        "Sprigatito",
+        "Floragato",
+        "Magmar"
       ],
       "reciprocalRank": 0,
       "recall": {
@@ -2190,15 +2214,15 @@
         "Piloswine",
         "Mamoswine",
         "Abomasnow",
+        "Snover",
         "Swinub",
         "Wooper",
-        "Snover",
-        "Snom",
-        "Avalugg",
         "Clodsire",
-        "Cryogonal",
-        "Arctozolt",
-        "Aurorus"
+        "Calyrex",
+        "Articuno",
+        "Avalugg",
+        "Snom",
+        "Cryogonal"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2214,15 +2238,15 @@
         "Gardevoir",
         "Kirlia",
         "Hatterene",
-        "Ralts",
-        "Mime Jr.",
         "Metang",
-        "Scream Tail",
-        "Indeedee",
-        "Tapu Lele",
-        "Rapidash",
         "Hattrem",
-        "Hatenna"
+        "Ralts",
+        "Hatenna",
+        "Mime Jr.",
+        "Rapidash",
+        "Scream Tail",
+        "Tapu Lele",
+        "Indeedee"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2237,20 +2261,20 @@
       "ranked": [
         "Steelix",
         "Archaludon",
-        "Dialga",
-        "Duraludon",
-        "Tinkatink",
-        "Perrserker",
         "Arctibax",
-        "Baxcalibur",
-        "Kingambit",
+        "Dialga",
+        "Perrserker",
+        "Tinkatink",
         "Goomy",
+        "Duraludon",
         "Orthworm",
-        "Goodra"
+        "Scizor",
+        "Tinkatuff",
+        "Baxcalibur"
       ],
       "reciprocalRank": 0.5,
       "recall": {
-        "3": 0.6666666666666666,
+        "3": 0.3333333333333333,
         "12": 1
       }
     },
@@ -2268,9 +2292,9 @@
         "Sandshrew",
         "Electabuzz",
         "Magnemite",
-        "Raticate",
         "Jolteon",
-        "Marill"
+        "Raticate",
+        "Electrode"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2291,8 +2315,8 @@
         "Zorua",
         "Thievul",
         "Litten",
-        "Litwick",
         "Gouging Fire",
+        "Litwick",
         "Fuecoco",
         "Moltres"
       ],
@@ -2315,10 +2339,10 @@
         "Buizel",
         "Drizzile",
         "Finizen",
-        "Goldeen",
-        "Gecqua",
+        "Wugtrio",
+        "Floatzel",
         "Poliwhirl",
-        "Wugtrio"
+        "Goldeen"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2334,15 +2358,15 @@
         "Bulbasaur",
         "Eldegoss",
         "Venusaur",
-        "Arboliva",
         "Ivysaur",
         "Sunkern",
+        "Arboliva",
         "Ferroseed",
         "Breloom",
         "Oddish",
-        "Maractus",
+        "Exeggcute",
         "Trumbeak",
-        "Exeggcute"
+        "Maractus"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2363,9 +2387,9 @@
         "Toucannon",
         "Pupitar",
         "Garbodor",
-        "Pumpkaboo",
-        "Salandit",
         "Trubbish",
+        "Salandit",
+        "Pumpkaboo",
         "Greavard"
       ],
       "reciprocalRank": 1,
@@ -2384,13 +2408,13 @@
         "Ivysaur",
         "Squirtle",
         "Charmander",
-        "Gallade",
         "Slowpoke",
+        "Gallade",
         "Gardevoir",
         "Moltres",
         "Spinarak",
-        "Magmar",
-        "Mr. Mime"
+        "Togekiss",
+        "Magmar"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2412,8 +2436,8 @@
         "Magnezone",
         "Garbodor",
         "Azumarill",
-        "Magcargo",
         "Tinkatink",
+        "Magcargo",
         "Darmanitan"
       ],
       "reciprocalRank": 1,
@@ -2456,13 +2480,13 @@
         "Dusclops",
         "Dedenne",
         "Drowzee",
-        "Togekiss",
         "Toxtricity",
+        "Togekiss",
         "Delcatty",
-        "Cutiefly",
         "Delphox",
-        "Latios",
-        "Froslass"
+        "Froslass",
+        "Porygon",
+        "Dracovish"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2485,8 +2509,8 @@
         "Fidough",
         "Bonsly",
         "Vivillon",
-        "Tentacruel",
-        "Darmanitan"
+        "Darmanitan",
+        "Volcarona"
       ],
       "reciprocalRank": 1,
       "recall": {
@@ -2530,11 +2554,11 @@
         "Gloom",
         "Jynx",
         "Buizel",
-        "Cutiefly",
-        "Snubbull",
+        "Forretress",
         "Celesteela",
-        "Arctozolt",
-        "Tandemaus"
+        "Tandemaus",
+        "Snubbull",
+        "Arctozolt"
       ],
       "reciprocalRank": 1,
       "recall": {

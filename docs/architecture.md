@@ -481,6 +481,8 @@ Latency was measured from a developer machine, not a hosted site, and the differ
 
 **Target not met.** The overall MRR target of 0.95 is missed, at 0.947. The remaining gap is in descriptive queries (0.717) and in Generation (0.950), ability (0.922) and species (0.922) queries. One-word prefix matching does not improve these, and we did not tune the benchmark to hide this.
 
+**Re-run after the full source rebuild (November 9, 2026).** The new body text names every form and adds "is weak to" and "resists" sentences. The choice of 300 still holds: it remains the lowest setting with the best score on every measure, and overall MRR is 0.947 at every setting from 100 up. Bare Type P@12 fell from 0.931 to 0.875 at every setting, including the setting before this change, so the drop comes from the body text, not from the boost. Our inference is that a bare Type word such as `flying` or `ground` now ranks higher for Pokémon whose matchup sentences name that Type, because each matchup is now stated twice ("takes 2x damage from" and "is weak to"): `flying` returns Centiskorch and Sizzlipede, which are weak to Flying. Descriptive queries moved from 0.717 to 0.700, ability from 0.922 to 0.900, and Generation from 0.950 to 1.000.
+
 **Rejected alternatives**
 
 - **Boost 100, the first recommendation.** MRR is perfect, but `char` still places Thundurus and Magmar among the Char- names.
@@ -650,37 +652,45 @@ The bubble is positioned against the Pokéball with its tail pointing at it, so 
 
 Measured at 1440×800: answers of about 200 words fit with no inner scroll. Real generated answers can be longer than the window. For Charizard they measured 325, 956 and 1,689 px of content against 556 px visible, because RGA returns headed, listed answers for broad questions. A wider bubble cannot remove that scrolling. Shorter answers would need different question wording or a prompt instruction.
 
+## Evaluation
+
+How every eval works, why each technique was chosen, the margin of error on each score, how we would evaluate in production, and the Coveo and external sources behind it are in `docs/evaluation.md`.
+
 ## Performance
 
 **Decision: measure first, and make no performance change the numbers do not support.** Coveo requires [load tests to be planned with and authorized by Coveo](https://docs.coveo.com/en/1948/), so every measurement is small, sequential and paced, and every request turns analytics capture off. The results are in `evals/reports/performance.json` (`npm run eval:performance`) and `evals/reports/bundle.json` (`npm run eval:bundle`).
 
 ### Method
 
-All numbers come from one developer machine on a home network, against the hosted site at https://pokebowl-cove.vercel.app/ (deployment of commit `5f6fbd0` on `main`). They are not real-user numbers.
+All numbers come from one developer machine on a home network, against the hosted site at https://pokebowl-cove.vercel.app/ (deployment of commit `d1662e8` on `main`, measured on November 9, 2026, after the full source rebuild that names every form in the body text). They are not real-user numbers.
 
 - **Coveo API timings.** Node sends requests straight to Coveo, one at a time, with the same request body as the application. The eval now runs `rewriteSearchBody` from `src/search/queryRewrite.ts`, so partial names and Pokédex numbers are sent exactly as the page sends them. The earlier baseline skipped this rewrite. `maximumAge` is 0, so Coveo's cache does not hide index time. Searches and suggestions are paced 500 ms apart. 20 generated answers are paced 3 seconds apart, from the questions that expect an answer.
 - **Hosted page timings.** Headless Chromium (Playwright) loads the hosted site 10 times in a fresh browser context each time, so every load is cold. The window is 1440×900, with no CPU or network throttling. Each run records first contentful paint, the load event, largest contentful paint (LCP), cumulative layout shift (CLS) and the time until the first result card is visible. It then types a three-letter partial name into the real search box and records the browser's own request times for type-ahead and search. The first 5 runs then ask one fact question and time the answer from pressing Enter. Runs are 2 seconds apart.
 - **What the page timings leave out.** pokemondb.net asks for 2 seconds between requests, and a page load asks for every card's artwork at once. One real artwork is therefore fetched once and served from memory for every card, so artwork download time is not included. Playwright answers CORS preflight requests itself when it intercepts a request, so the browser's request times do not include the preflight. A separate check measured a Coveo preflight at about 105 to 130 ms; browsers cache it, so only the first search of a visit pays it.
-- **Checks.** The hosted runs sent 62 search and suggestion requests, all with capture off. 9 of the 10 typed partial names reached Coveo with the partial-name rewrite applied, which confirms the hosted site runs the shipped behaviour; the tenth is a name the rewrite does not cover by design.
+- **Checks.** The hosted runs sent 65 search and suggestion requests, all with capture off. 9 of the 10 typed partial names reached Coveo with the partial-name rewrite applied, which confirms the hosted site runs the shipped behaviour; the tenth is a name the rewrite does not cover by design.
 
 ### Results
 
-| Measure | Samples | p50 | p95 | Target |
-|---|---|---|---|---|
-| Search, Coveo API | 40 | 174 ms | 198 ms | 250 ms |
-| Type-ahead, Coveo API | 28 | 51 ms | 63 ms | 100 ms |
-| Generated answer, first text, Coveo API | 19 | 2.1 s | 3.0 s | 3.6 s |
-| Generated answer, complete, Coveo API | 19 | 3.1 s | 7.7 s | 9.3 s |
-| Hosted: first contentful paint | 10 | 260 ms | 292 ms | 400 ms |
-| Hosted: largest contentful paint | 10 | 260 ms | 292 ms | 400 ms |
-| Hosted: cumulative layout shift | 10 | 0.033 | 0.033 | 0.05 |
-| Hosted: first result visible | 10 | 537 ms | 575 ms | 700 ms |
-| Hosted: type-ahead request in the browser | 10 | 49 ms | 71 ms | 100 ms |
-| Hosted: search request in the browser | 10 | 172 ms | 220 ms | 300 ms |
-| Hosted: answer first text, from Enter | 5 | 2.3 s | 2.8 s | 3.4 s |
-| Hosted: answer complete, from Enter | 5 | 3.1 s | 3.7 s | 4.4 s |
+| Measure | Samples | p50 | p95 | Target | Second run p95 |
+|---|---|---|---|---|---|
+| Search, Coveo API | 40 | 188 ms | 225 ms | 250 ms | **319 ms** |
+| Type-ahead, Coveo API | 28 | 55 ms | 68 ms | 100 ms | 64 ms |
+| Generated answer, first text, Coveo API | 19 | 2.1 s | **4.9 s** | 3.6 s | **5.1 s** |
+| Generated answer, complete, Coveo API | 19 | 3.1 s | 7.2 s | 9.3 s | **12.7 s** |
+| Hosted: first contentful paint | 10 | 260 ms | **1,060 ms** | 400 ms | **552 ms** |
+| Hosted: largest contentful paint | 10 | 260 ms | **1,060 ms** | 400 ms | **552 ms** |
+| Hosted: cumulative layout shift | 10 | 0.035 | 0.035 | 0.05 | 0.035 |
+| Hosted: first result visible | 10 | 543 ms | **1,896 ms** | 700 ms | **1,334 ms** |
+| Hosted: type-ahead request in the browser | 10 | 48 ms | **286 ms** | 100 ms | **141 ms** |
+| Hosted: search request in the browser | 10 | 173 ms | **328 ms** | 300 ms | 200 ms |
+| Hosted: answer first text, from Enter | 5 | 2.4 s | 3.3 s | 3.4 s | 2.4 s |
+| Hosted: answer complete, from Enter | 5 | 3.1 s | 3.4 s | 4.4 s | 2.9 s |
 
-One of the 20 answerable questions returned no answer, so 19 answers were timed. With 10 or fewer samples, the p95 is the slowest run. Sorted queries and the largest page size were again no slower than the default: sorted p50 169 ms against 178 ms for relevance, and 96 results 97 ms against 76 ms for an empty query.
+Bold marks a p95 over its target. The p50 and p95 columns are the recorded run in `evals/reports/performance.json`. The second run was made straight after it, to tell a single slow run from a regression; its p50 values were close to the first run's on every measure. One of the 20 answerable questions returned no answer in the first run (two in the second), so 19 answers were timed. With 10 or fewer samples, the p95 is the slowest run. Sorted queries and the largest page size were again close to the default: sorted p50 180 ms (by Pokédex number) and 200 ms (by name) against 183 ms for relevance, and 96 results 100 ms against 76 ms for an empty query.
+
+**Previous baseline.** The targets come from the measurement of commit `5f6fbd0` before the rebuild: search p50 174 ms and p95 198 ms, type-ahead 51 and 63 ms, answer first text 2.1 and 3.0 s, answer complete 3.1 and 7.7 s, first contentful paint 260 and 292 ms, first result visible 537 and 575 ms, browser type-ahead 49 and 71 ms, browser search 172 and 220 ms, hosted answer first text 2.3 and 2.8 s, hosted answer complete 3.1 and 3.7 s.
+
+**Targets missed after the rebuild.** Every p50 is close to the previous baseline, but both runs have p95 values over target, each from one or two slow samples, and not always in the same measure. First contentful paint and first result visible do not depend on the Coveo index, so the body text change cannot explain them. Our inference is that the slow samples come from the developer machine or the home network at the time of the runs, not from a change in the application or the index. We do not change the targets. The measurement should be repeated on a quiet network before the demo, and a target missed again on a repeat is a real regression.
 
 **Targets.** Each target is the measured p95 plus 20%, rounded up to the next 50 ms. Layout shift is rounded up to two decimals and never targeted at zero. The aim is to catch a regression that stands out from run-to-run noise, not to promise a figure to users. These are developer-machine targets; production targets would come from real-user data.
 
@@ -688,8 +698,8 @@ One of the 20 answerable questions returned no answer, so 19 answers were timed.
 
 - The partial-name rewrite costs nothing measurable. Search p50 was 182 ms before the rewrite was measured and 174 ms with it.
 - LCP equals first contentful paint. The loading placeholders are the largest element and appear first, so LCP does not see the result cards. "First result visible" is the better measure of when a person sees results.
-- The layout shift of 0.033 is the same on every run. It comes from two moments: the header and the search layout move by a few pixels about 335 ms into the load, and the query summary, sort menu and facet buttons change width when results replace the placeholders. It is small, but it has a cause that could be fixed.
-- Generated answers dominate. In the browser, first text took 2.3 s at p50. The slow tail of complete answers tracks long answers, as before.
+- The layout shift of 0.035 (0.033 before the rebuild) is the same on every run. It comes from two moments: the header and the search layout move by a few pixels about 335 ms into the load, and the query summary, sort menu and facet buttons change width when results replace the placeholders. It is small, but it has a cause that could be fixed.
+- Generated answers dominate. In the browser, first text took 2.4 s at p50. The slow tail of complete answers tracks long answers, as before.
 - Coveo's [response time guide](https://docs.coveo.com/en/1948/) lists several optimizations. We still do not apply the sort cache, a page size limit or pipeline simplification, because the numbers above show no problem they would solve. Coveo publishes no latency figures or tuning guide for generated answers. Our inference is that fixed, short questions remain the practical control, and that time to first text matters most because answers stream.
 
 ### Bundle size

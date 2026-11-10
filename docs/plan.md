@@ -58,14 +58,17 @@ If Passage Retrieval access has not arrived, write PC-83 and add PC-82 only if a
 
 Only what the assessment or the panel demo needs. Everything else is listed under Not doing, with the reason.
 
-### 1. Correct generated answer content (full source rebuilding)
+### 1. Correct generated answer content (full source rebuilt)
 
 Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each form's data table in the indexed body had no form name. PR #14 rewrites those rows as named sentences, adds the Pokémon's name to form labels, and adds "is weak to" sentences.
 
 - [x] Extension change built test-first, with answer eval questions that catch another form's values (PR #14)
 - [x] 🟡 User pastes the new extension into Coveo, rebuilds the single-Pokémon test source, and checks that Charizard's body names each form and that all 16 fields still populate (done 2026-11-09: all 10 required sentences and all 16 fields present)
-- [ ] 🟡 User rebuilds the full source (1,028 items), then rebuilds the RGA and Semantic Encoder models
-- [ ] Answer evals run after the rebuild and show the base-form facts are right
+- [x] 🟡 User rebuilds the full source (1,028 items) (done 2026-11-09). The user reports the RGA and Semantic Encoder models did not need a manual rebuild; the answer evals check this
+- [ ] Answer evals run after the rebuild and show the base-form facts are right. **Not yet: run on 2026-11-09 after the source rebuild, only 3 of the 7 base-form cases passed** (33 of 40 overall). Charizard's weight still comes back as 110.5 kg (Mega Charizard X), Venusaur's weight and height as Mega Venusaur's, and Lucario's height as Mega Lucario's. The indexed body is correct ("Charizard weighs 90.5 kg", each Mega form in its own sentence), so our inference is that the RGA and Semantic Encoder models still hold the old body text. "Is Charizard weak to water?" still gets no answer. See `docs/evaluation.md`
+- [ ] 🟡 User rebuilds the RGA and Semantic Encoder models manually, as after earlier body changes, then the answer evals are re-run
+- Problem found by the same run: the `weakness-charizard` case passes the grader but the answer also lists Grass and Bug as 4x weaknesses, which Charizard resists. String matching checks that expected facts are present, not that wrong ones are absent. Re-check this answer by hand after the model rebuild
+- Side effect found by the same run: bare Type searches such as `flying` and `ground` lost precision (P@12 0.931 to 0.875 in the partial-name benchmark), because the body now states each matchup twice. Relevance MRR is unchanged at 0.947. Decision for the user: accept, or drop one of the two matchup sentences
 
 ### 2. Interface fixes
 
@@ -75,6 +78,19 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 - [x] Only the two Coveo values reach the browser bundle, not Vercel's build values
 - [x] Atomic layout overrides reduced to what Atomic documents: all five `!important` rules removed, one documented exception kept (PC-79)
 
+### 2a. Generated answer loading state and answer style (raised 2026-11-09, decisions pending)
+
+**Problem: nothing shows while an answer is being prepared.** `atomic-generated-answer` in Atomic 3.65 renders nothing until the first answer text or citation arrives (`hasNoAnswerGenerated` in `atomic-generated-answer.js`). First text takes about 2 seconds at p50, so the results appear, then the answer card appears and pushes them down. Atomic's `is-generating` label only exists inside a card that is already showing, and is hidden. Headless exposes `isLoading` and `isStreaming` in the generated answer state, so a placeholder can be driven from it.
+
+- [ ] User decides when the placeholder shows (every text search, or question-style searches only) and how it looks
+- [ ] Placeholder built test-first and checked in a real browser
+
+**Problem: answers read as data dumps, not summaries.** In the November 9 report, 24 of 25 answers start with a Markdown heading, 10 refer to "the documentation", and "What is the difference between Charmander and Charmeleon?" lists every field of both pages. Headless 3.58 no longer has the `answerStyle` option; the only client format setting is plain text or Markdown. Coveo documents a custom prompt instruction on the RGA model (up to 2,000 characters, added to the base prompt, triggers a rebuild, not guaranteed to be followed, not covered by Coveo's tests) ([Create and manage RGA models](https://docs.coveo.com/en/nb6a0085/), [Improve your RGA implementation](https://docs.coveo.com/en/p5db0550/)).
+
+- [ ] User agrees the intended answer style and the prompt instruction text
+- [ ] Style checks added to the answer eval first (length, no heading on single facts, no "documentation" wording), and the current answers recorded as the baseline
+- [ ] 🟡 User adds the instruction in the console; answer evals re-run after the rebuild and compared case by case
+
 ### 3. Wrap-up
 
 - [ ] User looks through the live site at the usual window widths (PC-78)
@@ -82,6 +98,7 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 - [ ] Technical deep dive and demo script, using the talking points below (PC-100)
 - [ ] Production evaluation approach (PC-101)
 - [ ] Demo rehearsed
+- [ ] Performance re-measured on a quiet network before the demo. On 2026-11-09 after the rebuild, every p50 matched the baseline but two runs had p95 values over target, including page measures the index cannot affect (see `docs/architecture.md`, Performance)
 - [ ] Business case, started only after the technical work (Epic 11)
 - [ ] Coveo configuration exported with the Coveo CLI, at the very end (PC-90)
 - [ ] Materials submitted, then the repository shared (PC-103, PC-31)
@@ -104,7 +121,7 @@ Considered and dropped, because neither the assessment nor the demo needs them. 
 
 | Item | Reason |
 |---|---|
-| Improving descriptive queries such as `water turtle` (MRR 0.717) | Tuning work with no real queries to tune against. Explained as a tradeoff instead |
+| Improving descriptive queries such as `water turtle` (MRR 0.700) | Tuning work with no real queries to tune against. Explained as a tradeoff instead |
 | Linking Pokémon names in answers to detail pages (PC-64) | Not required, and Coveo does not guarantee a prompt instruction is followed |
 | General answer tuning and RGA reporting (PC-63) | The body text fix covers the visible errors; reporting needs real traffic |
 | Evolution answers, and answers drawn from the "Changes" section | Evolution charts vary in structure; these questions can be left out of the demo |
@@ -129,7 +146,7 @@ Considered and dropped, because neither the assessment nor the demo needs them. 
 - The Semantic Encoder threshold stays at 0.8, so some nonsense queries return near matches, because raising it would drop relevant descriptive results.
 - Query Suggestions start from a default queries file built from index values, the method Coveo documents for low-traffic environments, and the importance values rank categories, not real popularity.
 - Generated answers depend on clean body text: the form mix-up came from tables, and a fix needs a source rebuild and model rebuilds.
-- Overall MRR is 0.947 against a 0.95 target; the gap is descriptive queries.
+- Overall MRR is 0.947 against a 0.95 target, unchanged after the rebuild; the gap is descriptive queries (0.700).
 - Automatic field mapping is on, and a few Atomic layout overrides remain, each with a recorded reason.
 
 **Where this goes in production, with real users and data**
@@ -632,7 +649,7 @@ Owner: Both · Depends on: PC-44, PC-91
 
 Owner: Both
 
-- [ ] Explains evals over time, end-user feedback, sampling and A/B testing, using Coveo's tools where possible
+- [ ] Explains evals over time, end-user feedback, sampling and A/B testing, using Coveo's tools where possible. Notes and sources: `docs/evaluation.md`
 
 ### PC-103: Submit the presentation materials
 
