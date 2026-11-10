@@ -20,7 +20,7 @@ The application is a take-home technical assessment with no real users. Everythi
 | Index quality | Did the crawl index the right pages with the right values? | 40 sampled pages compared field by field with reference data read from pokemondb.net. 16 difficult pages verified by hand. Also checks item count, duplicates and non-Pokémon pages | 1,028 of 1,028 items, 0 mismatches, 0 stray pages | `npm run eval` |
 | Relevance | Do the right Pokémon rank first? | 123 labelled queries in 8 categories (name, Type, Generation, ability, species, partial name, descriptive, natural language). Mean reciprocal rank (MRR) and Recall@3 and @12 | MRR 0.947, Recall@3 0.957, Recall@12 0.968 (after the November 9 rebuild) | `npm run eval:relevance` |
 | Partial-name benchmark | Which boost makes `char` return the Char- names first? | 171 queries run once for each boost setting, with a name-first measure that MRR cannot see | Boost 300 chosen: lowest setting that reaches the best score on every measure. Still true after the rebuild | `npm run eval:prefix-benchmark` |
-| Generated answers | Are answers correct, cited, absent when they should be, and written as direct answers? | Question set with expected facts, an accepted citation, unanswerable questions, answers scoped to one Pokémon, and judgment questions. Automatic grading by string match, a check for weaknesses that must not appear, and style counts. Cases a person must review are flagged | 32 of 40 passed with the current grader; 13 flagged for human review. Only 3 of the 7 base-form cases passed. None of the 32 answers started with a direct sentence, and 15 referred to the documentation (November 9 run, regraded on November 10) | `npm run eval:answers`; `npm run eval:answers:regrade` regrades a saved report |
+| Generated answers | Are answers correct, cited, absent when they should be, and written as direct answers? | Question set with expected facts, an accepted citation, unanswerable questions, answers scoped to one Pokémon, and judgment questions. Automatic grading by string match, a check for weaknesses that must not appear, and style counts. Cases a person must review are flagged | **37 of 40** passed with prompt version 2 (November 10), against 32 of 40 for the regraded November 9 baseline. All 7 base-form cases pass (was 3). All 32 answers start with a direct sentence (was 0), none refers to the documentation (was 15), median 41 words (was 26). 12 flagged for human review | `npm run eval:answers`; `npm run eval:answers:regrade` regrades a saved report |
 | Performance | Is it fast enough, and did a change make it slower? | p50 and p95 for Coveo API calls, plus hosted page timings in headless Chromium | Search p95 225 ms, type-ahead p95 68 ms, answer first text p95 4.9 s, first result visible p95 1.9 s. p50 values unchanged; several p95 values over target (see `docs/architecture.md`) | `npm run eval:performance` |
 | Bundle size | How much JavaScript does a visitor download? | Production build, gzip per file, share by package | 448 kB gzipped entry JavaScript, mostly Coveo Atomic and its dependencies | `npm run eval:bundle` |
 | Unit, browser and extension tests | Does each behaviour still work? | About 325 unit tests, 182 browser tests with a stubbed answer stream, 59 Python tests for the indexing extension | All pass; unit and Python tests run in GitHub CI | `npm test`, `npm run test:e2e`, `pytest` |
@@ -30,6 +30,20 @@ Reports are saved as JSON in `evals/reports/`, and reference data is in `evals/r
 The answer set has 40 cases, including 7 base-form height and weight cases and a Charizard weakness case. They were run after the full source rebuild on November 9. Only 3 of the 7 base-form cases passed: Charizard's weight came back as 110.5 kg (Mega Charizard X), Venusaur's weight and height as Mega Venusaur's, and Lucario's height as Mega Lucario's. The three that passed (Lucario's, Meowth's and Tauros's weight) list the base value together with other forms' values, and are flagged for a person to check. Lucario's height also fails as a plain fact case, and "What does Pikachu evolve into?" and "Is Charizard weak to water?" get no answer.
 
 The indexed body is correct: it states "Charizard weighs 90.5 kg" and names each Mega form in its own sentence. The answers do not reflect it, and the Lucario answer labels its three weights "First Documentation", "Second Documentation" and "Third Documentation" with no form names. Our inference is that the RGA model still held the old body text, whose form tables had no form names. The Search API key cannot show a model's build state, so this could not be confirmed from here. The RGA model rebuilds when its configuration is saved, and the custom prompt instruction for answer style is now at version 2 (see `docs/architecture.md`, Answer style). Version 1 was replaced before the answer evals could measure it. The live answer evals run again once the RGA model is active with version 2. Because the new body text and the prompt go live in the same rebuild, the evals cannot say which of the two fixed a given answer. The Semantic Encoder rebuilds weekly, next about November 15, so results may change again after it.
+
+**Result with prompt version 2, November 10.** Run after the RGA model rebuilt with the new body text and prompt version 2, and compared case by case with the regraded baseline (same grader):
+
+| | Baseline, November 9 | Version 2, November 10 |
+|---|---|---|
+| Passed | 32 of 40 | 37 of 40 |
+| Base-form height and weight | 3 of 7 | 7 of 7 |
+| Starts with a direct answer | 0 of 32 | 32 of 32 |
+| Refers to the documentation | 15 of 32 | 0 of 32 |
+| Median words | 26 | 41 |
+| Longest answer | 732 words | 246 words |
+| First text, p50 and p95 | 2.1 s, 5.5 s | 2.0 s, 2.8 s |
+
+Six cases flipped to pass: the four base-form failures, Lucario's height and the Charizard weakness case, which now lists only Rock, Water and Electric as weaknesses and gives Grass and Bug as 0.25x. One flipped to fail: "What species is Eevee?" opens with Eevee's Type and Generation and never gives its species, the Evolution Pokémon. "What does Pikachu evolve into?" and "Is Charizard weak to water?" still get no answer. Because the body text and the prompt went live in the same rebuild, the run cannot say which change fixed the form values; the style changes come from the prompt. The Semantic Encoder still holds the old body text until its weekly rebuild, about November 15.
 
 **Checks added on November 10.** The November 9 report was regraded offline with the new checks and saved as `evals/reports/answers-baseline-2026-11-09.json`, so the next run is compared with the same grader. Its result is 32 of 40, one fewer than the 33 first reported.
 
@@ -92,12 +106,13 @@ Our test sets are small, so each score has a margin of error. Treating eval ques
 | Answer pass rate, all (November 9, regraded) | 40 | 0.800 | 0.063 |
 | Answer pass rate, facts (November 9, regraded) | 17 | 0.882 | 0.078 |
 | Answer pass rate, base form (November 9) | 7 | 0.429 | 0.187 |
+| Answer pass rate, all (prompt version 2) | 40 | 0.925 | 0.042 |
 
 **What this means.**
 
 - The overall MRR of 0.947 against a 0.95 target is a difference of 0.003, far inside one standard error. The data cannot tell whether we meet the target. The real, measurable weakness is descriptive queries. Their change from 0.717 to 0.700 after the rebuild is also far inside one standard error.
 - The base-form pass rate has a wide margin, but the fix was expected to pass all 7 cases. Even at the upper end of one standard error, about 0.62, it is clearly short of that, so the base-form result is a real failure, not noise.
-- Answer pass rates use the binomial standard error, sqrt(p(1-p)/n). The next answer run is compared with the regraded baseline case by case, counting the cases that flip each way.
+- Answer pass rates use the binomial standard error, sqrt(p(1-p)/n). Version 2 compared with the baseline case by case: 6 cases flipped to pass and 1 to fail, on the same 40 questions. The rise from 0.800 to 0.925 is about two standard errors, and the base-form cases moved from 3 to 7 of 7, which is the change the fix was built for.
 - A boost or configuration change should be compared **query by query** on the same set, not by comparing two overall scores. A paired comparison removes the variation between easy and hard questions, so it detects smaller real differences ([Miller, 2024](https://arxiv.org/abs/2411.00640)). The partial-name benchmark already runs every setting on the same queries.
 - The queries were written by us, not taken from real users, and some share a pattern. Questions that are not independent make the true error larger than this table shows ([Miller, 2024](https://arxiv.org/abs/2411.00640)).
 
