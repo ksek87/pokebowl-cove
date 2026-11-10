@@ -1,4 +1,4 @@
-import { POKEMON_FIELDS } from '../src/search/settings.ts';
+import { ASK_EVOLUTION_QUESTION, POKEMON_FIELDS } from '../src/search/settings.ts';
 import { latencyStats, type LatencyStats } from './metrics.ts';
 
 export interface AnswerItem {
@@ -70,6 +70,8 @@ export interface AnswerGrade {
   otherFormValuesShown?: string[];
   /** Resisted or immune types the answer claims as weaknesses. */
   wrongWeaknessesShown?: string[];
+  /** Expected facts missing from the opening, which must answer the question directly. */
+  missingFromOpening?: string[];
 }
 
 export type GradedAnswer = AnswerGrade & {
@@ -86,6 +88,12 @@ export type GradedAnswer = AnswerGrade & {
 
 const FACT_NAMES = ['Charizard', 'Pikachu', 'Bulbasaur', 'Mewtwo', 'Eevee', 'Gengar', 'Snorlax', 'Lucario'];
 const SCOPED_NAMES = ['Charizard', 'Pikachu', 'Mewtwo'];
+/** The evolution chain each scoped Pokémon's page states, which the evolution question must name. */
+const EVOLUTION_FACTS: Record<string, string[]> = {
+  Charizard: ['Charmander', 'Charmeleon'],
+  Pikachu: ['Pichu', 'Raichu'],
+  Mewtwo: ['does not evolve'],
+};
 const SCOPED_QUESTIONS = [
   (name: string): string => `Describe the appearance and behavior of ${name}.`,
   (name: string): string => `What are the abilities of ${name}?`,
@@ -105,7 +113,7 @@ const JUDGMENT: { question: string; facts: string[]; pages: string[]; note: stri
   { question: 'Which Pokémon evolves into Charizard?', facts: ['Charmeleon'], pages: ['Charizard'], note: 'Evolution facts are not index fields.' },
   { question: 'Is Charizard weak to water?', facts: ['water'], pages: ['Charizard'], note: 'A correct answer needs reading, beyond naming the Type.' },
   { question: 'What is the difference between Charmander and Charmeleon?', facts: ['Charmander', 'Charmeleon'], pages: ['Charmander', 'Charmeleon'], note: 'Quality of a comparison needs a person.' },
-  { question: 'How does Pikachu evolve into Alolan Raichu?', facts: ['Thunder Stone', 'Alola'], pages: ['Pikachu'], note: 'A branch in the evolution chart, written as sentences since 2026-11-10.' },
+  { question: 'How does Pikachu evolve into Alolan Raichu?', facts: ['Thunder Stone', 'Alola'], pages: ['Pikachu', 'Raichu'], note: 'A branch in the evolution chart, written as sentences since 2026-11-10.' },
   { question: 'Which Eevee evolution uses a Water Stone?', facts: ['Vaporeon'], pages: ['Eevee'], note: 'One of eight Eevee branches, written as sentences since 2026-11-10.' },
 ];
 
@@ -199,6 +207,20 @@ export function buildAnswerCases(items: AnswerItem[], formFacts: FormFacts = NO_
         }))
       : [];
   });
+  const evolution = SCOPED_NAMES.flatMap((name): AnswerCase[] => {
+    const item = byName(items, name);
+    return item
+      ? [{
+          id: `scoped-${slug(name)}-evolution`,
+          category: 'scoped',
+          question: ASK_EVOLUTION_QUESTION.replace('{name}', name),
+          facts: EVOLUTION_FACTS[name] ?? [],
+          citeAny: [item.uri],
+          scope: `@${POKEMON_FIELDS.name}=="${name}"`,
+          note: 'The evolution question the detail page suggests, sent with the same exact-name scope.',
+        }]
+      : [];
+  });
   const judgment = JUDGMENT.map(({ question, facts: expected, pages, note }, position): AnswerCase => ({
     id: `judgment-${position}`,
     category: 'judgment',
@@ -207,7 +229,7 @@ export function buildAnswerCases(items: AnswerItem[], formFacts: FormFacts = NO_
     citeAny: pages.flatMap((name) => byName(items, name)?.uri ?? []),
     note,
   }));
-  return [...facts, ...formCases(items, formFacts), ...unanswerable, ...scoped, ...judgment];
+  return [...facts, ...formCases(items, formFacts), ...unanswerable, ...scoped, ...evolution, ...judgment];
 }
 
 function sameUri(first: string, second: string): boolean {
@@ -225,16 +247,58 @@ function gradeUnanswerable(outcome: AnswerOutcome): AnswerGrade {
   };
 }
 
+const LIST_LINE = /^\s*(?:[-*+]|\d+\.)\s/;
+const HEADING = /^#{1,6}\s/;
+/** The first paragraph, used when every paragraph is a heading. */
+const FIRST_PARAGRAPH = 0;
+
+/**
+ * The opening of an answer: its first paragraph after any heading, and the list right after it when the paragraph
+ * ends with a colon, as in "Pikachu evolves into:" followed by the evolutions.
+ */
+export function answerOpening(text: string): string {
+  const paragraphs = text.trim().split(/\n\s*\n/);
+  const start = paragraphs.findIndex((paragraph): boolean => !HEADING.test(paragraph.trim()));
+  const [first = '', next = ''] = paragraphs.slice(Math.max(start, FIRST_PARAGRAPH));
+  if (!first.replace(/\*/g, '').trimEnd().endsWith(':')) {
+    return first;
+  }
+  return next.split('\n').every((line): boolean => LIST_LINE.test(line)) ? `${first}\n${next}` : first;
+}
+
+function missingFrom(text: string, facts: string[]): string[] {
+  const lower = text.toLowerCase();
+  return facts.filter((fact): boolean => !lower.includes(fact.toLowerCase()));
+}
+
+interface FactCheck {
+  missingFacts: string[];
+  missingFromOpening: string[];
+  factsRight: boolean;
+}
+
+/** Checks that every expected fact is in the answer, and in its opening, which must answer the question directly. */
+function checkFacts(testCase: AnswerCase, text: string): FactCheck {
+  const missingFacts = missingFrom(text, testCase.facts);
+  const missingFromOpening = missingFacts.length ? [] : missingFrom(answerOpening(text), testCase.facts);
+  return { missingFacts, missingFromOpening, factsRight: !missingFacts.length && !missingFromOpening.length };
+}
+
+const OPENING_FAILURE = 'The opening does not give every expected fact.';
+
 function gradeScoped(testCase: AnswerCase, outcome: AnswerOutcome): AnswerGrade {
   const inScope = outcome.citations.every((uri): boolean => testCase.citeAny.some((wanted): boolean => sameUri(uri, wanted)));
   const citationCorrect = outcome.citations.length > 0 && inScope;
-  const passed = outcome.answerGenerated && citationCorrect;
+  // A description is graded on its facts anywhere in the answer; only direct questions must answer in the opening.
+  const missingFacts = missingFrom(outcome.text, testCase.facts);
+  const passed = outcome.answerGenerated && citationCorrect && !missingFacts.length;
+  const failure = missingFacts.length ? 'Missing answer or expected fact.' : 'No answer, or a citation outside the Pokémon.';
   return {
     passed,
-    missingFacts: [],
+    missingFacts,
     citationCorrect,
     needsHumanReview: true,
-    reason: passed ? 'Answered from this Pokémon only; quality needs a person.' : 'No answer, or a citation outside the Pokémon.',
+    reason: passed ? 'Answered from this Pokémon only; quality needs a person.' : failure,
   };
 }
 
@@ -297,15 +361,17 @@ function gradeOtherForms(testCase: AnswerCase, answer: string, grade: AnswerGrad
 
 function gradeFacts(testCase: AnswerCase, outcome: AnswerOutcome): AnswerGrade {
   const answer = outcome.text.toLowerCase();
-  const missingFacts = testCase.facts.filter((fact): boolean => !answer.includes(fact.toLowerCase()));
+  const { missingFacts, missingFromOpening, factsRight } = checkFacts(testCase, outcome.text);
   const citationCorrect = outcome.citations.some((uri): boolean => testCase.citeAny.some((wanted): boolean => sameUri(uri, wanted)));
-  const passed = outcome.answerGenerated && !missingFacts.length && citationCorrect;
+  const passed = outcome.answerGenerated && factsRight && citationCorrect;
+  const failure = missingFromOpening.length ? OPENING_FAILURE : 'Missing answer, fact or citation.';
   const grade = {
     passed,
     missingFacts,
+    missingFromOpening,
     citationCorrect,
     needsHumanReview: testCase.category === 'judgment',
-    reason: passed ? 'Every expected fact and a correct citation.' : 'Missing answer, fact or citation.',
+    reason: passed ? 'Every expected fact in the opening, and a correct citation.' : failure,
   };
   return testCase.otherFormValues ? gradeOtherForms(testCase, answer, grade) : gradeWrongWeaknesses(testCase, outcome, grade);
 }

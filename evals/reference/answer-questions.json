@@ -404,6 +404,47 @@
     "scope": "@pokemon_name==\"Mewtwo\""
   },
   {
+    "id": "scoped-charizard-evolution",
+    "category": "scoped",
+    "question": "Describe how Charizard evolves",
+    "facts": [
+      "Charmander",
+      "Charmeleon"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/charizard"
+    ],
+    "scope": "@pokemon_name==\"Charizard\"",
+    "note": "The evolution question the detail page suggests, sent with the same exact-name scope."
+  },
+  {
+    "id": "scoped-pikachu-evolution",
+    "category": "scoped",
+    "question": "Describe how Pikachu evolves",
+    "facts": [
+      "Pichu",
+      "Raichu"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/pikachu"
+    ],
+    "scope": "@pokemon_name==\"Pikachu\"",
+    "note": "The evolution question the detail page suggests, sent with the same exact-name scope."
+  },
+  {
+    "id": "scoped-mewtwo-evolution",
+    "category": "scoped",
+    "question": "Describe how Mewtwo evolves",
+    "facts": [
+      "does not evolve"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/mewtwo"
+    ],
+    "scope": "@pokemon_name==\"Mewtwo\"",
+    "note": "The evolution question the detail page suggests, sent with the same exact-name scope."
+  },
+  {
     "id": "judgment-0",
     "category": "judgment",
     "question": "What does Pikachu evolve into?",
@@ -462,7 +503,8 @@
       "Alola"
     ],
     "citeAny": [
-      "https://pokemondb.net/pokedex/pikachu"
+      "https://pokemondb.net/pokedex/pikachu",
+      "https://pokemondb.net/pokedex/raichu"
     ],
     "note": "A branch in the evolution chart, written as sentences since 2026-11-10."
   },

@@ -82,8 +82,10 @@ export const STAT_BAR_MAXIMUM = 255;
 export const POKEDEX_ENTRIES_TIMEOUT_MS = 8000;
 
 // {name} is replaced with the Pokémon's name. Short descriptive questions gave the best answers in testing.
+// The answer evals ask the evolution question too, so it has its own name.
+export const ASK_EVOLUTION_QUESTION = 'Describe how {name} evolves';
 export const ASK_POKEMON_QUESTIONS = [
   'Describe the appearance and behavior of {name}',
   'Describe the strengths of {name} in battle',
-  'Describe how {name} evolves',
+  ASK_EVOLUTION_QUESTION,
 ];
