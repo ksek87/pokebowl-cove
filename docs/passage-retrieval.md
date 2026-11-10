@@ -2,7 +2,7 @@
 
 This document explains Coveo Passage Retrieval (CPR), when to use it instead of the Search API or Relevance Generative Answering (RGA), and how we would use it in future work. It was written for the Pokémon search application, which searches an index of 1,028 Pokémon pages from pokemondb.net.
 
-**Status: nothing here has been tested.** Passage Retrieval is a [paid product extension](https://docs.coveo.com/en/oaie5277/) and is not enabled in our organization. Everything below comes from the Coveo documentation, read in November 2026, or from our reasoning. Each section separates the two.
+**Status:** Passage Retrieval is an optional bonus in this project, covered by this point of view rather than a build. Everything below comes from the Coveo documentation, read in November 2026, or from our reasoning. Each section separates the two.
 
 ## Summary of our view
 
@@ -117,7 +117,7 @@ We would **not** choose Passage Retrieval just to show answers on a search page.
 
 ### First setup
 
-Once access is enabled (PC-02), PC-80 would:
+If we built it, the work would:
 
 1. Create one CPR model limited to the `pokemondb-pokemon` source, with the default structure-aware chunking.
 2. Associate it with `pokebowl-search`, which already has the Semantic Encoder. Coveo states that [the same SE model and pipeline can serve both RGA and CPR tools](https://docs.coveo.com/en/q1mb0212/).
@@ -148,7 +148,6 @@ This is an idea for discussion, not planned work.
 ## Not confirmed
 
 - Whether the browser key works in practice. The documented privilege matches, but nothing has been called. The "Allow content preview" privilege in the [usage guide](https://docs.coveo.com/en/o86c8334/) is listed for the model, and we did not confirm what, if anything, it means for a key.
-- Latency, passage quality and passage size on our content. These need access and measurement.
+- Latency, passage quality and passage size on our content. These need measurement.
 - The value of the minimum relevancy threshold. Coveo does not publish it.
-- Whether Passage Retrieval is licensed for this organization once requested.
 - The input arguments of the Hosted MCP Passage Retrieval tool. Coveo's MCP pages do not list them.

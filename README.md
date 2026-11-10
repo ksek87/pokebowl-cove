@@ -55,7 +55,7 @@ Every eval runs against the live Coveo organization with analytics capture off. 
 | Performance, from one developer machine | Search p50 188 ms and p95 225 ms, type-ahead p95 68 ms, first answer text p50 2.1 s and p95 4.9 s |
 | Tests | 374 unit tests, 189 browser tests and 66 extension tests, all passing |
 
-**Known limits and future work.** Species questions give the species after the opening sentence, "Which Pokémon evolves into Charizard?" opens imprecisely with Charmander, and two questions get no answer. These are documented with candidate changes rather than fixed, because each prompt change costs a model rebuild and is not guaranteed to hold. Results are a snapshot: Coveo models rebuild weekly, so in production the evals would run after every rebuild to detect drift. Passage Retrieval is covered by a written [point of view](docs/passage-retrieval.md), because it is a paid extension that is not enabled in our organization.
+**Known limits and future work.** Species questions give the species after the opening sentence, "Which Pokémon evolves into Charizard?" opens imprecisely with Charmander, and two questions get no answer. These are documented with candidate changes rather than fixed, because each prompt change costs a model rebuild and is not guaranteed to hold. Results are a snapshot: Coveo models rebuild weekly, so in production the evals would run after every rebuild to detect drift. Passage Retrieval, an optional bonus, is covered by a written [point of view](docs/passage-retrieval.md).
 
 ## Technology
 
