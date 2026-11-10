@@ -66,9 +66,9 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 - [x] 🟡 User pastes the new extension into Coveo, rebuilds the single-Pokémon test source, and checks that Charizard's body names each form and that all 16 fields still populate (done 2026-11-09: all 10 required sentences and all 16 fields present)
 - [x] 🟡 User rebuilds the full source (1,028 items) (done 2026-11-09). The user reports the RGA and Semantic Encoder models did not need a manual rebuild; the answer evals check this
 - [ ] Answer evals run after the rebuild and show the base-form facts are right. **Not yet: run on 2026-11-09 after the source rebuild, only 3 of the 7 base-form cases passed** (33 of 40 overall). Charizard's weight still comes back as 110.5 kg (Mega Charizard X), Venusaur's weight and height as Mega Venusaur's, and Lucario's height as Mega Lucario's. The indexed body is correct ("Charizard weighs 90.5 kg", each Mega form in its own sentence), so our inference is that the RGA and Semantic Encoder models still hold the old body text. "Is Charizard weak to water?" still gets no answer. See `docs/evaluation.md`
-- [ ] 🟡 User rebuilds the RGA and Semantic Encoder models manually, as after earlier body changes, then the answer evals are re-run
+- [ ] Both models pick up the new body text, then the answer evals are re-run. Coveo rebuilds Semantic Encoder and RGA models weekly from their creation date, and only an Account Manager can change the interval ([SE models](https://docs.coveo.com/en/nb890247/), [RGA models](https://docs.coveo.com/en/nb6a0085/)). Neither page documents a manual rebuild action. The Semantic Encoder has no manual rebuild in the console and its next weekly rebuild is about 2026-11-15, the day before the demo (seen in the console by the user). Answers should not depend on it: the Semantic Encoder picks the items, and the RGA model picks the passages from them ([About RGA](https://docs.coveo.com/en/n9de0370/)); this is our inference for the form values. Saving the RGA prompt instruction triggers an RGA rebuild, as Coveo documents; the user started it on 2026-11-10. Re-run the answer evals when the RGA model shows Active, and again after the Semantic Encoder rebuild. Fallback, agreed by the user: if answers still need fresh Semantic Encoder embeddings before the demo, create a new Semantic Encoder model with the same content, which builds on creation, then swap it into the `pokebowl-search` association once it is Active and record it in `configs/coveo/ml-models.json`
 - Problem found by the same run: the `weakness-charizard` case passes the grader but the answer also lists Grass and Bug as 4x weaknesses, which Charizard resists. String matching checks that expected facts are present, not that wrong ones are absent. Re-check this answer by hand after the model rebuild
-- Side effect found by the same run: bare Type searches such as `flying` and `ground` lost precision (P@12 0.931 to 0.875 in the partial-name benchmark), because the body now states each matchup twice. Relevance MRR is unchanged at 0.947. Decision for the user: accept, or drop one of the two matchup sentences
+- Side effect found by the same run: bare Type searches such as `flying` and `ground` lost precision (P@12 0.931 to 0.875 in the partial-name benchmark), because the body now states each matchup twice. Relevance MRR is unchanged at 0.947. **Decision (user, 2026-11-10): accept.** The first result is a Pokémon of that Type for all 18 Type searches, which is what the user requires. The cost is lower precision on the first page for some Types, lowest for `flying` (6 of 12) and `ground` (7 of 12)
 
 ### 2. Interface fixes
 
@@ -82,14 +82,15 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 
 **Problem: nothing shows while an answer is being prepared.** `atomic-generated-answer` in Atomic 3.65 renders nothing until the first answer text or citation arrives (`hasNoAnswerGenerated` in `atomic-generated-answer.js`). First text takes about 2 seconds at p50, so the results appear, then the answer card appears and pushes them down. Atomic's `is-generating` label only exists inside a card that is already showing, and is hidden. Headless exposes `isLoading` and `isStreaming` in the generated answer state, so a placeholder can be driven from it.
 
-- [ ] User decides when the placeholder shows (every text search, or question-style searches only) and how it looks
+- [x] User decides when the placeholder shows: on every text search where Coveo starts an answer, driven by Headless state (2026-11-10). The build measures whether short searches flash it
 - [ ] Placeholder built test-first and checked in a real browser
 
 **Problem: answers read as data dumps, not summaries.** In the November 9 report, 24 of 25 answers start with a Markdown heading, 10 refer to "the documentation", and "What is the difference between Charmander and Charmeleon?" lists every field of both pages. Headless 3.58 no longer has the `answerStyle` option; the only client format setting is plain text or Markdown. Coveo documents a custom prompt instruction on the RGA model (up to 2,000 characters, added to the base prompt, triggers a rebuild, not guaranteed to be followed, not covered by Coveo's tests) ([Create and manage RGA models](https://docs.coveo.com/en/nb6a0085/), [Improve your RGA implementation](https://docs.coveo.com/en/p5db0550/)).
 
-- [ ] User agrees the intended answer style and the prompt instruction text
-- [ ] Style checks added to the answer eval first (length, no heading on single facts, no "documentation" wording), and the current answers recorded as the baseline
-- [ ] 🟡 User adds the instruction in the console; answer evals re-run after the rebuild and compared case by case
+- [x] User agrees the intended answer style and the prompt instruction text: a short direct summary, then relevant details, with headings for multi-part answers, grounded only in the cited content, keeping the template's accuracy and safety rules (`configs/coveo/rga-prompt-instruction.txt`)
+- [ ] Style checks added to the answer eval (length, no "documentation" wording, no wrong weaknesses) and applied to the 2026-11-09 report as the baseline before the prompt. Headings are now allowed for multi-part answers
+- [x] 🟡 User adds the instruction in the console (done 2026-11-10; this started the RGA rebuild)
+- [ ] Answer evals re-run once the RGA model is Active and compared case by case with the baseline
 
 ### 3. Wrap-up
 
@@ -107,6 +108,8 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 
 - Search box stays centered; sort and page size stay visible for small result sets; filters and search are not pinned on long pages.
 - Suggestions on an empty search box: yes, and already live.
+- Bare Type searches keep the doubled matchup sentences: the first result is the right Type for every Type, and first-page precision dropped for some (2026-11-10).
+- Answer style comes from a custom RGA prompt instruction: a direct summary first, relevant details after, headings for multi-part answers, and only cited content (2026-11-10).
 - Detail page is complete for the demo: no close-match suggestions on the not-found page, no search box, no evolution line, stat percentiles or Type matchups.
 - An answer disappearing when sorting away from Best match is accepted, because Coveo documents this behaviour.
 - `char` showing "Did you mean: chart" is accepted. It predates the partial-name change, and turning correction off would also remove corrections for real typos.

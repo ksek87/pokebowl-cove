@@ -289,7 +289,7 @@ Three related gaps had the same root. In 47 pages, form labels such as "Normal F
 1. The user pastes the new `reconstruct_body.py` into the `pre-reconstruct-body` extension in the console.
 2. Rebuild the single-Pokémon test source. In Content Browser, the Charizard quick view must show the sentences listed in [Indexing Expected Results](indexing-expected-results.md), and all 16 fields must still populate.
 3. Rebuild the full source, keeping the 2-second crawl delay. It must still hold 1,028 items with all 16 fields.
-4. The user rebuilds the Semantic Encoder and RGA models manually, so they do not wait for the weekly rebuild.
+4. The RGA model rebuilds when its configuration is saved, here the prompt instruction. The Semantic Encoder has no manual rebuild in the console, so it waits for its weekly rebuild unless Coveo changes the schedule (corrected on 2026-11-10; the earlier plan assumed both could be rebuilt by hand).
 5. Run the answer evals with `npm run eval:answers`.
 
 The answer evals reflect this change only after step 4, because the models answer from the embeddings of their last build.
