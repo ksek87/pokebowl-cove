@@ -1,5 +1,5 @@
 {
-  "source": "Values read from the form tabs and type defense grids of pokemondb.net Pokémon pages on 2026-11-09. Base-form values come from the index. These are the values of the other forms on the same page, which a generated answer must not give in place of the base form's.",
+  "source": "Values read from the form tabs and type defense grids of pokemondb.net Pokémon pages on 2026-11-09. Charizard's resistances and immunity were read from the base form's (Fire/Flying) type defense grid on 2026-11-10 ('not very effective' and 'no effect'). Base-form values come from the index. These are the values of the other forms on the same page, which a generated answer must not give in place of the base form's.",
   "baseForm": [
     { "name": "Charizard", "field": "weight", "otherForms": ["110.5", "100.5"] },
     { "name": "Venusaur", "field": "weight", "otherForms": ["155.5"] },
@@ -10,6 +10,11 @@
     { "name": "Tauros", "field": "weight", "otherForms": ["115.0", "85.0", "110.0"] }
   ],
   "weaknesses": [
-    { "name": "Charizard", "types": ["Rock", "Water", "Electric"] }
+    {
+      "name": "Charizard",
+      "types": ["Rock", "Water", "Electric"],
+      "resists": ["Fire", "Grass", "Fighting", "Bug", "Steel", "Fairy"],
+      "immuneTo": ["Ground"]
+    }
   ]
 }
