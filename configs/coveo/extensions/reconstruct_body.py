@@ -8,7 +8,7 @@ body in chunks and a chunk can start in the middle of a form's section.
 
 import re
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 DAMAGE_LABELS = ((400, "4x damage"), (200, "2x damage"), (50, "0.5x damage"), (25, "0.25x damage"), (0, "no damage"))
 NORMAL_DAMAGE = 100
@@ -233,10 +233,94 @@ def remove_clutter(soup):
             item.decompose()
 
 
+def evolution_card_name(card):
+    data = card.select_one(".infocard-lg-data")
+    name = data.select_one("a.ent-name").get_text(strip=True)
+    labels = [
+        small.get_text(" ", strip=True) for small in data.find_all("small", recursive=False)
+        if not small.find("a", class_="itype") and not small.get_text(strip=True).startswith("#")
+    ]
+    if not labels:
+        return name
+    return labels[0] if name in labels[0] else f"{name} ({labels[0]})"
+
+
+def evolution_condition(arrow):
+    small = arrow.find("small")
+    text = small.get_text(" ", strip=True).strip("()") if small else ""
+    return " ".join(text.replace(" ,", ",").split())
+
+
+def is_plus(child):
+    return child.name == "span" and not child.get("class") and child.get_text(strip=True) == "+"
+
+
+def add_evolution_card(name, state, steps):
+    if state["together"] and steps:
+        before, after, how = steps[-1]
+        steps[-1] = (before, f"{after} and {name}", how)
+        state["together"] = False
+    elif state["condition"] is not None:
+        steps.append((state["last"], name, state["condition"]))
+        state["condition"] = None
+    state["last"] = name
+
+
+def read_evolution_child(child, state, steps):
+    classes = child.get("class", [])
+    if is_plus(child):
+        state["together"] = True
+    elif "infocard-arrow" in classes:
+        state["condition"] = evolution_condition(child)
+    elif "infocard-evo-split" in classes:
+        for branch in child.find_all("div", class_="infocard-list-evo", recursive=False):
+            evolution_steps(branch, state["last"], steps)
+    elif "infocard" in classes:
+        add_evolution_card(evolution_card_name(child), state, steps)
+
+
+def evolution_steps(chart_row, previous, steps):
+    """Read a chart row left to right. A branch row starts with an arrow from the card before its split."""
+    state = {"last": previous, "condition": None, "together": False}
+    for child in chart_row.children:
+        if isinstance(child, Tag):
+            read_evolution_child(child, state, steps)
+    return steps
+
+
+def evolution_sentence(before, after, condition):
+    return f"{before} evolves into {after} ({condition})." if condition else f"{before} evolves into {after}."
+
+
+def chart_rows(soup):
+    return [chart_row for chart_row in soup.select(".infocard-list-evo")
+            if chart_row.find_parent(class_="infocard-evo-split") is None]
+
+
+def chart_sentences(rows):
+    steps = []
+    for chart_row in rows:
+        evolution_steps(chart_row, None, steps)
+    return list(dict.fromkeys(evolution_sentence(*step) for step in steps if step[0] is not None))
+
+
+def rewrite_evolution_chart(soup):
+    """Replace the flattened chart with one sentence per evolution step. Pages without a chart keep their text."""
+    rows = chart_rows(soup)
+    sentences = chart_sentences(rows)
+    if not sentences:
+        return
+    for sentence in sentences:
+        rows[0].insert_before(paragraph(soup, sentence))
+    for chart_row in rows:
+        chart_row.decompose()
+
+
 def reconstruct(html):
     soup = BeautifulSoup(html, "html.parser")
     remove_clutter(soup)
     rewrite_form_panels(soup)
+    rewrite_evolution_chart(soup)
     return str(soup)
 
 

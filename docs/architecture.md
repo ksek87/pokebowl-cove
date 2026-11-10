@@ -278,7 +278,7 @@ Three related gaps had the same root. In 47 pages, form labels such as "Normal F
 - **One item per form:** gives each form its own body, but creates near-duplicate items, which the RGA guidance advises against, and Sitemap sources do not support sub-items. See [One item per Pokémon](#one-item-per-pokémon).
 - **Name only the first sentence of each table:** shorter, but a chunk that starts after that sentence would again hold unnamed values.
 - **A prompt instruction about forms:** Coveo allows a custom prompt, but it cannot add a name that the chunk does not contain.
-- **Rewriting the evolution chart as sentences:** it would help evolution questions, but it is a separate change and was left out of this fix.
+- **Rewriting the evolution chart as sentences:** left out of this fix and done separately; see [Evolution sentences](#evolution-sentences).
 
 **Cost.** Repeating the names makes the body longer. Over the 227 pages checked, the body grew by a median of 14% and at most 44%. The longest page, Rotom, has about 2,400 words, far below the limit of 1,000 chunks per item. The slowest page took 240 ms locally, against Coveo's limit of about 5 seconds per item.
 
@@ -297,6 +297,25 @@ The answer evals reflect this change only after step 4, because the models answe
 The 16 field selectors read the Pokédex data and stat tables that the extension now replaces. The fields should still populate, because web scraping runs in the crawler and the extension runs later, in the indexing pipeline. Coveo does not document this order for the stream a pre-conversion script receives, so this is our inference. It is supported by the earlier test, where the six stat fields still populated after the extension had replaced the stat tables. Step 2 confirms it for the Pokédex data table before the full rebuild.
 
 **Answer evals.** The answer set now asks base-form height and weight questions for Charizard, Venusaur, Lucario, Meowth and Tauros, and "What types is Charizard weak to?". The values of the other forms come from [`form-facts.json`](../evals/reference/form-facts.json). A base-form answer fails when it gives another form's value in place of the base form's value. An answer that gives both passes but is flagged for a person to check.
+
+### Evolution sentences
+
+**Problem.** "What does Pikachu evolve into?" got no answer. The evolution chart reached the index as a flattened list, for example "#0172 Pichu Electric (high Friendship) #0025 Pikachu Electric (use Thunder Stone, outside Alola) #0026 Raichu …", with no "evolves into" wording, and branches such as Eevee's eight were run together on one line. This matters for the demo, because the detail page suggests "Describe how {name} evolves" for every Pokémon.
+
+**Decision: the extension replaces the chart with one sentence per evolution step,** such as "Pikachu evolves into Alolan Raichu (use Thunder Stone, in Alola)." The page markup already states who evolves into whom, so linear and branching charts need no separate handling:
+
+- A row (`infocard-list-evo`) runs card, arrow, card. Each arrow links the last card before it to the next card.
+- A split (`infocard-evo-split`) holds branch rows that start with an arrow. Their "from" Pokémon is the last card before the split, and later steps in a branch follow that branch, as in Wurmple to Silcoon to Beautifly.
+- Separate rows are separate chains, as on Eevee's page.
+- A `+` between two cards means both appear together: "Nincada evolves into Ninjask and Shedinja".
+- The condition text is kept word for word, and regional or other forms use the card's form label, such as "Alolan Raichu" or "Urshifu (Rapid Strike Style)".
+- A page without a chart ("Ditto does not evolve.") is unchanged, and a chart that yields no sentence is kept as it is.
+
+**Checks.** `test_evolution_sentences.py` covers a linear chain, a branch with a form label, separate rows, steps after a branch, the `+` case, removal of the flattened chart and a page without one. Over 227 saved pages, 158 with a chart (122 linear, 36 branching) gave 313 sentences, every arrow became a sentence, every Pokémon in a chart appears in a sentence, no chart was left, and the slowest page took 232 ms. Two answer eval cases were added: "How does Pikachu evolve into Alolan Raichu?" and "Which Eevee evolution uses a Water Stone?".
+
+**Rollout.** The same as the form sentences: paste the extension, rebuild the test source and check Pikachu and Eevee in quick view, rebuild the full source, then save the RGA prompt instruction so the RGA model rebuilds. The Semantic Encoder picks the text up at its weekly rebuild.
+
+**Alternative rejected:** a prompt instruction telling the model how to read the flattened chart. It cannot make a chunk say who evolves into whom, and Coveo does not guarantee instructions are followed.
 
 ### Field mapping
 

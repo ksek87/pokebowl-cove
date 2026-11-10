@@ -321,8 +321,7 @@ def test_a_form_with_no_weaknesses_says_so():
     ensure("Bulbasaur has no type weaknesses." in text_of(reconstruct(html)))
 
 
-def test_evolution_chart_and_pokedex_entries_are_left_as_they_are():
+def test_pokedex_entries_are_left_as_they_are():
     html = reconstruct(page_html("Charizard"))
     after = html.split("<h2>Evolution chart</h2>")[1]
-    ensure('<div class="infocard-list-evo">Charmander Charmeleon</div>' in after)
     ensure('<table class="vitals-table"><tr><th>Red</th><td>Entry text.</td></tr></table>' in after)

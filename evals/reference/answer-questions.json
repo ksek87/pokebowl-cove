@@ -404,7 +404,7 @@
     "citeAny": [
       "https://pokemondb.net/pokedex/pikachu"
     ],
-    "note": "Evolution facts are not index fields."
+    "note": "Evolution facts are not index fields; the chart is written as sentences since 2026-11-10."
   },
   {
     "id": "judgment-1",
@@ -443,5 +443,30 @@
       "https://pokemondb.net/pokedex/charmeleon"
     ],
     "note": "Quality of a comparison needs a person."
+  },
+  {
+    "id": "judgment-4",
+    "category": "judgment",
+    "question": "How does Pikachu evolve into Alolan Raichu?",
+    "facts": [
+      "Thunder Stone",
+      "Alola"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/pikachu"
+    ],
+    "note": "A branch in the evolution chart, written as sentences since 2026-11-10."
+  },
+  {
+    "id": "judgment-5",
+    "category": "judgment",
+    "question": "Which Eevee evolution uses a Water Stone?",
+    "facts": [
+      "Vaporeon"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/eevee"
+    ],
+    "note": "One of eight Eevee branches, written as sentences since 2026-11-10."
   }
 ]

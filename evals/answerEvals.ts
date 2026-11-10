@@ -80,10 +80,12 @@ const UNANSWERABLE = [
 ];
 
 const JUDGMENT: { question: string; facts: string[]; pages: string[]; note: string }[] = [
-  { question: 'What does Pikachu evolve into?', facts: ['Raichu'], pages: ['Pikachu'], note: 'Evolution facts are not index fields.' },
+  { question: 'What does Pikachu evolve into?', facts: ['Raichu'], pages: ['Pikachu'], note: 'Evolution facts are not index fields; the chart is written as sentences since 2026-11-10.' },
   { question: 'Which Pokémon evolves into Charizard?', facts: ['Charmeleon'], pages: ['Charizard'], note: 'Evolution facts are not index fields.' },
   { question: 'Is Charizard weak to water?', facts: ['water'], pages: ['Charizard'], note: 'A correct answer needs reading, beyond naming the Type.' },
   { question: 'What is the difference between Charmander and Charmeleon?', facts: ['Charmander', 'Charmeleon'], pages: ['Charmander', 'Charmeleon'], note: 'Quality of a comparison needs a person.' },
+  { question: 'How does Pikachu evolve into Alolan Raichu?', facts: ['Thunder Stone', 'Alola'], pages: ['Pikachu'], note: 'A branch in the evolution chart, written as sentences since 2026-11-10.' },
+  { question: 'Which Eevee evolution uses a Water Stone?', facts: ['Vaporeon'], pages: ['Eevee'], note: 'One of eight Eevee branches, written as sentences since 2026-11-10.' },
 ];
 
 function byName(items: AnswerItem[], name: string): AnswerItem | undefined {
