@@ -1,16 +1,23 @@
 import { describe, expect, it } from 'vitest';
 import {
+  ANSWER_STYLE_LIMITS,
+  answerStyle,
   buildAnswerCases,
   gradeAnswer,
+  regradeReport,
   summarizeAnswers,
   type AnswerCase,
   type AnswerOutcome,
   type FormFacts,
+  type GradedAnswer,
 } from './answerEvals.ts';
 
 const URI = 'https://pokemondb.net/pokedex/charizard';
 const OTHER = 'https://pokemondb.net/pokedex/pikachu';
 const TOTAL = 2;
+const ONE = 1;
+const NONE = 0;
+const WORDS_WITHOUT_MARKDOWN = 4;
 
 function outcome(overrides: Partial<AnswerOutcome>): AnswerOutcome {
   return {
@@ -102,7 +109,94 @@ describe('gradeAnswer for base-form questions', (): void => {
   });
 });
 
+describe('gradeAnswer for wrong weaknesses', (): void => {
+  const weakness: AnswerCase = {
+    id: 'weakness-charizard',
+    category: 'fact',
+    question: 'What types is Charizard weak to?',
+    facts: ['Rock', 'Water'],
+    citeAny: [URI],
+    wrongWeaknesses: ['Fire', 'Grass', 'Bug', 'Ground'],
+  };
+
+  it('fails an answer that lists a resisted type as a weakness, and names it', (): void => {
+    const text = 'Charizard is weak to:\n- **Rock**: takes 4x damage from Rock.\n- **Water**: 2x.\n- **Grass**: takes 4x damage from Grass.\n- **Bug**: takes 4x damage from Bug.';
+    const grade = gradeAnswer(weakness, outcome({ text }));
+
+    expect(grade).toMatchObject({ passed: false, wrongWeaknessesShown: ['Grass', 'Bug'] });
+    expect(grade.reason).toContain('resists');
+  });
+
+  it('passes an answer that names resisted types as resistances', (): void => {
+    const text = 'Charizard is weak to Rock (4x) and Water (2x). It resists Grass and Bug at 0.25x, and Ground has no effect.';
+
+    expect(gradeAnswer(weakness, outcome({ text }))).toMatchObject({ passed: true, wrongWeaknessesShown: [] });
+  });
+
+  it('does not count the Pokémon\'s own Type as a claimed weakness', (): void => {
+    const text = 'Charizard, a Fire/Flying Pokémon, is weak to Rock and Water. As a Fire type it is weak to Water.';
+
+    expect(gradeAnswer(weakness, outcome({ text })).passed).toBe(true);
+  });
+});
+
+describe('answerStyle', (): void => {
+  it('counts words without Markdown symbols', (): void => {
+    expect(answerStyle('## Answer\n\n- **Charizard** is Fire/Flying.').words).toBe(WORDS_WITHOUT_MARKDOWN);
+  });
+
+  it('finds an answer that starts with a direct sentence, before any heading', (): void => {
+    expect(answerStyle('**Charizard** weighs 90.5 kg.\n\n## Forms\n- Mega').directAnswerFirst).toBe(true);
+    expect(answerStyle('## Weight of Charizard\n\nCharizard weighs 90.5 kg.').directAnswerFirst).toBe(false);
+    expect(answerStyle('**Answer**\n\nCharizard weighs 90.5 kg.').directAnswerFirst).toBe(false);
+    expect(answerStyle('- Blaze\n- Solar Power').directAnswerFirst).toBe(false);
+  });
+
+  it('finds references to the documentation, documents, sources or provided content', (): void => {
+    const mentions = [
+      'This is stated in the documentation.',
+      'Based on the provided documentation, it is Fire.',
+      'The documents list two abilities.',
+      'According to the provided content, it is Fire.',
+      'The sources say it is Fire.',
+      'This is supported by the following documentation:',
+    ];
+
+    expect(mentions.map((text): boolean => answerStyle(text).mentionsDocumentation)).toEqual(mentions.map(() => true));
+    expect(answerStyle('Charizard is a Fire/Flying type Pokémon.').mentionsDocumentation).toBe(false);
+  });
+
+  it('marks an answer longer than the named limit as long', (): void => {
+    const words = (count: number): string => Array.from({ length: count }, () => 'word').join(' ');
+
+    expect(answerStyle(words(ANSWER_STYLE_LIMITS.longAnswerWords)).long).toBe(false);
+    expect(answerStyle(words(ANSWER_STYLE_LIMITS.longAnswerWords + 1)).long).toBe(true);
+  });
+});
+
 describe('summarizeAnswers', (): void => {
+  it('reports style counts for generated answers, by category and overall', (): void => {
+    const entry = (text: string, category: string): GradedAnswer => ({
+      ...gradeAnswer(FACT, outcome({ text })),
+      id: text,
+      category,
+      question: 'q',
+      firstTextMs: text ? ONE : null,
+      totalMs: 2,
+      text,
+      style: text ? answerStyle(text) : undefined,
+    });
+    const summary = summarizeAnswers([
+      entry('Fire and Flying, as the documentation says.', 'fact'),
+      entry('## Type\n\nFire and Flying.', 'fact'),
+      entry('', 'unanswerable'),
+    ]);
+
+    expect(summary.style.overall).toMatchObject({ answered: TOTAL, directAnswerFirst: ONE, mentionsDocumentation: ONE, long: NONE });
+    expect(summary.style.byCategory.fact?.answered).toBe(TOTAL);
+    expect(summary.style.byCategory.unanswerable?.answered).toBe(NONE);
+  });
+
   it('reports pass rates by category', (): void => {
     const graded = [
       { ...gradeAnswer(FACT, outcome({})), id: 'a', category: 'fact', question: 'q', firstTextMs: 1, totalMs: 2 },
@@ -151,7 +245,7 @@ describe('buildAnswerCases', (): void => {
       { name: 'Charizard', field: 'height', otherForms: ['1.8'] },
       { name: 'Missingno', field: 'weight', otherForms: ['1.0'] },
     ],
-    weaknesses: [{ name: 'Charizard', types: ['Rock', 'Water'] }],
+    weaknesses: [{ name: 'Charizard', types: ['Rock', 'Water'], resists: ['Fire', 'Grass'], immuneTo: ['Ground'] }],
   };
 
   it('asks base-form height and weight questions with the index value and the other forms to reject', (): void => {
@@ -172,6 +266,35 @@ describe('buildAnswerCases', (): void => {
     const weakness = buildAnswerCases(items, formFacts).find((entry): boolean => entry.id === 'weakness-charizard');
 
     expect(weakness).toMatchObject({ category: 'fact', facts: ['Rock', 'Water'], citeAny: [items[0]?.uri] });
+    expect(weakness?.wrongWeaknesses).toEqual(['Fire', 'Grass', 'Ground']);
     expect(weakness?.question).toContain('weak');
+  });
+});
+
+describe('regradeReport', (): void => {
+  const cases: AnswerCase[] = [{ ...FACT, id: 'a', wrongWeaknesses: ['Grass'] }];
+
+  it('grades saved answers again with the current cases, keeping timings and text', (): void => {
+    const report = {
+      measuredAt: 't',
+      method: 'm',
+      graded: [{ id: 'a', category: 'fact', question: 'q', passed: true, firstTextMs: 1, totalMs: 2, text: 'Fire and Flying; weak to Grass at 2x.', citations: [URI] }],
+    };
+    const regraded = regradeReport(report, cases);
+
+    const [first] = regraded.graded;
+
+    expect(regraded).toMatchObject({ measuredAt: 't', overall: { total: ONE, passed: NONE } });
+    expect(first).toMatchObject({ id: 'a', passed: false, firstTextMs: ONE, wrongWeaknessesShown: ['Grass'] });
+    expect(first?.style?.words).toBeGreaterThan(NONE);
+  });
+
+  it('treats a saved answer with no text as not generated', (): void => {
+    const report = { measuredAt: 't', method: 'm', graded: [{ id: 'a', category: 'fact', question: 'q', firstTextMs: null, totalMs: 2, text: '', citations: [] }] };
+
+    const [first] = regradeReport(report, cases).graded;
+
+    expect(first).toMatchObject({ passed: false });
+    expect(first?.style).toBeUndefined();
   });
 });

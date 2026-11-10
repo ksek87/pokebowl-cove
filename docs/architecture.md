@@ -109,6 +109,7 @@ flowchart TD
 | Empty and error views | Rendered from Headless search status | [Interface states and motion](#interface-states-and-motion) |
 | Type-ahead | Query Suggestions model with a default queries file | [Query Suggestions](#query-suggestions) |
 | Generated answers | Atomic's `atomic-generated-answer` with Semantic Encoder and RGA models | [Generated answers](#generated-answers) |
+| Answer style | Custom prompt instruction on the RGA model | [Answer style](#answer-style) |
 | Detail page | Query parameter URL, read through a separate Headless engine | [Pokémon detail page](#pokémon-detail-page) |
 
 ## Decisions
@@ -277,7 +278,7 @@ Three related gaps had the same root. In 47 pages, form labels such as "Normal F
 
 - **One item per form:** gives each form its own body, but creates near-duplicate items, which the RGA guidance advises against, and Sitemap sources do not support sub-items. See [One item per Pokémon](#one-item-per-pokémon).
 - **Name only the first sentence of each table:** shorter, but a chunk that starts after that sentence would again hold unnamed values.
-- **A prompt instruction about forms:** Coveo allows a custom prompt, but it cannot add a name that the chunk does not contain.
+- **A prompt instruction about forms:** Coveo allows a custom prompt, but it cannot add a name that the chunk does not contain. A prompt rule about forms was added later for answer style (see [Answer style](#answer-style)); it supports this fix but cannot replace it.
 - **Rewriting the evolution chart as sentences:** it would help evolution questions, but it is a separate change and was left out of this fix.
 
 **Cost.** Repeating the names makes the body longer. Over the 227 pages checked, the body grew by a median of 14% and at most 44%. The longest page, Rotom, has about 2,400 words, far below the limit of 1,000 chunks per item. The slowest page took 240 ms locally, against Coveo's limit of about 5 seconds per item.
@@ -289,7 +290,7 @@ Three related gaps had the same root. In 47 pages, form labels such as "Normal F
 1. The user pastes the new `reconstruct_body.py` into the `pre-reconstruct-body` extension in the console.
 2. Rebuild the single-Pokémon test source. In Content Browser, the Charizard quick view must show the sentences listed in [Indexing Expected Results](indexing-expected-results.md), and all 16 fields must still populate.
 3. Rebuild the full source, keeping the 2-second crawl delay. It must still hold 1,028 items with all 16 fields.
-4. The user rebuilds the Semantic Encoder and RGA models manually, so they do not wait for the weekly rebuild.
+4. The RGA model rebuilds when its configuration is saved, here the prompt instruction. The Semantic Encoder has no manual rebuild in the console, so it waits for its weekly rebuild unless Coveo changes the schedule (corrected on 2026-11-10; the earlier plan assumed both could be rebuilt by hand).
 5. Run the answer evals with `npm run eval:answers`.
 
 The answer evals reflect this change only after step 4, because the models answer from the embeddings of their last build.
@@ -665,6 +666,28 @@ Every text search, including names, single words and nonsense, started an answer
 **Testing:** every browser test uses a stubbed answer stream from `e2e/fixtures.ts`, so the suite reads no real answers from the allowance. `holdAnswer` replaces `fetch` for the answer stream and lets the test send the header, the answer or the end separately, which tests the placeholder before the header and before the first text. A routed request can only send a whole body, so it cannot hold a stream open after its header. The real end-to-end checks above were run separately.
 
 The type-ahead panel now shares the search box's edges, border and radius, and uses the main text color, through Atomic's `suggestions-wrapper` and `query-suggestion-text` parts.
+
+## Answer style
+
+**Problem.** Answers read like copies of the page, not summaries. In the November 9 report, 24 of 25 answers started with a Markdown heading, 10 referred to "the documentation", and "What is the difference between Charmander and Charmeleon?" listed every field of both pages, including nine regional Pokédex numbers.
+
+**Decision: a custom prompt instruction on the RGA model, applied by the user on 2026-11-10.** The current text is in `configs/coveo/rga-prompt-instruction.txt` (version 2, 1,975 of 2,000 characters). It asks for a direct answer in the first one or two sentences, then only the relevant details, with short headings and bullet points for answers with several parts. It keeps the rules from Coveo's default template that apply here: use only the provided content, no opinions or speculation, decline when uncertain or off topic, and the safety rules. It adds two rules for errors the evals found: give the base form's value unless another form is named, and list a type as a weakness only at 2x or 4x damage. The user chose this version over a shorter first draft without headings, because answers should keep useful detail and stay grounded in cited content.
+
+**Version 2, applied on 2026-11-10.** With version 1 live, "What type is Charizard?" returned one sentence and then "This is supported by the documentation which states...". Two causes, by our inference: "Start with one or two sentences" was followed literally, and a rule that named the phrase to avoid did not stop it, possibly because Coveo's hidden base prompt asks the model to justify answers from the source. Version 2 requires a "Key details" section of three to six related facts, says what to include for type and measurement questions, and explains that the reader already sees the sources as citations, with an example of the wanted style. Version 1 is kept in `configs/coveo/rga-prompt-instruction-v1.txt`.
+
+**Coveo documentation.** [Create and manage RGA models](https://docs.coveo.com/en/nb6a0085/) states that the instruction is set under Configuration, Prompt enhancement, is limited to 2,000 characters, is added to the base prompt rather than replacing it, applies to every pipeline that uses the model, and triggers a model rebuild when saved. It warns that a custom instruction "isn't guaranteed to be followed fully or consistently", is not covered by Coveo's automated tests, may carry prompt injection risk, and should be retested because the base prompt changes often. [Improve your RGA implementation](https://docs.coveo.com/en/p5db0550/) lists the instruction as a way to adjust tone or style. [About RGA](https://docs.coveo.com/en/n9de0370/) states that the language model uses only the chunks in the prompt, and that Coveo returns citations for them.
+
+**Our inference.** Coveo attaches citations from the chunks it used, so the prompt cannot add citations. Asking that every statement come from the provided content keeps each statement traceable to a cited page. The instruction also reaches the detail page bubble, which uses the same model.
+
+**Rejected alternatives**
+
+- **The Headless `answerStyle` option.** Older Atomic and Headless versions offered default, bullet, step and concise styles. Headless 3.58 no longer has it; the only client setting is plain text or Markdown.
+- **Knowledge Hub answer rules.** [Create rules for generated answers](https://docs.coveo.com/en/p5db0039/) states that only blocking rules exist, which stop an answer for a word or phrase. They cannot change style, and the Knowledge Hub is an early-access beta.
+- **The shorter first draft.** It removed headings and kept answers to one to three sentences. The user rejected it as too thin.
+
+**Verification.** The answer evals now report, for each answer, its word count, whether it refers to "the documentation" or similar wording, and whether it starts with a direct sentence before any heading. They also fail a weakness answer that names a type the Pokémon resists or is immune to. These style checks are reported, not graded, because headings are allowed for answers with several parts. The November 9 report, from before the prompt, was regraded offline with these checks (`evals/reports/answers-baseline-2026-11-09.json`): none of the 32 generated answers started with a direct sentence, 15 referred to the documentation, 5 were over 200 words, the median was 26 words, and the Charmander and Charmeleon comparison was 732 words. The Charizard weakness answer now fails for listing Grass and Bug, which lowers that run from 33 to 32 of 40. Prompt version 1 was replaced by version 2 before it was measured, so there is no version 1 result.
+
+**Measured with version 2, November 10:** 37 of 40 passed (was 32). Every answer starts with a direct sentence (was 0 of 32), none refers to the documentation (was 15), the median answer is 41 words (was 26) and the longest 246 (was 732). All base-form cases pass and the Charizard weakness answer is correct. One new failure: the Eevee species question is answered with Type and Generation and leaves out the species, so the fixed first sentence can miss what was asked. Details in `docs/evaluation.md`.
 
 ## Ask about this Pokémon
 
