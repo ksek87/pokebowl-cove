@@ -66,7 +66,7 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 - [x] 🟡 User pastes the new extension into Coveo, rebuilds the single-Pokémon test source, and checks that Charizard's body names each form and that all 16 fields still populate (done 2026-11-09: all 10 required sentences and all 16 fields present)
 - [x] 🟡 User rebuilds the full source (1,028 items) (done 2026-11-09). The user reports the RGA and Semantic Encoder models did not need a manual rebuild; the answer evals check this
 - [x] Answer evals run after the rebuild and show the base-form facts are right. **Done 2026-11-10 with prompt version 2: all 7 base-form cases pass, 37 of 40 overall (33 of 40 with the stricter grader added later that day).** Earlier result: run on 2026-11-09 after the source rebuild, only 3 of the 7 base-form cases passed** (33 of 40 overall, 32 of 40 with the wrong-weakness check added on 2026-11-10). Charizard's weight still comes back as 110.5 kg (Mega Charizard X), Venusaur's weight and height as Mega Venusaur's, and Lucario's height as Mega Lucario's. The indexed body is correct ("Charizard weighs 90.5 kg", each Mega form in its own sentence), so our inference is that the RGA and Semantic Encoder models still hold the old body text. "Is Charizard weak to water?" still gets no answer. See `docs/evaluation.md`
-- [ ] Both models pick up the new body text, then the answer evals are re-run. **RGA part done 2026-11-10 (38 of 45). Left: one answer eval run after the Semantic Encoder's weekly rebuild, about 2026-11-15, to confirm nothing changed before the demo.** Coveo rebuilds Semantic Encoder and RGA models weekly from their creation date, and only an Account Manager can change the interval ([SE models](https://docs.coveo.com/en/nb890247/), [RGA models](https://docs.coveo.com/en/nb6a0085/)). Neither page documents a manual rebuild action. The Semantic Encoder has no manual rebuild in the console and its next weekly rebuild is about 2026-11-15, the day before the demo (seen in the console by the user). Answers should not depend on it: the Semantic Encoder picks the items, and the RGA model picks the passages from them ([About RGA](https://docs.coveo.com/en/n9de0370/)); this is our inference for the form values. On 2026-11-10 the user found the Semantic Encoder's Edit JSON panel read-only, so its build interval (`intervalTime`, `intervalUnit`, documented only for other model types such as [DNE models](https://docs.coveo.com/en/3396/)) cannot be changed in the console, which matches the SE page's instruction to contact an Account Manager. Saving the RGA prompt instruction triggers an RGA rebuild, as Coveo documents; the user started it on 2026-11-10. Re-run the answer evals when the RGA model shows Active, and again after the Semantic Encoder rebuild. Fallback, agreed by the user: if answers still need fresh Semantic Encoder embeddings before the demo, create a new Semantic Encoder model with the same content, which builds on creation, then swap it into the `pokebowl-search` association once it is Active and record it in `configs/coveo/ml-models.json`
+- [x] Both models pick up the new body text, then the answer evals are re-run. **RGA done 2026-11-10 (38 of 45).** The Semantic Encoder cannot be rebuilt by hand, its Edit JSON schedule is read-only, and its next weekly build (about 2026-11-15) falls after submission. User decision (2026-11-10): no run after it; the results are a snapshot, and the production plan runs the answer evals after every model rebuild to detect drift (`docs/evaluation.md`)
 - Problem found by the same run: the `weakness-charizard` answer also lists Grass and Bug as 4x weaknesses, which Charizard resists. **Grader fixed (2026-11-10):** the case now fails when a resisted or immune type, from `evals/reference/form-facts.json`, is claimed as a weakness. The answer is correct in the 2026-11-10 run with prompt version 2
 - Side effect found by the same run: bare Type searches such as `flying` and `ground` lost precision (P@12 0.931 to 0.875 in the partial-name benchmark), because the body now states each matchup twice. Relevance MRR is unchanged at 0.947. **Decision (user, 2026-11-10): accept.** The first result is a Pokémon of that Type for all 18 Type searches, which is what the user requires. The cost is lower precision on the first page for some Types, lowest for `flying` (6 of 12) and `ground` (7 of 12)
 
@@ -101,7 +101,7 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 ### 3. Wrap-up
 
 - [ ] User looks through the live site at the usual window widths (PC-78)
-- [ ] Final documentation and README (PC-91)
+- [x] Final documentation and README (PC-91, 2026-11-10)
 - [ ] Technical deep dive and demo script, using the talking points below (PC-100)
 - [ ] Production evaluation approach (PC-101)
 - [ ] Demo rehearsed
@@ -116,6 +116,7 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 - Suggestions on an empty search box: yes, and already live.
 - Bare Type searches keep the doubled matchup sentences: the first result is the right Type for every Type, and first-page precision dropped for some (2026-11-10).
 - Answer style comes from a custom RGA prompt instruction: a direct summary first, relevant details after, headings for multi-part answers, and only cited content (2026-11-10).
+- The answer prompt stays at version 3. The remaining answer failures, including the soft fail on "Which Pokémon evolves into Charizard?", are future work with candidate changes recorded in `docs/evaluation.md` (2026-11-10).
 - Detail page is complete for the demo: no close-match suggestions on the not-found page, no search box, no evolution line, stat percentiles or Type matchups.
 - An answer disappearing when sorting away from Best match is accepted, because Coveo documents this behaviour.
 - `char` showing "Did you mean: chart" is accepted. It predates the partial-name change, and turning correction off would also remove corrections for real typos.
@@ -169,7 +170,7 @@ Confirm each Coveo capability against current Coveo documentation before present
 - **Learn from behaviour.** Real queries and clicks replace the synthetic default queries file in Query Suggestions, and allow Automatic Relevance Tuning to boost what people actually choose. This needs search hubs and analytics set up per interface, which the application already sends.
 - **Tune with evidence.** Use real query logs and a labelled set that includes negative queries to tune the Semantic Encoder threshold, the partial-name boost and descriptive queries, and A/B test pipeline changes before rolling them out.
 - **Close the loop on answers.** Feedback buttons and RGA reporting show which answers fail. Sampled answers are reviewed by a person, and failing questions are added to the answer evals.
-- **Run evals over time.** Index, relevance, answer and performance evals run on a schedule and in CI, with alerts when a score drops, so a content or configuration change cannot quietly break answers.
+- **Run evals over time.** Index, relevance, answer and performance evals run on a schedule and in CI, with alerts when a score drops, so a content or configuration change cannot quietly break answers. Answer evals also run after every weekly model rebuild, because Coveo states the RGA base prompt changes often.
 - **Manage configuration as code.** The Coveo CLI exports the organization configuration, so changes are reviewed and promoted between a test and a production organization.
 - **Keep content fresh and structured.** Schedule recrawls as pokemondb.net changes, or move to the Push API with structured data, which would also remove the table-parsing risk behind the answer fix.
 - **Secure access per user.** Use search tokens issued by a backend instead of a shared search-only API key once there are signed-in users.
@@ -341,7 +342,7 @@ This is part of the final submission. The repository stays private until the pre
 
 **Branch:** `feature/evals`, with finished work combined in one integration branch (PR #6)
 
-Evals run on demand with `npm run eval`. The index quality check turns analytics capture off, so its traffic does not affect the analytics used for model training. Relevance and answer evals need a second API key with a separate search hub, because the browser key enforces `pokebowl-search`.
+Evals run on demand with `npm run eval`. The index quality check turns analytics capture off, so its traffic does not affect the analytics used for model training. Relevance and answer evals also query the `pokebowl-search` search hub, which the browser key enforces, with analytics capture off.
 
 ### PC-40: Create eval reference data
 

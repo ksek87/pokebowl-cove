@@ -2,7 +2,7 @@
 
 ## Solution flow
 
-This diagram shows the components of the solution and how they connect. Choices that are still open are marked "TBD".
+This diagram shows the components of the solution and how they connect. Dotted lines show the Passage Retrieval bonus, which is a written point of view and not enabled in our organization.
 
 ```mermaid
 flowchart TD
@@ -28,13 +28,13 @@ flowchart TD
         SE["Semantic Encoder<br/>vector retrieval"]
         RGA["RGA<br/>generated answers"]
         QS["Query Suggestions<br/>type-ahead"]
-        CPR["Passage Retrieval model<br/>bonus"]
+        CPR["Passage Retrieval model<br/>bonus: not enabled, point of view only"]
     end
 
     subgraph QUERY["Coveo query layer"]
         PIPELINE["Query pipeline<br/>limits the app to the full source, applies rules and models"]
         SEARCHAPI["Search API"]
-        PRAPI["Passage Retrieval API<br/>bonus"]
+        PRAPI["Passage Retrieval API<br/>bonus: not enabled"]
         ANALYTICS["Coveo Analytics<br/>searches and clicks"]
     end
 
@@ -44,7 +44,7 @@ flowchart TD
         FACETS["Type and Generation facets"]
         RESULTS["Results with Pokémon pictures"]
         DETAIL["Pokémon detail page"]
-        BONUS["Passage Retrieval feature<br/>bonus, concept TBD"]
+        BONUS["Agent grounded in the index<br/>concept only, docs/passage-retrieval.md"]
     end
 
     SEED["Default queries file<br/>uploaded through the Machine Learning API"]
@@ -60,17 +60,17 @@ flowchart TD
 
     ITEMS -->|"title and body embedded"| SE
     ITEMS -->|"body embedded"| RGA
-    ITEMS -->|"body embedded"| CPR
+    ITEMS -.->|"body embedded"| CPR
 
     SE --> PIPELINE
     RGA --> PIPELINE
     QS --> PIPELINE
-    CPR --> PIPELINE
+    CPR -.-> PIPELINE
 
     ITEMS --> PIPELINE
     FIELDS --> PIPELINE
     PIPELINE <--> SEARCHAPI
-    PIPELINE <--> PRAPI
+    PIPELINE -.- PRAPI
 
     SEARCHAPI <--> BOX
     SEARCHAPI --> ANSWER
@@ -78,7 +78,7 @@ flowchart TD
     SEARCHAPI --> RESULTS
     SEARCHAPI --> DETAIL
     RESULTS -->|"select a Pokémon"| DETAIL
-    PRAPI <--> BONUS
+    PRAPI -.- BONUS
 
     BOX -. "search events" .-> ANALYTICS
     RESULTS -. "click events" .-> ANALYTICS
@@ -710,7 +710,7 @@ The type-ahead panel now shares the search box's edges, border and radius, and u
 
 **Measured with version 2, November 10:** 37 of 40 passed (was 32). Every answer starts with a direct sentence (was 0 of 32), none refers to the documentation (was 15), the median answer is 41 words (was 26) and the longest 246 (was 732). All base-form cases pass and the Charizard weakness answer is correct. One new failure: the Eevee species question is answered with Type and Generation and leaves out the species, so the fixed first sentence can miss what was asked. Details in `docs/evaluation.md`.
 
-**Measured with version 3 and the evolution sentences, November 10:** 38 of 45 passed. Before this run the grader was made stricter: the opening of a direct answer must now give the expected fact, because an answer that opened with "Charmander evolves into Charizard." had passed on its details. With that grader, the earlier runs score 31 of 40 (baseline) and 33 of 40 (version 2). The evolution questions now pass, except "Which Pokémon evolves into Charizard?", whose opening skips Charmeleon, and "Describe how Mewtwo evolves", which gets no answer. Version 3 did not fix the species questions: Charizard, Pikachu, Eevee and Gengar still open with Type and Generation and give the species only in the details, while Coveo's default prompt opened with the species. **Decision (user, 2026-11-10):** these failures are documented as the next iterations, not fixed before the demo, because each prompt change costs an RGA rebuild, is not guaranteed to be followed, and with no real users there is no feedback to show which errors matter most. Details and candidate changes in `docs/evaluation.md`.
+**Measured with version 3 and the evolution sentences, November 10:** 38 of 45 passed. Before this run the grader was made stricter: the opening of a direct answer must now give the expected fact, because an answer that opened with "Charmander evolves into Charizard." had passed on its details. With that grader, the earlier runs score 31 of 40 (baseline) and 33 of 40 (version 2). The evolution questions now pass, except "Which Pokémon evolves into Charizard?", whose opening skips Charmeleon, and "Describe how Mewtwo evolves", which gets no answer. Version 3 did not fix the species questions: Charizard, Pikachu, Eevee and Gengar still open with Type and Generation and give the species only in the details, while Coveo's default prompt opened with the species. The Charizard evolution answer is a soft fail: the details are right, but the opening names Charmander instead of Charmeleon. **Decision (user, 2026-11-10):** these failures are documented as future work, not fixed for the assessment, because each prompt change costs an RGA rebuild, is not guaranteed to be followed, and with no real users there is no feedback to show which errors matter most. The most promising untested change is the prompt's style example, which models an opening with the Type; changing it to answer the asked attribute fits the 77 characters left. Details and candidate changes in `docs/evaluation.md`. Results are a snapshot of November 10: the Semantic Encoder's next weekly rebuild falls after submission, and in production the answer evals would run after every model rebuild to detect drift.
 
 ## Ask about this Pokémon
 

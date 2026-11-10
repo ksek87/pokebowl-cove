@@ -10,7 +10,7 @@
       "filters": null,
       "queryPipeline": "pokebowl-search",
       "associationCondition": null,
-      "buildSchedule": "Weekly from creation; no manual rebuild in the console. Next build about 2026-11-15, reported by the user. Fallback: create a new model, which builds on creation, and swap the association once it is Active"
+      "buildSchedule": "Weekly from creation; no manual rebuild in the console, and the schedule fields are read-only in Edit JSON (checked by the user on 2026-11-10). Next build about 2026-11-15, after submission. Fallback, not used: create a new model, which builds on creation, and swap the association once it is Active"
     },
     {
       "name": "pokebowl-rga",
@@ -27,7 +27,7 @@
         "file": "configs/coveo/rga-prompt-instruction.txt",
         "appliedOn": "2026-11-10",
         "appliedThrough": "Administration Console: Models, Edit, Configuration, Prompt enhancement",
-        "status": "Version 3 saved by the user on 2026-11-10 after the evolution sentence source rebuild; the save starts a model rebuild",
+        "status": "Version 3 saved by the user on 2026-11-10 after the evolution sentence source rebuild; the rebuild it started finished the same day, and the answer evals ran on it (38 of 45)",
         "version": 3,
         "previousVersion": "configs/coveo/rga-prompt-instruction-v2.txt"
       },
