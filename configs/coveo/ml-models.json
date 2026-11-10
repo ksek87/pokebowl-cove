@@ -27,9 +27,9 @@
         "file": "configs/coveo/rga-prompt-instruction.txt",
         "appliedOn": "2026-11-10",
         "appliedThrough": "Administration Console: Models, Edit, Configuration, Prompt enhancement",
-        "status": "Version 2 saved by the user on 2026-11-10; the save started a model rebuild",
-        "version": 2,
-        "previousVersion": "configs/coveo/rga-prompt-instruction-v1.txt"
+        "status": "Version 3 saved by the user on 2026-11-10 after the evolution sentence source rebuild; the save starts a model rebuild",
+        "version": 3,
+        "previousVersion": "configs/coveo/rga-prompt-instruction-v2.txt"
       },
       "buildSchedule": "Weekly from creation; a configuration save starts a rebuild"
     },
