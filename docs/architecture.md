@@ -109,6 +109,7 @@ flowchart TD
 | Empty and error views | Rendered from Headless search status | [Interface states and motion](#interface-states-and-motion) |
 | Type-ahead | Query Suggestions model with a default queries file | [Query Suggestions](#query-suggestions) |
 | Generated answers | Atomic's `atomic-generated-answer` with Semantic Encoder and RGA models | [Generated answers](#generated-answers) |
+| Answer style | Custom prompt instruction on the RGA model | [Answer style](#answer-style) |
 | Detail page | Query parameter URL, read through a separate Headless engine | [Pokémon detail page](#pokémon-detail-page) |
 
 ## Decisions
@@ -277,7 +278,7 @@ Three related gaps had the same root. In 47 pages, form labels such as "Normal F
 
 - **One item per form:** gives each form its own body, but creates near-duplicate items, which the RGA guidance advises against, and Sitemap sources do not support sub-items. See [One item per Pokémon](#one-item-per-pokémon).
 - **Name only the first sentence of each table:** shorter, but a chunk that starts after that sentence would again hold unnamed values.
-- **A prompt instruction about forms:** Coveo allows a custom prompt, but it cannot add a name that the chunk does not contain.
+- **A prompt instruction about forms:** Coveo allows a custom prompt, but it cannot add a name that the chunk does not contain. A prompt rule about forms was added later for answer style (see [Answer style](#answer-style)); it supports this fix but cannot replace it.
 - **Rewriting the evolution chart as sentences:** left out of this fix and done separately; see [Evolution sentences](#evolution-sentences).
 
 **Cost.** Repeating the names makes the body longer. Over the 227 pages checked, the body grew by a median of 14% and at most 44%. The longest page, Rotom, has about 2,400 words, far below the limit of 1,000 chunks per item. The slowest page took 240 ms locally, against Coveo's limit of about 5 seconds per item.
@@ -289,7 +290,7 @@ Three related gaps had the same root. In 47 pages, form labels such as "Normal F
 1. The user pastes the new `reconstruct_body.py` into the `pre-reconstruct-body` extension in the console.
 2. Rebuild the single-Pokémon test source. In Content Browser, the Charizard quick view must show the sentences listed in [Indexing Expected Results](indexing-expected-results.md), and all 16 fields must still populate.
 3. Rebuild the full source, keeping the 2-second crawl delay. It must still hold 1,028 items with all 16 fields.
-4. The user rebuilds the Semantic Encoder and RGA models manually, so they do not wait for the weekly rebuild.
+4. The RGA model rebuilds when its configuration is saved, here the prompt instruction. The Semantic Encoder has no manual rebuild in the console, so it waits for its weekly rebuild unless Coveo changes the schedule (corrected on 2026-11-10; the earlier plan assumed both could be rebuilt by hand).
 5. Run the answer evals with `npm run eval:answers`.
 
 The answer evals reflect this change only after step 4, because the models answer from the embeddings of their last build.
@@ -500,6 +501,8 @@ Latency was measured from a developer machine, not a hosted site, and the differ
 
 **Target not met.** The overall MRR target of 0.95 is missed, at 0.947. The remaining gap is in descriptive queries (0.717) and in Generation (0.950), ability (0.922) and species (0.922) queries. One-word prefix matching does not improve these, and we did not tune the benchmark to hide this.
 
+**Re-run after the full source rebuild (November 9, 2026).** The new body text names every form and adds "is weak to" and "resists" sentences. The choice of 300 still holds: it remains the lowest setting with the best score on every measure, and overall MRR is 0.947 at every setting from 100 up. Bare Type P@12 fell from 0.931 to 0.875 at every setting, including the setting before this change, so the drop comes from the body text, not from the boost. Our inference is that a bare Type word such as `flying` or `ground` now ranks higher for Pokémon whose matchup sentences name that Type, because each matchup is now stated twice ("takes 2x damage from" and "is weak to"): `flying` returns Centiskorch and Sizzlipede, which are weak to Flying. Descriptive queries moved from 0.717 to 0.700, ability from 0.922 to 0.900, and Generation from 0.950 to 1.000.
+
 **Rejected alternatives**
 
 - **Boost 100, the first recommendation.** MRR is perfect, but `char` still places Thundurus and Magmar among the Char- names.
@@ -647,6 +650,28 @@ Not confirmed: real artwork on the page, and that the click event reaches Coveo 
 
 The type-ahead panel now shares the search box's edges, border and radius, and uses the main text color, through Atomic's `suggestions-wrapper` and `query-suggestion-text` parts.
 
+## Answer style
+
+**Problem.** Answers read like copies of the page, not summaries. In the November 9 report, 24 of 25 answers started with a Markdown heading, 10 referred to "the documentation", and "What is the difference between Charmander and Charmeleon?" listed every field of both pages, including nine regional Pokédex numbers.
+
+**Decision: a custom prompt instruction on the RGA model, applied by the user on 2026-11-10.** The current text is in `configs/coveo/rga-prompt-instruction.txt` (version 2, 1,975 of 2,000 characters). It asks for a direct answer in the first one or two sentences, then only the relevant details, with short headings and bullet points for answers with several parts. It keeps the rules from Coveo's default template that apply here: use only the provided content, no opinions or speculation, decline when uncertain or off topic, and the safety rules. It adds two rules for errors the evals found: give the base form's value unless another form is named, and list a type as a weakness only at 2x or 4x damage. The user chose this version over a shorter first draft without headings, because answers should keep useful detail and stay grounded in cited content.
+
+**Version 2, applied on 2026-11-10.** With version 1 live, "What type is Charizard?" returned one sentence and then "This is supported by the documentation which states...". Two causes, by our inference: "Start with one or two sentences" was followed literally, and a rule that named the phrase to avoid did not stop it, possibly because Coveo's hidden base prompt asks the model to justify answers from the source. Version 2 requires a "Key details" section of three to six related facts, says what to include for type and measurement questions, and explains that the reader already sees the sources as citations, with an example of the wanted style. Version 1 is kept in `configs/coveo/rga-prompt-instruction-v1.txt`.
+
+**Coveo documentation.** [Create and manage RGA models](https://docs.coveo.com/en/nb6a0085/) states that the instruction is set under Configuration, Prompt enhancement, is limited to 2,000 characters, is added to the base prompt rather than replacing it, applies to every pipeline that uses the model, and triggers a model rebuild when saved. It warns that a custom instruction "isn't guaranteed to be followed fully or consistently", is not covered by Coveo's automated tests, may carry prompt injection risk, and should be retested because the base prompt changes often. [Improve your RGA implementation](https://docs.coveo.com/en/p5db0550/) lists the instruction as a way to adjust tone or style. [About RGA](https://docs.coveo.com/en/n9de0370/) states that the language model uses only the chunks in the prompt, and that Coveo returns citations for them.
+
+**Our inference.** Coveo attaches citations from the chunks it used, so the prompt cannot add citations. Asking that every statement come from the provided content keeps each statement traceable to a cited page. The instruction also reaches the detail page bubble, which uses the same model.
+
+**Rejected alternatives**
+
+- **The Headless `answerStyle` option.** Older Atomic and Headless versions offered default, bullet, step and concise styles. Headless 3.58 no longer has it; the only client setting is plain text or Markdown.
+- **Knowledge Hub answer rules.** [Create rules for generated answers](https://docs.coveo.com/en/p5db0039/) states that only blocking rules exist, which stop an answer for a word or phrase. They cannot change style, and the Knowledge Hub is an early-access beta.
+- **The shorter first draft.** It removed headings and kept answers to one to three sentences. The user rejected it as too thin.
+
+**Verification.** The answer evals now report, for each answer, its word count, whether it refers to "the documentation" or similar wording, and whether it starts with a direct sentence before any heading. They also fail a weakness answer that names a type the Pokémon resists or is immune to. These style checks are reported, not graded, because headings are allowed for answers with several parts. The November 9 report, from before the prompt, was regraded offline with these checks (`evals/reports/answers-baseline-2026-11-09.json`): none of the 32 generated answers started with a direct sentence, 15 referred to the documentation, 5 were over 200 words, the median was 26 words, and the Charmander and Charmeleon comparison was 732 words. The Charizard weakness answer now fails for listing Grass and Bug, which lowers that run from 33 to 32 of 40. Prompt version 1 was replaced by version 2 before it was measured, so there is no version 1 result.
+
+**Measured with version 2, November 10:** 37 of 40 passed (was 32). Every answer starts with a direct sentence (was 0 of 32), none refers to the documentation (was 15), the median answer is 41 words (was 26) and the longest 246 (was 732). All base-form cases pass and the Charizard weakness answer is correct. One new failure: the Eevee species question is answered with Type and Generation and leaves out the species, so the fixed first sentence can miss what was asked. Details in `docs/evaluation.md`.
+
 ## Ask about this Pokémon
 
 **Decision: the detail page has a compact speech bubble, opened from a wobbling Pokéball at the top-right corner of the main card.** The user chose this over a card on the page, then over a chat window, and placed the Pokéball in the card so it is visible on load without scrolling. A fixed bottom-corner launcher was rejected for being less visible. The bubble stays closed on load, shows three suggested questions defined once in `src/search/settings.ts`, and shows one thing at a time. Picking a question replaces the questions with its answer, while the Pokéball wobbles faster and the bubble says it is thinking. "Ask something else" returns to the questions. There is no greeting, header or message history.
@@ -669,37 +694,45 @@ The bubble is positioned against the Pokéball with its tail pointing at it, so 
 
 Measured at 1440×800: answers of about 200 words fit with no inner scroll. Real generated answers can be longer than the window. For Charizard they measured 325, 956 and 1,689 px of content against 556 px visible, because RGA returns headed, listed answers for broad questions. A wider bubble cannot remove that scrolling. Shorter answers would need different question wording or a prompt instruction.
 
+## Evaluation
+
+How every eval works, why each technique was chosen, the margin of error on each score, how we would evaluate in production, and the Coveo and external sources behind it are in `docs/evaluation.md`.
+
 ## Performance
 
 **Decision: measure first, and make no performance change the numbers do not support.** Coveo requires [load tests to be planned with and authorized by Coveo](https://docs.coveo.com/en/1948/), so every measurement is small, sequential and paced, and every request turns analytics capture off. The results are in `evals/reports/performance.json` (`npm run eval:performance`) and `evals/reports/bundle.json` (`npm run eval:bundle`).
 
 ### Method
 
-All numbers come from one developer machine on a home network, against the hosted site at https://pokebowl-cove.vercel.app/ (deployment of commit `5f6fbd0` on `main`). They are not real-user numbers.
+All numbers come from one developer machine on a home network, against the hosted site at https://pokebowl-cove.vercel.app/ (deployment of commit `d1662e8` on `main`, measured on November 9, 2026, after the full source rebuild that names every form in the body text). They are not real-user numbers.
 
 - **Coveo API timings.** Node sends requests straight to Coveo, one at a time, with the same request body as the application. The eval now runs `rewriteSearchBody` from `src/search/queryRewrite.ts`, so partial names and Pokédex numbers are sent exactly as the page sends them. The earlier baseline skipped this rewrite. `maximumAge` is 0, so Coveo's cache does not hide index time. Searches and suggestions are paced 500 ms apart. 20 generated answers are paced 3 seconds apart, from the questions that expect an answer.
 - **Hosted page timings.** Headless Chromium (Playwright) loads the hosted site 10 times in a fresh browser context each time, so every load is cold. The window is 1440×900, with no CPU or network throttling. Each run records first contentful paint, the load event, largest contentful paint (LCP), cumulative layout shift (CLS) and the time until the first result card is visible. It then types a three-letter partial name into the real search box and records the browser's own request times for type-ahead and search. The first 5 runs then ask one fact question and time the answer from pressing Enter. Runs are 2 seconds apart.
 - **What the page timings leave out.** pokemondb.net asks for 2 seconds between requests, and a page load asks for every card's artwork at once. One real artwork is therefore fetched once and served from memory for every card, so artwork download time is not included. Playwright answers CORS preflight requests itself when it intercepts a request, so the browser's request times do not include the preflight. A separate check measured a Coveo preflight at about 105 to 130 ms; browsers cache it, so only the first search of a visit pays it.
-- **Checks.** The hosted runs sent 62 search and suggestion requests, all with capture off. 9 of the 10 typed partial names reached Coveo with the partial-name rewrite applied, which confirms the hosted site runs the shipped behaviour; the tenth is a name the rewrite does not cover by design.
+- **Checks.** The hosted runs sent 65 search and suggestion requests, all with capture off. 9 of the 10 typed partial names reached Coveo with the partial-name rewrite applied, which confirms the hosted site runs the shipped behaviour; the tenth is a name the rewrite does not cover by design.
 
 ### Results
 
-| Measure | Samples | p50 | p95 | Target |
-|---|---|---|---|---|
-| Search, Coveo API | 40 | 174 ms | 198 ms | 250 ms |
-| Type-ahead, Coveo API | 28 | 51 ms | 63 ms | 100 ms |
-| Generated answer, first text, Coveo API | 19 | 2.1 s | 3.0 s | 3.6 s |
-| Generated answer, complete, Coveo API | 19 | 3.1 s | 7.7 s | 9.3 s |
-| Hosted: first contentful paint | 10 | 260 ms | 292 ms | 400 ms |
-| Hosted: largest contentful paint | 10 | 260 ms | 292 ms | 400 ms |
-| Hosted: cumulative layout shift | 10 | 0.033 | 0.033 | 0.05 |
-| Hosted: first result visible | 10 | 537 ms | 575 ms | 700 ms |
-| Hosted: type-ahead request in the browser | 10 | 49 ms | 71 ms | 100 ms |
-| Hosted: search request in the browser | 10 | 172 ms | 220 ms | 300 ms |
-| Hosted: answer first text, from Enter | 5 | 2.3 s | 2.8 s | 3.4 s |
-| Hosted: answer complete, from Enter | 5 | 3.1 s | 3.7 s | 4.4 s |
+| Measure | Samples | p50 | p95 | Target | Second run p95 |
+|---|---|---|---|---|---|
+| Search, Coveo API | 40 | 188 ms | 225 ms | 250 ms | **319 ms** |
+| Type-ahead, Coveo API | 28 | 55 ms | 68 ms | 100 ms | 64 ms |
+| Generated answer, first text, Coveo API | 19 | 2.1 s | **4.9 s** | 3.6 s | **5.1 s** |
+| Generated answer, complete, Coveo API | 19 | 3.1 s | 7.2 s | 9.3 s | **12.7 s** |
+| Hosted: first contentful paint | 10 | 260 ms | **1,060 ms** | 400 ms | **552 ms** |
+| Hosted: largest contentful paint | 10 | 260 ms | **1,060 ms** | 400 ms | **552 ms** |
+| Hosted: cumulative layout shift | 10 | 0.035 | 0.035 | 0.05 | 0.035 |
+| Hosted: first result visible | 10 | 543 ms | **1,896 ms** | 700 ms | **1,334 ms** |
+| Hosted: type-ahead request in the browser | 10 | 48 ms | **286 ms** | 100 ms | **141 ms** |
+| Hosted: search request in the browser | 10 | 173 ms | **328 ms** | 300 ms | 200 ms |
+| Hosted: answer first text, from Enter | 5 | 2.4 s | 3.3 s | 3.4 s | 2.4 s |
+| Hosted: answer complete, from Enter | 5 | 3.1 s | 3.4 s | 4.4 s | 2.9 s |
 
-One of the 20 answerable questions returned no answer, so 19 answers were timed. With 10 or fewer samples, the p95 is the slowest run. Sorted queries and the largest page size were again no slower than the default: sorted p50 169 ms against 178 ms for relevance, and 96 results 97 ms against 76 ms for an empty query.
+Bold marks a p95 over its target. The p50 and p95 columns are the recorded run in `evals/reports/performance.json`. The second run was made straight after it, to tell a single slow run from a regression; its p50 values were close to the first run's on every measure. One of the 20 answerable questions returned no answer in the first run (two in the second), so 19 answers were timed. With 10 or fewer samples, the p95 is the slowest run. Sorted queries and the largest page size were again close to the default: sorted p50 180 ms (by Pokédex number) and 200 ms (by name) against 183 ms for relevance, and 96 results 100 ms against 76 ms for an empty query.
+
+**Previous baseline.** The targets come from the measurement of commit `5f6fbd0` before the rebuild: search p50 174 ms and p95 198 ms, type-ahead 51 and 63 ms, answer first text 2.1 and 3.0 s, answer complete 3.1 and 7.7 s, first contentful paint 260 and 292 ms, first result visible 537 and 575 ms, browser type-ahead 49 and 71 ms, browser search 172 and 220 ms, hosted answer first text 2.3 and 2.8 s, hosted answer complete 3.1 and 3.7 s.
+
+**Targets missed after the rebuild.** Every p50 is close to the previous baseline, but both runs have p95 values over target, each from one or two slow samples, and not always in the same measure. First contentful paint and first result visible do not depend on the Coveo index, so the body text change cannot explain them. Our inference is that the slow samples come from the developer machine or the home network at the time of the runs, not from a change in the application or the index. We do not change the targets. The measurement should be repeated on a quiet network before the demo, and a target missed again on a repeat is a real regression.
 
 **Targets.** Each target is the measured p95 plus 20%, rounded up to the next 50 ms. Layout shift is rounded up to two decimals and never targeted at zero. The aim is to catch a regression that stands out from run-to-run noise, not to promise a figure to users. These are developer-machine targets; production targets would come from real-user data.
 
@@ -707,8 +740,8 @@ One of the 20 answerable questions returned no answer, so 19 answers were timed.
 
 - The partial-name rewrite costs nothing measurable. Search p50 was 182 ms before the rewrite was measured and 174 ms with it.
 - LCP equals first contentful paint. The loading placeholders are the largest element and appear first, so LCP does not see the result cards. "First result visible" is the better measure of when a person sees results.
-- The layout shift of 0.033 is the same on every run. It comes from two moments: the header and the search layout move by a few pixels about 335 ms into the load, and the query summary, sort menu and facet buttons change width when results replace the placeholders. It is small, but it has a cause that could be fixed.
-- Generated answers dominate. In the browser, first text took 2.3 s at p50. The slow tail of complete answers tracks long answers, as before.
+- The layout shift of 0.035 (0.033 before the rebuild) is the same on every run. It comes from two moments: the header and the search layout move by a few pixels about 335 ms into the load, and the query summary, sort menu and facet buttons change width when results replace the placeholders. It is small, but it has a cause that could be fixed.
+- Generated answers dominate. In the browser, first text took 2.4 s at p50. The slow tail of complete answers tracks long answers, as before.
 - Coveo's [response time guide](https://docs.coveo.com/en/1948/) lists several optimizations. We still do not apply the sort cache, a page size limit or pipeline simplification, because the numbers above show no problem they would solve. Coveo publishes no latency figures or tuning guide for generated answers. Our inference is that fixed, short questions remain the practical control, and that time to first text matters most because answers stream.
 
 ### Bundle size

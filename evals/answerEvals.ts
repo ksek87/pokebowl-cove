@@ -25,12 +25,29 @@ export interface AnswerCase {
   note?: string;
   /** Values of the Pokémon's other forms, which must not replace the base form's value. */
   otherFormValues?: string[];
+  /** Types the Pokémon resists or is immune to, which an answer must not claim as weaknesses. */
+  wrongWeaknesses?: string[];
 }
 
 /** Reference values that the index does not hold, read from the Pokémon pages. */
 export interface FormFacts {
   baseForm: { name: string; field: 'height' | 'weight'; otherForms: string[] }[];
-  weaknesses: { name: string; types: string[] }[];
+  weaknesses: { name: string; types: string[]; resists?: string[]; immuneTo?: string[] }[];
+}
+
+/** Limits for the style checks. Style is reported, not graded. */
+export const ANSWER_STYLE_LIMITS = {
+  /** About 200 words fit in the detail page bubble without scrolling (docs/architecture.md, Detail page layout). */
+  longAnswerWords: 200,
+};
+
+export interface AnswerStyle {
+  words: number;
+  long: boolean;
+  /** Refers to "the documentation", "the following documentation", "the documents", "the sources" or "the provided content". */
+  mentionsDocumentation: boolean;
+  /** The first line is a sentence, not a heading, a bold label or a list. */
+  directAnswerFirst: boolean;
 }
 
 const NO_FORM_FACTS: FormFacts = { baseForm: [], weaknesses: [] };
@@ -51,6 +68,8 @@ export interface AnswerGrade {
   reason: string;
   /** Other-form values found in the answer, for base-form questions. */
   otherFormValuesShown?: string[];
+  /** Resisted or immune types the answer claims as weaknesses. */
+  wrongWeaknessesShown?: string[];
 }
 
 export type GradedAnswer = AnswerGrade & {
@@ -61,6 +80,8 @@ export type GradedAnswer = AnswerGrade & {
   totalMs: number;
   text?: string;
   citations?: string[];
+  answerGenerated?: boolean;
+  style?: AnswerStyle;
 };
 
 const FACT_NAMES = ['Charizard', 'Pikachu', 'Bulbasaur', 'Mewtwo', 'Eevee', 'Gengar', 'Snorlax', 'Lucario'];
@@ -119,10 +140,18 @@ function formCases(items: AnswerItem[], formFacts: FormFacts): AnswerCase[] {
         }]
       : [];
   });
-  const weaknesses = formFacts.weaknesses.flatMap(({ name, types }): AnswerCase[] => {
+  const weaknesses = formFacts.weaknesses.flatMap(({ name, types, resists = [], immuneTo = [] }): AnswerCase[] => {
     const item = byName(items, name);
+    const wrongWeaknesses = [...resists, ...immuneTo];
     return item
-      ? [{ id: `weakness-${slug(name)}`, category: 'fact', question: `What types is ${name} weak to?`, facts: types, citeAny: [item.uri] }]
+      ? [{
+          id: `weakness-${slug(name)}`,
+          category: 'fact',
+          question: `What types is ${name} weak to?`,
+          facts: types,
+          citeAny: [item.uri],
+          ...(wrongWeaknesses.length ? { wrongWeaknesses } : {}),
+        }]
       : [];
   });
   return [...baseForm, ...weaknesses];
@@ -214,13 +243,59 @@ function shownValues(answer: string, values: string[]): string[] {
   return values.filter((value): boolean => new RegExp(`(?<![\\d.])${value.replace(/\./g, '\\.')}(?![\\d])`).test(answer));
 }
 
-export function gradeAnswer(testCase: AnswerCase, outcome: AnswerOutcome): AnswerGrade {
-  if (testCase.category === 'unanswerable') {
-    return gradeUnanswerable(outcome);
+const WEAKNESS_CLAIM = /\bweak|super[- ]effective|\b[24](?:\.0)?\s?[x×]/i;
+const RESISTANCE_CLAIM = /resist|not very effective|no effect|immun|\b0(?:\.25|\.5)?\s?[x×]|[½¼]/i;
+
+/**
+ * Finds types named in a sentence or list line that claims a weakness and does not mention a resistance.
+ * A type written as part of the Pokémon's own Type, such as "Fire/Flying" or "Fire type", is not a claim.
+ */
+function claimedWeaknesses(answer: string, types: string[]): string[] {
+  const claims = answer
+    .split(/\n|(?<=[.!?])\s+/)
+    .filter((segment): boolean => WEAKNESS_CLAIM.test(segment) && !RESISTANCE_CLAIM.test(segment));
+  return types.filter((type): boolean => {
+    const named = new RegExp(`(?<![\\w/])${type}(?![\\w/]|[- ]type)`, 'i');
+    return claims.some((segment): boolean => named.test(segment));
+  });
+}
+
+const DOCUMENTATION_WORDING = /\b(?:the|following|provided) (?:provided )?(?:documentation|documents|sources)\b|\bthe provided (?:content|information|data)\b/i;
+const NOT_A_SENTENCE = /^(?:#{1,6}\s|[-*+]\s|\d+\.\s|>|\||\*\*[^*]+\*\*:?$)/;
+const WORD = /[\p{L}\p{N}]/u;
+
+export function answerStyle(text: string): AnswerStyle {
+  const words = text.split(/\s+/).filter((token): boolean => WORD.test(token)).length;
+  const firstLine = text.split('\n').map((line): string => line.trim()).find(Boolean) ?? '';
+  return {
+    words,
+    long: words > ANSWER_STYLE_LIMITS.longAnswerWords,
+    mentionsDocumentation: DOCUMENTATION_WORDING.test(text),
+    directAnswerFirst: Boolean(firstLine) && !NOT_A_SENTENCE.test(firstLine),
+  };
+}
+
+function gradeWrongWeaknesses(testCase: AnswerCase, outcome: AnswerOutcome, grade: AnswerGrade): AnswerGrade {
+  if (!testCase.wrongWeaknesses) {
+    return grade;
   }
-  if (testCase.category === 'scoped') {
-    return gradeScoped(testCase, outcome);
+  const wrongWeaknessesShown = claimedWeaknesses(outcome.text, testCase.wrongWeaknesses);
+  return wrongWeaknessesShown.length
+    ? { ...grade, wrongWeaknessesShown, passed: false, reason: 'Named a type the Pokémon resists or is immune to as a weakness.' }
+    : { ...grade, wrongWeaknessesShown };
+}
+
+function gradeOtherForms(testCase: AnswerCase, answer: string, grade: AnswerGrade): AnswerGrade {
+  const otherFormValuesShown = shownValues(answer, testCase.otherFormValues ?? []);
+  if (!otherFormValuesShown.length) {
+    return { ...grade, otherFormValuesShown };
   }
+  return grade.passed
+    ? { ...grade, otherFormValuesShown, needsHumanReview: true, reason: 'The base value and other forms\' values; a person checks which is which.' }
+    : { ...grade, otherFormValuesShown, reason: 'Gave another form\'s value in place of the base form\'s.' };
+}
+
+function gradeFacts(testCase: AnswerCase, outcome: AnswerOutcome): AnswerGrade {
   const answer = outcome.text.toLowerCase();
   const missingFacts = testCase.facts.filter((fact): boolean => !answer.includes(fact.toLowerCase()));
   const citationCorrect = outcome.citations.some((uri): boolean => testCase.citeAny.some((wanted): boolean => sameUri(uri, wanted)));
@@ -232,21 +307,39 @@ export function gradeAnswer(testCase: AnswerCase, outcome: AnswerOutcome): Answe
     needsHumanReview: testCase.category === 'judgment',
     reason: passed ? 'Every expected fact and a correct citation.' : 'Missing answer, fact or citation.',
   };
-  if (!testCase.otherFormValues) {
-    return grade;
+  return testCase.otherFormValues ? gradeOtherForms(testCase, answer, grade) : gradeWrongWeaknesses(testCase, outcome, grade);
+}
+
+export function gradeAnswer(testCase: AnswerCase, outcome: AnswerOutcome): AnswerGrade {
+  if (testCase.category === 'unanswerable') {
+    return gradeUnanswerable(outcome);
   }
-  const otherFormValuesShown = shownValues(answer, testCase.otherFormValues);
-  if (!otherFormValuesShown.length) {
-    return { ...grade, otherFormValuesShown };
-  }
-  return passed
-    ? { ...grade, otherFormValuesShown, needsHumanReview: true, reason: 'The base value and other forms\' values; a person checks which is which.' }
-    : { ...grade, otherFormValuesShown, reason: 'Gave another form\'s value in place of the base form\'s.' };
+  return testCase.category === 'scoped' ? gradeScoped(testCase, outcome) : gradeFacts(testCase, outcome);
+}
+
+export interface StyleCounts {
+  answered: number;
+  directAnswerFirst: number;
+  mentionsDocumentation: number;
+  long: number;
+  words: LatencyStats | null;
+}
+
+function styleCounts(entries: GradedAnswer[]): StyleCounts {
+  const styles = entries.flatMap((entry): AnswerStyle[] => (entry.style ? [entry.style] : []));
+  return {
+    answered: styles.length,
+    directAnswerFirst: styles.filter((style): boolean => style.directAnswerFirst).length,
+    mentionsDocumentation: styles.filter((style): boolean => style.mentionsDocumentation).length,
+    long: styles.filter((style): boolean => style.long).length,
+    words: styles.length ? latencyStats(styles.map((style): number => style.words)) : null,
+  };
 }
 
 export function summarizeAnswers(graded: GradedAnswer[]): {
   overall: { total: number; passed: number };
   byCategory: Record<string, { total: number; passed: number; needsHumanReview: number }>;
+  style: { limits: typeof ANSWER_STYLE_LIMITS; overall: StyleCounts; byCategory: Record<string, StyleCounts> };
   firstTextMs: LatencyStats | null;
   totalMs: LatencyStats | null;
 } {
@@ -262,7 +355,54 @@ export function summarizeAnswers(graded: GradedAnswer[]): {
     byCategory: Object.fromEntries(
       categories.map((category) => [category, count(graded.filter((entry): boolean => entry.category === category))]),
     ),
+    style: {
+      limits: ANSWER_STYLE_LIMITS,
+      overall: styleCounts(graded),
+      byCategory: Object.fromEntries(
+        categories.map((category) => [category, styleCounts(graded.filter((entry): boolean => entry.category === category))]),
+      ),
+    },
     firstTextMs: answered.length ? latencyStats(answered.map((entry): number => entry.firstTextMs as number)) : null,
     totalMs: answered.length ? latencyStats(answered.map((entry): number => entry.totalMs)) : null,
   };
+}
+
+/** Turns a test case and its outcome into a report entry, with style checks for generated answers. */
+export function gradedEntry(testCase: AnswerCase, outcome: AnswerOutcome): GradedAnswer {
+  return {
+    ...gradeAnswer(testCase, outcome),
+    id: testCase.id,
+    category: testCase.category,
+    question: testCase.question,
+    firstTextMs: outcome.firstTextMs,
+    totalMs: outcome.totalMs,
+    text: outcome.text,
+    citations: outcome.citations,
+    answerGenerated: outcome.answerGenerated,
+    ...(outcome.answerGenerated ? { style: answerStyle(outcome.text) } : {}),
+  };
+}
+
+export interface SavedAnswerReport {
+  measuredAt: string;
+  method: string;
+  graded: (Partial<GradedAnswer> & Pick<GradedAnswer, 'id' | 'firstTextMs' | 'totalMs'>)[];
+}
+
+/** Grades a saved report again with the current cases, so reports from different runs use the same grader. */
+export function regradeReport(report: SavedAnswerReport, cases: AnswerCase[]): SavedAnswerReport & ReturnType<typeof summarizeAnswers> & { graded: GradedAnswer[] } {
+  const graded = report.graded.flatMap((saved): GradedAnswer[] => {
+    const testCase = cases.find((entry): boolean => entry.id === saved.id);
+    const text = saved.text ?? '';
+    return testCase
+      ? [gradedEntry(testCase, {
+          text,
+          citations: saved.citations ?? [],
+          answerGenerated: saved.answerGenerated ?? Boolean(text),
+          firstTextMs: saved.firstTextMs,
+          totalMs: saved.totalMs,
+        })]
+      : [];
+  });
+  return { measuredAt: report.measuredAt, method: report.method, ...summarizeAnswers(graded), graded };
 }

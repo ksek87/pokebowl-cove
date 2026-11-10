@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-11-09T19:34:59.664Z",
+  "measuredAt": "2026-11-10T03:49:17.446Z",
   "method": "Each setting runs in pokebowl-search with analytics capture off, sequentially and paced. Boost settings use the application rewrite with a different modifier. Queries the rewrite leaves alone are sent once and are not timed. Overall covers the reference queries only. Latency is from a developer machine, not a hosted site.",
   "k": 12,
   "queries": 171,
@@ -10,10 +10,10 @@
       "label": "today",
       "overall": {
         "queries": 123,
-        "mrr": 0.9010162601626015,
+        "mrr": 0.9006323396567298,
         "recall": {
-          "3": 0.8956639566395663,
-          "12": 0.9079637841832964
+          "3": 0.9065040650406504,
+          "12": 0.9189270756343926
         }
       },
       "byCategory": {
@@ -30,23 +30,23 @@
           "mrr": 1,
           "recall": {
             "3": 1,
-            "12": 0.9953703703703702
+            "12": 1
           }
         },
         "generation": {
           "queries": 10,
-          "mrr": 0.95,
+          "mrr": 1,
           "recall": {
-            "3": 0.8666666666666668,
-            "12": 0.825
+            "3": 1,
+            "12": 0.975
           }
         },
         "ability": {
           "queries": 15,
-          "mrr": 0.9222222222222223,
+          "mrr": 0.9,
           "recall": {
-            "3": 0.9111111111111111,
-            "12": 0.9025252525252525
+            "3": 0.9333333333333332,
+            "12": 0.9202020202020201
           }
         },
         "species": {
@@ -67,10 +67,10 @@
         },
         "descriptive": {
           "queries": 13,
-          "mrr": 0.7173076923076922,
+          "mrr": 0.7008547008547008,
           "recall": {
-            "3": 0.6923076923076923,
-            "12": 0.8365384615384616
+            "3": 0.6666666666666667,
+            "12": 0.7980769230769231
           }
         },
         "natural": {
@@ -85,8 +85,8 @@
           "queries": 18,
           "mrr": 1,
           "recall": {
-            "3": 0.9629629629629629,
-            "12": 0.9305555555555556
+            "3": 1,
+            "12": 0.8749999999999999
           }
         },
         "short-prefix": {
@@ -100,13 +100,13 @@
       },
       "partialNamesFirst": 0.5625,
       "shortPrefixNamesFirst": 0.1,
-      "bareTypePrecision": 0.9305555555555556,
+      "bareTypePrecision": 0.8749999999999999,
       "latency": {
         "count": 93,
-        "p50": 165.35133400000632,
-        "p95": 195.1004590000084,
-        "min": 142.6341249999823,
-        "max": 301.68812499999996
+        "p50": 166.0789169999989,
+        "p95": 245.89462500001537,
+        "min": 143.66358299998683,
+        "max": 311.67329200000006
       },
       "bareTypesChangedInTopResults": []
     },
@@ -114,10 +114,10 @@
       "label": "no-boost",
       "overall": {
         "queries": 123,
-        "mrr": 0.9376016260162601,
+        "mrr": 0.9372177055103884,
         "recall": {
-          "3": 0.9403794037940378,
-          "12": 0.9559312638580931
+          "3": 0.9512195121951219,
+          "12": 0.9668945553091894
         }
       },
       "byCategory": {
@@ -134,23 +134,23 @@
           "mrr": 1,
           "recall": {
             "3": 1,
-            "12": 0.9953703703703702
+            "12": 1
           }
         },
         "generation": {
           "queries": 10,
-          "mrr": 0.95,
+          "mrr": 1,
           "recall": {
-            "3": 0.8666666666666668,
-            "12": 0.825
+            "3": 1,
+            "12": 0.975
           }
         },
         "ability": {
           "queries": 15,
-          "mrr": 0.9222222222222223,
+          "mrr": 0.9,
           "recall": {
-            "3": 0.9111111111111111,
-            "12": 0.9025252525252525
+            "3": 0.9333333333333332,
+            "12": 0.9202020202020201
           }
         },
         "species": {
@@ -171,10 +171,10 @@
         },
         "descriptive": {
           "queries": 13,
-          "mrr": 0.7173076923076922,
+          "mrr": 0.7008547008547008,
           "recall": {
-            "3": 0.6923076923076923,
-            "12": 0.8365384615384616
+            "3": 0.6666666666666667,
+            "12": 0.7980769230769231
           }
         },
         "natural": {
@@ -189,8 +189,8 @@
           "queries": 18,
           "mrr": 1,
           "recall": {
-            "3": 0.9629629629629629,
-            "12": 0.9305555555555556
+            "3": 1,
+            "12": 0.8749999999999999
           }
         },
         "short-prefix": {
@@ -204,13 +204,13 @@
       },
       "partialNamesFirst": 0.875,
       "shortPrefixNamesFirst": 0.7333333333333333,
-      "bareTypePrecision": 0.9305555555555556,
+      "bareTypePrecision": 0.8749999999999999,
       "latency": {
         "count": 93,
-        "p50": 165.16699999998673,
-        "p95": 191.68695799997658,
-        "min": 146.27816599998914,
-        "max": 425.04725000000326
+        "p50": 168.8434169999964,
+        "p95": 253.169458999997,
+        "min": 143.31333299999824,
+        "max": 261.41345799999544
       },
       "bareTypesChangedInTopResults": []
     },
@@ -218,10 +218,10 @@
       "label": "boost-50",
       "overall": {
         "queries": 123,
-        "mrr": 0.9416666666666665,
+        "mrr": 0.9412827461607949,
         "recall": {
-          "3": 0.9403794037940378,
-          "12": 0.9559312638580931
+          "3": 0.9512195121951219,
+          "12": 0.9676336536092633
         }
       },
       "byCategory": {
@@ -238,23 +238,23 @@
           "mrr": 1,
           "recall": {
             "3": 1,
-            "12": 0.9953703703703702
+            "12": 1
           }
         },
         "generation": {
           "queries": 10,
-          "mrr": 0.95,
+          "mrr": 1,
           "recall": {
-            "3": 0.8666666666666668,
-            "12": 0.825
+            "3": 1,
+            "12": 0.975
           }
         },
         "ability": {
           "queries": 15,
-          "mrr": 0.9222222222222223,
+          "mrr": 0.9,
           "recall": {
-            "3": 0.9111111111111111,
-            "12": 0.9025252525252525
+            "3": 0.9333333333333332,
+            "12": 0.9262626262626262
           }
         },
         "species": {
@@ -275,10 +275,10 @@
         },
         "descriptive": {
           "queries": 13,
-          "mrr": 0.7173076923076922,
+          "mrr": 0.7008547008547008,
           "recall": {
-            "3": 0.6923076923076923,
-            "12": 0.8365384615384616
+            "3": 0.6666666666666667,
+            "12": 0.7980769230769231
           }
         },
         "natural": {
@@ -293,8 +293,8 @@
           "queries": 18,
           "mrr": 1,
           "recall": {
-            "3": 0.9814814814814814,
-            "12": 0.9305555555555556
+            "3": 1,
+            "12": 0.8749999999999999
           }
         },
         "short-prefix": {
@@ -308,52 +308,52 @@
       },
       "partialNamesFirst": 0.9375,
       "shortPrefixNamesFirst": 0.7666666666666667,
-      "bareTypePrecision": 0.9305555555555556,
+      "bareTypePrecision": 0.8749999999999999,
       "latency": {
         "count": 93,
-        "p50": 168.51579199999105,
-        "p95": 189.4137499999997,
-        "min": 144.46429099998204,
-        "max": 202.79862499999945
+        "p50": 167.31562500001746,
+        "p95": 243.72470799999428,
+        "min": 143.09674999999697,
+        "max": 345.63500000000204
       },
       "bareTypesChangedInTopResults": [
         {
           "query": "dark",
           "before": [
-            "Sableye",
+            "Maschiff",
             "Mabosstiff",
-            "Maschiff"
+            "Nickit"
           ],
           "after": [
             "Darkrai",
-            "Sableye",
+            "Maschiff",
             "Mabosstiff"
           ]
         },
         {
           "query": "dragon",
           "before": [
-            "Regidrago",
             "Dragonite",
-            "Charizard"
+            "Applin",
+            "Flapple"
           ],
           "after": [
             "Dragonite",
             "Dragonair",
-            "Regidrago"
+            "Applin"
           ]
         },
         {
           "query": "rock",
           "before": [
-            "Roggenrola",
-            "Rockruff",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol",
+            "Sudowoodo"
           ],
           "after": [
             "Rockruff",
-            "Roggenrola",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol"
           ]
         }
       ]
@@ -362,10 +362,10 @@
       "label": "boost-100",
       "overall": {
         "queries": 123,
-        "mrr": 0.9470867208672086,
+        "mrr": 0.9467028003613369,
         "recall": {
-          "3": 0.943089430894309,
-          "12": 0.9559312638580931
+          "3": 0.953929539295393,
+          "12": 0.9668945553091894
         }
       },
       "byCategory": {
@@ -382,23 +382,23 @@
           "mrr": 1,
           "recall": {
             "3": 1,
-            "12": 0.9953703703703702
+            "12": 1
           }
         },
         "generation": {
           "queries": 10,
-          "mrr": 0.95,
+          "mrr": 1,
           "recall": {
-            "3": 0.8666666666666668,
-            "12": 0.825
+            "3": 1,
+            "12": 0.975
           }
         },
         "ability": {
           "queries": 15,
-          "mrr": 0.9222222222222223,
+          "mrr": 0.9,
           "recall": {
-            "3": 0.9111111111111111,
-            "12": 0.9025252525252525
+            "3": 0.9333333333333332,
+            "12": 0.9202020202020201
           }
         },
         "species": {
@@ -419,10 +419,10 @@
         },
         "descriptive": {
           "queries": 13,
-          "mrr": 0.7173076923076922,
+          "mrr": 0.7008547008547008,
           "recall": {
-            "3": 0.6923076923076923,
-            "12": 0.8365384615384616
+            "3": 0.6666666666666667,
+            "12": 0.7980769230769231
           }
         },
         "natural": {
@@ -437,13 +437,13 @@
           "queries": 18,
           "mrr": 1,
           "recall": {
-            "3": 0.9814814814814814,
-            "12": 0.9305555555555556
+            "3": 1,
+            "12": 0.8749999999999999
           }
         },
         "short-prefix": {
           "queries": 30,
-          "mrr": 0.851111111111111,
+          "mrr": 0.8527777777777777,
           "recall": {
             "3": 0.8555555555555556,
             "12": 0.9777777777777777
@@ -452,52 +452,52 @@
       },
       "partialNamesFirst": 0.9375,
       "shortPrefixNamesFirst": 0.7666666666666667,
-      "bareTypePrecision": 0.9305555555555556,
+      "bareTypePrecision": 0.8749999999999999,
       "latency": {
         "count": 93,
-        "p50": 166.54629199998453,
-        "p95": 184.78358400000434,
-        "min": 146.46816700001364,
-        "max": 205.09570800000802
+        "p50": 169.57129200000782,
+        "p95": 258.2166670000006,
+        "min": 145.86187500000233,
+        "max": 3675.399458
       },
       "bareTypesChangedInTopResults": [
         {
           "query": "dark",
           "before": [
-            "Sableye",
+            "Maschiff",
             "Mabosstiff",
-            "Maschiff"
+            "Nickit"
           ],
           "after": [
             "Darkrai",
-            "Sableye",
+            "Maschiff",
             "Mabosstiff"
           ]
         },
         {
           "query": "dragon",
           "before": [
-            "Regidrago",
             "Dragonite",
-            "Charizard"
+            "Applin",
+            "Flapple"
           ],
           "after": [
             "Dragonite",
             "Dragonair",
-            "Regidrago"
+            "Applin"
           ]
         },
         {
           "query": "rock",
           "before": [
-            "Roggenrola",
-            "Rockruff",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol",
+            "Sudowoodo"
           ],
           "after": [
             "Rockruff",
-            "Roggenrola",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol"
           ]
         }
       ]
@@ -506,10 +506,10 @@
       "label": "boost-150",
       "overall": {
         "queries": 123,
-        "mrr": 0.9470867208672086,
+        "mrr": 0.9467028003613369,
         "recall": {
-          "3": 0.9457994579945799,
-          "12": 0.9559312638580931
+          "3": 0.9566395663956639,
+          "12": 0.9668945553091894
         }
       },
       "byCategory": {
@@ -526,23 +526,23 @@
           "mrr": 1,
           "recall": {
             "3": 1,
-            "12": 0.9953703703703702
+            "12": 1
           }
         },
         "generation": {
           "queries": 10,
-          "mrr": 0.95,
+          "mrr": 1,
           "recall": {
-            "3": 0.8666666666666668,
-            "12": 0.825
+            "3": 1,
+            "12": 0.975
           }
         },
         "ability": {
           "queries": 15,
-          "mrr": 0.9222222222222223,
+          "mrr": 0.9,
           "recall": {
-            "3": 0.9111111111111111,
-            "12": 0.9025252525252525
+            "3": 0.9333333333333332,
+            "12": 0.9202020202020201
           }
         },
         "species": {
@@ -563,10 +563,10 @@
         },
         "descriptive": {
           "queries": 13,
-          "mrr": 0.7173076923076922,
+          "mrr": 0.7008547008547008,
           "recall": {
-            "3": 0.6923076923076923,
-            "12": 0.8365384615384616
+            "3": 0.6666666666666667,
+            "12": 0.7980769230769231
           }
         },
         "natural": {
@@ -581,67 +581,67 @@
           "queries": 18,
           "mrr": 1,
           "recall": {
-            "3": 0.9814814814814814,
-            "12": 0.9305555555555556
+            "3": 1,
+            "12": 0.8749999999999999
           }
         },
         "short-prefix": {
           "queries": 30,
-          "mrr": 0.9177777777777777,
+          "mrr": 0.9344444444444444,
           "recall": {
-            "3": 0.9222222222222222,
+            "3": 0.9333333333333333,
             "12": 1
           }
         }
       },
       "partialNamesFirst": 1,
-      "shortPrefixNamesFirst": 0.8666666666666667,
-      "bareTypePrecision": 0.9305555555555556,
+      "shortPrefixNamesFirst": 0.9,
+      "bareTypePrecision": 0.8749999999999999,
       "latency": {
         "count": 93,
-        "p50": 166.97037499999715,
-        "p95": 188.49987500000861,
-        "min": 147.88904199999524,
-        "max": 222.0846249999886
+        "p50": 172.6297080000004,
+        "p95": 239.57354199999827,
+        "min": 147.48795800001244,
+        "max": 296.0766669999866
       },
       "bareTypesChangedInTopResults": [
         {
           "query": "dark",
           "before": [
-            "Sableye",
+            "Maschiff",
             "Mabosstiff",
-            "Maschiff"
+            "Nickit"
           ],
           "after": [
             "Darkrai",
-            "Sableye",
+            "Maschiff",
             "Mabosstiff"
           ]
         },
         {
           "query": "dragon",
           "before": [
-            "Regidrago",
             "Dragonite",
-            "Charizard"
+            "Applin",
+            "Flapple"
           ],
           "after": [
             "Dragonite",
             "Dragonair",
-            "Regidrago"
+            "Applin"
           ]
         },
         {
           "query": "rock",
           "before": [
-            "Roggenrola",
-            "Rockruff",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol",
+            "Sudowoodo"
           ],
           "after": [
             "Rockruff",
-            "Roggenrola",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol"
           ]
         }
       ]
@@ -650,10 +650,10 @@
       "label": "boost-200",
       "overall": {
         "queries": 123,
-        "mrr": 0.9470867208672086,
+        "mrr": 0.9467028003613369,
         "recall": {
-          "3": 0.9457994579945799,
-          "12": 0.9559312638580931
+          "3": 0.9566395663956639,
+          "12": 0.9676336536092633
         }
       },
       "byCategory": {
@@ -670,23 +670,23 @@
           "mrr": 1,
           "recall": {
             "3": 1,
-            "12": 0.9953703703703702
+            "12": 1
           }
         },
         "generation": {
           "queries": 10,
-          "mrr": 0.95,
+          "mrr": 1,
           "recall": {
-            "3": 0.8666666666666668,
-            "12": 0.825
+            "3": 1,
+            "12": 0.975
           }
         },
         "ability": {
           "queries": 15,
-          "mrr": 0.9222222222222223,
+          "mrr": 0.9,
           "recall": {
-            "3": 0.9111111111111111,
-            "12": 0.9025252525252525
+            "3": 0.9333333333333332,
+            "12": 0.9262626262626262
           }
         },
         "species": {
@@ -707,10 +707,10 @@
         },
         "descriptive": {
           "queries": 13,
-          "mrr": 0.7173076923076922,
+          "mrr": 0.7008547008547008,
           "recall": {
-            "3": 0.6923076923076923,
-            "12": 0.8365384615384616
+            "3": 0.6666666666666667,
+            "12": 0.7980769230769231
           }
         },
         "natural": {
@@ -725,8 +725,8 @@
           "queries": 18,
           "mrr": 1,
           "recall": {
-            "3": 0.9814814814814814,
-            "12": 0.9305555555555556
+            "3": 1,
+            "12": 0.8749999999999999
           }
         },
         "short-prefix": {
@@ -740,52 +740,52 @@
       },
       "partialNamesFirst": 1,
       "shortPrefixNamesFirst": 0.9,
-      "bareTypePrecision": 0.9305555555555556,
+      "bareTypePrecision": 0.8749999999999999,
       "latency": {
         "count": 93,
-        "p50": 164.37629200000083,
-        "p95": 190.29754200000002,
-        "min": 146.6862909999909,
-        "max": 205.8619999999937
+        "p50": 168.41095799999312,
+        "p95": 264.46058300000004,
+        "min": 146.01870800000324,
+        "max": 303.90516700000444
       },
       "bareTypesChangedInTopResults": [
         {
           "query": "dark",
           "before": [
-            "Sableye",
+            "Maschiff",
             "Mabosstiff",
-            "Maschiff"
+            "Nickit"
           ],
           "after": [
             "Darkrai",
-            "Sableye",
+            "Maschiff",
             "Mabosstiff"
           ]
         },
         {
           "query": "dragon",
           "before": [
-            "Regidrago",
             "Dragonite",
-            "Charizard"
+            "Applin",
+            "Flapple"
           ],
           "after": [
             "Dragonite",
             "Dragonair",
-            "Regidrago"
+            "Applin"
           ]
         },
         {
           "query": "rock",
           "before": [
-            "Roggenrola",
-            "Rockruff",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol",
+            "Sudowoodo"
           ],
           "after": [
             "Rockruff",
-            "Roggenrola",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol"
           ]
         }
       ]
@@ -794,10 +794,10 @@
       "label": "boost-300",
       "overall": {
         "queries": 123,
-        "mrr": 0.9470867208672086,
+        "mrr": 0.9467028003613369,
         "recall": {
-          "3": 0.9457994579945799,
-          "12": 0.9559312638580931
+          "3": 0.9566395663956639,
+          "12": 0.9668945553091894
         }
       },
       "byCategory": {
@@ -814,23 +814,23 @@
           "mrr": 1,
           "recall": {
             "3": 1,
-            "12": 0.9953703703703702
+            "12": 1
           }
         },
         "generation": {
           "queries": 10,
-          "mrr": 0.95,
+          "mrr": 1,
           "recall": {
-            "3": 0.8666666666666668,
-            "12": 0.825
+            "3": 1,
+            "12": 0.975
           }
         },
         "ability": {
           "queries": 15,
-          "mrr": 0.9222222222222223,
+          "mrr": 0.9,
           "recall": {
-            "3": 0.9111111111111111,
-            "12": 0.9025252525252525
+            "3": 0.9333333333333332,
+            "12": 0.9202020202020201
           }
         },
         "species": {
@@ -851,10 +851,10 @@
         },
         "descriptive": {
           "queries": 13,
-          "mrr": 0.7173076923076922,
+          "mrr": 0.7008547008547008,
           "recall": {
-            "3": 0.6923076923076923,
-            "12": 0.8365384615384616
+            "3": 0.6666666666666667,
+            "12": 0.7980769230769231
           }
         },
         "natural": {
@@ -869,8 +869,8 @@
           "queries": 18,
           "mrr": 1,
           "recall": {
-            "3": 0.9814814814814814,
-            "12": 0.9305555555555556
+            "3": 1,
+            "12": 0.8749999999999999
           }
         },
         "short-prefix": {
@@ -884,52 +884,52 @@
       },
       "partialNamesFirst": 1,
       "shortPrefixNamesFirst": 0.9666666666666667,
-      "bareTypePrecision": 0.9305555555555556,
+      "bareTypePrecision": 0.8749999999999999,
       "latency": {
         "count": 93,
-        "p50": 166.84141599999566,
-        "p95": 188.58545800001593,
-        "min": 148.89279199999874,
-        "max": 261.24174999999923
+        "p50": 169.31800000000112,
+        "p95": 240.2060000000056,
+        "min": 141.89983399999983,
+        "max": 3635.689167000004
       },
       "bareTypesChangedInTopResults": [
         {
           "query": "dark",
           "before": [
-            "Sableye",
+            "Maschiff",
             "Mabosstiff",
-            "Maschiff"
+            "Nickit"
           ],
           "after": [
             "Darkrai",
-            "Sableye",
+            "Maschiff",
             "Mabosstiff"
           ]
         },
         {
           "query": "dragon",
           "before": [
-            "Regidrago",
             "Dragonite",
-            "Charizard"
+            "Applin",
+            "Flapple"
           ],
           "after": [
             "Dragonite",
             "Dragonair",
-            "Regidrago"
+            "Applin"
           ]
         },
         {
           "query": "rock",
           "before": [
-            "Roggenrola",
-            "Rockruff",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol",
+            "Sudowoodo"
           ],
           "after": [
             "Rockruff",
-            "Roggenrola",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol"
           ]
         }
       ]
@@ -938,10 +938,10 @@
       "label": "boost-500",
       "overall": {
         "queries": 123,
-        "mrr": 0.9470867208672086,
+        "mrr": 0.9467028003613369,
         "recall": {
-          "3": 0.9457994579945799,
-          "12": 0.9559312638580931
+          "3": 0.9566395663956639,
+          "12": 0.9668945553091894
         }
       },
       "byCategory": {
@@ -958,23 +958,23 @@
           "mrr": 1,
           "recall": {
             "3": 1,
-            "12": 0.9953703703703702
+            "12": 1
           }
         },
         "generation": {
           "queries": 10,
-          "mrr": 0.95,
+          "mrr": 1,
           "recall": {
-            "3": 0.8666666666666668,
-            "12": 0.825
+            "3": 1,
+            "12": 0.975
           }
         },
         "ability": {
           "queries": 15,
-          "mrr": 0.9222222222222223,
+          "mrr": 0.9,
           "recall": {
-            "3": 0.9111111111111111,
-            "12": 0.9025252525252525
+            "3": 0.9333333333333332,
+            "12": 0.9202020202020201
           }
         },
         "species": {
@@ -995,10 +995,10 @@
         },
         "descriptive": {
           "queries": 13,
-          "mrr": 0.7173076923076922,
+          "mrr": 0.7008547008547008,
           "recall": {
-            "3": 0.6923076923076923,
-            "12": 0.8365384615384616
+            "3": 0.6666666666666667,
+            "12": 0.7980769230769231
           }
         },
         "natural": {
@@ -1013,8 +1013,8 @@
           "queries": 18,
           "mrr": 1,
           "recall": {
-            "3": 0.9814814814814814,
-            "12": 0.9305555555555556
+            "3": 1,
+            "12": 0.8749999999999999
           }
         },
         "short-prefix": {
@@ -1028,52 +1028,52 @@
       },
       "partialNamesFirst": 1,
       "shortPrefixNamesFirst": 0.9666666666666667,
-      "bareTypePrecision": 0.9305555555555556,
+      "bareTypePrecision": 0.8749999999999999,
       "latency": {
         "count": 93,
-        "p50": 169.02258300001267,
-        "p95": 202.17233299999498,
-        "min": 143.58400000000256,
-        "max": 219.27891699999964
+        "p50": 165.44354100000055,
+        "p95": 252.27412499999627,
+        "min": 147.29341600000043,
+        "max": 260.15079200000037
       },
       "bareTypesChangedInTopResults": [
         {
           "query": "dark",
           "before": [
-            "Sableye",
+            "Maschiff",
             "Mabosstiff",
-            "Maschiff"
+            "Nickit"
           ],
           "after": [
             "Darkrai",
-            "Sableye",
+            "Maschiff",
             "Mabosstiff"
           ]
         },
         {
           "query": "dragon",
           "before": [
-            "Regidrago",
             "Dragonite",
-            "Charizard"
+            "Applin",
+            "Flapple"
           ],
           "after": [
             "Dragonite",
             "Dragonair",
-            "Regidrago"
+            "Applin"
           ]
         },
         {
           "query": "rock",
           "before": [
-            "Roggenrola",
-            "Rockruff",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol",
+            "Sudowoodo"
           ],
           "after": [
             "Rockruff",
-            "Roggenrola",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol"
           ]
         }
       ]
@@ -1082,10 +1082,10 @@
       "label": "boost-1000",
       "overall": {
         "queries": 123,
-        "mrr": 0.9470867208672086,
+        "mrr": 0.9467028003613369,
         "recall": {
-          "3": 0.9457994579945799,
-          "12": 0.9559312638580931
+          "3": 0.9566395663956639,
+          "12": 0.9668945553091894
         }
       },
       "byCategory": {
@@ -1102,23 +1102,23 @@
           "mrr": 1,
           "recall": {
             "3": 1,
-            "12": 0.9953703703703702
+            "12": 1
           }
         },
         "generation": {
           "queries": 10,
-          "mrr": 0.95,
+          "mrr": 1,
           "recall": {
-            "3": 0.8666666666666668,
-            "12": 0.825
+            "3": 1,
+            "12": 0.975
           }
         },
         "ability": {
           "queries": 15,
-          "mrr": 0.9222222222222223,
+          "mrr": 0.9,
           "recall": {
-            "3": 0.9111111111111111,
-            "12": 0.9025252525252525
+            "3": 0.9333333333333332,
+            "12": 0.9202020202020201
           }
         },
         "species": {
@@ -1139,10 +1139,10 @@
         },
         "descriptive": {
           "queries": 13,
-          "mrr": 0.7173076923076922,
+          "mrr": 0.7008547008547008,
           "recall": {
-            "3": 0.6923076923076923,
-            "12": 0.8365384615384616
+            "3": 0.6666666666666667,
+            "12": 0.7980769230769231
           }
         },
         "natural": {
@@ -1157,8 +1157,8 @@
           "queries": 18,
           "mrr": 1,
           "recall": {
-            "3": 0.9814814814814814,
-            "12": 0.9305555555555556
+            "3": 1,
+            "12": 0.8749999999999999
           }
         },
         "short-prefix": {
@@ -1172,52 +1172,52 @@
       },
       "partialNamesFirst": 1,
       "shortPrefixNamesFirst": 0.9666666666666667,
-      "bareTypePrecision": 0.9305555555555556,
+      "bareTypePrecision": 0.8749999999999999,
       "latency": {
         "count": 93,
-        "p50": 167.7860830000027,
-        "p95": 198.08637499999895,
-        "min": 147.4997919999878,
-        "max": 234.06654100000742
+        "p50": 170.4464580000058,
+        "p95": 259.16466599999694,
+        "min": 147.07958300001337,
+        "max": 3679.8158750000002
       },
       "bareTypesChangedInTopResults": [
         {
           "query": "dark",
           "before": [
-            "Sableye",
+            "Maschiff",
             "Mabosstiff",
-            "Maschiff"
+            "Nickit"
           ],
           "after": [
             "Darkrai",
-            "Sableye",
+            "Maschiff",
             "Mabosstiff"
           ]
         },
         {
           "query": "dragon",
           "before": [
-            "Regidrago",
             "Dragonite",
-            "Charizard"
+            "Applin",
+            "Flapple"
           ],
           "after": [
             "Dragonite",
             "Dragonair",
-            "Regidrago"
+            "Applin"
           ]
         },
         {
           "query": "rock",
           "before": [
-            "Roggenrola",
-            "Rockruff",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol",
+            "Sudowoodo"
           ],
           "after": [
             "Rockruff",
-            "Roggenrola",
-            "Stonjourner"
+            "Coalossal",
+            "Carkol"
           ]
         }
       ]
@@ -1249,7 +1249,7 @@
         },
         "namesFirst": 1,
         "precision": 0.08333333333333333,
-        "ms": 301.68812499999996
+        "ms": 311.67329200000006
       },
       {
         "query": "Golbat",
@@ -1267,7 +1267,7 @@
         },
         "namesFirst": 1,
         "precision": 0.25,
-        "ms": 182.04491700000017
+        "ms": 184.87179100000003
       },
       {
         "query": "Farfetch'd",
@@ -1300,7 +1300,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 167.68779199999972
+        "ms": 154.7993750000005
       },
       {
         "query": "Ledyba",
@@ -1316,7 +1316,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 184.58508299999994
+        "ms": 186.31045799999993
       },
       {
         "query": "Dunsparce",
@@ -1334,7 +1334,7 @@
         },
         "namesFirst": 1,
         "precision": 0.25,
-        "ms": 159.41958299999897
+        "ms": 157.6381249999995
       },
       {
         "query": "Pupitar",
@@ -1353,7 +1353,7 @@
         },
         "namesFirst": 1,
         "precision": 0.2,
-        "ms": 154.81954199999927
+        "ms": 166.0789169999989
       },
       {
         "query": "Vigoroth",
@@ -1376,7 +1376,7 @@
         },
         "namesFirst": 1,
         "precision": 0.1111111111111111,
-        "ms": 173.77762500000063
+        "ms": 189.31687500000044
       },
       {
         "query": "Vibrava",
@@ -1394,7 +1394,7 @@
         },
         "namesFirst": 1,
         "precision": 0.25,
-        "ms": 176.20208300000013
+        "ms": 151.93033300000025
       },
       {
         "query": "Bagon",
@@ -1411,7 +1411,7 @@
         },
         "namesFirst": 1,
         "precision": 0.3333333333333333,
-        "ms": 168.64929199999824
+        "ms": 162.83658400000058
       },
       {
         "query": "Burmy",
@@ -1430,7 +1430,7 @@
         },
         "namesFirst": 1,
         "precision": 0.2,
-        "ms": 158.93491699999868
+        "ms": 156.84079100000235
       },
       {
         "query": "Croagunk",
@@ -1451,7 +1451,7 @@
         },
         "namesFirst": 1,
         "precision": 0.14285714285714285,
-        "ms": 157.74666699999943
+        "ms": 156.95704200000182
       },
       {
         "query": "Victini",
@@ -1467,7 +1467,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 165.37441699999908
+        "ms": 175.32408399999986
       },
       {
         "query": "Tympole",
@@ -1491,7 +1491,7 @@
         },
         "namesFirst": 1,
         "precision": 0.1,
-        "ms": 175.58804200000304
+        "ms": 229.02833299999475
       },
       {
         "query": "Gothitelle",
@@ -1509,7 +1509,7 @@
         },
         "namesFirst": 1,
         "precision": 0.25,
-        "ms": 147.30166699999972
+        "ms": 255.6030000000028
       },
       {
         "query": "Accelgor",
@@ -1526,7 +1526,7 @@
         },
         "namesFirst": 1,
         "precision": 0.3333333333333333,
-        "ms": 161.30837500000052
+        "ms": 179.84920799999963
       },
       {
         "query": "Greninja",
@@ -1544,7 +1544,7 @@
         },
         "namesFirst": 1,
         "precision": 0.25,
-        "ms": 169.79166599999735
+        "ms": 166.55066600000282
       },
       {
         "query": "Sylveon",
@@ -1552,13 +1552,13 @@
         "ranked": [
           "Sylveon",
           "Umbreon",
-          "Leafeon",
           "Glaceon",
           "Espeon",
-          "Vaporeon",
-          "Eevee",
+          "Leafeon",
           "Flareon",
-          "Jolteon"
+          "Jolteon",
+          "Vaporeon",
+          "Eevee"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -1567,7 +1567,7 @@
         },
         "namesFirst": 1,
         "precision": 0.1111111111111111,
-        "ms": 166.06595799999923
+        "ms": 179.5711250000022
       },
       {
         "query": "Oricorio",
@@ -1582,7 +1582,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 167.82795800000167
+        "ms": 170.5463329999984
       },
       {
         "query": "Jangmo-o",
@@ -1608,9 +1608,9 @@
           "Corviknight",
           "Corvisquire",
           "Rookidee",
+          "Tinkaton",
           "Bunnelby",
           "Braviary",
-          "Tinkaton",
           "Skarmory"
         ],
         "reciprocalRank": 1,
@@ -1620,7 +1620,7 @@
         },
         "namesFirst": 1,
         "precision": 0.14285714285714285,
-        "ms": 167.67229200000293
+        "ms": 173.2567080000008
       },
       {
         "query": "Cursola",
@@ -1636,7 +1636,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 179.42312500000116
+        "ms": 156.54895899999974
       },
       {
         "query": "Enamorus",
@@ -1651,7 +1651,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 169.67291699999623
+        "ms": 158.15479100000084
       },
       {
         "query": "Bramblin",
@@ -1671,15 +1671,15 @@
         },
         "namesFirst": 1,
         "precision": 0.16666666666666666,
-        "ms": 199.52700000000186
+        "ms": 156.3905409999934
       },
       {
         "query": "Flutter Mane",
         "category": "name",
         "ranked": [
           "Flutter Mane",
-          "Misdreavus",
           "Rapidash",
+          "Misdreavus",
           "Dartrix",
           "Meowstic",
           "Aerodactyl",
@@ -1756,7 +1756,7 @@
         },
         "namesFirst": 1,
         "precision": 0.16666666666666666,
-        "ms": 165.4945829999997
+        "ms": 175.73541699999623
       },
       {
         "query": "bug type",
@@ -1764,16 +1764,16 @@
         "ranked": [
           "Blipbug",
           "Nymble",
-          "Venonat",
           "Spidops",
+          "Rabsca",
           "Tarountula",
+          "Accelgor",
           "Rellor",
-          "Shedinja",
+          "Lokix",
+          "Dottler",
           "Beautifly",
-          "Parasect",
-          "Vivillon",
-          "Cutiefly",
-          "Yanmega"
+          "Venonat",
+          "Vivillon"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -1788,18 +1788,18 @@
         "query": "dark type",
         "category": "type",
         "ranked": [
-          "Darkrai",
           "Umbreon",
           "Mabosstiff",
-          "Vullaby",
+          "Darkrai",
           "Maschiff",
-          "Krokorok",
-          "Sableye",
-          "Kingambit",
-          "Ting-Lu",
-          "Thievul",
+          "Liepard",
           "Nickit",
-          "Obstagoon"
+          "Thievul",
+          "Krokorok",
+          "Vullaby",
+          "Meowscarada",
+          "Lokix",
+          "Overqwil"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -1815,17 +1815,17 @@
         "category": "type",
         "ranked": [
           "Dragonite",
-          "Regidrago",
           "Dragonair",
+          "Regidrago",
+          "Flapple",
           "Goomy",
-          "Dragalge",
-          "Drampa",
-          "Tatsugiri",
           "Frigibax",
-          "Dracozolt",
-          "Kyurem",
+          "Naganadel",
+          "Dragalge",
           "Arctibax",
-          "Gouging Fire"
+          "Applin",
+          "Noibat",
+          "Garchomp"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -1842,16 +1842,16 @@
         "ranked": [
           "Electabuzz",
           "Luxio",
-          "Manectric",
-          "Magnemite",
           "Electivire",
           "Elekid",
-          "Electrike",
           "Electrode",
+          "Electrike",
           "Pichu",
           "Flaaffy",
+          "Magnemite",
           "Tynamo",
-          "Pawmi"
+          "Pawmi",
+          "Eelektrik"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -1869,15 +1869,15 @@
           "Clefable",
           "Milcery",
           "Flabébé",
+          "Slurpuff",
           "Togepi",
           "Florges",
           "Clefairy",
-          "Wigglytuff",
           "Dachsbun",
-          "Jigglypuff",
-          "Togekiss",
           "Alcremie",
-          "Whimsicott"
+          "Togekiss",
+          "Fidough",
+          "Floette"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -1892,18 +1892,18 @@
         "query": "fighting type",
         "category": "type",
         "ranked": [
-          "Annihilape",
           "Kubfu",
-          "Grapploct",
-          "Hawlucha",
-          "Hitmontop",
-          "Timburr",
-          "Pawmot",
+          "Annihilape",
           "Crabrawler",
-          "Tyrogue",
+          "Clobbopus",
+          "Grapploct",
+          "Pawmot",
           "Pawmo",
-          "Sneasler",
-          "Mankey"
+          "Timburr",
+          "Hitmontop",
+          "Tyrogue",
+          "Mankey",
+          "Conkeldurr"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -1922,14 +1922,14 @@
           "Charcadet",
           "Darmanitan",
           "Crocalor",
-          "Fletchinder",
           "Flareon",
-          "Pombon",
           "Fuecoco",
-          "Typhlosion",
-          "Armarouge",
+          "Vulpix",
+          "Cyndaquil",
           "Simisear",
-          "Cyndaquil"
+          "Quilava",
+          "Pansear",
+          "Armarouge"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -1950,12 +1950,12 @@
           "Pidgeotto",
           "Staravia",
           "Archeops",
-          "Sigilyph",
           "Pidgeot",
           "Pelipper",
           "Wingull",
           "Dodrio",
-          "Yanmega"
+          "Yanmega",
+          "Fearow"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -1972,16 +1972,16 @@
         "ranked": [
           "Houndstone",
           "Greavard",
-          "Dreepy",
-          "Sinistcha",
+          "Gholdengo",
+          "Polteageist",
           "Misdreavus",
-          "Spiritomb",
-          "Litwick",
-          "Haunter",
+          "Dreepy",
           "Cofagrigus",
-          "Pumpkaboo",
-          "Flutter Mane",
-          "Aegislash"
+          "Runerigus",
+          "Gimmighoul",
+          "Skeledirge",
+          "Sinistea",
+          "Mismagius"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -1998,16 +1998,16 @@
         "ranked": [
           "Floragato",
           "Sprigatito",
-          "Fomantis",
           "Lurantis",
-          "Browt",
-          "Brambleghast",
-          "Skiddo",
+          "Meowscarada",
+          "Fomantis",
           "Arboliva",
-          "Whimsicott",
+          "Skiddo",
+          "Pansage",
+          "Snivy",
           "Sawsbuck",
-          "Rowlet",
-          "Meowscarada"
+          "Brambleghast",
+          "Servine"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2022,18 +2022,18 @@
         "query": "ground type",
         "category": "type",
         "ranked": [
+          "Torterra",
           "Toedscruel",
+          "Dugtrio",
           "Toedscool",
           "Seismitoad",
-          "Torterra",
-          "Dugtrio",
-          "Rhydon",
-          "Gabite",
-          "Landorus",
-          "Clodsire",
-          "Rhyhorn",
           "Silicobra",
-          "Marshtomp"
+          "Diglett",
+          "Drilbur",
+          "Gabite",
+          "Rhydon",
+          "Clodsire",
+          "Sandaconda"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2050,16 +2050,16 @@
         "ranked": [
           "Vanillish",
           "Glaceon",
-          "Cryogonal",
           "Eiscue",
-          "Spheal",
-          "Abomasnow",
-          "Regice",
-          "Vanillite",
-          "Avalugg",
+          "Frigibax",
           "Glalie",
+          "Vanillite",
           "Bergmite",
-          "Cubchoo"
+          "Cubchoo",
+          "Cryogonal",
+          "Beartic",
+          "Cetoddle",
+          "Regice"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2077,23 +2077,23 @@
           "Type: Null",
           "Silvally",
           "Terapagos",
+          "Purugly",
+          "Patrat",
           "Dubwool",
-          "Wigglytuff",
+          "Watchog",
           "Arboliva",
-          "Castform",
+          "Wigglytuff",
           "Maushold",
-          "Azurill",
-          "Whismur",
-          "Zorua",
-          "Porygon-Z"
+          "Farigiraf",
+          "Whismur"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.9166666666666666
+          "12": 1
         },
-        "namesFirst": 0,
-        "precision": 0.9166666666666666,
+        "namesFirst": 1,
+        "precision": 1,
         "ms": null
       },
       {
@@ -2104,14 +2104,14 @@
           "Nidoran♀ (female)",
           "Garbodor",
           "Nidorino",
-          "Clodsire",
-          "Foongus",
-          "Weezing",
-          "Toxicroak",
+          "Naganadel",
           "Koffing",
-          "Toxel",
-          "Skrelp",
-          "Drapion"
+          "Clodsire",
+          "Poipole",
+          "Muk",
+          "Foongus",
+          "Glimmet",
+          "Toxel"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2127,17 +2127,17 @@
         "category": "type",
         "ranked": [
           "Beheeyem",
-          "Kirlia",
           "Kadabra",
-          "Gardevoir",
           "Espathra",
           "Abra",
-          "Espurr",
           "Flittle",
+          "Espeon",
           "Elgyem",
-          "Farigiraf",
+          "Kirlia",
           "Gothita",
-          "Wyrdeer"
+          "Meowstic",
+          "Espurr",
+          "Gardevoir"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2154,16 +2154,16 @@
         "ranked": [
           "Roggenrola",
           "Regirock",
-          "Dwebble",
-          "Rhyperior",
-          "Rockruff",
-          "Graveler",
-          "Stonjourner",
-          "Omastar",
           "Garganacl",
-          "Rhydon",
+          "Dwebble",
+          "Naclstack",
+          "Cranidos",
           "Carkol",
-          "Naclstack"
+          "Nacli",
+          "Graveler",
+          "Sudowoodo",
+          "Stonjourner",
+          "Rhydon"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2178,18 +2178,18 @@
         "query": "steel type",
         "category": "type",
         "ranked": [
-          "Steelix",
           "Perrserker",
-          "Kingambit",
-          "Archaludon",
+          "Steelix",
+          "Klinklang",
+          "Klink",
+          "Copperajah",
+          "Cufant",
+          "Melmetal",
           "Tinkatink",
-          "Cobalion",
+          "Archaludon",
           "Aron",
           "Orthworm",
-          "Magnemite",
-          "Forretress",
-          "Melmetal",
-          "Scizor"
+          "Magnemite"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2205,17 +2205,17 @@
         "category": "type",
         "ranked": [
           "Seel",
-          "Panpour",
+          "Buizel",
           "Finizen",
           "Vaporeon",
-          "Buizel",
-          "Lotad",
+          "Panpour",
           "Drizzile",
-          "Palpitoad",
+          "Lotad",
           "Wugtrio",
+          "Palpitoad",
+          "Mudkip",
           "Simipour",
-          "Dondozo",
-          "Araquanid"
+          "Seismitoad"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2230,18 +2230,70 @@
         "query": "generation 1",
         "category": "generation",
         "ranked": [
+          "Mewtwo",
+          "Tauros",
+          "Weezing",
+          "Marowak",
+          "Meowth",
+          "Raichu",
           "Flareon",
-          "Jolteon",
-          "Scyther",
-          "Electrode",
-          "Ponyta",
-          "Tentacruel",
-          "Magnemite",
-          "Tentacool",
-          "Ninetales",
-          "Vileplume",
           "Gloom",
-          "Mew"
+          "Ninetales",
+          "Mew",
+          "Arceus",
+          "Watchog"
+        ],
+        "reciprocalRank": 1,
+        "recall": {
+          "3": 1,
+          "12": 0.8333333333333334
+        },
+        "namesFirst": 0,
+        "precision": 0.8333333333333334,
+        "ms": null
+      },
+      {
+        "query": "generation 2",
+        "category": "generation",
+        "ranked": [
+          "Donphan",
+          "Houndoom",
+          "Pineco",
+          "Wooper",
+          "Typhlosion",
+          "Furret",
+          "Meganium",
+          "Qwilfish",
+          "Tynamo",
+          "Elekid",
+          "Heracross",
+          "Yanma"
+        ],
+        "reciprocalRank": 1,
+        "recall": {
+          "3": 1,
+          "12": 0.9166666666666666
+        },
+        "namesFirst": 0,
+        "precision": 0.9166666666666666,
+        "ms": null
+      },
+      {
+        "query": "generation 3",
+        "category": "generation",
+        "ranked": [
+          "Rayquaza",
+          "Latios",
+          "Latias",
+          "Groudon",
+          "Kyogre",
+          "Absol",
+          "Castform",
+          "Camerupt",
+          "Mawile",
+          "Aggron",
+          "Manectric",
+          "Blaziken"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2253,73 +2305,21 @@
         "ms": null
       },
       {
-        "query": "generation 2",
-        "category": "generation",
-        "ranked": [
-          "Pineco",
-          "Qwilfish",
-          "Weezing",
-          "Tynamo",
-          "Elekid",
-          "Heracross",
-          "Yanma",
-          "Flaaffy",
-          "Jolteon",
-          "Scyther",
-          "Electrode",
-          "Ponyta"
-        ],
-        "reciprocalRank": 1,
-        "recall": {
-          "3": 0.6666666666666666,
-          "12": 0.5
-        },
-        "namesFirst": 0,
-        "precision": 0.5,
-        "ms": null
-      },
-      {
-        "query": "generation 3",
-        "category": "generation",
-        "ranked": [
-          "Cacturne",
-          "Swalot",
-          "Kangaskhan",
-          "Cradily",
-          "Lileep",
-          "Armaldo",
-          "Anorith",
-          "Crawdaunt",
-          "Corphish",
-          "Cloyster",
-          "Shellder",
-          "Kabutops"
-        ],
-        "reciprocalRank": 1,
-        "recall": {
-          "3": 0.6666666666666666,
-          "12": 0.6666666666666666
-        },
-        "namesFirst": 0,
-        "precision": 0.6666666666666666,
-        "ms": null
-      },
-      {
         "query": "generation 4",
         "category": "generation",
         "ranked": [
-          "Phione",
+          "Arceus",
           "Cresselia",
           "Darkrai",
-          "Regigigas",
-          "Dialga",
-          "Heatran",
-          "Azelf",
           "Rotom",
-          "Palkia",
           "Mesprit",
+          "Regigigas",
           "Uxie",
-          "Gallade"
+          "Heatran",
+          "Phione",
+          "Dialga",
+          "Palkia",
+          "Azelf"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2334,26 +2334,26 @@
         "query": "generation 5",
         "category": "generation",
         "ranked": [
-          "Exploud",
+          "Heatmor",
+          "Bouffalant",
+          "Accelgor",
+          "Shelmet",
           "Beartic",
           "Eelektross",
-          "Leavanny",
-          "Scolipede",
-          "Seismitoad",
-          "Woobat",
-          "Zebstrika",
-          "Unfezant",
-          "Samurott",
-          "Oshawott",
-          "Snivy"
+          "Ferrothorn",
+          "Klink",
+          "Klinklang",
+          "Karrablast",
+          "Duosion",
+          "Reuniclus"
         ],
-        "reciprocalRank": 0.5,
+        "reciprocalRank": 1,
         "recall": {
-          "3": 0.6666666666666666,
-          "12": 0.9166666666666666
+          "3": 1,
+          "12": 1
         },
-        "namesFirst": 0,
-        "precision": 0.9166666666666666,
+        "namesFirst": 1,
+        "precision": 1,
         "ms": null
       },
       {
@@ -2363,15 +2363,15 @@
           "Diancie",
           "Volcanion",
           "Xerneas",
+          "Goodra",
+          "Swirlix",
+          "Aromatisse",
+          "Slurpuff",
+          "Spritzee",
           "Gogoat",
-          "Flabébé",
-          "Florges",
-          "Vivillon",
-          "Greninja",
+          "Espurr",
           "Skiddo",
-          "Chesnaught",
-          "Quilladin",
-          "Delphox"
+          "Florges"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2387,25 +2387,25 @@
         "category": "generation",
         "ranked": [
           "Melmetal",
-          "Decidueye",
-          "Greninja",
-          "Diancie",
-          "Volcanion",
-          "Florges",
-          "Vivillon",
-          "Chesnaught",
-          "Delphox",
-          "Eelektross",
-          "Samurott",
-          "Heatran"
+          "Xurkitree",
+          "Cosmoem",
+          "Dhelmise",
+          "Silvally",
+          "Salazzle",
+          "Tsareena",
+          "Dewpider",
+          "Shiinotic",
+          "Araquanid",
+          "Ribombee",
+          "Crabrawler"
         ],
         "reciprocalRank": 1,
         "recall": {
-          "3": 0.6666666666666666,
-          "12": 0.16666666666666666
+          "3": 1,
+          "12": 1
         },
-        "namesFirst": 0,
-        "precision": 0.16666666666666666,
+        "namesFirst": 1,
+        "precision": 1,
         "ms": null
       },
       {
@@ -2413,17 +2413,17 @@
         "category": "generation",
         "ranked": [
           "Sneasler",
-          "Glastrier",
-          "Regidrago",
+          "Spectrier",
           "Regieleki",
           "Kubfu",
-          "Spectrier",
-          "Alcremie",
+          "Glastrier",
+          "Regidrago",
+          "Pincurchin",
+          "Stonjourner",
+          "Cufant",
           "Milcery",
-          "Perrserker",
-          "Grapploct",
-          "Boltund",
-          "Thievul"
+          "Copperajah",
+          "Polteageist"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2439,17 +2439,17 @@
         "category": "generation",
         "ranked": [
           "Dondozo",
-          "Cetoddle",
           "Houndstone",
           "Orthworm",
-          "Finizen",
-          "Espathra",
+          "Cetoddle",
           "Wugtrio",
+          "Espathra",
           "Flittle",
+          "Finizen",
           "Rellor",
           "Capsakid",
           "Klawf",
-          "Mabosstiff"
+          "Maschiff"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2468,14 +2468,14 @@
           "Gecqua",
           "Browt",
           "Jolteon",
-          "Drampa",
           "Zygarde",
-          "Omanyte",
+          "Drampa",
           "Passimian",
+          "Omanyte",
           "Mamoswine",
-          "Pyroar",
           "Piplup",
-          "Mareanie"
+          "Mareanie",
+          "Combusken"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2490,53 +2490,53 @@
         "query": "Adaptability",
         "category": "ability",
         "ranked": [
-          "Eevee",
           "Corphish",
+          "Eevee",
           "Porygon-Z",
-          "Basculin",
-          "Basculegion",
           "Kabutops",
-          "Glimmora",
+          "Basculegion",
+          "Basculin",
           "Wiglett",
-          "Beedrill",
-          "Silvally",
           "Noctowl",
-          "Lucario"
+          "Glimmora",
+          "Yungoos",
+          "Type: Null",
+          "Gumshoos"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.45454545454545453
+          "12": 0.6363636363636364
         },
         "namesFirst": 0,
-        "precision": 0.4166666666666667,
-        "ms": 158.01350000000093
+        "precision": 0.5833333333333334,
+        "ms": 173.24637500000244
       },
       {
         "query": "Blaze",
         "category": "ability",
         "ranked": [
-          "Typhlosion",
-          "Blaziken",
-          "Quilava",
-          "Torracat",
-          "Litten",
-          "Rapidash",
           "Tauros",
-          "Charmander",
+          "Quilava",
+          "Typhlosion",
+          "Rapidash",
+          "Litten",
+          "Blaziken",
           "Pignite",
           "Tepig",
           "Cyndaquil",
-          "Pombon"
+          "Charmander",
+          "Darmanitan",
+          "Torracat"
         ],
-        "reciprocalRank": 1,
+        "reciprocalRank": 0.5,
         "recall": {
-          "3": 1,
-          "12": 0.8333333333333334
+          "3": 0.6666666666666666,
+          "12": 0.75
         },
         "namesFirst": 0,
-        "precision": 0.8333333333333334,
-        "ms": 170.2721670000028
+        "precision": 0.75,
+        "ms": 176.40458400000352
       },
       {
         "query": "Damp",
@@ -2544,16 +2544,16 @@
         "ranked": [
           "Shroomish",
           "Parasect",
-          "Poliwag",
+          "Frillish",
           "Quagsire",
+          "Poliwag",
+          "Jellicent",
           "Wooper",
           "Politoed",
           "Poliwrath",
           "Poliwhirl",
-          "Frillish",
-          "Jellicent",
-          "Panpour",
-          "Paras"
+          "Paras",
+          "Drifloon"
         ],
         "reciprocalRank": 0.5,
         "recall": {
@@ -2562,7 +2562,7 @@
         },
         "namesFirst": 0,
         "precision": 0.8333333333333334,
-        "ms": 161.72329199999513
+        "ms": 177.56433300000208
       },
       {
         "query": "Emergency Exit",
@@ -2615,13 +2615,13 @@
           "Arctibax",
           "Cubone",
           "Mawile",
-          "Glastrier",
           "Shieldon",
           "Gligar",
           "Druddigon",
-          "Yamask",
+          "Glastrier",
           "Bastiodon",
-          "Smoochum"
+          "Smoochum",
+          "Buizel"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2637,8 +2637,8 @@
         "category": "ability",
         "ranked": [
           "Raboot",
-          "Scorbunny",
-          "Cinderace"
+          "Cinderace",
+          "Scorbunny"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2647,46 +2647,46 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 168.3842910000094
+        "ms": 241.7156249999971
       },
       {
         "query": "Mold Breaker",
         "category": "ability",
         "ranked": [
-          "Basculin",
           "Basculegion",
-          "Ogerpon",
+          "Basculin",
           "Veluza",
           "Tinkatink",
           "Pinsir",
-          "Tinkaton",
+          "Ogerpon",
           "Tinkatuff",
+          "Tinkaton",
           "Fraxure",
           "Axew",
-          "Emboar",
-          "Pancham"
+          "Sawk",
+          "Throh"
         ],
         "reciprocalRank": 1,
         "recall": {
-          "3": 0.6666666666666666,
-          "12": 0.8333333333333334
+          "3": 1,
+          "12": 0.9166666666666666
         },
         "namesFirst": 0,
-        "precision": 0.8333333333333334,
+        "precision": 0.9166666666666666,
         "ms": null
       },
       {
         "query": "Pickpocket",
         "category": "ability",
         "ranked": [
-          "Shroodle",
           "Tinkatink",
+          "Shroodle",
           "Sneasel",
-          "Tinkaton",
           "Tinkatuff",
+          "Tinkaton",
+          "Impidimp",
           "Grimmsnarl",
           "Morgrem",
-          "Impidimp",
           "Barbaracle",
           "Binacle",
           "Nuzleaf",
@@ -2699,7 +2699,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 165.08041599999706
+        "ms": 255.92558299998927
       },
       {
         "query": "Purifying Salt",
@@ -2745,18 +2745,18 @@
         "query": "Slow Start",
         "category": "ability",
         "ranked": [
-          "Regigigas",
           "Varoom",
+          "Regigigas",
           "Rhyhorn",
           "Feebas",
-          "Lugia",
           "Whismur",
+          "Lugia",
           "Ivysaur",
           "Dratini",
           "Manaphy",
           "Volcarona",
-          "Dragapult",
-          "Mienshao"
+          "Mienshao",
+          "Quilladin"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2788,26 +2788,26 @@
         "category": "ability",
         "ranked": [
           "Exeggcute",
-          "Solosis",
           "Dialga",
           "Palkia",
-          "Beheeyem",
-          "Elgyem",
           "Exeggutor",
-          "Latias",
-          "Oranguru",
-          "Latios",
           "Rabsca",
-          "Dottler"
+          "Blipbug",
+          "Dottler",
+          "Solosis",
+          "Latias",
+          "Orbeetle",
+          "Tapu Fini",
+          "Tapu Koko"
         ],
-        "reciprocalRank": 0.3333333333333333,
+        "reciprocalRank": 0.5,
         "recall": {
-          "3": 0.3333333333333333,
-          "12": 0.5833333333333334
+          "3": 0.6666666666666666,
+          "12": 0.6666666666666666
         },
         "namesFirst": 0,
-        "precision": 0.5833333333333334,
-        "ms": 157.61824999999953
+        "precision": 0.6666666666666666,
+        "ms": 162.5460000000021
       },
       {
         "query": "Unseen Fist",
@@ -2835,9 +2835,9 @@
           "Drifloon",
           "Wurmple",
           "Chansey",
-          "Machop",
           "Rampardos",
           "Rufflet",
+          "Machop",
           "Electrode",
           "Pelipper",
           "Morpeko"
@@ -2863,8 +2863,8 @@
           "Bellibolt",
           "Bellossom",
           "Chatot",
-          "Exeggutor",
           "Morpeko",
+          "Exeggutor",
           "Chikorita",
           "Flutter Mane"
         ],
@@ -2883,16 +2883,16 @@
         "ranked": [
           "Hatenna",
           "Blissey",
-          "Tauros",
           "Dragonite",
-          "Meganium",
           "Pelipper",
           "Arboliva",
           "Sylveon",
+          "Meganium",
           "Gloom",
-          "Mantine",
           "Donphan",
-          "Lycanroc"
+          "Mantine",
+          "Lycanroc",
+          "Slowking"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -2940,9 +2940,9 @@
           "Rampardos",
           "Electabuzz",
           "Phantump",
+          "Heracross",
           "Natu",
           "Aipom",
-          "Heracross",
           "Treecko",
           "Grovyle"
         ],
@@ -2963,8 +2963,8 @@
           "Mudsdale",
           "Magneton",
           "Rattata",
-          "Tentacruel",
           "Barboach",
+          "Tentacruel",
           "Gastly",
           "Koffing",
           "Victreebel",
@@ -2993,10 +2993,10 @@
           "Mismagius",
           "Ho-oh",
           "Wynaut",
-          "Hattrem",
-          "Charmander",
           "Kirlia",
-          "Indeedee"
+          "Charmander",
+          "Indeedee",
+          "Clefable"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -3039,8 +3039,8 @@
         "ranked": [
           "Garchomp",
           "Pidgeot",
-          "Golurk",
           "Inteleon",
+          "Golurk",
           "Dragapult",
           "Gyarados",
           "Machoke",
@@ -3048,7 +3048,7 @@
           "Machamp",
           "Darmanitan",
           "Tinkaton",
-          "Voltorb"
+          "Electivire"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -3099,8 +3099,8 @@
           "Jigglypuff",
           "Poipole",
           "Overqwil",
-          "Umbreon",
-          "Basculegion"
+          "Basculegion",
+          "Umbreon"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -3120,8 +3120,8 @@
           "Vivillon",
           "Talonflame",
           "Scyther",
-          "Vileplume",
           "Scovillain",
+          "Vileplume",
           "Dustox",
           "Scraggy",
           "Scrafty",
@@ -3145,8 +3145,8 @@
           "Sliggoo",
           "Shellos",
           "Slugma",
-          "Shellder",
           "Flutter Mane",
+          "Shellder",
           "Wiglett",
           "Squirtle",
           "Turtonator",
@@ -3172,11 +3172,11 @@
           "Smeargle",
           "Pikachu",
           "Togepi",
-          "Persian",
           "Luvdisc",
+          "Persian",
+          "Cofagrigus",
           "Murkrow",
           "Darumaka",
-          "Cofagrigus",
           "Klang",
           "Swoobat"
         ],
@@ -3232,7 +3232,7 @@
         },
         "namesFirst": 0,
         "precision": 0.6,
-        "ms": 168.9182920000021
+        "ms": 155.72108300001128
       },
       {
         "query": "pika",
@@ -3247,7 +3247,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 159.26183299999684
+        "ms": 167.78612499999872
       },
       {
         "query": "bulba",
@@ -3262,7 +3262,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 159.0347080000065
+        "ms": 164.03608400000667
       },
       {
         "query": "mew",
@@ -3279,7 +3279,7 @@
         },
         "namesFirst": 1,
         "precision": 0.6666666666666666,
-        "ms": 156.0846249999886
+        "ms": 161.98450000000594
       },
       {
         "query": "bulb",
@@ -3302,7 +3302,7 @@
         },
         "namesFirst": 1,
         "precision": 0.1111111111111111,
-        "ms": 164.50258299999405
+        "ms": 155.42520800000057
       },
       {
         "query": "seel",
@@ -3318,7 +3318,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 158.76004200000898
+        "ms": 146.25387499999488
       },
       {
         "query": "pich",
@@ -3333,7 +3333,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 167.84929200001352
+        "ms": 149.48879099999613
       },
       {
         "query": "mudk",
@@ -3349,7 +3349,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 199.20129199999792
+        "ms": 165.37495800000033
       },
       {
         "query": "balt",
@@ -3362,7 +3362,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 161.29116700000304
+        "ms": 151.1085410000087
       },
       {
         "query": "mism",
@@ -3378,7 +3378,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 161.8562499999971
+        "ms": 157.60587500000838
       },
       {
         "query": "panp",
@@ -3391,7 +3391,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 157.55529200000456
+        "ms": 160.24725000000035
       },
       {
         "query": "klan",
@@ -3406,7 +3406,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 165.53616599999077
+        "ms": 147.971000000005
       },
       {
         "query": "inka",
@@ -3419,24 +3419,24 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 166.91920899999968
+        "ms": 152.22804099999485
       },
       {
         "query": "type",
         "category": "partial",
         "ranked": [
           "Type: Null",
-          "Dondozo",
-          "Orthworm",
-          "Zeraora",
-          "Xerneas",
-          "Victini",
+          "Silicobra",
           "Numel",
           "Ogerpon",
+          "Gholdengo",
+          "Arctibax",
+          "Frigibax",
+          "Dondozo",
           "Houndstone",
-          "Espathra",
-          "Flittle",
-          "Mabosstiff"
+          "Varoom",
+          "Glimmet",
+          "Orthworm"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -3445,7 +3445,7 @@
         },
         "namesFirst": 1,
         "precision": 0.08333333333333333,
-        "ms": 171.3399170000048
+        "ms": 172.74391699998523
       },
       {
         "query": "hatt",
@@ -3460,7 +3460,7 @@
         },
         "namesFirst": 0,
         "precision": 1,
-        "ms": 163.88141699999687
+        "ms": 233.09212499999558
       },
       {
         "query": "mabo",
@@ -3473,7 +3473,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 156.9410829999979
+        "ms": 245.89462500001537
       },
       {
         "query": "bug dark",
@@ -3482,16 +3482,16 @@
         "ranked": [
           "Lokix",
           "Venonat",
-          "Shedinja",
-          "Mabosstiff",
-          "Maschiff",
-          "Thievul",
-          "Nickit",
-          "Wyrdeer",
-          "Parasect",
           "Iron Valiant",
-          "Sneasel",
-          "Darkrai"
+          "Shedinja",
+          "Maschiff",
+          "Mabosstiff",
+          "Nickit",
+          "Thievul",
+          "Liepard",
+          "Umbreon",
+          "Mr. Rime",
+          "Parasect"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -3509,16 +3509,16 @@
         "ranked": [
           "Umbreon",
           "Obstagoon",
+          "Gengar",
+          "Zorua",
           "Linoone",
           "Darkrai",
-          "Sableye",
-          "Kingambit",
+          "Haunter",
           "Zigzagoon",
-          "Zorua",
-          "Krokorok",
-          "Gengar",
+          "Maschiff",
           "Mabosstiff",
-          "Maschiff"
+          "Nickit",
+          "Thievul"
         ],
         "reciprocalRank": 0.5,
         "recall": {
@@ -3535,19 +3535,19 @@
         "judgment": "A Type pair is taken to mean Pokémon with both Types.",
         "ranked": [
           "Jolteon",
-          "Magnemite",
           "Electabuzz",
-          "Magneton",
-          "Manectric",
-          "Pikachu",
+          "Magnemite",
           "Pichu",
-          "Heliolisk",
           "Electrode",
+          "Magneton",
           "Flaaffy",
-          "Raichu",
-          "Luxio"
+          "Pikachu",
+          "Heliolisk",
+          "Luxio",
+          "Elekid",
+          "Mareep"
         ],
-        "reciprocalRank": 0.125,
+        "reciprocalRank": 0.1111111111111111,
         "recall": {
           "3": 0,
           "12": 0.5
@@ -3565,22 +3565,22 @@
           "Gouging Fire",
           "Charmander",
           "Quilava",
-          "Litleo",
-          "Fletchinder",
-          "Magmar",
-          "Typhlosion",
-          "Darmanitan",
           "Vaporeon",
-          "Lampent",
-          "Charizard"
+          "Magmar",
+          "Fuecoco",
+          "Darmanitan",
+          "Cyndaquil",
+          "Ceruledge",
+          "Magcargo",
+          "Leafeon"
         ],
-        "reciprocalRank": 0.2,
+        "reciprocalRank": 0,
         "recall": {
           "3": 0,
-          "12": 0.5
+          "12": 0
         },
         "namesFirst": 0,
-        "precision": 0.08333333333333333,
+        "precision": 0,
         "ms": null
       },
       {
@@ -3589,17 +3589,17 @@
         "judgment": "A Type pair is taken to mean Pokémon with both Types.",
         "ranked": [
           "Gouging Fire",
-          "Fletchinder",
           "Flareon",
           "Ponyta",
-          "Houndoom",
+          "Fletchinder",
           "Quilava",
           "Cyndaquil",
+          "Houndoom",
           "Fuecoco",
-          "Fomantis",
           "Darmanitan",
-          "Litten",
-          "Pombon"
+          "Sprigatito",
+          "Floragato",
+          "Magmar"
         ],
         "reciprocalRank": 0,
         "recall": {
@@ -3618,15 +3618,15 @@
           "Piloswine",
           "Mamoswine",
           "Abomasnow",
+          "Snover",
           "Swinub",
           "Wooper",
-          "Snover",
-          "Snom",
-          "Avalugg",
           "Clodsire",
-          "Cryogonal",
-          "Arctozolt",
-          "Aurorus"
+          "Calyrex",
+          "Articuno",
+          "Avalugg",
+          "Snom",
+          "Cryogonal"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -3645,15 +3645,15 @@
           "Gardevoir",
           "Kirlia",
           "Hatterene",
-          "Ralts",
-          "Mime Jr.",
           "Metang",
-          "Scream Tail",
-          "Indeedee",
-          "Tapu Lele",
-          "Rapidash",
           "Hattrem",
-          "Hatenna"
+          "Ralts",
+          "Hatenna",
+          "Mime Jr.",
+          "Rapidash",
+          "Scream Tail",
+          "Tapu Lele",
+          "Indeedee"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -3671,20 +3671,20 @@
         "ranked": [
           "Steelix",
           "Archaludon",
-          "Dialga",
-          "Duraludon",
-          "Tinkatink",
-          "Perrserker",
           "Arctibax",
-          "Baxcalibur",
-          "Kingambit",
+          "Dialga",
+          "Perrserker",
+          "Tinkatink",
           "Goomy",
+          "Duraludon",
           "Orthworm",
-          "Goodra"
+          "Scizor",
+          "Baxcalibur",
+          "Tinkatuff"
         ],
         "reciprocalRank": 0.5,
         "recall": {
-          "3": 0.6666666666666666,
+          "3": 0.3333333333333333,
           "12": 1
         },
         "namesFirst": 0,
@@ -3758,10 +3758,10 @@
           "Buizel",
           "Drizzile",
           "Finizen",
+          "Wugtrio",
+          "Floatzel",
           "Goldeen",
-          "Gecqua",
-          "Poliwhirl",
-          "Wugtrio"
+          "Poliwhirl"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -3780,15 +3780,15 @@
           "Bulbasaur",
           "Eldegoss",
           "Venusaur",
-          "Arboliva",
           "Ivysaur",
           "Sunkern",
+          "Arboliva",
           "Ferroseed",
           "Breloom",
           "Oddish",
-          "Maractus",
+          "Exeggcute",
           "Trumbeak",
-          "Exeggcute"
+          "Maractus"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -3812,9 +3812,9 @@
           "Toucannon",
           "Pupitar",
           "Garbodor",
-          "Pumpkaboo",
-          "Salandit",
           "Trubbish",
+          "Salandit",
+          "Pumpkaboo",
           "Greavard"
         ],
         "reciprocalRank": 1,
@@ -3836,13 +3836,13 @@
           "Ivysaur",
           "Squirtle",
           "Charmander",
-          "Gallade",
           "Slowpoke",
+          "Gallade",
           "Gardevoir",
           "Moltres",
           "Spinarak",
-          "Magmar",
-          "Togekiss"
+          "Togekiss",
+          "Magmar"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -3867,8 +3867,8 @@
           "Magnezone",
           "Garbodor",
           "Azumarill",
-          "Magcargo",
           "Tinkatink",
+          "Magcargo",
           "Darmanitan"
         ],
         "reciprocalRank": 1,
@@ -3917,13 +3917,13 @@
           "Dusclops",
           "Dedenne",
           "Drowzee",
-          "Togekiss",
           "Toxtricity",
+          "Togekiss",
           "Delcatty",
-          "Cutiefly",
           "Delphox",
-          "Latios",
-          "Froslass"
+          "Froslass",
+          "Dracovish",
+          "Porygon"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -3949,8 +3949,8 @@
           "Fidough",
           "Bonsly",
           "Vivillon",
-          "Tentacruel",
-          "Darmanitan"
+          "Darmanitan",
+          "Volcarona"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -4000,9 +4000,9 @@
           "Gloom",
           "Jynx",
           "Buizel",
-          "Cutiefly",
-          "Snubbull",
+          "Forretress",
           "Celesteela",
+          "Snubbull",
           "Arctozolt",
           "Tandemaus"
         ],
@@ -4046,18 +4046,18 @@
         "query": "bug",
         "category": "bare-type",
         "ranked": [
-          "Parasect",
-          "Shedinja",
           "Blipbug",
-          "Venonat",
+          "Parasect",
+          "Rabsca",
           "Beautifly",
-          "Ledyba",
-          "Paras",
+          "Shedinja",
+          "Spewpa",
+          "Karrablast",
           "Vivillon",
           "Rellor",
           "Spidops",
           "Tarountula",
-          "Nymble"
+          "Lokix"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -4066,59 +4066,59 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 195.1004590000084
+        "ms": 159.88316600001417
       },
       {
         "query": "dark",
         "category": "bare-type",
         "ranked": [
-          "Sableye",
-          "Mabosstiff",
           "Maschiff",
-          "Thievul",
+          "Mabosstiff",
           "Nickit",
+          "Thievul",
+          "Liepard",
           "Umbreon",
-          "Krokorok",
-          "Kingambit",
-          "Sneasel",
-          "Honchkrow",
-          "Murkrow",
-          "Darkrai"
+          "Sableye",
+          "Noctowl",
+          "Haunter",
+          "Wobbuffet",
+          "Kommo-o",
+          "Krokorok"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 1
+          "12": 0.6666666666666666
         },
-        "namesFirst": 1,
-        "precision": 1,
-        "ms": 164.306333000015
+        "namesFirst": 0,
+        "precision": 0.6666666666666666,
+        "ms": 181.95287499998813
       },
       {
         "query": "dragon",
         "category": "bare-type",
         "ranked": [
-          "Regidrago",
           "Dragonite",
-          "Charizard",
-          "Drampa",
+          "Applin",
+          "Flapple",
+          "Naganadel",
           "Goomy",
-          "Dragalge",
+          "Regidrago",
           "Dragonair",
-          "Goodra",
-          "Dachsbun",
-          "Magikarp",
-          "Sylveon",
-          "Tatsugiri"
+          "Dragalge",
+          "Garchomp",
+          "Charizard",
+          "Noibat",
+          "Dachsbun"
         ],
         "reciprocalRank": 1,
         "recall": {
-          "3": 0.6666666666666666,
-          "12": 0.6666666666666666
+          "3": 1,
+          "12": 0.8333333333333334
         },
         "namesFirst": 0,
-        "precision": 0.6666666666666666,
-        "ms": 180.19379099999787
+        "precision": 0.8333333333333334,
+        "ms": 176.99004100001184
       },
       {
         "query": "electric",
@@ -4130,12 +4130,12 @@
           "Jolteon",
           "Electrike",
           "Flaaffy",
-          "Magnemite",
           "Elekid",
-          "Pikachu",
           "Luxio",
-          "Manectric",
-          "Electivire"
+          "Pikachu",
+          "Electivire",
+          "Magnemite",
+          "Mareep"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -4144,7 +4144,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 169.75445899998886
+        "ms": 161.6314999999886
       },
       {
         "query": "fairy",
@@ -4152,51 +4152,51 @@
         "ranked": [
           "Clefable",
           "Milcery",
+          "Slurpuff",
           "Fidough",
+          "Swirlix",
+          "Aromatisse",
+          "Spritzee",
           "Flabébé",
           "Dachsbun",
           "Alcremie",
-          "Xerneas",
           "Florges",
-          "Indeedee",
-          "Jigglypuff",
-          "Togepi",
-          "Clefairy"
+          "Togepi"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.9166666666666666
+          "12": 1
         },
-        "namesFirst": 0,
-        "precision": 0.9166666666666666,
-        "ms": 176.35483300001943
+        "namesFirst": 1,
+        "precision": 1,
+        "ms": 150.65166699999827
       },
       {
         "query": "fighting",
         "category": "bare-type",
         "ranked": [
-          "Annihilape",
-          "Okidogi",
-          "Iron Valiant",
-          "Sneasler",
-          "Kubfu",
-          "Croagunk",
           "Tyrogue",
-          "Lopunny",
-          "Combusken",
+          "Annihilape",
+          "Kubfu",
+          "Conkeldurr",
           "Grapploct",
-          "Hawlucha",
-          "Cobalion"
+          "Clobbopus",
+          "Crabrawler",
+          "Gurdurr",
+          "Timburr",
+          "Hitmontop",
+          "Sinistcha",
+          "Houndstone"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.9166666666666666
+          "12": 0.8333333333333334
         },
         "namesFirst": 0,
-        "precision": 0.9166666666666666,
-        "ms": 158.8291249999893
+        "precision": 0.8333333333333334,
+        "ms": 159.73770800000057
       },
       {
         "query": "fire",
@@ -4206,14 +4206,14 @@
           "Charmander",
           "Charcadet",
           "Magmar",
-          "Charizard",
           "Fuecoco",
           "Darmanitan",
-          "Litten",
           "Cyndaquil",
           "Crocalor",
           "Scorbunny",
-          "Volcarona"
+          "Tepig",
+          "Infernape",
+          "Chimchar"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -4222,59 +4222,59 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 162.01558300000033
+        "ms": 181.8552909999853
       },
       {
         "query": "flying",
         "category": "bare-type",
         "ranked": [
+          "Corvisquire",
+          "Rookidee",
+          "Corviknight",
+          "Flygon",
           "Crobat",
           "Pidgeot",
-          "Corviknight",
-          "Unfezant",
+          "Centiskorch",
+          "Sizzlipede",
+          "Bagon",
+          "Chimecho",
           "Pelipper",
-          "Talonflame",
-          "Ducklett",
-          "Masquerain",
-          "Yanma",
-          "Golbat",
-          "Pidgeotto",
-          "Flygon"
+          "Sneasler"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.9166666666666666
+          "12": 0.5
         },
         "namesFirst": 0,
-        "precision": 0.9166666666666666,
-        "ms": 165.35133400000632
+        "precision": 0.5,
+        "ms": 187.27216600000975
       },
       {
         "query": "ghost",
         "category": "bare-type",
         "ranked": [
           "Greavard",
-          "Spectrier",
+          "Polteageist",
+          "Sinistea",
+          "Gholdengo",
           "Houndstone",
-          "Sinistcha",
-          "Dreepy",
-          "Ceruledge",
-          "Dhelmise",
+          "Spectrier",
           "Dusclops",
-          "Litwick",
+          "Dreepy",
           "Farigiraf",
-          "Heliolisk",
-          "Helioptile"
+          "Brambleghast",
+          "Bramblin",
+          "Wyrdeer"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.75
+          "12": 0.8333333333333334
         },
         "namesFirst": 0,
-        "precision": 0.75,
-        "ms": 164.61966699999175
+        "precision": 0.8333333333333334,
+        "ms": 172.40716600001906
       },
       {
         "query": "grass",
@@ -4284,14 +4284,14 @@
           "Sprigatito",
           "Nuzleaf",
           "Fomantis",
-          "Browt",
-          "Sinistcha",
-          "Brambleghast",
-          "Bramblin",
-          "Celebi",
-          "Meganium",
-          "Victreebel",
-          "Rowlet"
+          "Pansage",
+          "Lurantis",
+          "Simisage",
+          "Capsakid",
+          "Meowscarada",
+          "Rillaboom",
+          "Thwackey",
+          "Gogoat"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -4300,59 +4300,59 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 174.15979199999128
+        "ms": 169.22570800001267
       },
       {
         "query": "ground",
         "category": "bare-type",
         "ranked": [
-          "Marshtomp",
-          "Piloswine",
-          "Iron Treads",
-          "Clodsire",
-          "Toedscruel",
-          "Toedscool",
+          "Sandaconda",
           "Silicobra",
           "Drilbur",
-          "Gabite",
-          "Whiscash",
-          "Larvitar",
-          "Phanpy"
+          "Phanpy",
+          "Dugtrio",
+          "Regirock",
+          "Marshtomp",
+          "Treecko",
+          "Tyranitar",
+          "Piloswine",
+          "Iron Jugulis",
+          "Kingambit"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 1
+          "12": 0.5833333333333334
         },
-        "namesFirst": 1,
-        "precision": 1,
-        "ms": 168.57587500000955
+        "namesFirst": 0,
+        "precision": 0.5833333333333334,
+        "ms": 164.14137499997742
       },
       {
         "query": "ice",
         "category": "bare-type",
         "ranked": [
           "Glalie",
-          "Seel",
-          "Regice",
           "Vanillish",
           "Glaceon",
-          "Articuno",
-          "Spheal",
-          "Cryogonal",
-          "Dewgong",
+          "Seel",
           "Eiscue",
+          "Regice",
+          "Articuno",
           "Bergmite",
-          "Snover"
+          "Cryogonal",
+          "Vanillite",
+          "Spheal",
+          "Dewgong"
         ],
         "reciprocalRank": 1,
         "recall": {
-          "3": 0.6666666666666666,
+          "3": 1,
           "12": 0.9166666666666666
         },
         "namesFirst": 0,
         "precision": 0.9166666666666666,
-        "ms": 183.9523329999938
+        "ms": 165.4089999999851
       },
       {
         "query": "normal",
@@ -4362,23 +4362,23 @@
           "Tandemaus",
           "Lechonk",
           "Dubwool",
-          "Fletchling",
-          "Zorua",
-          "Whismur",
-          "Azurill",
-          "Ditto",
-          "Pecharunt",
-          "Archaludon",
-          "Poltchageist"
+          "Greedent",
+          "Skwovet",
+          "Silvally",
+          "Patrat",
+          "Watchog",
+          "Purugly",
+          "Deoxys",
+          "Whismur"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.6666666666666666
+          "12": 0.9166666666666666
         },
         "namesFirst": 0,
-        "precision": 0.6666666666666666,
-        "ms": 161.54937500000233
+        "precision": 0.9166666666666666,
+        "ms": 167.5202500000014
       },
       {
         "query": "poison",
@@ -4386,16 +4386,16 @@
         "ranked": [
           "Nidoran♂ (male)",
           "Nidoran♀ (female)",
-          "Toxicroak",
           "Koffing",
-          "Weezing",
-          "Venomoth",
           "Nidorino",
           "Garbodor",
-          "Croagunk",
-          "Gastly",
-          "Foongus",
-          "Victreebel"
+          "Toxicroak",
+          "Naganadel",
+          "Venomoth",
+          "Poipole",
+          "Muk",
+          "Clodsire",
+          "Croagunk"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -4404,7 +4404,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 178.1878330000036
+        "ms": 156.7405420000141
       },
       {
         "query": "psychic",
@@ -4412,16 +4412,16 @@
         "ranked": [
           "Beheeyem",
           "Kadabra",
+          "Meowstic",
+          "Espathra",
+          "Abra",
+          "Elgyem",
+          "Gothita",
           "Gardevoir",
           "Espurr",
-          "Abra",
-          "Espathra",
-          "Elgyem",
-          "Meowstic",
-          "Gothita",
-          "Kirlia",
+          "Reuniclus",
           "Grumpig",
-          "Gothitelle"
+          "Duosion"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -4430,33 +4430,33 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 166.5199169999978
+        "ms": 240.6229160000221
       },
       {
         "query": "rock",
         "category": "bare-type",
         "ranked": [
-          "Roggenrola",
-          "Rockruff",
-          "Stonjourner",
           "Coalossal",
           "Carkol",
+          "Sudowoodo",
+          "Roggenrola",
+          "Cranidos",
+          "Nacli",
+          "Garganacl",
+          "Naclstack",
+          "Rockruff",
           "Drednaw",
-          "Binacle",
           "Dwebble",
-          "Regirock",
-          "Rhyperior",
-          "Shieldon",
-          "Relicanth"
+          "Happiny"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 1
+          "12": 0.9166666666666666
         },
-        "namesFirst": 1,
-        "precision": 1,
-        "ms": 172.24541600001976
+        "namesFirst": 0,
+        "precision": 0.9166666666666666,
+        "ms": 254.99583300002269
       },
       {
         "query": "steel",
@@ -4464,42 +4464,42 @@
         "ranked": [
           "Steelix",
           "Perrserker",
-          "Cobalion",
           "Aron",
-          "Kingambit",
+          "Cufant",
+          "Copperajah",
+          "Melmetal",
+          "Klink",
+          "Klinklang",
           "Tinkatink",
-          "Archaludon",
-          "Durant",
-          "Ferrothorn",
-          "Escavalier",
-          "Lairon",
-          "Forretress"
+          "Haxorus",
+          "Blitzle",
+          "Zebstrika"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 1
+          "12": 0.75
         },
-        "namesFirst": 1,
-        "precision": 1,
-        "ms": 170.02558299998054
+        "namesFirst": 0,
+        "precision": 0.75,
+        "ms": 170.24987500000861
       },
       {
         "query": "water",
         "category": "bare-type",
         "ranked": [
           "Vaporeon",
-          "Tentacool",
           "Panpour",
-          "Dracovish",
-          "Tapu Fini",
-          "Araquanid",
-          "Dewpider",
+          "Tentacool",
+          "Drizzile",
+          "Popplio",
           "Clawitzer",
           "Clauncher",
-          "Simipour",
-          "Relicanth",
-          "Lotad"
+          "Buizel",
+          "Mudkip",
+          "Lotad",
+          "Blastoise",
+          "Seismitoad"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -4508,7 +4508,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 168.6258749999979
+        "ms": 172.96141699998407
       },
       {
         "query": "arc",
@@ -4534,7 +4534,7 @@
         },
         "namesFirst": 0,
         "precision": 0.3333333333333333,
-        "ms": 166.97212500000023
+        "ms": 161.85579100000905
       },
       {
         "query": "bel",
@@ -4547,7 +4547,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 155.70149999999558
+        "ms": 148.72891600002185
       },
       {
         "query": "bra",
@@ -4560,7 +4560,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 157.5578749999986
+        "ms": 156.05262499998207
       },
       {
         "query": "che",
@@ -4573,7 +4573,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 154.38045799999963
+        "ms": 163.08112500002608
       },
       {
         "query": "cle",
@@ -4586,7 +4586,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 163.99700000000303
+        "ms": 177.5626250000205
       },
       {
         "query": "cra",
@@ -4599,7 +4599,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 163.75566700001946
+        "ms": 171.4527919999964
       },
       {
         "query": "del",
@@ -4616,7 +4616,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 161.1644999999844
+        "ms": 143.66358299998683
       },
       {
         "query": "dus",
@@ -4629,7 +4629,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 219.7347080000036
+        "ms": 166.388208999997
       },
       {
         "query": "fer",
@@ -4642,7 +4642,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 163.01620800001547
+        "ms": 159.67787500002305
       },
       {
         "query": "fro",
@@ -4661,7 +4661,7 @@
         },
         "namesFirst": 0,
         "precision": 0.4,
-        "ms": 161.14466600000742
+        "ms": 169.84679199999664
       },
       {
         "query": "gol",
@@ -4674,7 +4674,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 159.4821670000092
+        "ms": 152.36845799998264
       },
       {
         "query": "gre",
@@ -4687,7 +4687,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 142.6341249999823
+        "ms": 166.3998750000028
       },
       {
         "query": "hou",
@@ -4702,7 +4702,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 158.03595800002222
+        "ms": 148.05033299999195
       },
       {
         "query": "lil",
@@ -4719,7 +4719,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 168.53429100001813
+        "ms": 164.57320800001617
       },
       {
         "query": "man",
@@ -4737,7 +4737,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 146.49741599999834
+        "ms": 145.72999999998137
       },
       {
         "query": "meo",
@@ -4750,7 +4750,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 170.53491700001177
+        "ms": 237.59124999999767
       },
       {
         "query": "min",
@@ -4763,7 +4763,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 160.0872499999823
+        "ms": 229.12879200000316
       },
       {
         "query": "nid",
@@ -4776,7 +4776,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 147.09812500001863
+        "ms": 156.8690840000054
       },
       {
         "query": "pan",
@@ -4791,7 +4791,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 146.48004200001014
+        "ms": 167.03637499999604
       },
       {
         "query": "pol",
@@ -4810,7 +4810,7 @@
         },
         "namesFirst": 0,
         "precision": 1,
-        "ms": 168.00149999998393
+        "ms": 156.5881249999802
       },
       {
         "query": "qua",
@@ -4823,7 +4823,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 150.93275000000722
+        "ms": 161.73824999999488
       },
       {
         "query": "san",
@@ -4836,7 +4836,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 157.5279580000206
+        "ms": 149.49950000000536
       },
       {
         "query": "sea",
@@ -4844,16 +4844,16 @@
         "ranked": [
           "Huntail",
           "Gorebyss",
-          "Kyogre",
           "Pelipper",
+          "Wingull",
+          "Phione",
           "Relicanth",
           "Corsola",
           "Seel",
-          "Phione",
           "Lugia",
-          "Lanturn",
           "Cradily",
-          "Wingull"
+          "Sharpedo",
+          "Anorith"
         ],
         "reciprocalRank": 0,
         "recall": {
@@ -4862,7 +4862,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 174.80670799998916
+        "ms": 185.21662500000093
       },
       {
         "query": "sil",
@@ -4875,7 +4875,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 163.20629199998803
+        "ms": 160.72287500000675
       },
       {
         "query": "sno",
@@ -4890,7 +4890,7 @@
         },
         "namesFirst": 0,
         "precision": 1,
-        "ms": 166.72179099998903
+        "ms": 149.19200000001
       },
       {
         "query": "spi",
@@ -4905,7 +4905,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 167.65520900001866
+        "ms": 165.39520799997263
       },
       {
         "query": "tan",
@@ -4920,7 +4920,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 153.80870799999684
+        "ms": 199.82508300000336
       },
       {
         "query": "tog",
@@ -4935,7 +4935,7 @@
         },
         "namesFirst": 0,
         "precision": 1,
-        "ms": 158.99425000001793
+        "ms": 173.82687499996973
       },
       {
         "query": "urs",
@@ -4948,7 +4948,7 @@
         },
         "namesFirst": 0,
         "precision": 0,
-        "ms": 154.42233299999498
+        "ms": 180.44104199996218
       },
       {
         "query": "vol",
@@ -4966,7 +4966,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 167.5918750000128
+        "ms": 170.96241700003156
       }
     ],
     "boost-300": [
@@ -4994,7 +4994,7 @@
         },
         "namesFirst": 1,
         "precision": 0.08333333333333333,
-        "ms": 184.46791699999994
+        "ms": 183.50154199999997
       },
       {
         "query": "Golbat",
@@ -5012,7 +5012,7 @@
         },
         "namesFirst": 1,
         "precision": 0.25,
-        "ms": 167.5430839999999
+        "ms": 177.80349999999999
       },
       {
         "query": "Farfetch'd",
@@ -5045,7 +5045,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 167.2176670000008
+        "ms": 150.84279100000003
       },
       {
         "query": "Ledyba",
@@ -5061,7 +5061,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 261.24174999999923
+        "ms": 141.89983399999983
       },
       {
         "query": "Dunsparce",
@@ -5079,7 +5079,7 @@
         },
         "namesFirst": 1,
         "precision": 0.25,
-        "ms": 165.34291699999994
+        "ms": 169.31800000000112
       },
       {
         "query": "Pupitar",
@@ -5098,7 +5098,7 @@
         },
         "namesFirst": 1,
         "precision": 0.2,
-        "ms": 159.65429100000074
+        "ms": 174.46720800000185
       },
       {
         "query": "Vigoroth",
@@ -5121,7 +5121,7 @@
         },
         "namesFirst": 1,
         "precision": 0.1111111111111111,
-        "ms": 183.71179200000188
+        "ms": 174.76204199999847
       },
       {
         "query": "Vibrava",
@@ -5139,7 +5139,7 @@
         },
         "namesFirst": 1,
         "precision": 0.25,
-        "ms": 186.24374999999782
+        "ms": 168.151167
       },
       {
         "query": "Bagon",
@@ -5156,7 +5156,7 @@
         },
         "namesFirst": 1,
         "precision": 0.3333333333333333,
-        "ms": 169.94874999999956
+        "ms": 166.65049999999974
       },
       {
         "query": "Burmy",
@@ -5175,7 +5175,7 @@
         },
         "namesFirst": 1,
         "precision": 0.2,
-        "ms": 159.07129200000054
+        "ms": 172.96758299999783
       },
       {
         "query": "Croagunk",
@@ -5196,7 +5196,7 @@
         },
         "namesFirst": 1,
         "precision": 0.14285714285714285,
-        "ms": 157.4420420000024
+        "ms": 171.46600000000035
       },
       {
         "query": "Victini",
@@ -5212,7 +5212,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 157.43687499999942
+        "ms": 232.28233300000284
       },
       {
         "query": "Tympole",
@@ -5236,7 +5236,7 @@
         },
         "namesFirst": 1,
         "precision": 0.1,
-        "ms": 173.84216699999888
+        "ms": 246.77641699999367
       },
       {
         "query": "Gothitelle",
@@ -5254,7 +5254,7 @@
         },
         "namesFirst": 1,
         "precision": 0.25,
-        "ms": 162.02458399999887
+        "ms": 169.02475000000413
       },
       {
         "query": "Accelgor",
@@ -5271,7 +5271,7 @@
         },
         "namesFirst": 1,
         "precision": 0.3333333333333333,
-        "ms": 178.58395799999562
+        "ms": 156.2627499999944
       },
       {
         "query": "Greninja",
@@ -5289,7 +5289,7 @@
         },
         "namesFirst": 1,
         "precision": 0.25,
-        "ms": 174.03383399999439
+        "ms": 175.8857910000006
       },
       {
         "query": "Sylveon",
@@ -5297,13 +5297,13 @@
         "ranked": [
           "Sylveon",
           "Umbreon",
-          "Leafeon",
           "Glaceon",
           "Espeon",
-          "Vaporeon",
-          "Eevee",
+          "Leafeon",
           "Flareon",
-          "Jolteon"
+          "Jolteon",
+          "Vaporeon",
+          "Eevee"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5312,7 +5312,7 @@
         },
         "namesFirst": 1,
         "precision": 0.1111111111111111,
-        "ms": 164.77383299999929
+        "ms": 184.32466600000043
       },
       {
         "query": "Oricorio",
@@ -5327,7 +5327,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 159.42808399999922
+        "ms": 181.32616699999926
       },
       {
         "query": "Jangmo-o",
@@ -5353,9 +5353,9 @@
           "Corviknight",
           "Corvisquire",
           "Rookidee",
+          "Tinkaton",
           "Bunnelby",
           "Braviary",
-          "Tinkaton",
           "Skarmory"
         ],
         "reciprocalRank": 1,
@@ -5365,7 +5365,7 @@
         },
         "namesFirst": 1,
         "precision": 0.14285714285714285,
-        "ms": 208.466124999999
+        "ms": 159.17874999999913
       },
       {
         "query": "Cursola",
@@ -5381,7 +5381,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 173.52883299999667
+        "ms": 173.64312500000233
       },
       {
         "query": "Enamorus",
@@ -5396,7 +5396,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 159.54437499999767
+        "ms": 169.67012499999691
       },
       {
         "query": "Bramblin",
@@ -5416,15 +5416,15 @@
         },
         "namesFirst": 1,
         "precision": 0.16666666666666666,
-        "ms": 159.75912500000413
+        "ms": 170.2152500000011
       },
       {
         "query": "Flutter Mane",
         "category": "name",
         "ranked": [
           "Flutter Mane",
-          "Misdreavus",
           "Rapidash",
+          "Misdreavus",
           "Dartrix",
           "Meowstic",
           "Aerodactyl",
@@ -5501,7 +5501,7 @@
         },
         "namesFirst": 1,
         "precision": 0.16666666666666666,
-        "ms": 160.13454199999978
+        "ms": 157.97474999999395
       },
       {
         "query": "bug type",
@@ -5509,16 +5509,16 @@
         "ranked": [
           "Blipbug",
           "Nymble",
-          "Venonat",
           "Spidops",
+          "Rabsca",
           "Tarountula",
+          "Accelgor",
           "Rellor",
-          "Shedinja",
+          "Lokix",
+          "Dottler",
           "Beautifly",
-          "Parasect",
-          "Vivillon",
-          "Cutiefly",
-          "Yanmega"
+          "Venonat",
+          "Vivillon"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5533,18 +5533,18 @@
         "query": "dark type",
         "category": "type",
         "ranked": [
-          "Darkrai",
           "Umbreon",
           "Mabosstiff",
-          "Vullaby",
+          "Darkrai",
           "Maschiff",
-          "Krokorok",
-          "Sableye",
-          "Kingambit",
-          "Ting-Lu",
-          "Thievul",
+          "Liepard",
           "Nickit",
-          "Obstagoon"
+          "Thievul",
+          "Krokorok",
+          "Vullaby",
+          "Meowscarada",
+          "Lokix",
+          "Overqwil"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5560,17 +5560,17 @@
         "category": "type",
         "ranked": [
           "Dragonite",
-          "Regidrago",
           "Dragonair",
+          "Regidrago",
+          "Flapple",
           "Goomy",
-          "Dragalge",
-          "Drampa",
-          "Tatsugiri",
           "Frigibax",
-          "Dracozolt",
-          "Kyurem",
+          "Naganadel",
+          "Dragalge",
           "Arctibax",
-          "Gouging Fire"
+          "Applin",
+          "Noibat",
+          "Garchomp"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5587,16 +5587,16 @@
         "ranked": [
           "Electabuzz",
           "Luxio",
-          "Manectric",
-          "Magnemite",
           "Electivire",
           "Elekid",
-          "Electrike",
           "Electrode",
+          "Electrike",
           "Pichu",
           "Flaaffy",
+          "Magnemite",
           "Tynamo",
-          "Pawmi"
+          "Pawmi",
+          "Eelektrik"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5614,15 +5614,15 @@
           "Clefable",
           "Milcery",
           "Flabébé",
+          "Slurpuff",
           "Togepi",
           "Florges",
           "Clefairy",
-          "Wigglytuff",
           "Dachsbun",
-          "Jigglypuff",
-          "Togekiss",
           "Alcremie",
-          "Whimsicott"
+          "Togekiss",
+          "Fidough",
+          "Floette"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5637,18 +5637,18 @@
         "query": "fighting type",
         "category": "type",
         "ranked": [
-          "Annihilape",
           "Kubfu",
-          "Grapploct",
-          "Hawlucha",
-          "Hitmontop",
-          "Timburr",
-          "Pawmot",
+          "Annihilape",
           "Crabrawler",
-          "Tyrogue",
+          "Clobbopus",
+          "Grapploct",
+          "Pawmot",
           "Pawmo",
-          "Sneasler",
-          "Mankey"
+          "Timburr",
+          "Hitmontop",
+          "Tyrogue",
+          "Mankey",
+          "Conkeldurr"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5667,14 +5667,14 @@
           "Charcadet",
           "Darmanitan",
           "Crocalor",
-          "Fletchinder",
           "Flareon",
-          "Pombon",
           "Fuecoco",
-          "Typhlosion",
-          "Armarouge",
+          "Vulpix",
+          "Cyndaquil",
           "Simisear",
-          "Cyndaquil"
+          "Quilava",
+          "Pansear",
+          "Armarouge"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5695,12 +5695,12 @@
           "Pidgeotto",
           "Staravia",
           "Archeops",
-          "Sigilyph",
           "Pidgeot",
           "Pelipper",
           "Wingull",
           "Dodrio",
-          "Yanmega"
+          "Yanmega",
+          "Fearow"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5717,16 +5717,16 @@
         "ranked": [
           "Houndstone",
           "Greavard",
-          "Dreepy",
-          "Sinistcha",
+          "Gholdengo",
+          "Polteageist",
           "Misdreavus",
-          "Spiritomb",
-          "Litwick",
-          "Haunter",
+          "Dreepy",
           "Cofagrigus",
-          "Pumpkaboo",
-          "Flutter Mane",
-          "Aegislash"
+          "Runerigus",
+          "Gimmighoul",
+          "Skeledirge",
+          "Sinistea",
+          "Mismagius"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5743,16 +5743,16 @@
         "ranked": [
           "Floragato",
           "Sprigatito",
-          "Fomantis",
           "Lurantis",
-          "Browt",
-          "Brambleghast",
-          "Skiddo",
+          "Meowscarada",
+          "Fomantis",
           "Arboliva",
-          "Whimsicott",
+          "Skiddo",
+          "Pansage",
+          "Snivy",
           "Sawsbuck",
-          "Rowlet",
-          "Meowscarada"
+          "Brambleghast",
+          "Servine"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5767,18 +5767,18 @@
         "query": "ground type",
         "category": "type",
         "ranked": [
+          "Torterra",
           "Toedscruel",
+          "Dugtrio",
           "Toedscool",
           "Seismitoad",
-          "Torterra",
-          "Dugtrio",
-          "Rhydon",
-          "Gabite",
-          "Landorus",
-          "Clodsire",
-          "Rhyhorn",
           "Silicobra",
-          "Marshtomp"
+          "Diglett",
+          "Drilbur",
+          "Gabite",
+          "Rhydon",
+          "Clodsire",
+          "Sandaconda"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5795,16 +5795,16 @@
         "ranked": [
           "Vanillish",
           "Glaceon",
-          "Cryogonal",
           "Eiscue",
-          "Spheal",
-          "Abomasnow",
-          "Regice",
-          "Vanillite",
-          "Avalugg",
+          "Frigibax",
           "Glalie",
+          "Vanillite",
           "Bergmite",
-          "Cubchoo"
+          "Cubchoo",
+          "Cryogonal",
+          "Beartic",
+          "Cetoddle",
+          "Regice"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5822,23 +5822,23 @@
           "Type: Null",
           "Silvally",
           "Terapagos",
+          "Purugly",
+          "Patrat",
           "Dubwool",
-          "Wigglytuff",
+          "Watchog",
           "Arboliva",
-          "Castform",
+          "Wigglytuff",
           "Maushold",
-          "Azurill",
-          "Whismur",
-          "Zorua",
-          "Porygon-Z"
+          "Farigiraf",
+          "Whismur"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.9166666666666666
+          "12": 1
         },
-        "namesFirst": 0,
-        "precision": 0.9166666666666666,
+        "namesFirst": 1,
+        "precision": 1,
         "ms": null
       },
       {
@@ -5849,14 +5849,14 @@
           "Nidoran♀ (female)",
           "Garbodor",
           "Nidorino",
-          "Clodsire",
-          "Foongus",
-          "Weezing",
-          "Toxicroak",
+          "Naganadel",
           "Koffing",
-          "Toxel",
-          "Skrelp",
-          "Drapion"
+          "Clodsire",
+          "Poipole",
+          "Muk",
+          "Foongus",
+          "Glimmet",
+          "Toxel"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5872,17 +5872,17 @@
         "category": "type",
         "ranked": [
           "Beheeyem",
-          "Kirlia",
           "Kadabra",
-          "Gardevoir",
           "Espathra",
           "Abra",
-          "Espurr",
           "Flittle",
+          "Espeon",
           "Elgyem",
-          "Farigiraf",
+          "Kirlia",
           "Gothita",
-          "Wyrdeer"
+          "Meowstic",
+          "Espurr",
+          "Gardevoir"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5899,16 +5899,16 @@
         "ranked": [
           "Roggenrola",
           "Regirock",
-          "Dwebble",
-          "Rhyperior",
-          "Rockruff",
-          "Graveler",
-          "Stonjourner",
-          "Omastar",
           "Garganacl",
-          "Rhydon",
+          "Dwebble",
+          "Naclstack",
+          "Cranidos",
           "Carkol",
-          "Naclstack"
+          "Nacli",
+          "Graveler",
+          "Sudowoodo",
+          "Stonjourner",
+          "Rhydon"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5923,18 +5923,18 @@
         "query": "steel type",
         "category": "type",
         "ranked": [
-          "Steelix",
           "Perrserker",
-          "Kingambit",
-          "Archaludon",
+          "Steelix",
+          "Klinklang",
+          "Klink",
+          "Copperajah",
+          "Cufant",
+          "Melmetal",
           "Tinkatink",
-          "Cobalion",
+          "Archaludon",
           "Aron",
           "Orthworm",
-          "Magnemite",
-          "Forretress",
-          "Melmetal",
-          "Scizor"
+          "Magnemite"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5950,17 +5950,17 @@
         "category": "type",
         "ranked": [
           "Seel",
-          "Panpour",
+          "Buizel",
           "Finizen",
           "Vaporeon",
-          "Buizel",
-          "Lotad",
+          "Panpour",
           "Drizzile",
-          "Palpitoad",
+          "Lotad",
           "Wugtrio",
+          "Palpitoad",
+          "Mudkip",
           "Simipour",
-          "Dondozo",
-          "Araquanid"
+          "Seismitoad"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5975,18 +5975,70 @@
         "query": "generation 1",
         "category": "generation",
         "ranked": [
+          "Mewtwo",
+          "Tauros",
+          "Weezing",
+          "Marowak",
+          "Meowth",
+          "Raichu",
           "Flareon",
-          "Jolteon",
-          "Scyther",
-          "Electrode",
-          "Ponyta",
-          "Tentacruel",
-          "Magnemite",
-          "Tentacool",
-          "Ninetales",
-          "Vileplume",
           "Gloom",
-          "Mew"
+          "Ninetales",
+          "Mew",
+          "Arceus",
+          "Watchog"
+        ],
+        "reciprocalRank": 1,
+        "recall": {
+          "3": 1,
+          "12": 0.8333333333333334
+        },
+        "namesFirst": 0,
+        "precision": 0.8333333333333334,
+        "ms": null
+      },
+      {
+        "query": "generation 2",
+        "category": "generation",
+        "ranked": [
+          "Donphan",
+          "Houndoom",
+          "Pineco",
+          "Wooper",
+          "Typhlosion",
+          "Furret",
+          "Meganium",
+          "Qwilfish",
+          "Tynamo",
+          "Elekid",
+          "Heracross",
+          "Yanma"
+        ],
+        "reciprocalRank": 1,
+        "recall": {
+          "3": 1,
+          "12": 0.9166666666666666
+        },
+        "namesFirst": 0,
+        "precision": 0.9166666666666666,
+        "ms": null
+      },
+      {
+        "query": "generation 3",
+        "category": "generation",
+        "ranked": [
+          "Rayquaza",
+          "Latios",
+          "Latias",
+          "Groudon",
+          "Kyogre",
+          "Absol",
+          "Castform",
+          "Camerupt",
+          "Mawile",
+          "Aggron",
+          "Manectric",
+          "Blaziken"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -5998,73 +6050,21 @@
         "ms": null
       },
       {
-        "query": "generation 2",
-        "category": "generation",
-        "ranked": [
-          "Pineco",
-          "Qwilfish",
-          "Weezing",
-          "Tynamo",
-          "Elekid",
-          "Heracross",
-          "Yanma",
-          "Flaaffy",
-          "Jolteon",
-          "Scyther",
-          "Electrode",
-          "Ponyta"
-        ],
-        "reciprocalRank": 1,
-        "recall": {
-          "3": 0.6666666666666666,
-          "12": 0.5
-        },
-        "namesFirst": 0,
-        "precision": 0.5,
-        "ms": null
-      },
-      {
-        "query": "generation 3",
-        "category": "generation",
-        "ranked": [
-          "Cacturne",
-          "Swalot",
-          "Kangaskhan",
-          "Cradily",
-          "Lileep",
-          "Armaldo",
-          "Anorith",
-          "Crawdaunt",
-          "Corphish",
-          "Cloyster",
-          "Shellder",
-          "Kabutops"
-        ],
-        "reciprocalRank": 1,
-        "recall": {
-          "3": 0.6666666666666666,
-          "12": 0.6666666666666666
-        },
-        "namesFirst": 0,
-        "precision": 0.6666666666666666,
-        "ms": null
-      },
-      {
         "query": "generation 4",
         "category": "generation",
         "ranked": [
-          "Phione",
+          "Arceus",
           "Cresselia",
           "Darkrai",
-          "Regigigas",
-          "Dialga",
-          "Heatran",
-          "Azelf",
           "Rotom",
-          "Palkia",
           "Mesprit",
+          "Regigigas",
           "Uxie",
-          "Gallade"
+          "Heatran",
+          "Phione",
+          "Dialga",
+          "Palkia",
+          "Azelf"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -6079,26 +6079,26 @@
         "query": "generation 5",
         "category": "generation",
         "ranked": [
-          "Exploud",
+          "Heatmor",
+          "Bouffalant",
+          "Accelgor",
+          "Shelmet",
           "Beartic",
           "Eelektross",
-          "Leavanny",
-          "Scolipede",
-          "Seismitoad",
-          "Woobat",
-          "Zebstrika",
-          "Unfezant",
-          "Samurott",
-          "Oshawott",
-          "Snivy"
+          "Ferrothorn",
+          "Klink",
+          "Klinklang",
+          "Karrablast",
+          "Duosion",
+          "Reuniclus"
         ],
-        "reciprocalRank": 0.5,
+        "reciprocalRank": 1,
         "recall": {
-          "3": 0.6666666666666666,
-          "12": 0.9166666666666666
+          "3": 1,
+          "12": 1
         },
-        "namesFirst": 0,
-        "precision": 0.9166666666666666,
+        "namesFirst": 1,
+        "precision": 1,
         "ms": null
       },
       {
@@ -6108,15 +6108,15 @@
           "Diancie",
           "Volcanion",
           "Xerneas",
+          "Goodra",
+          "Swirlix",
+          "Aromatisse",
+          "Slurpuff",
+          "Spritzee",
           "Gogoat",
-          "Flabébé",
-          "Florges",
-          "Vivillon",
-          "Greninja",
+          "Espurr",
           "Skiddo",
-          "Chesnaught",
-          "Quilladin",
-          "Delphox"
+          "Florges"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -6132,25 +6132,25 @@
         "category": "generation",
         "ranked": [
           "Melmetal",
-          "Decidueye",
-          "Greninja",
-          "Diancie",
-          "Volcanion",
-          "Florges",
-          "Vivillon",
-          "Chesnaught",
-          "Delphox",
-          "Eelektross",
-          "Samurott",
-          "Heatran"
+          "Xurkitree",
+          "Cosmoem",
+          "Dhelmise",
+          "Silvally",
+          "Salazzle",
+          "Tsareena",
+          "Dewpider",
+          "Shiinotic",
+          "Araquanid",
+          "Ribombee",
+          "Crabrawler"
         ],
         "reciprocalRank": 1,
         "recall": {
-          "3": 0.6666666666666666,
-          "12": 0.16666666666666666
+          "3": 1,
+          "12": 1
         },
-        "namesFirst": 0,
-        "precision": 0.16666666666666666,
+        "namesFirst": 1,
+        "precision": 1,
         "ms": null
       },
       {
@@ -6158,17 +6158,17 @@
         "category": "generation",
         "ranked": [
           "Sneasler",
-          "Glastrier",
-          "Regidrago",
+          "Spectrier",
           "Regieleki",
           "Kubfu",
-          "Spectrier",
-          "Alcremie",
+          "Glastrier",
+          "Regidrago",
+          "Pincurchin",
+          "Stonjourner",
+          "Cufant",
           "Milcery",
-          "Perrserker",
-          "Grapploct",
-          "Boltund",
-          "Thievul"
+          "Copperajah",
+          "Polteageist"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -6184,17 +6184,17 @@
         "category": "generation",
         "ranked": [
           "Dondozo",
-          "Cetoddle",
           "Houndstone",
           "Orthworm",
-          "Finizen",
-          "Espathra",
+          "Cetoddle",
           "Wugtrio",
+          "Espathra",
           "Flittle",
+          "Finizen",
           "Rellor",
           "Capsakid",
           "Klawf",
-          "Mabosstiff"
+          "Maschiff"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -6213,14 +6213,14 @@
           "Gecqua",
           "Browt",
           "Jolteon",
-          "Drampa",
           "Zygarde",
-          "Omanyte",
+          "Drampa",
           "Passimian",
+          "Omanyte",
           "Mamoswine",
-          "Pyroar",
           "Piplup",
-          "Mareanie"
+          "Mareanie",
+          "Combusken"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -6235,53 +6235,53 @@
         "query": "Adaptability",
         "category": "ability",
         "ranked": [
-          "Eevee",
           "Corphish",
+          "Eevee",
           "Porygon-Z",
-          "Basculin",
-          "Basculegion",
           "Kabutops",
-          "Glimmora",
+          "Basculegion",
+          "Basculin",
           "Wiglett",
-          "Beedrill",
-          "Silvally",
           "Noctowl",
-          "Lucario"
+          "Glimmora",
+          "Yungoos",
+          "Type: Null",
+          "Gumshoos"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.45454545454545453
+          "12": 0.6363636363636364
         },
         "namesFirst": 0,
-        "precision": 0.4166666666666667,
-        "ms": 209.41529200000514
+        "precision": 0.5833333333333334,
+        "ms": 161.83958299999358
       },
       {
         "query": "Blaze",
         "category": "ability",
         "ranked": [
-          "Typhlosion",
-          "Blaziken",
-          "Quilava",
-          "Torracat",
-          "Litten",
-          "Rapidash",
           "Tauros",
-          "Charmander",
+          "Quilava",
+          "Typhlosion",
+          "Rapidash",
+          "Litten",
+          "Blaziken",
           "Pignite",
           "Tepig",
           "Cyndaquil",
-          "Pombon"
+          "Charmander",
+          "Darmanitan",
+          "Torracat"
         ],
-        "reciprocalRank": 1,
+        "reciprocalRank": 0.5,
         "recall": {
-          "3": 1,
-          "12": 0.8333333333333334
+          "3": 0.6666666666666666,
+          "12": 0.75
         },
         "namesFirst": 0,
-        "precision": 0.8333333333333334,
-        "ms": 173.93270800000755
+        "precision": 0.75,
+        "ms": 179.4824590000062
       },
       {
         "query": "Damp",
@@ -6289,16 +6289,16 @@
         "ranked": [
           "Shroomish",
           "Parasect",
-          "Poliwag",
+          "Frillish",
           "Quagsire",
+          "Poliwag",
+          "Jellicent",
           "Wooper",
           "Politoed",
           "Poliwrath",
           "Poliwhirl",
-          "Frillish",
-          "Jellicent",
-          "Panpour",
-          "Paras"
+          "Paras",
+          "Drifloon"
         ],
         "reciprocalRank": 0.5,
         "recall": {
@@ -6307,7 +6307,7 @@
         },
         "namesFirst": 0,
         "precision": 0.8333333333333334,
-        "ms": 159.8159169999999
+        "ms": 198.96208399999887
       },
       {
         "query": "Emergency Exit",
@@ -6360,13 +6360,13 @@
           "Arctibax",
           "Cubone",
           "Mawile",
-          "Glastrier",
           "Shieldon",
           "Gligar",
           "Druddigon",
-          "Yamask",
+          "Glastrier",
           "Bastiodon",
-          "Smoochum"
+          "Smoochum",
+          "Buizel"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -6382,8 +6382,8 @@
         "category": "ability",
         "ranked": [
           "Raboot",
-          "Scorbunny",
-          "Cinderace"
+          "Cinderace",
+          "Scorbunny"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -6392,46 +6392,46 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 155.46620900000562
+        "ms": 211.93845899999724
       },
       {
         "query": "Mold Breaker",
         "category": "ability",
         "ranked": [
-          "Basculin",
           "Basculegion",
-          "Ogerpon",
+          "Basculin",
           "Veluza",
           "Tinkatink",
           "Pinsir",
-          "Tinkaton",
+          "Ogerpon",
           "Tinkatuff",
+          "Tinkaton",
           "Fraxure",
           "Axew",
-          "Emboar",
-          "Pancham"
+          "Sawk",
+          "Throh"
         ],
         "reciprocalRank": 1,
         "recall": {
-          "3": 0.6666666666666666,
-          "12": 0.8333333333333334
+          "3": 1,
+          "12": 0.9166666666666666
         },
         "namesFirst": 0,
-        "precision": 0.8333333333333334,
+        "precision": 0.9166666666666666,
         "ms": null
       },
       {
         "query": "Pickpocket",
         "category": "ability",
         "ranked": [
-          "Shroodle",
           "Tinkatink",
+          "Shroodle",
           "Sneasel",
-          "Tinkaton",
           "Tinkatuff",
+          "Tinkaton",
+          "Impidimp",
           "Grimmsnarl",
           "Morgrem",
-          "Impidimp",
           "Barbaracle",
           "Binacle",
           "Nuzleaf",
@@ -6444,7 +6444,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 180.73679199999606
+        "ms": 179.92350000000442
       },
       {
         "query": "Purifying Salt",
@@ -6490,18 +6490,18 @@
         "query": "Slow Start",
         "category": "ability",
         "ranked": [
-          "Regigigas",
           "Varoom",
+          "Regigigas",
           "Rhyhorn",
           "Feebas",
-          "Lugia",
           "Whismur",
+          "Lugia",
           "Ivysaur",
           "Dratini",
           "Manaphy",
           "Volcarona",
-          "Dragapult",
-          "Mienshao"
+          "Mienshao",
+          "Quilladin"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -6533,26 +6533,26 @@
         "category": "ability",
         "ranked": [
           "Exeggcute",
-          "Solosis",
           "Dialga",
           "Palkia",
-          "Beheeyem",
-          "Elgyem",
           "Exeggutor",
-          "Latias",
-          "Oranguru",
-          "Latios",
           "Rabsca",
-          "Dottler"
+          "Blipbug",
+          "Dottler",
+          "Solosis",
+          "Latias",
+          "Orbeetle",
+          "Tapu Fini",
+          "Tapu Koko"
         ],
-        "reciprocalRank": 0.3333333333333333,
+        "reciprocalRank": 0.5,
         "recall": {
-          "3": 0.3333333333333333,
-          "12": 0.5833333333333334
+          "3": 0.6666666666666666,
+          "12": 0.6666666666666666
         },
         "namesFirst": 0,
-        "precision": 0.5833333333333334,
-        "ms": 173.44737500000338
+        "precision": 0.6666666666666666,
+        "ms": 181.8028750000085
       },
       {
         "query": "Unseen Fist",
@@ -6580,9 +6580,9 @@
           "Drifloon",
           "Wurmple",
           "Chansey",
-          "Machop",
           "Rampardos",
           "Rufflet",
+          "Machop",
           "Electrode",
           "Pelipper",
           "Morpeko"
@@ -6608,8 +6608,8 @@
           "Bellibolt",
           "Bellossom",
           "Chatot",
-          "Exeggutor",
           "Morpeko",
+          "Exeggutor",
           "Chikorita",
           "Flutter Mane"
         ],
@@ -6628,16 +6628,16 @@
         "ranked": [
           "Hatenna",
           "Blissey",
-          "Tauros",
           "Dragonite",
-          "Meganium",
           "Pelipper",
           "Arboliva",
           "Sylveon",
+          "Meganium",
           "Gloom",
-          "Mantine",
           "Donphan",
-          "Lycanroc"
+          "Mantine",
+          "Lycanroc",
+          "Slowking"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -6685,9 +6685,9 @@
           "Rampardos",
           "Electabuzz",
           "Phantump",
+          "Heracross",
           "Natu",
           "Aipom",
-          "Heracross",
           "Treecko",
           "Grovyle"
         ],
@@ -6708,8 +6708,8 @@
           "Mudsdale",
           "Magneton",
           "Rattata",
-          "Tentacruel",
           "Barboach",
+          "Tentacruel",
           "Gastly",
           "Koffing",
           "Victreebel",
@@ -6738,10 +6738,10 @@
           "Mismagius",
           "Ho-oh",
           "Wynaut",
-          "Hattrem",
-          "Charmander",
           "Kirlia",
-          "Indeedee"
+          "Charmander",
+          "Indeedee",
+          "Clefable"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -6784,8 +6784,8 @@
         "ranked": [
           "Garchomp",
           "Pidgeot",
-          "Golurk",
           "Inteleon",
+          "Golurk",
           "Dragapult",
           "Gyarados",
           "Machoke",
@@ -6793,7 +6793,7 @@
           "Machamp",
           "Darmanitan",
           "Tinkaton",
-          "Voltorb"
+          "Electivire"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -6844,8 +6844,8 @@
           "Jigglypuff",
           "Poipole",
           "Overqwil",
-          "Umbreon",
-          "Basculegion"
+          "Basculegion",
+          "Umbreon"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -6865,8 +6865,8 @@
           "Vivillon",
           "Talonflame",
           "Scyther",
-          "Vileplume",
           "Scovillain",
+          "Vileplume",
           "Dustox",
           "Scraggy",
           "Scrafty",
@@ -6890,8 +6890,8 @@
           "Sliggoo",
           "Shellos",
           "Slugma",
-          "Shellder",
           "Flutter Mane",
+          "Shellder",
           "Wiglett",
           "Squirtle",
           "Turtonator",
@@ -6917,11 +6917,11 @@
           "Smeargle",
           "Pikachu",
           "Togepi",
-          "Persian",
           "Luvdisc",
+          "Persian",
+          "Cofagrigus",
           "Murkrow",
           "Darumaka",
-          "Cofagrigus",
           "Klang",
           "Swoobat"
         ],
@@ -6967,8 +6967,8 @@
           "Charcadet",
           "Charjabug",
           "Charizard",
-          "Charmander",
           "Charmeleon",
+          "Charmander",
           "Thundurus",
           "Magmar"
         ],
@@ -6979,7 +6979,7 @@
         },
         "namesFirst": 1,
         "precision": 0.7142857142857143,
-        "ms": 158.9342079999915
+        "ms": 174.02083399999538
       },
       {
         "query": "pika",
@@ -6995,7 +6995,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 166.84141599999566
+        "ms": 151.940042000002
       },
       {
         "query": "bulba",
@@ -7010,7 +7010,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 151.41941600000428
+        "ms": 152.86420799999905
       },
       {
         "query": "mew",
@@ -7027,7 +7027,7 @@
         },
         "namesFirst": 1,
         "precision": 0.6666666666666666,
-        "ms": 160.31308300000092
+        "ms": 175.56391700000677
       },
       {
         "query": "bulb",
@@ -7050,7 +7050,7 @@
         },
         "namesFirst": 1,
         "precision": 0.1111111111111111,
-        "ms": 174.62216600000102
+        "ms": 3635.689167000004
       },
       {
         "query": "seel",
@@ -7066,7 +7066,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 164.27291600000171
+        "ms": 154.12791700000525
       },
       {
         "query": "pich",
@@ -7081,7 +7081,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 165.94262499999604
+        "ms": 171.58733299998858
       },
       {
         "query": "mudk",
@@ -7097,7 +7097,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 152.3944579999952
+        "ms": 154.95100000000093
       },
       {
         "query": "balt",
@@ -7112,7 +7112,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 155.35058300000674
+        "ms": 148.7292090000119
       },
       {
         "query": "mism",
@@ -7128,7 +7128,7 @@
         },
         "namesFirst": 1,
         "precision": 0.5,
-        "ms": 178.63354199999594
+        "ms": 169.23041699999885
       },
       {
         "query": "panp",
@@ -7143,7 +7143,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 174.36345799999253
+        "ms": 176.5882500000007
       },
       {
         "query": "klan",
@@ -7158,7 +7158,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 158.69204199999513
+        "ms": 151.6088749999908
       },
       {
         "query": "inka",
@@ -7173,24 +7173,24 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 159.76454099999683
+        "ms": 146.60866600000008
       },
       {
         "query": "type",
         "category": "partial",
         "ranked": [
           "Type: Null",
-          "Dondozo",
-          "Orthworm",
-          "Zeraora",
-          "Xerneas",
-          "Victini",
+          "Silicobra",
           "Numel",
           "Ogerpon",
+          "Gholdengo",
+          "Arctibax",
+          "Frigibax",
+          "Dondozo",
           "Houndstone",
-          "Espathra",
-          "Flittle",
-          "Mabosstiff"
+          "Varoom",
+          "Glimmet",
+          "Orthworm"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7199,7 +7199,7 @@
         },
         "namesFirst": 1,
         "precision": 0.08333333333333333,
-        "ms": 174.58354200000758
+        "ms": 235.39045799997984
       },
       {
         "query": "hatt",
@@ -7215,7 +7215,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 154.61345800000709
+        "ms": 254.83479200000875
       },
       {
         "query": "mabo",
@@ -7230,7 +7230,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 164.95391699999163
+        "ms": 192.2707919999957
       },
       {
         "query": "bug dark",
@@ -7239,16 +7239,16 @@
         "ranked": [
           "Lokix",
           "Venonat",
-          "Shedinja",
-          "Mabosstiff",
-          "Maschiff",
-          "Thievul",
-          "Nickit",
-          "Wyrdeer",
-          "Parasect",
           "Iron Valiant",
-          "Sneasel",
-          "Darkrai"
+          "Shedinja",
+          "Maschiff",
+          "Mabosstiff",
+          "Nickit",
+          "Thievul",
+          "Liepard",
+          "Umbreon",
+          "Mr. Rime",
+          "Parasect"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7266,16 +7266,16 @@
         "ranked": [
           "Umbreon",
           "Obstagoon",
+          "Gengar",
+          "Zorua",
           "Linoone",
           "Darkrai",
-          "Sableye",
-          "Kingambit",
+          "Haunter",
           "Zigzagoon",
-          "Zorua",
-          "Krokorok",
-          "Gengar",
+          "Maschiff",
           "Mabosstiff",
-          "Maschiff"
+          "Nickit",
+          "Thievul"
         ],
         "reciprocalRank": 0.5,
         "recall": {
@@ -7292,19 +7292,19 @@
         "judgment": "A Type pair is taken to mean Pokémon with both Types.",
         "ranked": [
           "Jolteon",
-          "Magnemite",
           "Electabuzz",
-          "Magneton",
-          "Manectric",
-          "Pikachu",
+          "Magnemite",
           "Pichu",
-          "Heliolisk",
           "Electrode",
+          "Magneton",
           "Flaaffy",
-          "Raichu",
-          "Luxio"
+          "Pikachu",
+          "Heliolisk",
+          "Luxio",
+          "Elekid",
+          "Mareep"
         ],
-        "reciprocalRank": 0.125,
+        "reciprocalRank": 0.1111111111111111,
         "recall": {
           "3": 0,
           "12": 0.5
@@ -7322,22 +7322,22 @@
           "Gouging Fire",
           "Charmander",
           "Quilava",
-          "Litleo",
-          "Fletchinder",
-          "Magmar",
-          "Typhlosion",
-          "Darmanitan",
           "Vaporeon",
-          "Lampent",
-          "Charizard"
+          "Magmar",
+          "Fuecoco",
+          "Darmanitan",
+          "Cyndaquil",
+          "Ceruledge",
+          "Magcargo",
+          "Leafeon"
         ],
-        "reciprocalRank": 0.2,
+        "reciprocalRank": 0,
         "recall": {
           "3": 0,
-          "12": 0.5
+          "12": 0
         },
         "namesFirst": 0,
-        "precision": 0.08333333333333333,
+        "precision": 0,
         "ms": null
       },
       {
@@ -7346,17 +7346,17 @@
         "judgment": "A Type pair is taken to mean Pokémon with both Types.",
         "ranked": [
           "Gouging Fire",
-          "Fletchinder",
           "Flareon",
           "Ponyta",
-          "Houndoom",
+          "Fletchinder",
           "Quilava",
           "Cyndaquil",
+          "Houndoom",
           "Fuecoco",
-          "Fomantis",
           "Darmanitan",
-          "Litten",
-          "Pombon"
+          "Sprigatito",
+          "Floragato",
+          "Magmar"
         ],
         "reciprocalRank": 0,
         "recall": {
@@ -7375,15 +7375,15 @@
           "Piloswine",
           "Mamoswine",
           "Abomasnow",
+          "Snover",
           "Swinub",
           "Wooper",
-          "Snover",
-          "Snom",
-          "Avalugg",
           "Clodsire",
-          "Cryogonal",
-          "Arctozolt",
-          "Aurorus"
+          "Calyrex",
+          "Articuno",
+          "Avalugg",
+          "Snom",
+          "Cryogonal"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7402,15 +7402,15 @@
           "Gardevoir",
           "Kirlia",
           "Hatterene",
-          "Ralts",
-          "Mime Jr.",
           "Metang",
-          "Scream Tail",
-          "Indeedee",
-          "Tapu Lele",
-          "Rapidash",
           "Hattrem",
-          "Hatenna"
+          "Ralts",
+          "Hatenna",
+          "Mime Jr.",
+          "Rapidash",
+          "Scream Tail",
+          "Tapu Lele",
+          "Indeedee"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7428,20 +7428,20 @@
         "ranked": [
           "Steelix",
           "Archaludon",
-          "Dialga",
-          "Duraludon",
-          "Tinkatink",
-          "Perrserker",
           "Arctibax",
-          "Baxcalibur",
-          "Kingambit",
+          "Dialga",
+          "Perrserker",
+          "Tinkatink",
           "Goomy",
+          "Duraludon",
           "Orthworm",
-          "Goodra"
+          "Scizor",
+          "Baxcalibur",
+          "Tinkatuff"
         ],
         "reciprocalRank": 0.5,
         "recall": {
-          "3": 0.6666666666666666,
+          "3": 0.3333333333333333,
           "12": 1
         },
         "namesFirst": 0,
@@ -7515,10 +7515,10 @@
           "Buizel",
           "Drizzile",
           "Finizen",
+          "Wugtrio",
+          "Floatzel",
           "Goldeen",
-          "Gecqua",
-          "Poliwhirl",
-          "Wugtrio"
+          "Poliwhirl"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7537,15 +7537,15 @@
           "Bulbasaur",
           "Eldegoss",
           "Venusaur",
-          "Arboliva",
           "Ivysaur",
           "Sunkern",
+          "Arboliva",
           "Ferroseed",
           "Breloom",
           "Oddish",
-          "Maractus",
+          "Exeggcute",
           "Trumbeak",
-          "Exeggcute"
+          "Maractus"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7569,9 +7569,9 @@
           "Toucannon",
           "Pupitar",
           "Garbodor",
-          "Pumpkaboo",
-          "Salandit",
           "Trubbish",
+          "Salandit",
+          "Pumpkaboo",
           "Greavard"
         ],
         "reciprocalRank": 1,
@@ -7593,13 +7593,13 @@
           "Ivysaur",
           "Squirtle",
           "Charmander",
-          "Gallade",
           "Slowpoke",
+          "Gallade",
           "Gardevoir",
           "Moltres",
           "Spinarak",
-          "Magmar",
-          "Togekiss"
+          "Togekiss",
+          "Magmar"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7624,8 +7624,8 @@
           "Magnezone",
           "Garbodor",
           "Azumarill",
-          "Magcargo",
           "Tinkatink",
+          "Magcargo",
           "Darmanitan"
         ],
         "reciprocalRank": 1,
@@ -7674,13 +7674,13 @@
           "Dusclops",
           "Dedenne",
           "Drowzee",
-          "Togekiss",
           "Toxtricity",
+          "Togekiss",
           "Delcatty",
-          "Cutiefly",
           "Delphox",
-          "Latios",
-          "Froslass"
+          "Froslass",
+          "Dracovish",
+          "Porygon"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7706,8 +7706,8 @@
           "Fidough",
           "Bonsly",
           "Vivillon",
-          "Tentacruel",
-          "Darmanitan"
+          "Darmanitan",
+          "Volcarona"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7757,9 +7757,9 @@
           "Gloom",
           "Jynx",
           "Buizel",
-          "Cutiefly",
-          "Snubbull",
+          "Forretress",
           "Celesteela",
+          "Snubbull",
           "Arctozolt",
           "Tandemaus"
         ],
@@ -7803,18 +7803,18 @@
         "query": "bug",
         "category": "bare-type",
         "ranked": [
-          "Parasect",
-          "Shedinja",
           "Blipbug",
-          "Venonat",
+          "Parasect",
+          "Rabsca",
           "Beautifly",
-          "Ledyba",
-          "Paras",
+          "Shedinja",
+          "Spewpa",
+          "Karrablast",
           "Vivillon",
           "Rellor",
           "Spidops",
           "Tarountula",
-          "Nymble"
+          "Lokix"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7823,50 +7823,24 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 163.5632920000062
+        "ms": 176.51933300000383
       },
       {
         "query": "dark",
         "category": "bare-type",
         "ranked": [
           "Darkrai",
-          "Sableye",
-          "Mabosstiff",
           "Maschiff",
-          "Thievul",
+          "Mabosstiff",
           "Nickit",
+          "Thievul",
+          "Liepard",
           "Umbreon",
-          "Krokorok",
-          "Kingambit",
-          "Sneasel",
-          "Honchkrow",
-          "Murkrow"
-        ],
-        "reciprocalRank": 1,
-        "recall": {
-          "3": 1,
-          "12": 1
-        },
-        "namesFirst": 1,
-        "precision": 1,
-        "ms": 171.5219170000055
-      },
-      {
-        "query": "dragon",
-        "category": "bare-type",
-        "ranked": [
-          "Dragonite",
-          "Dragonair",
-          "Regidrago",
-          "Charizard",
-          "Drampa",
-          "Goomy",
-          "Dragalge",
-          "Goodra",
-          "Dachsbun",
-          "Magikarp",
-          "Sylveon",
-          "Tatsugiri"
+          "Sableye",
+          "Noctowl",
+          "Haunter",
+          "Wobbuffet",
+          "Kommo-o"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7875,7 +7849,33 @@
         },
         "namesFirst": 0,
         "precision": 0.6666666666666666,
-        "ms": 170.69095899999957
+        "ms": 179.18404200000805
+      },
+      {
+        "query": "dragon",
+        "category": "bare-type",
+        "ranked": [
+          "Dragonite",
+          "Dragonair",
+          "Applin",
+          "Flapple",
+          "Naganadel",
+          "Goomy",
+          "Regidrago",
+          "Dragalge",
+          "Garchomp",
+          "Charizard",
+          "Noibat",
+          "Dachsbun"
+        ],
+        "reciprocalRank": 1,
+        "recall": {
+          "3": 1,
+          "12": 0.8333333333333334
+        },
+        "namesFirst": 0,
+        "precision": 0.8333333333333334,
+        "ms": 169.17574999999488
       },
       {
         "query": "electric",
@@ -7887,12 +7887,12 @@
           "Jolteon",
           "Electrike",
           "Flaaffy",
-          "Magnemite",
           "Elekid",
-          "Pikachu",
           "Luxio",
-          "Manectric",
-          "Electivire"
+          "Pikachu",
+          "Electivire",
+          "Magnemite",
+          "Mareep"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7901,7 +7901,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 173.48758300000918
+        "ms": 162.11979200001224
       },
       {
         "query": "fairy",
@@ -7909,51 +7909,51 @@
         "ranked": [
           "Clefable",
           "Milcery",
+          "Slurpuff",
           "Fidough",
+          "Swirlix",
+          "Aromatisse",
+          "Spritzee",
           "Flabébé",
           "Dachsbun",
           "Alcremie",
           "Florges",
-          "Xerneas",
-          "Indeedee",
-          "Jigglypuff",
-          "Togepi",
-          "Clefairy"
+          "Togepi"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.9166666666666666
+          "12": 1
         },
-        "namesFirst": 0,
-        "precision": 0.9166666666666666,
-        "ms": 152.42204099998344
+        "namesFirst": 1,
+        "precision": 1,
+        "ms": 166.12370799999917
       },
       {
         "query": "fighting",
         "category": "bare-type",
         "ranked": [
-          "Annihilape",
-          "Okidogi",
-          "Iron Valiant",
-          "Sneasler",
-          "Kubfu",
-          "Croagunk",
           "Tyrogue",
-          "Lopunny",
-          "Combusken",
+          "Annihilape",
+          "Kubfu",
+          "Conkeldurr",
           "Grapploct",
-          "Hawlucha",
-          "Cobalion"
+          "Clobbopus",
+          "Crabrawler",
+          "Gurdurr",
+          "Timburr",
+          "Hitmontop",
+          "Sinistcha",
+          "Houndstone"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.9166666666666666
+          "12": 0.8333333333333334
         },
         "namesFirst": 0,
-        "precision": 0.9166666666666666,
-        "ms": 168.25870799997938
+        "precision": 0.8333333333333334,
+        "ms": 172.42041700001573
       },
       {
         "query": "fire",
@@ -7963,14 +7963,14 @@
           "Charmander",
           "Charcadet",
           "Magmar",
-          "Charizard",
           "Fuecoco",
           "Darmanitan",
-          "Litten",
           "Cyndaquil",
           "Crocalor",
           "Scorbunny",
-          "Volcarona"
+          "Tepig",
+          "Infernape",
+          "Chimchar"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -7979,59 +7979,59 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 177.38945800001966
+        "ms": 167.60645799999475
       },
       {
         "query": "flying",
         "category": "bare-type",
         "ranked": [
+          "Corvisquire",
+          "Rookidee",
+          "Corviknight",
+          "Flygon",
           "Crobat",
           "Pidgeot",
-          "Corviknight",
-          "Unfezant",
+          "Centiskorch",
+          "Sizzlipede",
+          "Bagon",
+          "Chimecho",
           "Pelipper",
-          "Talonflame",
-          "Ducklett",
-          "Masquerain",
-          "Yanma",
-          "Golbat",
-          "Pidgeotto",
-          "Flygon"
+          "Sneasler"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.9166666666666666
+          "12": 0.5
         },
         "namesFirst": 0,
-        "precision": 0.9166666666666666,
-        "ms": 168.64345800000592
+        "precision": 0.5,
+        "ms": 192.04266599999391
       },
       {
         "query": "ghost",
         "category": "bare-type",
         "ranked": [
           "Greavard",
-          "Spectrier",
+          "Polteageist",
+          "Sinistea",
+          "Gholdengo",
           "Houndstone",
-          "Sinistcha",
-          "Dreepy",
-          "Ceruledge",
-          "Dhelmise",
+          "Spectrier",
           "Dusclops",
-          "Litwick",
+          "Dreepy",
           "Farigiraf",
-          "Heliolisk",
-          "Helioptile"
+          "Brambleghast",
+          "Bramblin",
+          "Wyrdeer"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.75
+          "12": 0.8333333333333334
         },
         "namesFirst": 0,
-        "precision": 0.75,
-        "ms": 162.26412500001607
+        "precision": 0.8333333333333334,
+        "ms": 178.17725000000792
       },
       {
         "query": "grass",
@@ -8041,14 +8041,14 @@
           "Sprigatito",
           "Nuzleaf",
           "Fomantis",
-          "Browt",
-          "Sinistcha",
-          "Brambleghast",
-          "Bramblin",
-          "Celebi",
-          "Meganium",
-          "Victreebel",
-          "Rowlet"
+          "Pansage",
+          "Lurantis",
+          "Simisage",
+          "Capsakid",
+          "Meowscarada",
+          "Rillaboom",
+          "Thwackey",
+          "Gogoat"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -8057,59 +8057,59 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 173.022541000013
+        "ms": 177.06345899999724
       },
       {
         "query": "ground",
         "category": "bare-type",
         "ranked": [
-          "Marshtomp",
-          "Piloswine",
-          "Iron Treads",
-          "Clodsire",
-          "Toedscruel",
-          "Toedscool",
+          "Sandaconda",
           "Silicobra",
           "Drilbur",
-          "Gabite",
-          "Whiscash",
-          "Larvitar",
-          "Phanpy"
+          "Phanpy",
+          "Dugtrio",
+          "Regirock",
+          "Marshtomp",
+          "Treecko",
+          "Tyranitar",
+          "Piloswine",
+          "Iron Jugulis",
+          "Kingambit"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 1
+          "12": 0.5833333333333334
         },
-        "namesFirst": 1,
-        "precision": 1,
-        "ms": 165.88045799999963
+        "namesFirst": 0,
+        "precision": 0.5833333333333334,
+        "ms": 185.31079200000386
       },
       {
         "query": "ice",
         "category": "bare-type",
         "ranked": [
           "Glalie",
-          "Seel",
-          "Regice",
           "Vanillish",
           "Glaceon",
-          "Articuno",
-          "Spheal",
-          "Cryogonal",
-          "Dewgong",
+          "Seel",
           "Eiscue",
+          "Regice",
+          "Articuno",
           "Bergmite",
-          "Snover"
+          "Cryogonal",
+          "Vanillite",
+          "Spheal",
+          "Dewgong"
         ],
         "reciprocalRank": 1,
         "recall": {
-          "3": 0.6666666666666666,
+          "3": 1,
           "12": 0.9166666666666666
         },
         "namesFirst": 0,
         "precision": 0.9166666666666666,
-        "ms": 169.25212499999907
+        "ms": 166.4639999999781
       },
       {
         "query": "normal",
@@ -8119,23 +8119,23 @@
           "Tandemaus",
           "Lechonk",
           "Dubwool",
-          "Fletchling",
-          "Zorua",
-          "Whismur",
-          "Azurill",
-          "Ditto",
-          "Pecharunt",
-          "Archaludon",
-          "Poltchageist"
+          "Greedent",
+          "Skwovet",
+          "Silvally",
+          "Patrat",
+          "Watchog",
+          "Purugly",
+          "Deoxys",
+          "Whismur"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 0.6666666666666666
+          "12": 0.9166666666666666
         },
         "namesFirst": 0,
-        "precision": 0.6666666666666666,
-        "ms": 188.58545800001593
+        "precision": 0.9166666666666666,
+        "ms": 170.68070799999987
       },
       {
         "query": "poison",
@@ -8143,16 +8143,16 @@
         "ranked": [
           "Nidoran♂ (male)",
           "Nidoran♀ (female)",
-          "Toxicroak",
           "Koffing",
-          "Weezing",
-          "Venomoth",
           "Nidorino",
           "Garbodor",
-          "Croagunk",
-          "Gastly",
-          "Foongus",
-          "Victreebel"
+          "Toxicroak",
+          "Naganadel",
+          "Venomoth",
+          "Poipole",
+          "Muk",
+          "Clodsire",
+          "Croagunk"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -8161,7 +8161,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 189.95237499999348
+        "ms": 225.63375000000815
       },
       {
         "query": "psychic",
@@ -8169,16 +8169,16 @@
         "ranked": [
           "Beheeyem",
           "Kadabra",
+          "Meowstic",
+          "Espathra",
+          "Abra",
+          "Elgyem",
+          "Gothita",
           "Gardevoir",
           "Espurr",
-          "Abra",
-          "Espathra",
-          "Elgyem",
-          "Meowstic",
-          "Gothita",
-          "Kirlia",
+          "Reuniclus",
           "Grumpig",
-          "Gothitelle"
+          "Duosion"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -8187,33 +8187,33 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 178.31641600001603
+        "ms": 180.80370799999218
       },
       {
         "query": "rock",
         "category": "bare-type",
         "ranked": [
           "Rockruff",
-          "Roggenrola",
-          "Stonjourner",
           "Coalossal",
           "Carkol",
+          "Sudowoodo",
+          "Roggenrola",
+          "Cranidos",
+          "Nacli",
+          "Garganacl",
+          "Naclstack",
           "Drednaw",
-          "Binacle",
           "Dwebble",
-          "Regirock",
-          "Rhyperior",
-          "Shieldon",
-          "Relicanth"
+          "Happiny"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 1
+          "12": 0.9166666666666666
         },
-        "namesFirst": 1,
-        "precision": 1,
-        "ms": 173.8276660000265
+        "namesFirst": 0,
+        "precision": 0.9166666666666666,
+        "ms": 154.753624999983
       },
       {
         "query": "steel",
@@ -8221,42 +8221,42 @@
         "ranked": [
           "Steelix",
           "Perrserker",
-          "Cobalion",
           "Aron",
-          "Kingambit",
+          "Cufant",
+          "Copperajah",
+          "Melmetal",
+          "Klink",
+          "Klinklang",
           "Tinkatink",
-          "Archaludon",
-          "Durant",
-          "Ferrothorn",
-          "Escavalier",
-          "Lairon",
-          "Forretress"
+          "Haxorus",
+          "Blitzle",
+          "Zebstrika"
         ],
         "reciprocalRank": 1,
         "recall": {
           "3": 1,
-          "12": 1
+          "12": 0.75
         },
-        "namesFirst": 1,
-        "precision": 1,
-        "ms": 167.91675000000396
+        "namesFirst": 0,
+        "precision": 0.75,
+        "ms": 176.04079200001433
       },
       {
         "query": "water",
         "category": "bare-type",
         "ranked": [
           "Vaporeon",
-          "Tentacool",
           "Panpour",
-          "Dracovish",
-          "Tapu Fini",
-          "Araquanid",
-          "Dewpider",
+          "Tentacool",
+          "Drizzile",
+          "Popplio",
           "Clawitzer",
           "Clauncher",
-          "Simipour",
-          "Relicanth",
-          "Lotad"
+          "Buizel",
+          "Mudkip",
+          "Lotad",
+          "Blastoise",
+          "Seismitoad"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -8265,7 +8265,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 175.63933299999917
+        "ms": 181.48024999999325
       },
       {
         "query": "arc",
@@ -8291,7 +8291,7 @@
         },
         "namesFirst": 1,
         "precision": 0.6666666666666666,
-        "ms": 166.3925000000163
+        "ms": 165.33324999999604
       },
       {
         "query": "bel",
@@ -8309,7 +8309,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 168.83854200001224
+        "ms": 218.11941600000137
       },
       {
         "query": "bra",
@@ -8327,15 +8327,15 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 168.20595800000592
+        "ms": 147.2627499999944
       },
       {
         "query": "che",
         "category": "short-prefix",
         "ranked": [
           "Chewtle",
-          "Chesnaught",
           "Chespin",
+          "Chesnaught",
           "Cherubi",
           "Cherrim"
         ],
@@ -8346,15 +8346,15 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 155.96066700000665
+        "ms": 145.8882910000102
       },
       {
         "query": "cle",
         "category": "short-prefix",
         "ranked": [
           "Cleffa",
-          "Clefable",
-          "Clefairy"
+          "Clefairy",
+          "Clefable"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -8363,7 +8363,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 169.86733400000958
+        "ms": 150.6367920000048
       },
       {
         "query": "cra",
@@ -8383,7 +8383,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 166.07370899998932
+        "ms": 168.4431249999907
       },
       {
         "query": "del",
@@ -8400,15 +8400,15 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 170.10483399999794
+        "ms": 151.9115420000162
       },
       {
         "query": "dus",
         "category": "short-prefix",
         "ranked": [
           "Dusknoir",
-          "Dusclops",
           "Duskull",
+          "Dusclops",
           "Dustox"
         ],
         "reciprocalRank": 1,
@@ -8418,7 +8418,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 162.13666599997669
+        "ms": 168.7582499999844
       },
       {
         "query": "fer",
@@ -8435,7 +8435,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 163.48633300000802
+        "ms": 160.95975000000908
       },
       {
         "query": "fro",
@@ -8456,15 +8456,15 @@
         },
         "namesFirst": 1,
         "precision": 0.5714285714285714,
-        "ms": 168.73608400000376
+        "ms": 168.9830409999995
       },
       {
         "query": "gol",
         "category": "short-prefix",
         "ranked": [
           "Golisopod",
-          "Golett",
           "Golurk",
+          "Golett",
           "Goldeen",
           "Golem",
           "Golduck",
@@ -8477,7 +8477,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 148.89279199999874
+        "ms": 151.4523329999938
       },
       {
         "query": "gre",
@@ -8495,15 +8495,15 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 153.29987499999697
+        "ms": 178.60858300002292
       },
       {
         "query": "hou",
         "category": "short-prefix",
         "ranked": [
           "Houndstone",
-          "Houndoom",
           "Houndour",
+          "Houndoom",
           "Ho-oh"
         ],
         "reciprocalRank": 1,
@@ -8513,7 +8513,7 @@
         },
         "namesFirst": 1,
         "precision": 0.75,
-        "ms": 160.78558300001896
+        "ms": 169.12933299998986
       },
       {
         "query": "lil",
@@ -8530,7 +8530,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 168.49954200000502
+        "ms": 162.1154160000151
       },
       {
         "query": "man",
@@ -8555,7 +8555,7 @@
         },
         "namesFirst": 0,
         "precision": 0.5454545454545454,
-        "ms": 157.12320800000452
+        "ms": 240.2060000000056
       },
       {
         "query": "meo",
@@ -8572,7 +8572,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 161.45733299999847
+        "ms": 253.32170900001074
       },
       {
         "query": "min",
@@ -8589,18 +8589,18 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 163.9263749999809
+        "ms": 157.21308299998054
       },
       {
         "query": "nid",
         "category": "short-prefix",
         "ranked": [
+          "Nidoking",
           "Nidorino",
           "Nidoran♂ (male)",
+          "Nidoran♀ (female)",
           "Nidoqueen",
-          "Nidorina",
-          "Nidoking",
-          "Nidoran♀ (female)"
+          "Nidorina"
         ],
         "reciprocalRank": 1,
         "recall": {
@@ -8609,7 +8609,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 157.7067500000121
+        "ms": 149.70645800000057
       },
       {
         "query": "pan",
@@ -8617,9 +8617,9 @@
         "ranked": [
           "Pancham",
           "Pangoro",
+          "Panpour",
           "Pansear",
           "Pansage",
-          "Panpour",
           "Hakamo-o"
         ],
         "reciprocalRank": 1,
@@ -8629,7 +8629,7 @@
         },
         "namesFirst": 1,
         "precision": 0.8333333333333334,
-        "ms": 154.2630000000063
+        "ms": 150.01333299998078
       },
       {
         "query": "pol",
@@ -8649,15 +8649,15 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 167.39262499997858
+        "ms": 149.77204099998926
       },
       {
         "query": "qua",
         "category": "short-prefix",
         "ranked": [
-          "Quaxly",
           "Quaquaval",
           "Quaxwell",
+          "Quaxly",
           "Quagsire"
         ],
         "reciprocalRank": 1,
@@ -8667,7 +8667,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 168.06116700000712
+        "ms": 146.98716700001387
       },
       {
         "query": "san",
@@ -8687,7 +8687,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 166.39079100001254
+        "ms": 192.17995800002245
       },
       {
         "query": "sea",
@@ -8698,12 +8698,12 @@
           "Seadra",
           "Huntail",
           "Gorebyss",
-          "Kyogre",
           "Pelipper",
+          "Wingull",
+          "Phione",
           "Relicanth",
           "Corsola",
           "Seel",
-          "Phione",
           "Lugia"
         ],
         "reciprocalRank": 1,
@@ -8713,7 +8713,7 @@
         },
         "namesFirst": 1,
         "precision": 0.25,
-        "ms": 177.05883300001733
+        "ms": 156.99741700000595
       },
       {
         "query": "sil",
@@ -8730,7 +8730,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 165.81891599998926
+        "ms": 164.4079170000041
       },
       {
         "query": "sno",
@@ -8748,7 +8748,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 180.0003330000036
+        "ms": 179.67225000000326
       },
       {
         "query": "spi",
@@ -8767,7 +8767,7 @@
         },
         "namesFirst": 1,
         "precision": 0.8,
-        "ms": 158.02620799999568
+        "ms": 179.8204169999808
       },
       {
         "query": "tan",
@@ -8785,7 +8785,7 @@
         },
         "namesFirst": 1,
         "precision": 0.75,
-        "ms": 157.9258330000157
+        "ms": 160.23695799999405
       },
       {
         "query": "tog",
@@ -8803,7 +8803,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 167.62483300000895
+        "ms": 165.03829099994618
       },
       {
         "query": "urs",
@@ -8820,7 +8820,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 170.25820799998473
+        "ms": 168.26929199998267
       },
       {
         "query": "vol",
@@ -8838,7 +8838,7 @@
         },
         "namesFirst": 1,
         "precision": 1,
-        "ms": 158.4095410000009
+        "ms": 167.78416700003436
       }
     ]
   }

@@ -290,6 +290,15 @@
     ],
     "citeAny": [
       "https://pokemondb.net/pokedex/charizard"
+    ],
+    "wrongWeaknesses": [
+      "Fire",
+      "Grass",
+      "Fighting",
+      "Bug",
+      "Steel",
+      "Fairy",
+      "Ground"
     ]
   },
   {

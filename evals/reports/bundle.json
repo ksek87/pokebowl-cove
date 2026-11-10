@@ -1,35 +1,35 @@
 {
-  "measuredAt": "2026-11-09T22:55:16.381Z",
+  "measuredAt": "2026-11-10T04:06:41.802Z",
   "method": "Production build with source maps. Gzip at level 9 per file. Contributors credit each stretch of minified entry code to its source module through the source map, then gzip each package on its own, so package gzip sizes do not add up exactly to the file size.",
   "assets": {
     "js": {
-      "raw": 1870703,
-      "gzip": 565209
+      "raw": 1870149,
+      "gzip": 565254
     },
     "css": {
-      "raw": 45604,
-      "gzip": 9423
+      "raw": 44900,
+      "gzip": 9309
     },
     "initial": {
-      "raw": 1696942,
-      "gzip": 457348
+      "raw": 1695684,
+      "gzip": 457079
     },
     "lazy": {
       "count": 144,
       "raw": 219365,
-      "gzip": 117284
+      "gzip": 117484
     }
   },
   "entry": {
-    "name": "assets/index-BwryyRbV.js",
-    "raw": 1650612,
-    "gzip": 447496
+    "name": "assets/index-BzX18BEp.js",
+    "raw": 1650058,
+    "gzip": 447341
   },
   "contributors": [
     {
       "name": "@coveo/atomic",
       "rawBytes": 409461,
-      "gzipBytes": 92481,
+      "gzipBytes": 92476,
       "gzipShare": 20.7
     },
     {
@@ -88,8 +88,8 @@
     }
   ],
   "cardStylesheet": {
-    "raw": 43012,
-    "gzip": 8550,
+    "raw": 42322,
+    "gzip": 8450,
     "gzipShareOfEntry": 1.9
   },
   "atomicStylesheets": {

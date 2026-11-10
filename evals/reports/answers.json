@@ -1,16 +1,21 @@
 {
-  "measuredAt": "2026-11-09T14:16:55.159Z",
+  "measuredAt": "2026-11-10T13:31:37.181Z",
   "method": "Times run from sending the search to the first answer text and to stream end, sequentially, with analytics capture off.",
   "overall": {
-    "total": 32,
-    "passed": 29,
-    "needsHumanReview": 10
+    "total": 40,
+    "passed": 37,
+    "needsHumanReview": 12
   },
   "byCategory": {
     "fact": {
-      "total": 16,
-      "passed": 15,
+      "total": 17,
+      "passed": 16,
       "needsHumanReview": 0
+    },
+    "base-form": {
+      "total": 7,
+      "passed": 7,
+      "needsHumanReview": 2
     },
     "unanswerable": {
       "total": 6,
@@ -28,19 +33,98 @@
       "needsHumanReview": 4
     }
   },
+  "style": {
+    "limits": {
+      "longAnswerWords": 200
+    },
+    "overall": {
+      "answered": 32,
+      "directAnswerFirst": 32,
+      "mentionsDocumentation": 0,
+      "long": 2,
+      "words": {
+        "count": 32,
+        "p50": 41,
+        "p95": 202,
+        "min": 17,
+        "max": 246
+      }
+    },
+    "byCategory": {
+      "fact": {
+        "answered": 17,
+        "directAnswerFirst": 17,
+        "mentionsDocumentation": 0,
+        "long": 0,
+        "words": {
+          "count": 17,
+          "p50": 48,
+          "p95": 92,
+          "min": 29,
+          "max": 92
+        }
+      },
+      "base-form": {
+        "answered": 7,
+        "directAnswerFirst": 7,
+        "mentionsDocumentation": 0,
+        "long": 0,
+        "words": {
+          "count": 7,
+          "p50": 29,
+          "p95": 56,
+          "min": 17,
+          "max": 56
+        }
+      },
+      "unanswerable": {
+        "answered": 0,
+        "directAnswerFirst": 0,
+        "mentionsDocumentation": 0,
+        "long": 0,
+        "words": null
+      },
+      "scoped": {
+        "answered": 6,
+        "directAnswerFirst": 6,
+        "mentionsDocumentation": 0,
+        "long": 1,
+        "words": {
+          "count": 6,
+          "p50": 63,
+          "p95": 202,
+          "min": 36,
+          "max": 202
+        }
+      },
+      "judgment": {
+        "answered": 2,
+        "directAnswerFirst": 2,
+        "mentionsDocumentation": 0,
+        "long": 1,
+        "words": {
+          "count": 2,
+          "p50": 20,
+          "p95": 246,
+          "min": 20,
+          "max": 246
+        }
+      }
+    }
+  },
   "firstTextMs": {
-    "count": 25,
-    "p50": 2022.2622499999998,
-    "p95": 2563.8004999999976,
-    "min": 1749.36437499999,
-    "max": 2611.0600840000116
+    "count": 32,
+    "p50": 1953.7568329999995,
+    "p95": 2772.3465410000063,
+    "min": 1727.7299579999963,
+    "max": 2831.827541
   },
   "totalMs": {
-    "count": 25,
-    "p50": 3143.940333000006,
-    "p95": 10618.839540999994,
-    "min": 2262.0820419999945,
-    "max": 10848.647083999997
+    "count": 32,
+    "p50": 3242.960665999999,
+    "p95": 5878.756666000001,
+    "min": 2525.9256660000246,
+    "max": 5892.573708000011
   },
   "graded": [
     {
@@ -52,14 +136,20 @@
       "id": "type-charizard",
       "category": "fact",
       "question": "What type is Charizard?",
-      "firstTextMs": 2016.193583,
-      "totalMs": 3316.371417,
-      "text": "## Type of Charizard\n\nCharizard is a **Fire/Flying** type Pokémon. This information is explicitly stated in the documentation:\n\n> \"Charizard is a Fire/Flying type Pokémon introduced in Generation 1.\"\n\nAdditionally, the documentation provides details about Charizard's type defenses and other related information, but the primary answer to the question is that Charizard is of the Fire/Flying type.",
+      "firstTextMs": 2831.827541,
+      "totalMs": 3959.6624580000002,
+      "text": "Charizard is a Fire/Flying type Pokémon.\n\n**Key details**:\n- Charizard is introduced in Generation 1.\n- Charizard is known as the Flame Pokémon.\n- Charizard is 1.7 m (5′07″) tall.\n- Charizard weighs 90.5 kg (199.5 lbs).\n- Charizard abilities: Blaze, Solar Power (hidden ability).",
       "citations": [
         "https://pokemondb.net/pokedex/charizard",
-        "https://pokemondb.net/pokedex/charizard",
         "https://pokemondb.net/pokedex/charizard"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 40,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -70,13 +160,20 @@
       "id": "species-charizard",
       "category": "fact",
       "question": "What species is Charizard?",
-      "firstTextMs": 2137.883040999999,
-      "totalMs": 2563.9309159999993,
-      "text": "## Species of Charizard\n\nCharizard is known as the **Flame Pokémon**. This information is directly supported by the documentation provided.",
+      "firstTextMs": 2622.8686669999997,
+      "totalMs": 3854.069542,
+      "text": "Charizard is a Fire/Flying type Pokémon. \n\n**Key details**:\n- Charizard is known as the Flame Pokémon.\n- It is introduced in Generation 1.\n- Charizard is the final evolution stage of one of the original starter Pokémon.\n- It has two Mega Evolutions, one of which replaces its Flying type with Dragon.\n- Charizard also has a Gigantamax form available in Pokémon Sword/Shield.",
       "citations": [
         "https://pokemondb.net/pokedex/charizard",
         "https://pokemondb.net/pokedex/charizard"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 58,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -87,13 +184,19 @@
       "id": "species-pikachu",
       "category": "fact",
       "question": "What species is Pikachu?",
-      "firstTextMs": 2090.715,
-      "totalMs": 3589.806625000001,
-      "text": "## Species of Pikachu\n\nPikachu is known as the **Mouse Pokémon**. This information is explicitly mentioned in the documentation:\n\n> \"Pikachu is an Electric type Pokémon introduced in Generation 1. It is known as the Mouse Pokémon.\"\n\nAdditionally, the documentation provides various details about Pikachu's characteristics, abilities, and appearances across different games, but the species identification as a Mouse Pokémon is the primary and relevant information to the question.",
+      "firstTextMs": 2003.575417,
+      "totalMs": 3247.0928749999985,
+      "text": "Pikachu is an Electric type Pokémon introduced in Generation 1. \n\n**Key details**:\n- Pikachu is known as the Mouse Pokémon.\n- It is 0.4 m (1′04″) tall.\n- Pikachu weighs 6.0 kg (13.2 lbs).\n- Pikachu abilities: Static, Lightning Rod (hidden ability).",
       "citations": [
-        "https://pokemondb.net/pokedex/pikachu",
         "https://pokemondb.net/pokedex/pikachu"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 38,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -104,13 +207,20 @@
       "id": "ability-pikachu",
       "category": "fact",
       "question": "What abilities can Pikachu have?",
-      "firstTextMs": 1787.7264160000013,
-      "totalMs": 3192.973041000001,
-      "text": "## Abilities of Pikachu\n\nPikachu can have the following abilities:\n\n- **Static:** With the Static ability, Pikachu takes 2x damage from Ground. It takes 0.5x damage from Electric, Flying, and Steel.\n- **Lightning Rod (hidden ability):** With the Lightning Rod ability, Pikachu takes 2x damage from Ground. It takes 0.5x damage from Flying and Steel. It takes no damage from Electric.",
+      "firstTextMs": 1908.0914999999986,
+      "totalMs": 3362.4079999999994,
+      "text": "Pikachu can have two abilities: Static and Lightning Rod (hidden ability).\n\n## Key details:\n- **Static ability**:\n  - **Weaknesses**: Ground\n  - **Resistances**: Electric, Flying, Steel\n  - **Damage taken**: 2x from Ground, 0.5x from Electric, Flying, and Steel\n- **Lightning Rod ability**:\n  - **Weaknesses**: Ground\n  - **Resistances**: Flying, Steel\n  - **Immunity**: Electric\n  - **Damage taken**: 2x from Ground, 0.5x from Flying and Steel, no damage from Electric",
       "citations": [
         "https://pokemondb.net/pokedex/pikachu",
         "https://pokemondb.net/pokedex/pikachu"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 56,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -121,12 +231,19 @@
       "id": "ability-bulbasaur",
       "category": "fact",
       "question": "What abilities can Bulbasaur have?",
-      "firstTextMs": 1995.0067500000005,
-      "totalMs": 2328.3576250000006,
-      "text": "## Bulbasaur Abilities\n\nBulbasaur can have the following abilities:\n\n- **Overgrow**\n- **Chlorophyll (hidden ability)**",
+      "firstTextMs": 1893.872875000001,
+      "totalMs": 2866.5873329999995,
+      "text": "Bulbasaur can have two abilities: Overgrow and Chlorophyll (hidden ability).\n\n## Key details:\n- **Overgrow**: This ability boosts the power of Grass-type moves when Bulbasaur's HP is low.\n- **Chlorophyll (hidden ability)**: This ability increases Bulbasaur's Speed stat when it is sunny.",
       "citations": [
         "https://pokemondb.net/pokedex/bulbasaur"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 39,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -137,12 +254,19 @@
       "id": "height-bulbasaur",
       "category": "fact",
       "question": "How tall is Bulbasaur?",
-      "firstTextMs": 2213.3673340000023,
-      "totalMs": 2614.282792000002,
-      "text": "## How tall is Bulbasaur?\n\nBulbasaur is **0.7 m (2′04″)** tall.",
+      "firstTextMs": 2065.946834000002,
+      "totalMs": 3399.350624999999,
+      "text": "Bulbasaur is 0.7 m (2′04″) tall.\n\n## Key details:\n- Bulbasaur is 0.7 m (2′04″) tall.\n- Bulbasaur is a Grass/Poison type Pokémon introduced in Generation 1.\n- Bulbasaur is known as the Seed Pokémon.\n- Bulbasaur is one of the three choices for a starter Pokémon in the original Game Boy games, Pokémon Red & Blue (Red & Green in Japan), along with Charmander and Squirtle.",
       "citations": [
         "https://pokemondb.net/pokedex/bulbasaur"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 60,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -153,12 +277,19 @@
       "id": "height-mewtwo",
       "category": "fact",
       "question": "How tall is Mewtwo?",
-      "firstTextMs": 2342.427958,
-      "totalMs": 2710.9712079999954,
-      "text": "## How tall is Mewtwo?\n\nMewtwo is 2.0 meters (6'07\") tall. This information is found in the documentation under the Pokédex data for Mewtwo.",
+      "firstTextMs": 1953.7568329999995,
+      "totalMs": 3246.998541000001,
+      "text": "Mewtwo is 2.0 m (6′07″) tall.\n\n**Key details**:\n- Mewtwo is 2.0 m (6′07″) tall.\n- Mewtwo is a Psychic type Pokémon introduced in Generation 1.\n- Mewtwo is known as the Genetic Pokémon.\n- Mewtwo has two Mega Evolutions, Mega Mewtwo X and Mega Mewtwo Y, available in Generation 6 games.",
       "citations": [
         "https://pokemondb.net/pokedex/mewtwo"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 48,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -169,14 +300,20 @@
       "id": "type-mewtwo",
       "category": "fact",
       "question": "What type is Mewtwo?",
-      "firstTextMs": 2022.2622499999998,
-      "totalMs": 3143.940333000006,
-      "text": "## Answer\n\nMewtwo is a **Psychic** type Pokémon. \n\n### Supporting Documentation\n\n- **Context 1:** \"Mewtwo Mewtwo is a Psychic type Pokémon introduced in Generation 1.\"\n- **Context 4:** \"Pokédex data National № 0150 Type Psychic Species Genetic Pokémon...\"\n- **Context 5:** \"Pokédex entries Mewtwo... Type Psychic...\"",
+      "firstTextMs": 2028.344333000001,
+      "totalMs": 4241.398457999996,
+      "text": "Mewtwo is a Psychic type Pokémon.\n\n**Key details**:\n- Introduced in Generation 1.\n- Known as the Genetic Pokémon.\n- It is 2.0 m (6′07″) tall and weighs 122.0 kg (269.0 lbs).\n- Abilities: Pressure, Unnerve (hidden ability).\n- Local №: 0150 (Red/Blue/Yellow); 0249 (Gold/Silver/Crystal); 0150 (FireRed/LeafGreen); 0254 (HeartGold/SoulSilver); 0151 (X/Y — Mountain Kalos); 0150 (Let's Go Pikachu/Let's Go Eevee); 0232 (Legends: Z-A).\n- Base stats: HP: base 106, Attack: base 110, Defense: base 90, Sp. Atk: base 154, Sp. Def: base 90, Speed: base 130, Total: 680.\n- Type defenses: Weak to Bug, Ghost, and Dark; resists Fighting and Psychic.",
       "citations": [
         "https://pokemondb.net/pokedex/mewtwo",
-        "https://pokemondb.net/pokedex/mewtwo",
         "https://pokemondb.net/pokedex/mewtwo"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 92,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -187,32 +324,48 @@
       "id": "type-eevee",
       "category": "fact",
       "question": "What type is Eevee?",
-      "firstTextMs": 1825.883375000005,
-      "totalMs": 3363.6421250000058,
-      "text": "## Answer\n\nEevee is a **Normal** type Pokémon. \n\nThis information is found in the documentation under the following excerpts:\n\n- \"Eevee Eevee is a Normal type Pokémon introduced in Generation 1.\"\n- \"Eevee Partner Eevee base stats: HP: base 65, ranging from 240 to 334 at level 100. [...] Type defenses Partner Eevee takes 2x damage from Fighting. It takes no damage from Ghost.\"\n- \"Eevee changes [...] #0133 Eevee Normal [...]\"\n\nThese excerpts clearly state that Eevee is of the Normal type.",
+      "firstTextMs": 2450.809291999998,
+      "totalMs": 3671.7833339999997,
+      "text": "Eevee is a Normal type Pokémon.\n\n## Key details\n- Eevee is a Normal type.\n- Eevee is introduced in Generation 1.\n- Eevee is known as the Evolution Pokémon.\n- Eevee is 0.3 m (1′00″) tall.\n- Eevee weighs 6.5 kg (14.3 lbs).\n- Eevee abilities: Run Away, Adaptability, Anticipation (hidden ability).",
       "citations": [
         "https://pokemondb.net/pokedex/eevee",
+        "https://pokemondb.net/pokedex/eevee",
         "https://pokemondb.net/pokedex/eevee"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 46,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
-      "passed": true,
-      "missingFacts": [],
+      "passed": false,
+      "missingFacts": [
+        "Evolution"
+      ],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Missing answer, fact or citation.",
       "id": "species-eevee",
       "category": "fact",
       "question": "What species is Eevee?",
-      "firstTextMs": 1792.4475840000014,
-      "totalMs": 4465.405250000003,
-      "text": "## Eevee Species\n\nEevee is known as the **Evolution Pokémon**. This species is characterized by its ability to evolve into multiple different Pokémon based on various conditions and items. \n\n### Key Points:\n- **Species:** Evolution Pokémon\n- **Type:** Normal\n- **Generation Introduced:** Generation 1\n\n### Evolutions:\nEevee can evolve into the following Pokémon:\n- **Vaporeon** (Water, using Water Stone)\n- **Jolteon** (Electric, using Thunder Stone)\n- **Flareon** (Fire, using Fire Stone)\n- **Espeon** (Psychic, high Friendship, Daytime)\n- **Umbreon** (Dark, high Friendship, Nighttime)\n- **Leafeon** (Grass, using Leaf Stone or level up near a Moss-rock)\n- **Glaceon** (Ice, using Ice Stone or level up near an Ice-rock)\n- **Sylveon** (Fairy, after learning a Fairy-type move, and either ♥♥ Affection in Gen 6-7 or high friendship in Gen 8+)\n\n### Additional Information:\n- Eevee has an unstable genetic makeup that allows it to adapt to its environment.\n- It has a Gigantamax form available in Pokémon Sword/Shield, with an exclusive G-Max move, G-Max Cuddle.",
+      "firstTextMs": 1949.2023750000008,
+      "totalMs": 3069.106667,
+      "text": "Eevee is a Normal type Pokémon introduced in Generation 1.\n\n## Key details\n- **Type:** Normal\n- **Generation:** 1\n- **Height:** 0.3 m (1′00″)\n- **Weight:** 6.5 kg (14.3 lbs)\n- **Abilities:** Run Away, Adaptability, Anticipation (hidden ability)\n- **Weaknesses:** Fighting\n- **Immunities:** Ghost",
       "citations": [
         "https://pokemondb.net/pokedex/eevee",
         "https://pokemondb.net/pokedex/eevee",
-        "https://pokemondb.net/pokedex/eevee",
         "https://pokemondb.net/pokedex/eevee"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 36,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -223,16 +376,23 @@
       "id": "species-gengar",
       "category": "fact",
       "question": "What species is Gengar?",
-      "firstTextMs": 2563.8004999999976,
-      "totalMs": 2572.269374999996,
-      "text": "## Species of Gengar\n\nGengar is known as the **Shadow Pokémon**.",
+      "firstTextMs": 2300.0207079999964,
+      "totalMs": 3714.689750000005,
+      "text": "Gengar is a Ghost/Poison type Pokémon.\n\n**Key details**:\n- Gengar is introduced in Generation 1.\n- It is known as the Shadow Pokémon.\n- Gengar has a Mega Evolution and a Gigantamax form.\n- It is 1.5 m (4′11″) tall and weighs 40.5 kg (89.3 lbs).\n- Gengar's abilities include Cursed Body and Shadow Tag (for Mega Gengar).\n- Gengar is weak to Ground, Psychic, Ghost, and Dark types.\n- Gengar resists Grass, Fairy, Poison, and Bug types.\n- Gengar is immune to Normal and Fighting types.",
       "citations": [
         "https://pokemondb.net/pokedex/gengar",
         "https://pokemondb.net/pokedex/gengar",
         "https://pokemondb.net/pokedex/gengar",
         "https://pokemondb.net/pokedex/gengar",
         "https://pokemondb.net/pokedex/gengar"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 79,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -243,13 +403,21 @@
       "id": "ability-gengar",
       "category": "fact",
       "question": "What abilities can Gengar have?",
-      "firstTextMs": 2181.991333999991,
-      "totalMs": 3094.153874999989,
-      "text": "## Abilities of Gengar\n\nGengar can have the following abilities:\n\n- **Cursed Body** (Generations 3-6)\n- **Shadow Tag** (Mega Gengar)\n\nThese abilities are explicitly mentioned in the provided documentation.",
+      "firstTextMs": 2279.341333000004,
+      "totalMs": 3162.647582999998,
+      "text": "Gengar can have the ability Cursed Body. \n\n**Key details**:\n- Gengar has the ability Cursed Body.\n- In Generations 3-6, Gengar has the Levitate ability.\n- Mega Gengar has the ability Shadow Tag.",
       "citations": [
         "https://pokemondb.net/pokedex/gengar",
+        "https://pokemondb.net/pokedex/gengar",
         "https://pokemondb.net/pokedex/gengar"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 30,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -260,14 +428,20 @@
       "id": "ability-snorlax",
       "category": "fact",
       "question": "What abilities can Snorlax have?",
-      "firstTextMs": 2250.305416000003,
-      "totalMs": 2658.0730829999957,
-      "text": "## Abilities of Snorlax\n\nSnorlax can have the following abilities:\n\n1. **Immunity**\n2. **Thick Fat**\n3. **Gluttony (hidden ability)**",
+      "firstTextMs": 1853.828416999997,
+      "totalMs": 2938.5027919999993,
+      "text": "Snorlax can have the following abilities:\n\n- **Immunity**\n- **Thick Fat**\n- **Gluttony (hidden ability)**\n\n**Key details**:\n- Immunity makes Snorlax weak to Fighting and immune to Ghost.\n- Thick Fat makes Snorlax weak to Fighting, resists Fire and Ice, and is immune to Ghost.\n- Gluttony makes Snorlax weak to Fighting and immune to Ghost.",
       "citations": [
         "https://pokemondb.net/pokedex/snorlax",
-        "https://pokemondb.net/pokedex/snorlax",
         "https://pokemondb.net/pokedex/snorlax"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 50,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -278,31 +452,43 @@
       "id": "height-snorlax",
       "category": "fact",
       "question": "How tall is Snorlax?",
-      "firstTextMs": 2329.931125000003,
-      "totalMs": 2339.5510829999985,
-      "text": "## Answer\n\nSnorlax is 2.1 meters (6′11″) tall.",
+      "firstTextMs": 1911.4246669999993,
+      "totalMs": 3044.414875000002,
+      "text": "Snorlax is 2.1 m (6′11″) tall.\n\n## Key details:\n- Snorlax is 2.1 m (6′11″) tall.\n- Snorlax is a Normal type Pokémon introduced in Generation 1.\n- Snorlax is known as the Sleeping Pokémon.\n- Snorlax has a Gigantamax form available in Pokémon Sword/Shield.",
       "citations": [
+        "https://pokemondb.net/pokedex/snorlax",
         "https://pokemondb.net/pokedex/snorlax"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 40,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
-      "passed": false,
-      "missingFacts": [
-        "1.2"
-      ],
+      "passed": true,
+      "missingFacts": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Missing answer, fact or citation.",
+      "reason": "Every expected fact and a correct citation.",
       "id": "height-lucario",
       "category": "fact",
       "question": "How tall is Lucario?",
-      "firstTextMs": 2611.0600840000116,
-      "totalMs": 2984.105542000005,
-      "text": "## How tall is Lucario?\n\nLucario is 1.3 meters (4′03″) tall.",
+      "firstTextMs": 1824.4962919999962,
+      "totalMs": 2731.2252919999883,
+      "text": "Lucario is 1.2 m (3′11″) tall.\n\n**Key details**:\n- Lucario is 1.2 m (3′11″) tall.\n- Mega Lucario is 1.3 m (4′03″) tall.\n- Mega Lucario Z is 1.3 m (4′03″) tall.",
       "citations": [
-        "https://pokemondb.net/pokedex/lucario",
         "https://pokemondb.net/pokedex/lucario"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 29,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -313,15 +499,225 @@
       "id": "type-lucario",
       "category": "fact",
       "question": "What type is Lucario?",
-      "firstTextMs": 1749.36437499999,
-      "totalMs": 10848.647083999997,
-      "text": "## Type of Lucario\n\nLucario is a **Fighting/Steel** type Pokémon. This information is directly supported by the documentation:\n\n- \"Lucario is a Fighting/Steel type Pokémon introduced in Generation 4.\"\n- \"Type Fighting Steel\"\n- \"Type Fighting · Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel Species Aura Pokémon\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel Species Aura Pokémon\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel Species Aura Pokémon\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"Type Fighting Steel\"\n- \"",
+      "firstTextMs": 2772.3465410000063,
+      "totalMs": 3138.801124999998,
+      "text": "Lucario is a Fighting/Steel type Pokémon.\n\n**Key details**:\n- Lucario is introduced in Generation 4.\n- Lucario is known as the Aura Pokémon.\n- Lucario is 1.2 m (3′11″) tall and weighs 54.0 kg (119.0 lbs).\n- Lucario has the abilities: Steadfast, Inner Focus, and Justified (hidden ability).\n- Lucario is number 0448 in the National Pokédex.",
       "citations": [
         "https://pokemondb.net/pokedex/lucario",
         "https://pokemondb.net/pokedex/lucario",
         "https://pokemondb.net/pokedex/lucario",
         "https://pokemondb.net/pokedex/lucario"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 52,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
+    },
+    {
+      "passed": true,
+      "missingFacts": [],
+      "citationCorrect": true,
+      "needsHumanReview": false,
+      "reason": "Every expected fact and a correct citation.",
+      "otherFormValuesShown": [],
+      "id": "base-weight-charizard",
+      "category": "base-form",
+      "question": "How much does Charizard weigh?",
+      "firstTextMs": 1861.5816249999916,
+      "totalMs": 3344.800999999992,
+      "text": "Charizard weighs 90.5 kg (199.5 lbs).\n\n## Key details:\n- Charizard is a Fire and Flying type Pokémon.\n- It is known as the Flame Pokémon.\n- Charizard is 1.7 m (5′07″) tall.\n- Charizard has a base experience yield of 267.\n- Charizard's base stats include HP: 78, Attack: 84, Defense: 78, Sp. Atk: 109, Sp. Def: 85, and Speed: 100.",
+      "citations": [
+        "https://pokemondb.net/pokedex/charizard"
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 56,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
+    },
+    {
+      "passed": true,
+      "missingFacts": [],
+      "citationCorrect": true,
+      "needsHumanReview": false,
+      "reason": "Every expected fact and a correct citation.",
+      "otherFormValuesShown": [],
+      "id": "base-weight-venusaur",
+      "category": "base-form",
+      "question": "How much does Venusaur weigh?",
+      "firstTextMs": 1727.7299579999963,
+      "totalMs": 2941.607541999998,
+      "text": "Venusaur weighs 100.0 kg (220.5 lbs).\n\n**Key details**:\n- Venusaur is 2.0 m (6′07″) tall.\n- Venusaur weighs 100.0 kg (220.5 lbs).\n- Venusaur abilities: Overgrow, Chlorophyll (hidden ability).",
+      "citations": [
+        "https://pokemondb.net/pokedex/venusaur"
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 26,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
+    },
+    {
+      "passed": true,
+      "missingFacts": [],
+      "citationCorrect": true,
+      "needsHumanReview": false,
+      "reason": "Every expected fact and a correct citation.",
+      "otherFormValuesShown": [],
+      "id": "base-height-venusaur",
+      "category": "base-form",
+      "question": "How tall is Venusaur?",
+      "firstTextMs": 1907.9509580000013,
+      "totalMs": 2729.0779579999944,
+      "text": "Venusaur is 2.0 m (6′07″) tall.\n\n## Key details\n- **Height:** 2.0 m (6′07″)\n- **Weight:** 100.0 kg (220.5 lbs)",
+      "citations": [
+        "https://pokemondb.net/pokedex/venusaur"
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 17,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
+    },
+    {
+      "passed": true,
+      "missingFacts": [],
+      "citationCorrect": true,
+      "needsHumanReview": false,
+      "reason": "Every expected fact and a correct citation.",
+      "otherFormValuesShown": [],
+      "id": "base-weight-lucario",
+      "category": "base-form",
+      "question": "How much does Lucario weigh?",
+      "firstTextMs": 2014.0325410000078,
+      "totalMs": 3040.014041000002,
+      "text": "Lucario weighs 54.0 kg (119.0 lbs).\n\n**Key details**:\n- Lucario is 1.2 m (3′11″) tall.\n- Lucario weighs 54.0 kg (119.0 lbs).\n- Lucario is a Fighting/Steel type Pokémon.\n- Lucario has abilities: Steadfast, Inner Focus, Justified (hidden ability).",
+      "citations": [
+        "https://pokemondb.net/pokedex/lucario"
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 35,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
+    },
+    {
+      "passed": true,
+      "missingFacts": [],
+      "citationCorrect": true,
+      "needsHumanReview": true,
+      "reason": "The base value and other forms' values; a person checks which is which.",
+      "otherFormValuesShown": [
+        "1.3"
+      ],
+      "id": "base-height-lucario",
+      "category": "base-form",
+      "question": "How tall is Lucario?",
+      "firstTextMs": 1910.500125000006,
+      "totalMs": 2834.781541000004,
+      "text": "Lucario is 1.2 m (3′11″) tall.\n\n**Key details**:\n- Lucario is 1.2 m (3′11″) tall.\n- Mega Lucario is 1.3 m (4′03″) tall.\n- Mega Lucario Z is 1.3 m (4′03″) tall.",
+      "citations": [
+        "https://pokemondb.net/pokedex/lucario"
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 29,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
+    },
+    {
+      "passed": true,
+      "missingFacts": [],
+      "citationCorrect": true,
+      "needsHumanReview": false,
+      "reason": "Every expected fact and a correct citation.",
+      "otherFormValuesShown": [],
+      "id": "base-weight-meowth",
+      "category": "base-form",
+      "question": "How much does Meowth weigh?",
+      "firstTextMs": 1911.7247080000234,
+      "totalMs": 2735.414208000002,
+      "text": "Meowth weighs 4.2 kg (9.3 lbs).\n\n**Key details**:\n- Meowth is 0.4 m (1′04″) tall.\n- Meowth weighs 4.2 kg (9.3 lbs).",
+      "citations": [
+        "https://pokemondb.net/pokedex/meowth",
+        "https://pokemondb.net/pokedex/meowth"
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 20,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
+    },
+    {
+      "passed": true,
+      "missingFacts": [],
+      "citationCorrect": true,
+      "needsHumanReview": true,
+      "reason": "The base value and other forms' values; a person checks which is which.",
+      "otherFormValuesShown": [
+        "115.0",
+        "85.0",
+        "110.0"
+      ],
+      "id": "base-weight-tauros",
+      "category": "base-form",
+      "question": "How much does Tauros weigh?",
+      "firstTextMs": 1787.6020000000135,
+      "totalMs": 3035.078375000012,
+      "text": "Tauros weighs 88.4 kg (194.9 lbs). \n\n**Key details**:\n- Tauros Combat Breed weighs 115.0 kg (253.5 lbs).\n- Tauros Blaze Breed weighs 85.0 kg (187.4 lbs).\n- Tauros Aqua Breed weighs 110.0 kg (242.5 lbs).",
+      "citations": [
+        "https://pokemondb.net/pokedex/tauros",
+        "https://pokemondb.net/pokedex/tauros",
+        "https://pokemondb.net/pokedex/tauros",
+        "https://pokemondb.net/pokedex/tauros"
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 32,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
+    },
+    {
+      "passed": true,
+      "missingFacts": [],
+      "citationCorrect": true,
+      "needsHumanReview": false,
+      "reason": "Every expected fact and a correct citation.",
+      "wrongWeaknessesShown": [],
+      "id": "weakness-charizard",
+      "category": "fact",
+      "question": "What types is Charizard weak to?",
+      "firstTextMs": 2426.2044999999925,
+      "totalMs": 3552.623500000016,
+      "text": "Charizard is weak to Rock, Water, and Electric types.\n\n## Key details:\n- **Type defenses**: Charizard is weak to Rock (4x), Water, and Electric.\n- **Damage multipliers**: Charizard takes 4x damage from Rock, 2x damage from Water and Electric, and 0.5x damage from Fire, Fighting, Steel, and Fairy. It takes 0.25x damage from Grass and Bug. It takes no damage from Ground.",
+      "citations": [
+        "https://pokemondb.net/pokedex/charizard",
+        "https://pokemondb.net/pokedex/charizard"
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 59,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -333,9 +729,10 @@
       "category": "unanswerable",
       "question": "Who won the 1998 World Cup?",
       "firstTextMs": null,
-      "totalMs": 221.4753330000094,
+      "totalMs": 257.8615409999911,
       "text": "",
-      "citations": []
+      "citations": [],
+      "answerGenerated": false
     },
     {
       "passed": true,
@@ -347,9 +744,10 @@
       "category": "unanswerable",
       "question": "What is the capital of France?",
       "firstTextMs": null,
-      "totalMs": 209.83212500000081,
+      "totalMs": 229.1567910000158,
       "text": "",
-      "citations": []
+      "citations": [],
+      "answerGenerated": false
     },
     {
       "passed": true,
@@ -361,9 +759,10 @@
       "category": "unanswerable",
       "question": "What is the current price of a Nintendo Switch?",
       "firstTextMs": null,
-      "totalMs": 243.67004200001247,
+      "totalMs": 262.0138330000045,
       "text": "",
-      "citations": []
+      "citations": [],
+      "answerGenerated": false
     },
     {
       "passed": true,
@@ -375,9 +774,10 @@
       "category": "unanswerable",
       "question": "What does Charizard taste like?",
       "firstTextMs": null,
-      "totalMs": 1087.1810839999962,
+      "totalMs": 862.0437920000113,
       "text": "",
-      "citations": []
+      "citations": [],
+      "answerGenerated": false
     },
     {
       "passed": true,
@@ -389,9 +789,10 @@
       "category": "unanswerable",
       "question": "How do I reset my bank password?",
       "firstTextMs": null,
-      "totalMs": 238.55329199999687,
+      "totalMs": 251.81649999998626,
       "text": "",
-      "citations": []
+      "citations": [],
+      "answerGenerated": false
     },
     {
       "passed": true,
@@ -403,9 +804,10 @@
       "category": "unanswerable",
       "question": "What is the phone number of Ash Ketchum's mother?",
       "firstTextMs": null,
-      "totalMs": 213.72091699999874,
+      "totalMs": 227.10149999998976,
       "text": "",
-      "citations": []
+      "citations": [],
+      "answerGenerated": false
     },
     {
       "passed": true,
@@ -416,14 +818,20 @@
       "id": "scoped-charizard-0",
       "category": "scoped",
       "question": "Describe the appearance and behavior of Charizard.",
-      "firstTextMs": 1759.277833,
-      "totalMs": 3725.0122499999998,
-      "text": "## Appearance\n\nCharizard is a large dragon-like Pokémon, mainly orange in color. It has two large wings, the underside of which are turquoise. Like Charmander and Charmeleon, it has a flame at the end of its tail. The design of Charizard appears to draw inspiration from dragons of European folklore, with its large wings, horned head, and fiery breath.\n\n## Behavior\n\nCharizard is known as the Flame Pokémon and is notable for being the final evolution stage of one of the original starter Pokémon. It is known to fly around the sky in search of powerful opponents and breathes fire of such great heat that it melts anything. However, it never turns its fiery breath on any opponent weaker than itself. Charizard's fire burns hotter if it has experienced harsh battles. In its Gigantamax form, the flame inside its body burns hotter than 3,600 degrees Fahrenheit, and when Charizard roars, that temperature climbs even higher.",
+      "firstTextMs": 2007.4679160000233,
+      "totalMs": 5878.756666000001,
+      "text": "Charizard is a Fire/Flying type Pokémon known as the Flame Pokémon. It is a large dragon-like Pokémon, mainly orange in color, with two large wings, the underside of which are turquoise. It has a flame at the end of its tail, similar to Charmander and Charmeleon. Charizard's design draws inspiration from dragons of European folklore, featuring a horned head and fiery breath.\n\n**Key details:**\n- Charizard is 1.7 m (5′07″) tall and weighs 90.5 kg (199.5 lbs).\n- It has a flame at the end of its tail that burns more intensely when expelling a blast of super hot fire.\n- If Charizard becomes furious, the flame at the tip of its tail flares up in a whitish-blue color.\n- It is known to cause forest fires unintentionally due to its ability to spit fire that is hot enough to melt boulders.\n- Charizard flies around the sky in search of powerful opponents and never turns its fiery breath on any opponent weaker than itself.\n\nCharizard's behavior includes using its wings to fly high and increasing the temperature of its fire as it gains experience in battle. It is also known for breathing intense, hot flames that can melt almost anything and inflict terrible pain on enemies.",
       "citations": [
         "https://pokemondb.net/pokedex/charizard",
-        "https://pokemondb.net/pokedex/charizard",
         "https://pokemondb.net/pokedex/charizard"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 202,
+        "long": true,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -434,12 +842,21 @@
       "id": "scoped-charizard-1",
       "category": "scoped",
       "question": "What are the abilities of Charizard?",
-      "firstTextMs": 2407.0092499999882,
-      "totalMs": 2740.721875000003,
-      "text": "## Abilities of Charizard\n\nCharizard has the following abilities:\n\n- **Blaze**\n- **Solar Power** (hidden ability)\n\nThese abilities are directly mentioned in the provided documentation.",
+      "firstTextMs": 2018.1208749999932,
+      "totalMs": 3242.960665999999,
+      "text": "Charizard has two abilities: Blaze and Solar Power (hidden ability).\n\n## Key details:\n- **Blaze:** Increases the power of Fire-type moves when the Pokémon's HP is low.\n- **Solar Power (hidden ability):** Boosts the power of Special Attack moves when the weather is sunny.",
       "citations": [
+        "https://pokemondb.net/pokedex/charizard",
+        "https://pokemondb.net/pokedex/charizard",
         "https://pokemondb.net/pokedex/charizard"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 41,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -450,14 +867,20 @@
       "id": "scoped-pikachu-0",
       "category": "scoped",
       "question": "Describe the appearance and behavior of Pikachu.",
-      "firstTextMs": 1895.697833000013,
-      "totalMs": 7625.018207999994,
-      "text": "## Appearance and Behavior of Pikachu\n\n### Appearance\n- **Pikachu** is an Electric type Pokémon known as the Mouse Pokémon.\n- It has electricity-storing pouches on its cheeks.\n- These pouches appear to become electrically charged during the night while Pikachu sleeps.\n- It occasionally discharges electricity when it is dozy after waking up.\n- Pikachu has a Gigantamax form available in Pokémon Sword/Shield, with an exclusive G-Max move, G-Max Volt Crash.\n\n### Behavior\n- When several Pikachu gather, their electricity can build and cause lightning storms.\n- Pikachu stores electricity in the electric sacs on its cheeks.\n- When it releases pent-up energy in a burst, the electric power is equal to a lightning bolt.\n- It lives in forests with others.\n- If it loses crackling power from the electric pouches on its cheeks, it is being wary.\n- Occasionally, Pikachu uses an electric shock to recharge a fellow Pikachu that is in a weakened state.\n- It raises its tail to check its surroundings, and the tail is sometimes struck by lightning in this pose.\n- Whenever Pikachu comes across something new, it blasts.\n\n### Pokédex Data\n- **National №**: 0025\n- **Type**: Electric\n- **Species**: Mouse Pokémon\n- **Height**: 0.4 m (1′04″)\n- **Weight**: 6.0 kg (13.2 lbs)\n- **Abilities**: Static, Lightning Rod (hidden ability)\n- **Gender**: 50% male, 50% female\n- **Egg cycles**: 10 (2,314–2,570 steps)\n\n### Base Stats\n- **HP**: base 35, ranging from 180 to 274 at level 100.\n- **Attack**: base 55, ranging from 103 to 229 at level 100.\n- **Defense**: base 40, ranging from 76 to 196 at level 100.\n- **Sp. Atk**: base 50, ranging from 94 to 218 at level 100.\n- **Sp. Def**: base 50, ranging from 94 to 218 at level 100.\n- **Speed**: base 90, ranging from 166 to 306 at level 100.\n- **Total**: 320.\n\n### Type Defenses\n- With the Static ability, Pikachu takes 2x damage from Ground. It takes 0.5x damage from Electric, Flying, and Steel.\n- With the Lightning Rod ability, Pikachu takes 2x damage from Ground. It takes 0.5x damage from Flying and Steel. It takes no damage from Electric.",
+      "firstTextMs": 2217.630833000003,
+      "totalMs": 4471.158124999987,
+      "text": "Pikachu is an Electric type Pokémon known as the Mouse Pokémon. \n\n## Key details:\n- **Appearance:**\n  - Pikachu is 0.4 m (1′04″) tall.\n  - It weighs 6.0 kg (13.2 lbs).\n  - It has small electric sacs on both its cheeks.\n  - It occasionally uses an electric shock to recharge a fellow Pikachu that is in a weakened state.\n  - It raises its tail to check its surroundings, and the tail is sometimes struck by lightning in this pose.\n  - It has the nature to store electricity and feels stressed if it’s unable to fully discharge the electricity.\n\n- **Behavior:**\n  - If it loses crackling power from the electric pouches on its cheeks, it is being wary.\n  - It blasts something new with a jolt of electricity if it comes across it.\n  - It has the nature to store up electricity and discharges it when it is dozy after waking up.\n  - It occasionally uses an electric shock to recharge a fellow Pikachu that is in a weakened state.\n  - It raises its tail to check its surroundings, and the tail is sometimes struck by lightning in this pose.",
       "citations": [
         "https://pokemondb.net/pokedex/pikachu",
-        "https://pokemondb.net/pokedex/pikachu",
         "https://pokemondb.net/pokedex/pikachu"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 174,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -468,13 +891,20 @@
       "id": "scoped-pikachu-1",
       "category": "scoped",
       "question": "What are the abilities of Pikachu?",
-      "firstTextMs": 1814.2584579999966,
-      "totalMs": 3149.6109580000048,
-      "text": "## Abilities of Pikachu\n\nPikachu has two abilities:\n\n1. **Static**\n   - With the Static ability, Pikachu takes 2x damage from Ground.\n   - It takes 0.5x damage from Electric, Flying, and Steel.\n\n2. **Lightning Rod (hidden ability)**\n   - With the Lightning Rod ability, Pikachu takes 2x damage from Ground.\n   - It takes 0.5x damage from Flying and Steel.\n   - It takes no damage from Electric.",
+      "firstTextMs": 1809.6339589999989,
+      "totalMs": 3138.4434170000022,
+      "text": "Pikachu has two abilities: Static and Lightning Rod (hidden ability).\n\n## Key details:\n- **Static**:\n  - Weak to Ground\n  - Resists Electric, Flying, and Steel\n  - Takes 2x damage from Ground\n  - Takes 0.5x damage from Electric, Flying, and Steel\n\n- **Lightning Rod**:\n  - Weak to Ground\n  - Resists Flying and Steel\n  - Immune to Electric\n  - Takes 2x damage from Ground\n  - Takes 0.5x damage from Flying and Steel\n  - Takes no damage from Electric",
       "citations": [
         "https://pokemondb.net/pokedex/pikachu",
         "https://pokemondb.net/pokedex/pikachu"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 63,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -485,16 +915,21 @@
       "id": "scoped-mewtwo-0",
       "category": "scoped",
       "question": "Describe the appearance and behavior of Mewtwo.",
-      "firstTextMs": 1777.2307079999882,
-      "totalMs": 6211.714165999991,
-      "text": "## Appearance and Behavior of Mewtwo\n\n### Appearance\n- **Type:** Psychic\n- **Species:** Genetic Pokémon\n- **Height:** 2.0 m (6′07″)\n- **Weight:** 122.0 kg (269.0 lbs)\n- **Abilities:** \n  - Pressure\n  - Unnerve (hidden ability)\n- **Mega Evolutions:**\n  - **Mega Mewtwo X:** \n    - **Height:** 2.3 m (7′07″)\n    - **Weight:** 127.0 kg (280.0 lbs)\n    - **Type:** Psychic\n    - **Abilities:** Steadfast\n  - **Mega Mewtwo Y:** \n    - **Height:** 1.5 m (4′11″)\n    - **Weight:** 33.0 kg (72.8 lbs)\n    - **Type:** Psychic\n    - **Abilities:** Insomnia\n\n### Behavior\n- **Creation:** Mewtwo was created by genetic manipulation through horrific gene-splicing and DNA-engineering experiments by a scientist.\n- **Disposition:** It is known for having a savage heart and a lack of compassion.\n- **Resting Behavior:** Mewtwo usually remains motionless to conserve energy, so that it may unleash its full power in battle.\n- **Battle Focus:** It thinks only of defeating its foes and was created solely for battling.\n\n### Pokédex Entries\n- **Red/Blue:** \"It was created by a scientist after years of horrific gene splicing and DNA engineering experiments.\"\n- **Gold:** \"Because its battle abilities were raised to the ultimate level, it thinks only of defeating its foes.\"\n- **Silver:** \"It usually remains motionless to conserve energy, so that it may unleash its full power in battle.\"\n- **Crystal:** \"Said to rest quietly in an undiscovered cave, this POKéMON was created solely for battling.\"\n- **X:** \"It was created by a scientist after years of horrific gene-splicing and DNA-engineering experiments.\"\n- **Y:** \"A Pokémon created by recombining Mew’s genes. It’s said to have the most savage heart among Pokémon.\"\n- **Sword:** \"Created from the DNA of Mew, this Pokémon is a dangerous combination of overwhelming power and a savage heart.\"\n- **Shield:** \"The research efforts of a certain scientist ultimately resulted in this Pokémon. Its powers are dedicated to battling.\"\n- **Brilliant Diamond/Shining Pearl:** \"Mewtwo was created by recombining Mew’s genes. It’s said to have the most savage heart among Pokémon.\"\n- **Let's Go Pikachu/Let's Go Eevee:** \"Its DNA is almost the same as Mew’s. However, its size and disposition are vastly different.\"",
+      "firstTextMs": 1812.8010420000064,
+      "totalMs": 3760.7630000000063,
+      "text": "Mewtwo is a Psychic type Pokémon created by genetic manipulation. It is known for its overwhelming power and savage heart. \n\n## Key details:\n- **Appearance**:\n  - Mewtwo is 2.0 m (6′07″) tall and weighs 122.0 kg (269.0 lbs).\n  - It has a genderless and non-evolving nature.\n  \n- **Behavior**:\n  - Mewtwo remains motionless to conserve energy, allowing it to unleash its full power in battle.\n  - It was created by a scientist through years of horrific gene-splicing and DNA-engineering experiments.\n  - Despite its creation, Mewtwo lacks a compassionate heart and is dedicated solely to battling.",
       "citations": [
         "https://pokemondb.net/pokedex/mewtwo",
         "https://pokemondb.net/pokedex/mewtwo",
-        "https://pokemondb.net/pokedex/mewtwo",
-        "https://pokemondb.net/pokedex/mewtwo",
         "https://pokemondb.net/pokedex/mewtwo"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 86,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": true,
@@ -505,31 +940,36 @@
       "id": "scoped-mewtwo-1",
       "category": "scoped",
       "question": "What are the abilities of Mewtwo?",
-      "firstTextMs": 2207.9191669999855,
-      "totalMs": 2554.655375000002,
-      "text": "## Abilities of Mewtwo\n\nMewtwo has two abilities:\n\n1. **Pressure**\n2. **Unnerve (hidden ability)**",
+      "firstTextMs": 2092.611249999987,
+      "totalMs": 3307.0469579999917,
+      "text": "Mewtwo has two abilities: Pressure and Unnerve (hidden ability).\n\n## Key details\n- **Pressure:** This ability increases the power of moves that make contact.\n- **Unnerve (hidden ability):** This ability causes opposing Pokémon to flinch when they switch in.",
       "citations": [
         "https://pokemondb.net/pokedex/mewtwo"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 36,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": false,
       "missingFacts": [
         "Raichu"
       ],
-      "citationCorrect": true,
+      "citationCorrect": false,
       "needsHumanReview": true,
       "reason": "Missing answer, fact or citation.",
       "id": "judgment-0",
       "category": "judgment",
       "question": "What does Pikachu evolve into?",
-      "firstTextMs": 2254.982457999984,
-      "totalMs": 2262.0820419999945,
-      "text": "I haven't found information about what Pikachu evolves into.",
-      "citations": [
-        "https://pokemondb.net/pokedex/pikachu",
-        "https://pokemondb.net/pokedex/pikachu"
-      ]
+      "firstTextMs": null,
+      "totalMs": 830.4839999999967,
+      "text": "",
+      "citations": [],
+      "answerGenerated": false
     },
     {
       "passed": true,
@@ -540,15 +980,20 @@
       "id": "judgment-1",
       "category": "judgment",
       "question": "Which Pokémon evolves into Charizard?",
-      "firstTextMs": 1943.466167000006,
-      "totalMs": 3482.5412500000093,
-      "text": "## Evolution into Charizard\n\nCharizard evolves from Charmeleon, which in turn evolves from Charmander. Here is the relevant information from the documentation:\n\n### Evolution Chart\n- **Charmander** (Fire, Level 16) → **Charmeleon** (Fire, Level 36) → **Charizard** (Fire/Flying)\n\n### Pokédex Data\n- **Charmander** is the first stage of the evolution line leading to Charizard.\n- **Charmeleon** is the second stage of the evolution line leading to Charizard.",
+      "firstTextMs": 2115.903875000018,
+      "totalMs": 2525.9256660000246,
+      "text": "Charmander evolves into Charizard.\n\n**Key details**:\n- Charmander evolves into Charmeleon at level 16.\n- Charmeleon evolves into Charizard at level 36.",
       "citations": [
         "https://pokemondb.net/pokedex/charizard",
-        "https://pokemondb.net/pokedex/charizard",
-        "https://pokemondb.net/pokedex/charizard",
         "https://pokemondb.net/pokedex/charizard"
-      ]
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 20,
+        "long": false,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     },
     {
       "passed": false,
@@ -562,9 +1007,10 @@
       "category": "judgment",
       "question": "Is Charizard weak to water?",
       "firstTextMs": null,
-      "totalMs": 889.5567919999885,
+      "totalMs": 703.9453750000102,
       "text": "",
-      "citations": []
+      "citations": [],
+      "answerGenerated": false
     },
     {
       "passed": true,
@@ -575,15 +1021,21 @@
       "id": "judgment-3",
       "category": "judgment",
       "question": "What is the difference between Charmander and Charmeleon?",
-      "firstTextMs": 1807.4416659999988,
-      "totalMs": 10618.839540999994,
-      "text": "## Differences Between Charmander and Charmeleon\n\n### Charmander\n- **Type:** Fire\n- **Species:** Lizard Pokémon\n- **Height:** 0.6 m (2′00″)\n- **Weight:** 8.5 kg (18.7 lbs)\n- **Abilities:** Blaze, Solar Power (hidden ability)\n- **Local Numbers:** \n  - 0004 (Red/Blue/Yellow)\n  - 0229 (Gold/Silver/Crystal)\n  - 0004 (FireRed/LeafGreen)\n  - 0234 (HeartGold/SoulSilver)\n  - 0083 (X/Y — Central Kalos)\n  - 0004 (Let's Go Pikachu/Let's Go Eevee)\n  - 0378 (Sword/Shield)\n  - 0151 (Legends: Z-A)\n  - 0167 (The Indigo Disk)\n- **Training EV yield:** 1 Speed\n- **Catch rate:** 45 (5.9% with PokéBall, full HP)\n- **Base Friendship:** 50 (normal)\n- **Base Exp.:** 62\n- **Growth Rate:** Medium Slow\n- **Breeding Egg Groups:** Dragon, Monster\n- **Gender:** 87.5% male, 12.5% female\n- **Egg cycles:** 20 (4,884–5,140 steps)\n- **Base Stats:**\n  - HP: base 39, ranging from 188 to 282 at level 100\n  - Attack: base 52, ranging from 98 to 223 at level 100\n  - Defense: base 43, ranging from 81 to 203 at level 100\n  - Sp. Atk: base 60, ranging from 112 to 240 at level 100\n  - Sp. Def: base 50, ranging from 94 to 218 at level 100\n  - Speed: base 65, ranging from 121 to 251 at level 100\n- **Total Base Stats:** 309\n- **Type Defenses:**\n  - Takes 2x damage from Water, Ground, and Rock\n  - Takes 0.5x damage from Fire, Grass, Ice, Bug, Steel, and Fairy\n- **Evolution:** Evolves into Charmeleon at Level 16\n\n### Charmeleon\n- **Type:** Fire\n- **Species:** Flame Pokémon\n- **Height:** 1.1 m (3′07″)\n- **Weight:** 19.0 kg (41.9 lbs)\n- **Abilities:** Blaze, Solar Power (hidden ability)\n- **Local Numbers:** \n  - 0005 (Red/Blue/Yellow)\n  - 0230 (Gold/Silver/Crystal)\n  - 0005 (FireRed/LeafGreen)\n  - 0235 (HeartGold/SoulSilver)\n  - 0084 (X/Y — Central Kalos)\n  - 0005 (Let's Go Pikachu/Let's Go Eevee)\n  - 0379 (Sword/Shield)\n  - 0152 (Legends: Z-A)\n  - 0168 (The Indigo Disk)\n- **Training EV yield:** 1 Sp. Atk, 1 Speed\n- **Catch rate:** 45 (5.9% with PokéBall, full HP)\n- **Base Friendship:** 50 (normal)\n- **Base Exp.:** 142\n- **Growth Rate:** Medium Slow\n- **Breeding Egg Groups:** Dragon, Monster\n- **Gender:** 87.5% male, 12.5% female\n- **Egg cycles:** 20 (4,884–5,140 steps)\n- **Base Stats:**\n  - HP: base 58, ranging from 226 to 320 at level 100\n  - Attack: base 64, ranging from 119 to 249 at level 100\n  - Defense: base 58, ranging from 108 to 236 at level 100\n  - Sp. Atk: base 80, ranging from 148 to 284 at level 100\n  - Sp. Def: base 65, ranging from 121 to 251 at level 100\n  - Speed: base 80, ranging from 148 to 284 at level 100\n- **Total Base Stats:** 405\n- **Type Defenses:**\n  - Takes 2x damage from Water, Ground, and Rock\n  - Takes 0.5x damage from Fire, Grass, Ice, Bug, Steel, and Fairy\n- **Evolution:** Evolves into Charizard at Level 36\n\n### Summary of Differences\n- **Type:** Both are Fire type, but Charmeleon also has a secondary type of Flying when it evolves into Charizard.\n- **Height and Weight:** Charmeleon is taller and heavier than Charmander.\n- **Base Stats:** Charmeleon has higher base stats across the board compared to Charmander.\n- **Abilities:** Both have the same abilities, but Charmeleon has a higher base Special Attack stat.\n- **Evolution:** Charmander evolves into Charmeleon at Level 16, and Charmeleon evolves into Charizard at Level 36.",
+      "firstTextMs": 1894.8011249999981,
+      "totalMs": 5892.573708000011,
+      "text": "Charmander and Charmeleon are both Fire-type Pokémon, but they have several differences.\n\n**Key details:**\n\n- **Type and Form:**\n  - **Charmander:** Fire type.\n  - **Charmeleon:** Fire type.\n\n- **Height and Weight:**\n  - **Charmander:** 0.6 m (2′00″) tall, 8.5 kg (18.7 lbs).\n  - **Charmeleon:** 1.1 m (3′07″) tall, 19.0 kg (41.9 lbs).\n\n- **Abilities:**\n  - Both have the abilities Blaze and Solar Power (hidden ability).\n\n- **Base Stats:**\n  - **Charmander:**\n    - HP: base 39, ranging from 188 to 282 at level 100.\n    - Attack: base 52, ranging from 98 to 223 at level 100.\n    - Defense: base 43, ranging from 81 to 203 at level 100.\n    - Sp. Atk: base 60, ranging from 112 to 240 at level 100.\n    - Sp. Def: base 50, ranging from 94 to 218 at level 100.\n    - Speed: base 65, ranging from 121 to 251 at level 100.\n    - Total: 309.\n  - **Charmeleon:**\n    - HP: base 58, ranging from 226 to 320 at level 100.\n    - Attack: base 64, ranging from 119 to 249 at level 100.\n    - Defense: base 58, ranging from 108 to 236 at level 100.\n    - Sp. Atk: base 80, ranging from 148 to 284 at level 100.\n    - Sp. Def: base 65, ranging from 121 to 251 at level 100.\n    - Speed: base 80, ranging from 148 to 284 at level 100.\n    - Total: 405.\n\n- **Type Defenses:**\n  - **Charmander:** Weak to Water, Ground, and Rock. Resists Fire, Grass, Ice, Bug, Steel, and Fairy.\n  - **Charmeleon:** Weak to Water, Ground, and Rock. Resists Fire, Grass, Ice, Bug, Steel, and Fairy.\n\n- **Evolution:**\n  - **Charmander** evolves into **Charmeleon** at level 16.\n  - **Charmeleon** evolves into **Charizard** at level 36.",
       "citations": [
         "https://pokemondb.net/pokedex/charmander",
         "https://pokemondb.net/pokedex/charmeleon",
-        "https://pokemondb.net/pokedex/charmander",
-        "https://pokemondb.net/pokedex/charmeleon"
-      ]
+        "https://pokemondb.net/pokedex/charmander"
+      ],
+      "answerGenerated": true,
+      "style": {
+        "words": 246,
+        "long": true,
+        "mentionsDocumentation": false,
+        "directAnswerFirst": true
+      }
     }
   ]
 }
