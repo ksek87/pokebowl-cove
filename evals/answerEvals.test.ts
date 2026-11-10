@@ -11,6 +11,7 @@ import {
   type FormFacts,
   type GradedAnswer,
 } from './answerEvals.ts';
+import { ASK_EVOLUTION_QUESTION } from '../src/search/settings.ts';
 
 const URI = 'https://pokemondb.net/pokedex/charizard';
 const OTHER = 'https://pokemondb.net/pokedex/pikachu';
@@ -68,10 +69,45 @@ describe('gradeAnswer', (): void => {
     expect(gradeAnswer(scoped, outcome({ citations: [URI, OTHER] })).passed).toBe(false);
   });
 
+  it('requires the expected facts anywhere in a scoped description, not only in its opening', (): void => {
+    const scoped: AnswerCase = { id: 's', category: 'scoped', question: 'q', facts: ['Charmander', 'Charmeleon'], citeAny: [URI], scope: 'x' };
+    const described = 'Charizard evolves from Charmeleon.\n\n- Charmander evolves into Charmeleon.';
+
+    expect(gradeAnswer(scoped, outcome({ text: described })).passed).toBe(true);
+    expect(gradeAnswer(scoped, outcome({ text: 'Charizard evolves from Charmeleon.' }))).toMatchObject({ passed: false, missingFacts: ['Charmander'] });
+  });
+
   it('flags judgment cases for a person', (): void => {
     const judgment: AnswerCase = { id: 'j', category: 'judgment', question: 'q', facts: ['Fire'], citeAny: [URI] };
 
     expect(gradeAnswer(judgment, outcome({})).needsHumanReview).toBe(true);
+  });
+});
+
+describe('gradeAnswer for the opening of an answer', (): void => {
+  it('fails an answer whose expected facts appear only after the opening paragraph, and names them', (): void => {
+    const text = 'Charmander evolves into Charizard.\n\n**Key details:**\n- Charmeleon evolves into Charizard at Level 36.';
+    const judgment: AnswerCase = { id: 'j', category: 'judgment', question: 'q', facts: ['Charmeleon'], citeAny: [URI] };
+
+    expect(gradeAnswer(judgment, outcome({ text }))).toMatchObject({ passed: false, missingFacts: [], missingFromOpening: ['Charmeleon'] });
+  });
+
+  it('passes facts given in the list that the opening line introduces', (): void => {
+    const text = '**Charizard is:**\n- Fire\n- Flying\n\n**Key details:**\n- More.';
+
+    expect(gradeAnswer(FACT, outcome({ text }))).toMatchObject({ passed: true, missingFromOpening: [] });
+  });
+
+  it('reads the opening after a heading, which is a title and not the answer', (): void => {
+    const text = '## Type of Charizard\n\nCharizard is Fire and Flying.\n\n- More.';
+
+    expect(gradeAnswer(FACT, outcome({ text })).passed).toBe(true);
+  });
+
+  it('passes facts given in a later sentence of the opening paragraph', (): void => {
+    const text = 'Charizard was introduced in Generation 1. It is Fire and Flying.\n\n- More.';
+
+    expect(gradeAnswer(FACT, outcome({ text })).passed).toBe(true);
   });
 });
 
@@ -221,6 +257,8 @@ describe('buildAnswerCases', (): void => {
     speed: '100',
   }));
 
+  const [FIRST_ITEM] = items;
+
   it('takes facts from index values and cites that page', (): void => {
     const fact = buildAnswerCases(items).find((entry): boolean => entry.question === 'What type is Charizard?');
 
@@ -231,6 +269,22 @@ describe('buildAnswerCases', (): void => {
     const categories = new Set(buildAnswerCases(items).map((entry): string => entry.category));
 
     expect(categories).toEqual(new Set(['fact', 'unanswerable', 'scoped', 'judgment']));
+  });
+
+  it('accepts any page of the evolution family as the citation for an evolution step', (): void => {
+    const raichu = 'https://pokemondb.net/pokedex/raichu';
+    const family = [...items, { ...FIRST_ITEM, name: 'Raichu', uri: raichu }];
+    const step = buildAnswerCases(family).find((entry): boolean => entry.question.includes('Alolan Raichu'));
+
+    expect(step?.citeAny).toEqual(expect.arrayContaining([OTHER, raichu]));
+  });
+
+  it('asks the detail page evolution question, scoped to the Pokémon, with the chain as facts', (): void => {
+    const question = ASK_EVOLUTION_QUESTION.replace('{name}', 'Charizard');
+    const evolution = buildAnswerCases(items).find((entry): boolean => entry.question === question);
+
+    expect(evolution).toMatchObject({ category: 'scoped', citeAny: [URI] });
+    expect(evolution?.facts.length).toBeGreaterThan(NONE);
   });
 
   it('scopes questions to one Pokémon by exact name', (): void => {

@@ -2,7 +2,7 @@
 
 ## Solution flow
 
-This diagram shows the components of the solution and how they connect. Choices that are still open are marked "TBD".
+This diagram shows the components of the solution and how they connect. Dotted lines show the Passage Retrieval bonus, which is a written point of view and not enabled in our organization.
 
 ```mermaid
 flowchart TD
@@ -28,13 +28,13 @@ flowchart TD
         SE["Semantic Encoder<br/>vector retrieval"]
         RGA["RGA<br/>generated answers"]
         QS["Query Suggestions<br/>type-ahead"]
-        CPR["Passage Retrieval model<br/>bonus"]
+        CPR["Passage Retrieval model<br/>bonus: not enabled, point of view only"]
     end
 
     subgraph QUERY["Coveo query layer"]
         PIPELINE["Query pipeline<br/>limits the app to the full source, applies rules and models"]
         SEARCHAPI["Search API"]
-        PRAPI["Passage Retrieval API<br/>bonus"]
+        PRAPI["Passage Retrieval API<br/>bonus: not enabled"]
         ANALYTICS["Coveo Analytics<br/>searches and clicks"]
     end
 
@@ -44,7 +44,7 @@ flowchart TD
         FACETS["Type and Generation facets"]
         RESULTS["Results with Pokémon pictures"]
         DETAIL["Pokémon detail page"]
-        BONUS["Passage Retrieval feature<br/>bonus, concept TBD"]
+        BONUS["Agent grounded in the index<br/>concept only, docs/passage-retrieval.md"]
     end
 
     SEED["Default queries file<br/>uploaded through the Machine Learning API"]
@@ -60,17 +60,17 @@ flowchart TD
 
     ITEMS -->|"title and body embedded"| SE
     ITEMS -->|"body embedded"| RGA
-    ITEMS -->|"body embedded"| CPR
+    ITEMS -.->|"body embedded"| CPR
 
     SE --> PIPELINE
     RGA --> PIPELINE
     QS --> PIPELINE
-    CPR --> PIPELINE
+    CPR -.-> PIPELINE
 
     ITEMS --> PIPELINE
     FIELDS --> PIPELINE
     PIPELINE <--> SEARCHAPI
-    PIPELINE <--> PRAPI
+    PIPELINE -.- PRAPI
 
     SEARCHAPI <--> BOX
     SEARCHAPI --> ANSWER
@@ -78,7 +78,7 @@ flowchart TD
     SEARCHAPI --> RESULTS
     SEARCHAPI --> DETAIL
     RESULTS -->|"select a Pokémon"| DETAIL
-    PRAPI <--> BONUS
+    PRAPI -.- BONUS
 
     BOX -. "search events" .-> ANALYTICS
     RESULTS -. "click events" .-> ANALYTICS
@@ -279,7 +279,7 @@ Three related gaps had the same root. In 47 pages, form labels such as "Normal F
 - **One item per form:** gives each form its own body, but creates near-duplicate items, which the RGA guidance advises against, and Sitemap sources do not support sub-items. See [One item per Pokémon](#one-item-per-pokémon).
 - **Name only the first sentence of each table:** shorter, but a chunk that starts after that sentence would again hold unnamed values.
 - **A prompt instruction about forms:** Coveo allows a custom prompt, but it cannot add a name that the chunk does not contain. A prompt rule about forms was added later for answer style (see [Answer style](#answer-style)); it supports this fix but cannot replace it.
-- **Rewriting the evolution chart as sentences:** it would help evolution questions, but it is a separate change and was left out of this fix.
+- **Rewriting the evolution chart as sentences:** left out of this fix and done separately; see [Evolution sentences](#evolution-sentences).
 
 **Cost.** Repeating the names makes the body longer. Over the 227 pages checked, the body grew by a median of 14% and at most 44%. The longest page, Rotom, has about 2,400 words, far below the limit of 1,000 chunks per item. The slowest page took 240 ms locally, against Coveo's limit of about 5 seconds per item.
 
@@ -298,6 +298,25 @@ The answer evals reflect this change only after step 4, because the models answe
 The 16 field selectors read the Pokédex data and stat tables that the extension now replaces. The fields should still populate, because web scraping runs in the crawler and the extension runs later, in the indexing pipeline. Coveo does not document this order for the stream a pre-conversion script receives, so this is our inference. It is supported by the earlier test, where the six stat fields still populated after the extension had replaced the stat tables. Step 2 confirms it for the Pokédex data table before the full rebuild.
 
 **Answer evals.** The answer set now asks base-form height and weight questions for Charizard, Venusaur, Lucario, Meowth and Tauros, and "What types is Charizard weak to?". The values of the other forms come from [`form-facts.json`](../evals/reference/form-facts.json). A base-form answer fails when it gives another form's value in place of the base form's value. An answer that gives both passes but is flagged for a person to check.
+
+### Evolution sentences
+
+**Problem.** "What does Pikachu evolve into?" got no answer. The evolution chart reached the index as a flattened list, for example "#0172 Pichu Electric (high Friendship) #0025 Pikachu Electric (use Thunder Stone, outside Alola) #0026 Raichu …", with no "evolves into" wording, and branches such as Eevee's eight were run together on one line. This matters for the demo, because the detail page suggests "Describe how {name} evolves" for every Pokémon.
+
+**Decision: the extension replaces the chart with one sentence per evolution step,** such as "Pikachu evolves into Alolan Raichu (use Thunder Stone, in Alola)." The page markup already states who evolves into whom, so linear and branching charts need no separate handling:
+
+- A row (`infocard-list-evo`) runs card, arrow, card. Each arrow links the last card before it to the next card.
+- A split (`infocard-evo-split`) holds branch rows that start with an arrow. Their "from" Pokémon is the last card before the split, and later steps in a branch follow that branch, as in Wurmple to Silcoon to Beautifly.
+- Separate rows are separate chains, as on Eevee's page.
+- A `+` between two cards means both appear together: "Nincada evolves into Ninjask and Shedinja".
+- The condition text is kept word for word, and regional or other forms use the card's form label, such as "Alolan Raichu" or "Urshifu (Rapid Strike Style)".
+- A page without a chart ("Ditto does not evolve.") is unchanged, and a chart that yields no sentence is kept as it is.
+
+**Checks.** `test_evolution_sentences.py` covers a linear chain, a branch with a form label, separate rows, steps after a branch, the `+` case, removal of the flattened chart and a page without one. Over 227 saved pages, 158 with a chart (122 linear, 36 branching) gave 313 sentences, every arrow became a sentence, every Pokémon in a chart appears in a sentence, no chart was left, and the slowest page took 232 ms. Two answer eval cases were added: "How does Pikachu evolve into Alolan Raichu?" and "Which Eevee evolution uses a Water Stone?".
+
+**Rollout.** The same as the form sentences: paste the extension, rebuild the test source and check Pikachu and Eevee in quick view, rebuild the full source, then save the RGA prompt instruction so the RGA model rebuilds. The Semantic Encoder picks the text up at its weekly rebuild.
+
+**Alternative rejected:** a prompt instruction telling the model how to read the flattened chart. It cannot make a chunk say who evolves into whom, and Coveo does not guarantee instructions are followed.
 
 ### Field mapping
 
@@ -671,9 +690,11 @@ The type-ahead panel now shares the search box's edges, border and radius, and u
 
 **Problem.** Answers read like copies of the page, not summaries. In the November 9 report, 24 of 25 answers started with a Markdown heading, 10 referred to "the documentation", and "What is the difference between Charmander and Charmeleon?" listed every field of both pages, including nine regional Pokédex numbers.
 
-**Decision: a custom prompt instruction on the RGA model, applied by the user on 2026-11-10.** The current text is in `configs/coveo/rga-prompt-instruction.txt` (version 2, 1,975 of 2,000 characters). It asks for a direct answer in the first one or two sentences, then only the relevant details, with short headings and bullet points for answers with several parts. It keeps the rules from Coveo's default template that apply here: use only the provided content, no opinions or speculation, decline when uncertain or off topic, and the safety rules. It adds two rules for errors the evals found: give the base form's value unless another form is named, and list a type as a weakness only at 2x or 4x damage. The user chose this version over a shorter first draft without headings, because answers should keep useful detail and stay grounded in cited content.
+**Decision: a custom prompt instruction on the RGA model, applied by the user on 2026-11-10.** The current text is in `configs/coveo/rga-prompt-instruction.txt` (version 3, 1,913 of 2,000 characters). Earlier versions are kept as `rga-prompt-instruction-v1.txt` and `rga-prompt-instruction-v2.txt`. It asks for a direct answer in the first one or two sentences, then only the relevant details, with short headings and bullet points for answers with several parts. It keeps the rules from Coveo's default template that apply here: use only the provided content, no opinions or speculation, decline when uncertain or off topic, and the safety rules. It adds two rules for errors the evals found: give the base form's value unless another form is named, and list a type as a weakness only at 2x or 4x damage. The user chose this version over a shorter first draft without headings, because answers should keep useful detail and stay grounded in cited content.
 
 **Version 2, applied on 2026-11-10.** With version 1 live, "What type is Charizard?" returned one sentence and then "This is supported by the documentation which states...". Two causes, by our inference: "Start with one or two sentences" was followed literally, and a rule that named the phrase to avoid did not stop it, possibly because Coveo's hidden base prompt asks the model to justify answers from the source. Version 2 requires a "Key details" section of three to six related facts, says what to include for type and measurement questions, and explains that the reader already sees the sources as citations, with an example of the wanted style. Version 1 is kept in `configs/coveo/rga-prompt-instruction-v1.txt`.
+
+**Version 3, applied on 2026-11-10.** Version 2 answered "What species is Eevee?" with Eevee's Type and Generation and never gave the species, because the answer pattern led with the same facts every time. Version 3 asks the first sentence to answer exactly what was asked, and to state a single asked attribute, such as species, first. The opening line and two examples were shortened to stay under 2,000 characters. It was saved together with the evolution sentence rollout, so one RGA rebuild covers both.
 
 **Coveo documentation.** [Create and manage RGA models](https://docs.coveo.com/en/nb6a0085/) states that the instruction is set under Configuration, Prompt enhancement, is limited to 2,000 characters, is added to the base prompt rather than replacing it, applies to every pipeline that uses the model, and triggers a model rebuild when saved. It warns that a custom instruction "isn't guaranteed to be followed fully or consistently", is not covered by Coveo's automated tests, may carry prompt injection risk, and should be retested because the base prompt changes often. [Improve your RGA implementation](https://docs.coveo.com/en/p5db0550/) lists the instruction as a way to adjust tone or style. [About RGA](https://docs.coveo.com/en/n9de0370/) states that the language model uses only the chunks in the prompt, and that Coveo returns citations for them.
 
@@ -688,6 +709,8 @@ The type-ahead panel now shares the search box's edges, border and radius, and u
 **Verification.** The answer evals now report, for each answer, its word count, whether it refers to "the documentation" or similar wording, and whether it starts with a direct sentence before any heading. They also fail a weakness answer that names a type the Pokémon resists or is immune to. These style checks are reported, not graded, because headings are allowed for answers with several parts. The November 9 report, from before the prompt, was regraded offline with these checks (`evals/reports/answers-baseline-2026-11-09.json`): none of the 32 generated answers started with a direct sentence, 15 referred to the documentation, 5 were over 200 words, the median was 26 words, and the Charmander and Charmeleon comparison was 732 words. The Charizard weakness answer now fails for listing Grass and Bug, which lowers that run from 33 to 32 of 40. Prompt version 1 was replaced by version 2 before it was measured, so there is no version 1 result.
 
 **Measured with version 2, November 10:** 37 of 40 passed (was 32). Every answer starts with a direct sentence (was 0 of 32), none refers to the documentation (was 15), the median answer is 41 words (was 26) and the longest 246 (was 732). All base-form cases pass and the Charizard weakness answer is correct. One new failure: the Eevee species question is answered with Type and Generation and leaves out the species, so the fixed first sentence can miss what was asked. Details in `docs/evaluation.md`.
+
+**Measured with version 3 and the evolution sentences, November 10:** 38 of 45 passed. Before this run the grader was made stricter: the opening of a direct answer must now give the expected fact, because an answer that opened with "Charmander evolves into Charizard." had passed on its details. With that grader, the earlier runs score 31 of 40 (baseline) and 33 of 40 (version 2). The evolution questions now pass, except "Which Pokémon evolves into Charizard?", whose opening skips Charmeleon, and "Describe how Mewtwo evolves", which gets no answer. Version 3 did not fix the species questions: Charizard, Pikachu, Eevee and Gengar still open with Type and Generation and give the species only in the details, while Coveo's default prompt opened with the species. The Charizard evolution answer is a soft fail: the details are right, but the opening names Charmander instead of Charmeleon. **Decision (user, 2026-11-10):** these failures are documented as future work, not fixed for the assessment, because each prompt change costs an RGA rebuild, is not guaranteed to be followed, and with no real users there is no feedback to show which errors matter most. The most promising untested change is the prompt's style example, which models an opening with the Type; changing it to answer the asked attribute fits the 77 characters left. Details and candidate changes in `docs/evaluation.md`. Results are a snapshot of November 10: the Semantic Encoder's next weekly rebuild falls after submission, and in production the answer evals would run after every model rebuild to detect drift.
 
 ## Ask about this Pokémon
 
@@ -749,7 +772,7 @@ Bold marks a p95 over its target. The p50 and p95 columns are the recorded run i
 
 **Previous baseline.** The targets come from the measurement of commit `5f6fbd0` before the rebuild: search p50 174 ms and p95 198 ms, type-ahead 51 and 63 ms, answer first text 2.1 and 3.0 s, answer complete 3.1 and 7.7 s, first contentful paint 260 and 292 ms, first result visible 537 and 575 ms, browser type-ahead 49 and 71 ms, browser search 172 and 220 ms, hosted answer first text 2.3 and 2.8 s, hosted answer complete 3.1 and 3.7 s.
 
-**Targets missed after the rebuild.** Every p50 is close to the previous baseline, but both runs have p95 values over target, each from one or two slow samples, and not always in the same measure. First contentful paint and first result visible do not depend on the Coveo index, so the body text change cannot explain them. Our inference is that the slow samples come from the developer machine or the home network at the time of the runs, not from a change in the application or the index. We do not change the targets. The measurement should be repeated on a quiet network before the demo, and a target missed again on a repeat is a real regression.
+**Targets missed after the rebuild.** Every p50 is close to the previous baseline, but both runs have p95 values over target, each from one or two slow samples, and not always in the same measure. First contentful paint and first result visible do not depend on the Coveo index, so the body text change cannot explain them. Our inference is that the slow samples come from the developer machine at the time of the runs, not from a change in the application or the index; with 40 samples, a p95 value rests on one or two of them. We do not change the targets. **Decision (user, 2026-11-10): no repeat measurement.** The runs were already made on a quiet network, and every p50 matches the baseline. The p95 misses stay documented as they are, and in production real-user monitoring would replace single-machine numbers.
 
 **Targets.** Each target is the measured p95 plus 20%, rounded up to the next 50 ms. Layout shift is rounded up to two decimals and never targeted at zero. The aim is to catch a regression that stands out from run-to-run noise, not to promise a figure to users. These are developer-machine targets; production targets would come from real-user data.
 

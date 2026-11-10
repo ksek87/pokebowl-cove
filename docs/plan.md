@@ -23,7 +23,7 @@ The assessment defines four tiers of required work and a panel presentation. A t
 | Essential | Show each Pokémon's picture in results | Done | PC-21 |
 | Intermediate | Host the code on GitHub and share the link | Code is on GitHub; not yet shared | PC-31 |
 | Intermediate | Host the search application | Done: https://pokebowl-cove.vercel.app/ | PC-30 |
-| Advanced | Generative answers with Relevance Generative Answering | Built and live. The body text fix for answers that mixed Pokémon forms is merged (PR #14) and the full source is rebuilt. A custom prompt instruction for answer style was applied on 2026-11-10, and the RGA model is rebuilding | PC-61, PC-62, PC-63, PC-44 |
+| Advanced | Generative answers with Relevance Generative Answering | Built and live. The body text fix for answers that mixed Pokémon forms is merged (PR #14) and the full source is rebuilt. A custom prompt instruction for answer style (version 3) and evolution sentences are live since 2026-11-10. Answer evals: 38 of 45, with the open failures documented | PC-61, PC-62, PC-63, PC-44 |
 | Advanced | Preload a Query Suggestions model for type-ahead | Done: model active and the ranked default queries are live. After the rebuild, Pokémon names lead the suggestions | PC-50, PC-51 |
 | Advanced | Pokémon detail page | Done, live on the hosted site | PC-70 |
 | Advanced | Technical deep dive presentation | Not started | PC-100 |
@@ -65,8 +65,8 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 - [x] Extension change built test-first, with answer eval questions that catch another form's values (PR #14)
 - [x] 🟡 User pastes the new extension into Coveo, rebuilds the single-Pokémon test source, and checks that Charizard's body names each form and that all 16 fields still populate (done 2026-11-09: all 10 required sentences and all 16 fields present)
 - [x] 🟡 User rebuilds the full source (1,028 items) (done 2026-11-09). The user reports the RGA and Semantic Encoder models did not need a manual rebuild; the answer evals check this
-- [x] Answer evals run after the rebuild and show the base-form facts are right. **Done 2026-11-10 with prompt version 2: all 7 base-form cases pass, 37 of 40 overall.** Earlier result: run on 2026-11-09 after the source rebuild, only 3 of the 7 base-form cases passed** (33 of 40 overall, 32 of 40 with the wrong-weakness check added on 2026-11-10). Charizard's weight still comes back as 110.5 kg (Mega Charizard X), Venusaur's weight and height as Mega Venusaur's, and Lucario's height as Mega Lucario's. The indexed body is correct ("Charizard weighs 90.5 kg", each Mega form in its own sentence), so our inference is that the RGA and Semantic Encoder models still hold the old body text. "Is Charizard weak to water?" still gets no answer. See `docs/evaluation.md`
-- [ ] Both models pick up the new body text, then the answer evals are re-run. Coveo rebuilds Semantic Encoder and RGA models weekly from their creation date, and only an Account Manager can change the interval ([SE models](https://docs.coveo.com/en/nb890247/), [RGA models](https://docs.coveo.com/en/nb6a0085/)). Neither page documents a manual rebuild action. The Semantic Encoder has no manual rebuild in the console and its next weekly rebuild is about 2026-11-15, the day before the demo (seen in the console by the user). Answers should not depend on it: the Semantic Encoder picks the items, and the RGA model picks the passages from them ([About RGA](https://docs.coveo.com/en/n9de0370/)); this is our inference for the form values. Saving the RGA prompt instruction triggers an RGA rebuild, as Coveo documents; the user started it on 2026-11-10. Re-run the answer evals when the RGA model shows Active, and again after the Semantic Encoder rebuild. Fallback, agreed by the user: if answers still need fresh Semantic Encoder embeddings before the demo, create a new Semantic Encoder model with the same content, which builds on creation, then swap it into the `pokebowl-search` association once it is Active and record it in `configs/coveo/ml-models.json`
+- [x] Answer evals run after the rebuild and show the base-form facts are right. **Done 2026-11-10 with prompt version 2: all 7 base-form cases pass, 37 of 40 overall (33 of 40 with the stricter grader added later that day).** Earlier result: run on 2026-11-09 after the source rebuild, only 3 of the 7 base-form cases passed** (33 of 40 overall, 32 of 40 with the wrong-weakness check added on 2026-11-10). Charizard's weight still comes back as 110.5 kg (Mega Charizard X), Venusaur's weight and height as Mega Venusaur's, and Lucario's height as Mega Lucario's. The indexed body is correct ("Charizard weighs 90.5 kg", each Mega form in its own sentence), so our inference is that the RGA and Semantic Encoder models still hold the old body text. "Is Charizard weak to water?" still gets no answer. See `docs/evaluation.md`
+- [x] Both models pick up the new body text, then the answer evals are re-run. **RGA done 2026-11-10 (38 of 45).** The Semantic Encoder cannot be rebuilt by hand, its Edit JSON schedule is read-only, and its next weekly build (about 2026-11-15) falls after submission. User decision (2026-11-10): no run after it; the results are a snapshot, and the production plan runs the answer evals after every model rebuild to detect drift (`docs/evaluation.md`)
 - Problem found by the same run: the `weakness-charizard` answer also lists Grass and Bug as 4x weaknesses, which Charizard resists. **Grader fixed (2026-11-10):** the case now fails when a resisted or immune type, from `evals/reference/form-facts.json`, is claimed as a weakness. The answer is correct in the 2026-11-10 run with prompt version 2
 - Side effect found by the same run: bare Type searches such as `flying` and `ground` lost precision (P@12 0.931 to 0.875 in the partial-name benchmark), because the body now states each matchup twice. Relevance MRR is unchanged at 0.947. **Decision (user, 2026-11-10): accept.** The first result is a Pokémon of that Type for all 18 Type searches, which is what the user requires. The cost is lower precision on the first page for some Types, lowest for `flying` (6 of 12) and `ground` (7 of 12)
 
@@ -92,17 +92,20 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 - [x] Style checks added to the answer eval (length, no "documentation" wording, no wrong weaknesses) and applied to the 2026-11-09 report as the baseline before the prompt (`evals/reports/answers-baseline-2026-11-09.json`, done 2026-11-10). Headings are allowed for multi-part answers. Regraded result: 32 of 40, because the Charizard weakness answer now fails for listing Grass and Bug; 0 of 32 answers start with a direct sentence, 15 refer to the documentation, 5 are over 200 words
 - [x] 🟡 User adds the instruction in the console (done 2026-11-10; this started the RGA rebuild)
 - [x] Answer evals re-run once the RGA model is Active with prompt version 2 and compared case by case with the baseline (2026-11-10: 37 of 40, was 32; 6 cases fixed, 1 broken; see `docs/evaluation.md`).
-- [ ] Open problem: evolution questions get no answer or a weak one ("What does Pikachu evolve into?" has no answer). The extension rewrites the form tables as sentences but leaves the evolution chart as it is, a list of names and conditions with no "evolves into" wording (cause confirmed by the user on 2026-11-10, matching `test_evolution_chart_and_pokedex_entries_are_left_as_they_are`). This matters for the demo, because the detail page bubble suggests "Describe how {name} evolves" for every Pokémon. Proposed fix, awaiting the user: write evolution sentences in the extension, then rebuild the test source, the full source and the RGA model
-- [ ] Open problem: "What species is Eevee?" now opens with Type and Generation and leaves out the species (the Evolution Pokémon). Decide whether to accept it or adjust the prompt, which needs another RGA rebuild. Version 1 was replaced before it was measured, and a run started during the version 2 rebuild was stopped and discarded, because it would have measured version 1 or a mix of both
+- [x] Evolution questions got no answer because the evolution chart was indexed as a flattened list. Fixed in PR #18: the extension writes one sentence per evolution step (see `docs/architecture.md`, Evolution sentences). Test source checked by the user on 2026-11-10
+- [x] "What species is Eevee?" was answered without the species. Prompt version 3 asks the first sentence to answer exactly what was asked (PR #18)
+- [x] 🟡 Full source rebuild and RGA rebuild with prompt version 3 (done 2026-11-10). The Search API shows the evolution sentences on exactly each family's pages and no flattened chart. Answer evals: 38 of 45 (see `docs/evaluation.md`)
+- [x] Grader made stricter (2026-11-10): the opening of a direct answer must give the expected fact, after an answer that opened with "Charmander evolves into Charizard." passed on its details. Detail page evolution question added for Charizard, Pikachu and Mewtwo; Raichu's page accepted as a citation for the Alolan Raichu step. Earlier reports regraded: baseline 31 of 40, version 2 33 of 40
+- [x] User decision (2026-11-10): the remaining answer failures are documented as next iterations for production feedback, not fixed before the demo: species given after the opening (Charizard, Pikachu, Eevee, Gengar), the reverse question "Which Pokémon evolves into Charizard?", no answer for "Describe how Mewtwo evolves", and no answer for "Is Charizard weak to water?"
 
 ### 3. Wrap-up
 
 - [ ] User looks through the live site at the usual window widths (PC-78)
-- [ ] Final documentation and README (PC-91)
+- [x] Final documentation and README (PC-91, 2026-11-10)
 - [ ] Technical deep dive and demo script, using the talking points below (PC-100)
 - [ ] Production evaluation approach (PC-101)
 - [ ] Demo rehearsed
-- [ ] Performance re-measured on a quiet network before the demo. On 2026-11-09 after the rebuild, every p50 matched the baseline but two runs had p95 values over target, including page measures the index cannot affect (see `docs/architecture.md`, Performance)
+- [x] ~~Performance re-measured on a quiet network~~ Dropped by the user on 2026-11-10: the 2026-11-09 runs were already made on a quiet network. Every p50 matched the baseline; the p95 misses stay documented (see `docs/architecture.md`, Performance)
 - [ ] Business case, started only after the technical work (Epic 11)
 - [ ] Coveo configuration exported with the Coveo CLI, at the very end (PC-90)
 - [ ] Materials submitted, then the repository shared (PC-103, PC-31)
@@ -113,6 +116,7 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 - Suggestions on an empty search box: yes, and already live.
 - Bare Type searches keep the doubled matchup sentences: the first result is the right Type for every Type, and first-page precision dropped for some (2026-11-10).
 - Answer style comes from a custom RGA prompt instruction: a direct summary first, relevant details after, headings for multi-part answers, and only cited content (2026-11-10).
+- The answer prompt stays at version 3. The remaining answer failures, including the soft fail on "Which Pokémon evolves into Charizard?", are future work with candidate changes recorded in `docs/evaluation.md` (2026-11-10).
 - Detail page is complete for the demo: no close-match suggestions on the not-found page, no search box, no evolution line, stat percentiles or Type matchups.
 - An answer disappearing when sorting away from Best match is accepted, because Coveo documents this behaviour.
 - `char` showing "Did you mean: chart" is accepted. It predates the partial-name change, and turning correction off would also remove corrections for real typos.
@@ -130,7 +134,8 @@ Considered and dropped, because neither the assessment nor the demo needs them. 
 | Improving descriptive queries such as `water turtle` (MRR 0.700) | Tuning work with no real queries to tune against. Explained as a tradeoff instead |
 | Linking Pokémon names in answers to detail pages (PC-64) | Not required, and Coveo does not guarantee a prompt instruction is followed |
 | General answer tuning and RGA reporting (PC-63) | The body text fix covers the visible errors; reporting needs real traffic |
-| Evolution answers, and answers drawn from the "Changes" section | Evolution charts vary in structure; these questions can be left out of the demo |
+| Answers drawn from the "Changes" section | Not needed for the demo. Evolution answers were fixed with the evolution sentences |
+| Further prompt iterations for the open answer failures | Each costs an RGA rebuild and is not guaranteed to hold; with no real users there is no feedback to prioritise them. Documented in `docs/evaluation.md` as next iterations |
 | Grader fixes for the Gengar ability and Mewtwo Type cases | The grader checks facts are present; the cases are known and documented |
 | Hands-on Passage Retrieval (PC-80 to PC-82) | The written point of view meets the bonus minimum, and access depends on Coveo |
 | Answer rating stretch goal (PC-S1) | Covered by the feedback buttons in the interface fixes |
@@ -152,7 +157,8 @@ Considered and dropped, because neither the assessment nor the demo needs them. 
 - The Semantic Encoder threshold stays at 0.8, so some nonsense queries return near matches, because raising it would drop relevant descriptive results.
 - Query Suggestions start from a default queries file built from index values, the method Coveo documents for low-traffic environments, and the importance values rank categories, not real popularity.
 - Generated answers depend on clean body text: the form mix-up came from tables, and a fix needs a source rebuild and model rebuilds. The Semantic Encoder cannot be rebuilt by hand; it rebuilds weekly.
-- Answer style is set by a custom RGA prompt instruction, because the client answer style option no longer exists. Coveo does not guarantee the instruction is followed and does not test it, so the answer evals check it.
+- Answer style is set by a custom RGA prompt instruction, because the client answer style option no longer exists. Coveo does not guarantee the instruction is followed and does not test it, so the answer evals check it. Version 3 did not move the species into the opening, which shows that limit.
+- The answer grader was made stricter when it passed a wrong opening sentence, and older reports were regraded, so the score went down rather than hiding the error (38 of 45).
 - The answer placeholder is driven only by Coveo's Headless state, because Atomic shows nothing until the first answer text arrives. Every text search starts an answer, so a short delay keeps searches without an answer from flashing it.
 - Overall MRR is 0.947 against a 0.95 target, unchanged after the rebuild; the gap is descriptive queries (0.700).
 - Automatic field mapping is on, and a few Atomic layout overrides remain, each with a recorded reason.
@@ -164,7 +170,7 @@ Confirm each Coveo capability against current Coveo documentation before present
 - **Learn from behaviour.** Real queries and clicks replace the synthetic default queries file in Query Suggestions, and allow Automatic Relevance Tuning to boost what people actually choose. This needs search hubs and analytics set up per interface, which the application already sends.
 - **Tune with evidence.** Use real query logs and a labelled set that includes negative queries to tune the Semantic Encoder threshold, the partial-name boost and descriptive queries, and A/B test pipeline changes before rolling them out.
 - **Close the loop on answers.** Feedback buttons and RGA reporting show which answers fail. Sampled answers are reviewed by a person, and failing questions are added to the answer evals.
-- **Run evals over time.** Index, relevance, answer and performance evals run on a schedule and in CI, with alerts when a score drops, so a content or configuration change cannot quietly break answers.
+- **Run evals over time.** Index, relevance, answer and performance evals run on a schedule and in CI, with alerts when a score drops, so a content or configuration change cannot quietly break answers. Answer evals also run after every weekly model rebuild, because Coveo states the RGA base prompt changes often.
 - **Manage configuration as code.** The Coveo CLI exports the organization configuration, so changes are reviewed and promoted between a test and a production organization.
 - **Keep content fresh and structured.** Schedule recrawls as pokemondb.net changes, or move to the Push API with structured data, which would also remove the table-parsing risk behind the answer fix.
 - **Secure access per user.** Use search tokens issued by a backend instead of a shared search-only API key once there are signed-in users.
@@ -336,7 +342,7 @@ This is part of the final submission. The repository stays private until the pre
 
 **Branch:** `feature/evals`, with finished work combined in one integration branch (PR #6)
 
-Evals run on demand with `npm run eval`. The index quality check turns analytics capture off, so its traffic does not affect the analytics used for model training. Relevance and answer evals need a second API key with a separate search hub, because the browser key enforces `pokebowl-search`.
+Evals run on demand with `npm run eval`. The index quality check turns analytics capture off, so its traffic does not affect the analytics used for model training. Relevance and answer evals also query the `pokebowl-search` search hub, which the browser key enforces, with analytics capture off.
 
 ### PC-40: Create eval reference data
 

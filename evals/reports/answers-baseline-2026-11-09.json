@@ -3,8 +3,8 @@
   "method": "Times run from sending the search to the first answer text and to stream end, sequentially, with analytics capture off.",
   "overall": {
     "total": 40,
-    "passed": 32,
-    "needsHumanReview": 13
+    "passed": 31,
+    "needsHumanReview": 12
   },
   "byCategory": {
     "fact": {
@@ -14,8 +14,8 @@
     },
     "base-form": {
       "total": 7,
-      "passed": 3,
-      "needsHumanReview": 3
+      "passed": 2,
+      "needsHumanReview": 2
     },
     "unanswerable": {
       "total": 6,
@@ -130,9 +130,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "type-charizard",
       "category": "fact",
       "question": "What type is Charizard?",
@@ -154,9 +155,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "species-charizard",
       "category": "fact",
       "question": "What species is Charizard?",
@@ -178,9 +180,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "species-pikachu",
       "category": "fact",
       "question": "What species is Pikachu?",
@@ -202,9 +205,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "ability-pikachu",
       "category": "fact",
       "question": "What abilities can Pikachu have?",
@@ -226,9 +230,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "ability-bulbasaur",
       "category": "fact",
       "question": "What abilities can Bulbasaur have?",
@@ -249,9 +254,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "height-bulbasaur",
       "category": "fact",
       "question": "How tall is Bulbasaur?",
@@ -272,9 +278,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "height-mewtwo",
       "category": "fact",
       "question": "How tall is Mewtwo?",
@@ -295,9 +302,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "type-mewtwo",
       "category": "fact",
       "question": "What type is Mewtwo?",
@@ -320,9 +328,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "type-eevee",
       "category": "fact",
       "question": "What type is Eevee?",
@@ -344,9 +353,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "species-eevee",
       "category": "fact",
       "question": "What species is Eevee?",
@@ -370,9 +380,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "species-gengar",
       "category": "fact",
       "question": "What species is Gengar?",
@@ -397,9 +408,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "ability-gengar",
       "category": "fact",
       "question": "What abilities can Gengar have?",
@@ -421,9 +433,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "ability-snorlax",
       "category": "fact",
       "question": "What abilities can Snorlax have?",
@@ -446,9 +459,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "height-snorlax",
       "category": "fact",
       "question": "How tall is Snorlax?",
@@ -471,6 +485,7 @@
       "missingFacts": [
         "1.2"
       ],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
       "reason": "Missing answer, fact or citation.",
@@ -495,9 +510,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "type-lucario",
       "category": "fact",
       "question": "What type is Lucario?",
@@ -522,6 +538,7 @@
       "missingFacts": [
         "90.5"
       ],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
       "reason": "Gave another form's value in place of the base form's.",
@@ -550,6 +567,7 @@
       "missingFacts": [
         "100.0"
       ],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
       "reason": "Gave another form's value in place of the base form's.",
@@ -578,6 +596,7 @@
       "missingFacts": [
         "2.0"
       ],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
       "reason": "Gave another form's value in place of the base form's.",
@@ -604,6 +623,7 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": true,
       "reason": "The base value and other forms' values; a person checks which is which.",
@@ -635,6 +655,7 @@
       "missingFacts": [
         "1.2"
       ],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
       "reason": "Gave another form's value in place of the base form's.",
@@ -660,11 +681,14 @@
       }
     },
     {
-      "passed": true,
+      "passed": false,
       "missingFacts": [],
+      "missingFromOpening": [
+        "4.2"
+      ],
       "citationCorrect": true,
-      "needsHumanReview": true,
-      "reason": "The base value and other forms' values; a person checks which is which.",
+      "needsHumanReview": false,
+      "reason": "Gave another form's value in place of the base form's.",
       "otherFormValuesShown": [
         "7.5"
       ],
@@ -690,6 +714,7 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": true,
       "reason": "The base value and other forms' values; a person checks which is which.",
@@ -719,6 +744,7 @@
     {
       "passed": false,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": false,
       "reason": "Named a type the Pokémon resists or is immune to as a weakness.",
@@ -988,6 +1014,7 @@
       "missingFacts": [
         "Raichu"
       ],
+      "missingFromOpening": [],
       "citationCorrect": false,
       "needsHumanReview": true,
       "reason": "Missing answer, fact or citation.",
@@ -1003,9 +1030,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": true,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "judgment-1",
       "category": "judgment",
       "question": "Which Pokémon evolves into Charizard?",
@@ -1031,6 +1059,7 @@
       "missingFacts": [
         "water"
       ],
+      "missingFromOpening": [],
       "citationCorrect": false,
       "needsHumanReview": true,
       "reason": "Missing answer, fact or citation.",
@@ -1046,9 +1075,10 @@
     {
       "passed": true,
       "missingFacts": [],
+      "missingFromOpening": [],
       "citationCorrect": true,
       "needsHumanReview": true,
-      "reason": "Every expected fact and a correct citation.",
+      "reason": "Every expected fact in the opening, and a correct citation.",
       "id": "judgment-3",
       "category": "judgment",
       "question": "What is the difference between Charmander and Charmeleon?",

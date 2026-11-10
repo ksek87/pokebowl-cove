@@ -404,6 +404,47 @@
     "scope": "@pokemon_name==\"Mewtwo\""
   },
   {
+    "id": "scoped-charizard-evolution",
+    "category": "scoped",
+    "question": "Describe how Charizard evolves",
+    "facts": [
+      "Charmander",
+      "Charmeleon"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/charizard"
+    ],
+    "scope": "@pokemon_name==\"Charizard\"",
+    "note": "The evolution question the detail page suggests, sent with the same exact-name scope."
+  },
+  {
+    "id": "scoped-pikachu-evolution",
+    "category": "scoped",
+    "question": "Describe how Pikachu evolves",
+    "facts": [
+      "Pichu",
+      "Raichu"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/pikachu"
+    ],
+    "scope": "@pokemon_name==\"Pikachu\"",
+    "note": "The evolution question the detail page suggests, sent with the same exact-name scope."
+  },
+  {
+    "id": "scoped-mewtwo-evolution",
+    "category": "scoped",
+    "question": "Describe how Mewtwo evolves",
+    "facts": [
+      "does not evolve"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/mewtwo"
+    ],
+    "scope": "@pokemon_name==\"Mewtwo\"",
+    "note": "The evolution question the detail page suggests, sent with the same exact-name scope."
+  },
+  {
     "id": "judgment-0",
     "category": "judgment",
     "question": "What does Pikachu evolve into?",
@@ -413,7 +454,7 @@
     "citeAny": [
       "https://pokemondb.net/pokedex/pikachu"
     ],
-    "note": "Evolution facts are not index fields."
+    "note": "Evolution facts are not index fields; the chart is written as sentences since 2026-11-10."
   },
   {
     "id": "judgment-1",
@@ -452,5 +493,31 @@
       "https://pokemondb.net/pokedex/charmeleon"
     ],
     "note": "Quality of a comparison needs a person."
+  },
+  {
+    "id": "judgment-4",
+    "category": "judgment",
+    "question": "How does Pikachu evolve into Alolan Raichu?",
+    "facts": [
+      "Thunder Stone",
+      "Alola"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/pikachu",
+      "https://pokemondb.net/pokedex/raichu"
+    ],
+    "note": "A branch in the evolution chart, written as sentences since 2026-11-10."
+  },
+  {
+    "id": "judgment-5",
+    "category": "judgment",
+    "question": "Which Eevee evolution uses a Water Stone?",
+    "facts": [
+      "Vaporeon"
+    ],
+    "citeAny": [
+      "https://pokemondb.net/pokedex/eevee"
+    ],
+    "note": "One of eight Eevee branches, written as sentences since 2026-11-10."
   }
 ]
