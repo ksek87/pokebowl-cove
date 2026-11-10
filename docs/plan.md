@@ -28,7 +28,7 @@ The assessment defines four tiers of required work and a panel presentation. A t
 | Advanced | Pokémon detail page | Done, live on the hosted site | PC-70 |
 | Advanced | Technical deep dive presentation | Not started | PC-100 |
 | Advanced | Enterprise customer value presentation | Not started | PC-102 |
-| Bonus | Passage Retrieval: at minimum, understand it and hold a point of view | Point of view written (`docs/passage-retrieval.md`); hands-on setup needs access | PC-02, PC-80 to PC-83 |
+| Bonus | Passage Retrieval: at minimum, understand it and hold a point of view | Done: point of view written (`docs/passage-retrieval.md`). Building with it is optional | PC-80 to PC-83 |
 
 Evals, performance baselines and interface polish are additions we chose and are not assessment requirements. They support the presentation.
 
@@ -50,7 +50,6 @@ Work with a waiting time, such as Coveo's response or a model build, starts as e
 | Done | PC-01, PC-03, PC-04, PC-10 to PC-15, PC-20 to PC-23, PC-30, PC-40, PC-41, PC-50 to PC-52, PC-60 to PC-62, PC-70, PC-75, PC-76, PC-83 | Index, search application, models, detail page and generated answers. Items after PC-23 are in PR #6 |
 | Now | See Remaining work | The ordered list of everything left |
 
-If Passage Retrieval access has not arrived, write PC-83 and add PC-82 only if access arrives later.
 
 ---
 
@@ -137,7 +136,7 @@ Considered and dropped, because neither the assessment nor the demo needs them. 
 | Answers drawn from the "Changes" section | Not needed for the demo. Evolution answers were fixed with the evolution sentences |
 | Further prompt iterations for the open answer failures | Each costs an RGA rebuild and is not guaranteed to hold; with no real users there is no feedback to prioritise them. Documented in `docs/evaluation.md` as next iterations |
 | Grader fixes for the Gengar ability and Mewtwo Type cases | The grader checks facts are present; the cases are known and documented |
-| Hands-on Passage Retrieval (PC-80 to PC-82) | The written point of view meets the bonus minimum, and access depends on Coveo |
+| Hands-on Passage Retrieval (PC-80 to PC-82) | Optional bonus; the written point of view covers it |
 | Answer rating stretch goal (PC-S1) | Covered by the feedback buttons in the interface fixes |
 | Console checks of the `25` search event and card clicks | Talking points about analytics, not demo needs |
 | Browser tests in CI, branch protection and a failing-test check | Production practice |
@@ -188,15 +187,6 @@ Owner: Agent
 
 - [x] `.gitignore` excludes secrets, dependencies and build output
 - [x] `.env.example` lists required variables without values
-
-### PC-02: Request Passage Retrieval access
-
-Owner: You · Send as soon as possible
-
-Passage Retrieval must be enabled by Coveo before the bonus work can start.
-
-- [ ] Organization ID sent to the Coveo contact
-- [ ] Coveo confirms the feature is enabled
 
 ### PC-03: Scaffold the application
 
@@ -598,7 +588,7 @@ The Passage Retrieval API returns ranked text passages from indexed content, mai
 
 ### PC-80: Set up Passage Retrieval
 
-Owner: You, guided by Agent · Depends on: PC-02, PC-61
+Owner: You, guided by Agent · Depends on: PC-61
 
 - Not doing: Passage Retrieval model created and associated with the query pipeline
 - Not doing: A test API call returns relevant passages
@@ -697,7 +687,7 @@ Owner: Agent · Depends on: PC-62
 
 ## Parked
 
-- Access to Coveo Knowledge Hub, a limited early-access tool for reviewing generated answers. It may require a request to Coveo.
+- Coveo Knowledge Hub, for reviewing generated answers. Not used in this project.
 
 ## Not building
 

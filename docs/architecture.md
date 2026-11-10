@@ -2,7 +2,7 @@
 
 ## Solution flow
 
-This diagram shows the components of the solution and how they connect. Dotted lines show the Passage Retrieval bonus, which is a written point of view and not enabled in our organization.
+This diagram shows the components of the solution and how they connect. Dotted lines show the optional Passage Retrieval bonus, which is covered by a written point of view.
 
 ```mermaid
 flowchart TD
@@ -28,13 +28,13 @@ flowchart TD
         SE["Semantic Encoder<br/>vector retrieval"]
         RGA["RGA<br/>generated answers"]
         QS["Query Suggestions<br/>type-ahead"]
-        CPR["Passage Retrieval model<br/>bonus: not enabled, point of view only"]
+        CPR["Passage Retrieval model<br/>optional bonus: point of view"]
     end
 
     subgraph QUERY["Coveo query layer"]
         PIPELINE["Query pipeline<br/>limits the app to the full source, applies rules and models"]
         SEARCHAPI["Search API"]
-        PRAPI["Passage Retrieval API<br/>bonus: not enabled"]
+        PRAPI["Passage Retrieval API<br/>optional bonus"]
         ANALYTICS["Coveo Analytics<br/>searches and clicks"]
     end
 
