@@ -23,7 +23,7 @@ The assessment defines four tiers of required work and a panel presentation. A t
 | Essential | Show each Pokémon's picture in results | Done | PC-21 |
 | Intermediate | Host the code on GitHub and share the link | Code is on GitHub; not yet shared | PC-31 |
 | Intermediate | Host the search application | Done: https://pokebowl-cove.vercel.app/ | PC-30 |
-| Advanced | Generative answers with Relevance Generative Answering | Built and live. A body text fix for answers that mixed Pokémon forms is in PR #14 and needs a Coveo rebuild | PC-61, PC-62, PC-63, PC-44 |
+| Advanced | Generative answers with Relevance Generative Answering | Built and live. The body text fix for answers that mixed Pokémon forms is merged (PR #14) and the full source is rebuilt. A custom prompt instruction for answer style was applied on 2026-11-10, and the RGA model is rebuilding | PC-61, PC-62, PC-63, PC-44 |
 | Advanced | Preload a Query Suggestions model for type-ahead | Done: model active and the ranked default queries are live. After the rebuild, Pokémon names lead the suggestions | PC-50, PC-51 |
 | Advanced | Pokémon detail page | Done, live on the hosted site | PC-70 |
 | Advanced | Technical deep dive presentation | Not started | PC-100 |
@@ -78,7 +78,7 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 - [x] Only the two Coveo values reach the browser bundle, not Vercel's build values
 - [x] Atomic layout overrides reduced to what Atomic documents: all five `!important` rules removed, one documented exception kept (PC-79)
 
-### 2a. Generated answer loading state and answer style (raised 2026-11-09, decisions pending)
+### 2a. Generated answer loading state and answer style (raised 2026-11-09, decided 2026-11-10)
 
 **Problem: nothing shows while an answer is being prepared.** `atomic-generated-answer` in Atomic 3.65 renders nothing until the first answer text or citation arrives (`hasNoAnswerGenerated` in `atomic-generated-answer.js`). First text takes about 2 seconds at p50, so the results appear, then the answer card appears and pushes them down. Atomic's `is-generating` label only exists inside a card that is already showing, and is hidden. Headless exposes `isLoading` and `isStreaming` in the generated answer state, so a placeholder can be driven from it.
 
@@ -148,7 +148,9 @@ Considered and dropped, because neither the assessment nor the demo needs them. 
 - Partial names use a `$qre` boost of 300, above Coveo's typical range, chosen by benchmark. Facet values are repeated in `dq` so filters still apply to prefix matches.
 - The Semantic Encoder threshold stays at 0.8, so some nonsense queries return near matches, because raising it would drop relevant descriptive results.
 - Query Suggestions start from a default queries file built from index values, the method Coveo documents for low-traffic environments, and the importance values rank categories, not real popularity.
-- Generated answers depend on clean body text: the form mix-up came from tables, and a fix needs a source rebuild and model rebuilds.
+- Generated answers depend on clean body text: the form mix-up came from tables, and a fix needs a source rebuild and model rebuilds. The Semantic Encoder cannot be rebuilt by hand; it rebuilds weekly.
+- Answer style is set by a custom RGA prompt instruction, because the client answer style option no longer exists. Coveo does not guarantee the instruction is followed and does not test it, so the answer evals check it.
+- The answer placeholder is driven only by Coveo's Headless state, because Atomic shows nothing until the first answer text arrives. Every text search starts an answer, so a short delay keeps searches without an answer from flashing it.
 - Overall MRR is 0.947 against a 0.95 target, unchanged after the rebuild; the gap is descriptive queries (0.700).
 - Automatic field mapping is on, and a few Atomic layout overrides remain, each with a recorded reason.
 

@@ -109,6 +109,7 @@ flowchart TD
 | Empty and error views | Rendered from Headless search status | [Interface states and motion](#interface-states-and-motion) |
 | Type-ahead | Query Suggestions model with a default queries file | [Query Suggestions](#query-suggestions) |
 | Generated answers | Atomic's `atomic-generated-answer` with Semantic Encoder and RGA models | [Generated answers](#generated-answers) |
+| Answer style | Custom prompt instruction on the RGA model | [Answer style](#answer-style) |
 | Detail page | Query parameter URL, read through a separate Headless engine | [Pokémon detail page](#pokémon-detail-page) |
 
 ## Decisions
@@ -277,7 +278,7 @@ Three related gaps had the same root. In 47 pages, form labels such as "Normal F
 
 - **One item per form:** gives each form its own body, but creates near-duplicate items, which the RGA guidance advises against, and Sitemap sources do not support sub-items. See [One item per Pokémon](#one-item-per-pokémon).
 - **Name only the first sentence of each table:** shorter, but a chunk that starts after that sentence would again hold unnamed values.
-- **A prompt instruction about forms:** Coveo allows a custom prompt, but it cannot add a name that the chunk does not contain.
+- **A prompt instruction about forms:** Coveo allows a custom prompt, but it cannot add a name that the chunk does not contain. A prompt rule about forms was added later for answer style (see [Answer style](#answer-style)); it supports this fix but cannot replace it.
 - **Rewriting the evolution chart as sentences:** it would help evolution questions, but it is a separate change and was left out of this fix.
 
 **Cost.** Repeating the names makes the body longer. Over the 227 pages checked, the body grew by a median of 14% and at most 44%. The longest page, Rotom, has about 2,400 words, far below the limit of 1,000 chunks per item. The slowest page took 240 ms locally, against Coveo's limit of about 5 seconds per item.
@@ -629,6 +630,24 @@ Not confirmed: real artwork on the page, and that the click event reaches Coveo 
 **Testing:** every browser test uses a stubbed answer stream from `e2e/fixtures.ts`, so the suite reads no real answers from the allowance. The real end-to-end checks above were run separately.
 
 The type-ahead panel now shares the search box's edges, border and radius, and uses the main text color, through Atomic's `suggestions-wrapper` and `query-suggestion-text` parts.
+
+## Answer style
+
+**Problem.** Answers read like copies of the page, not summaries. In the November 9 report, 24 of 25 answers started with a Markdown heading, 10 referred to "the documentation", and "What is the difference between Charmander and Charmeleon?" listed every field of both pages, including nine regional Pokédex numbers.
+
+**Decision: a custom prompt instruction on the RGA model, applied by the user on 2026-11-10.** The text is in `configs/coveo/rga-prompt-instruction.txt` (1,885 of 2,000 characters). It asks for a direct answer in the first one or two sentences, then only the relevant details, with short headings and bullet points for answers with several parts. It keeps the rules from Coveo's default template that apply here: use only the provided content, no opinions or speculation, decline when uncertain or off topic, and the safety rules. It adds two rules for errors the evals found: give the base form's value unless another form is named, and list a type as a weakness only at 2x or 4x damage. The user chose this version over a shorter first draft without headings, because answers should keep useful detail and stay grounded in cited content.
+
+**Coveo documentation.** [Create and manage RGA models](https://docs.coveo.com/en/nb6a0085/) states that the instruction is set under Configuration, Prompt enhancement, is limited to 2,000 characters, is added to the base prompt rather than replacing it, applies to every pipeline that uses the model, and triggers a model rebuild when saved. It warns that a custom instruction "isn't guaranteed to be followed fully or consistently", is not covered by Coveo's automated tests, may carry prompt injection risk, and should be retested because the base prompt changes often. [Improve your RGA implementation](https://docs.coveo.com/en/p5db0550/) lists the instruction as a way to adjust tone or style. [About RGA](https://docs.coveo.com/en/n9de0370/) states that the language model uses only the chunks in the prompt, and that Coveo returns citations for them.
+
+**Our inference.** Coveo attaches citations from the chunks it used, so the prompt cannot add citations. Asking that every statement come from the provided content keeps each statement traceable to a cited page. The instruction also reaches the detail page bubble, which uses the same model.
+
+**Rejected alternatives**
+
+- **The Headless `answerStyle` option.** Older Atomic and Headless versions offered default, bullet, step and concise styles. Headless 3.58 no longer has it; the only client setting is plain text or Markdown.
+- **Knowledge Hub answer rules.** [Create rules for generated answers](https://docs.coveo.com/en/p5db0039/) states that only blocking rules exist, which stop an answer for a word or phrase. They cannot change style, and the Knowledge Hub is an early-access beta.
+- **The shorter first draft.** It removed headings and kept answers to one to three sentences. The user rejected it as too thin.
+
+**Verification.** The answer evals add checks for answer length, "documentation" wording and wrong weaknesses, are applied first to the November 9 report as the baseline, and run again once the RGA model is active.
 
 ## Ask about this Pokémon
 

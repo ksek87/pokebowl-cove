@@ -4,26 +4,42 @@
       "name": "pokebowl-semantic-encoder",
       "type": "Semantic Encoder",
       "id": "g7g9ksahd7cvoorg_embeddings_514c1da3_4eea_458a_a05e_8f60f052e192",
-      "sources": ["pokemondb-pokemon"],
+      "sources": [
+        "pokemondb-pokemon"
+      ],
       "filters": null,
       "queryPipeline": "pokebowl-search",
-      "associationCondition": null
+      "associationCondition": null,
+      "buildSchedule": "Weekly from creation; no manual rebuild in the console. Next build about 2026-11-15, reported by the user. Fallback: create a new model, which builds on creation, and swap the association once it is Active"
     },
     {
       "name": "pokebowl-rga",
       "type": "Relevance Generative Answering",
       "id": "g7g9ksahd7cvoorg_genqa_0e742d37_4976_4d84_913c_dacbb630e2e3",
-      "sources": ["pokemondb-pokemon"],
+      "sources": [
+        "pokemondb-pokemon"
+      ],
       "filters": null,
       "queryPipeline": "pokebowl-search",
       "associationCondition": "Query is not empty",
-      "advancedConfiguration": "Defaults"
+      "advancedConfiguration": "Defaults",
+      "promptInstruction": {
+        "file": "configs/coveo/rga-prompt-instruction.txt",
+        "appliedOn": "2026-11-10",
+        "appliedThrough": "Administration Console: Models, Edit, Configuration, Prompt enhancement",
+        "status": "Saved by the user; the save started a model rebuild, still building at the end of 2026-11-10"
+      },
+      "buildSchedule": "Weekly from creation; a configuration save starts a rebuild"
     },
     {
       "name": "pokebowl-query-suggestions",
       "type": "Query Suggestions",
       "id": "g7g9ksahd7cvoorg_querysuggest_d5261f5b_03c8_4444_b0e3_553ea968b9b0",
-      "learningInterval": { "dataPeriod": "1 month", "buildingFrequency": "Daily", "reason": "A rebuild picks up the default queries file sooner than the weekly default" },
+      "learningInterval": {
+        "dataPeriod": "1 month",
+        "buildingFrequency": "Daily",
+        "reason": "A rebuild picks up the default queries file sooner than the weekly default"
+      },
       "filters": null,
       "queryPipeline": "pokebowl-search",
       "associationCondition": null,
