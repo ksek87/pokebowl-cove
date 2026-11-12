@@ -19,6 +19,27 @@ A Pokémon search application built on the [Coveo](https://www.coveo.com/) platf
 
 **Live site:** [pokebowl-cove.vercel.app](https://pokebowl-cove.vercel.app/). All 1,028 Pokémon are indexed in Coveo.
 
+## Assessment requirements
+
+The assessment set four tiers of work: essential, intermediate, advanced and a bonus. Each requirement and where it is built:
+
+| Tier | Requirement | Where |
+|---|---|---|
+| Essential | Atomic or Headless installed locally | Atomic React and Headless in `package.json`; the search page in [`src/App.tsx`](src/App.tsx) |
+| Essential | Index only the individual Pokémon pages | Sitemap source with one URL rule: [`configs/coveo/full-source.json`](configs/coveo/full-source.json), reasoning in [Coveo source: Sitemap](docs/architecture.md#coveo-source-sitemap) |
+| Essential | Connect the search page to Coveo | [`src/main.tsx`](src/main.tsx), [`src/config.ts`](src/config.ts) and [`src/search/engine.ts`](src/search/engine.ts), with a search-only key ([Search application connection](docs/architecture.md#search-application-connection)) |
+| Essential | Filter by Type and by Generation | Facets in [`src/App.tsx`](src/App.tsx), fields from web scraping in [`configs/coveo/fields.json`](configs/coveo/fields.json) and [`configs/coveo/web-scraping.json`](configs/coveo/web-scraping.json) |
+| Essential | Show each Pokémon's picture in its result | [`src/search/PokemonResult.tsx`](src/search/PokemonResult.tsx) |
+| Intermediate | Host the code on GitHub | This repository |
+| Intermediate | Host the search application | [pokebowl-cove.vercel.app](https://pokebowl-cove.vercel.app/) ([Hosting](docs/architecture.md#hosting)) |
+| Advanced | Generated answers with RGA | `atomic-generated-answer` in [`src/App.tsx`](src/App.tsx), the model in [`configs/coveo/ml-models.json`](configs/coveo/ml-models.json), the prompt instruction in [`configs/coveo/rga-prompt-instruction.txt`](configs/coveo/rga-prompt-instruction.txt) ([Generated answers](docs/architecture.md#generated-answers)) |
+| Advanced | Preload a Query Suggestions model for type-ahead | Default queries file [`configs/coveo/query-suggestions-default-queries.csv`](configs/coveo/query-suggestions-default-queries.csv) ([Query Suggestions](docs/architecture.md#query-suggestions)) |
+| Advanced | Pokémon detail page | [`src/search/PokemonDetailPage.tsx`](src/search/PokemonDetailPage.tsx) ([Pokémon detail page](docs/architecture.md#pokémon-detail-page)) |
+| Advanced | Technical deep dive and enterprise customer presentations | Presented to the panel. The production evaluation approach is in [docs/evaluation.md](docs/evaluation.md) |
+| Bonus | Understand Passage Retrieval and hold a point of view on it | [Passage Retrieval point of view](docs/passage-retrieval.md) |
+
+The final Coveo configuration, exported with the Coveo CLI, is in [`configs/coveo/export/`](configs/coveo/export/).
+
 ## How it works
 
 | Layer | What we use |
