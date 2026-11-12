@@ -2,7 +2,7 @@
   "pipeline": "pokebowl-search",
   "description": "Queries from the Pokémon search app and its evals.",
   "useCase": "Website",
-  "condition": "Search Hub contains pokebowl-",
+  "condition": "$searchHub is \"pokebowl-search\"",
   "filterRules": [
     {
       "queryParameter": "cq",

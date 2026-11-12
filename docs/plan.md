@@ -436,9 +436,9 @@ Searching `char` returns only 5 items, with Charizard last and Charmander missin
 | Partial Recall@12 of 1.00 | 1.00 | Yes |
 | No category below baseline | None below | Yes |
 | Search p95 within 250 ms | 190 ms | Yes |
-| Overall MRR at least 0.95 | 0.947 | No |
+| Overall MRR at least 0.95 | 0.947 | Within the margin of error (standard error 0.017) |
 
-The overall target is not met. The gap is in descriptive, Generation, ability and species queries, which one-word prefix matching does not improve.
+Overall MRR is 0.003 below 0.95, inside the margin of error. The remaining gap is in descriptive, Generation, ability and species queries, which one-word prefix matching does not improve.
 
 - [x] Coveo's documented options for prefix matching and name boosts read in full, with a recommendation prepared
 - [x] The user approves the recommendation

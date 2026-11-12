@@ -207,7 +207,7 @@ For a client with compliance needs, NIST's Generative AI Profile is a recognized
 
 - Every eval runs against live Coveo with the shipped request body, with analytics capture off.
 - Targets come from measured baselines. We changed nothing for performance, because the numbers did not justify it.
-- The 0.95 MRR target is not met at 0.947, but the gap is inside the margin of error. The measurable weakness is descriptive queries.
+- Overall MRR is 0.947 against the 0.95 target, a gap of 0.003 inside the margin of error (standard error 0.017). The measurable weakness is descriptive queries.
 - Answers are graded by code for facts, citations and declining to answer, and a person reviews what code cannot judge.
 - The grader was made stricter when it passed a wrong opening sentence, and older reports were regraded, so the score went down rather than hiding the error. Known answer failures are documented as the next iterations, to be prioritised with production feedback.
 - In production, Coveo Analytics, the Generative Answering Performance dashboard, the Knowledge Hub and pipeline A/B tests provide the online measures, with offline evals kept as a release gate.

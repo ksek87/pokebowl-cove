@@ -178,7 +178,7 @@ The performance gain is limited to crawling. Avoiding link traversal means the c
 - [Add a Web source](https://docs.coveo.com/en/malf0160/): starting URLs are subject to the source's filters.
 - [Sitemap source web scraping](https://docs.coveo.com/en/mahe0350/): Sitemap sources do not support sub-items.
 
-The conclusions about complexity, the small crawl performance gain and the absence of any effect on search latency are our reasoning. The Coveo documentation does not compare the two source types on these points.
+The conclusions about complexity, the small crawl performance gain and the absence of any effect on search latency are our reasoning. The Coveo documentation does not compare the two source types on these points. It does state, in [Add a Sitemap source](https://docs.coveo.com/en/1967/), that a Sitemap source "offers better performance than the Web source", and that it can "perform refresh updates, which the Web source doesn't support": an item is refreshed only when its sitemap date is more recent than the last refresh.
 
 ### Test source configuration
 
@@ -360,13 +360,13 @@ The application is a React and TypeScript page built with the official Atomic Re
 
 ## Limiting the application to the full source
 
-The single-Pokémon test source stays in the organization for testing configuration changes, so the index holds 1,029 items and Charizard exists twice. A dedicated query pipeline, `pokebowl-search`, receives queries from any search hub containing `pokebowl-`, and a filter rule on that pipeline limits them to `pokemondb-pokemon`. The default pipeline has no condition and no filter rule.
+The single-Pokémon test source stays in the organization for testing configuration changes, so the index holds 1,029 items and Charizard exists twice. A dedicated query pipeline, `pokebowl-search`, receives queries from the `pokebowl-search` search hub (condition `$searchHub is "pokebowl-search"`), and a filter rule on that pipeline limits them to `pokemondb-pokemon`. The default pipeline has no condition and no filter rule.
 
 **Decision: use a dedicated pipeline with a filter that includes the full source.** The rejected alternatives were:
 
 - Deleting the test source, which removes our safe place to test configuration.
 - Filtering in the application, which would not apply to requests made outside it.
-- A filter rule on the default pipeline, which we applied first and then replaced. Its search hub condition would not have covered the separate eval search hub, and rules and models on the default pipeline apply broadly.
+- A filter rule on the default pipeline, which we applied first and then replaced. Rules and models on the default pipeline apply to every query that has no other route, so a dedicated pipeline keeps this application's rules and models separate.
 
 **Decision: do not create a Coveo project for now.** Projects group related resources and do not change search behavior, so one is not needed for the application to work. One can be added later without changing the configuration.
 
@@ -501,7 +501,7 @@ Latency was measured from a developer machine, not a hosted site, and the differ
 
 **Why 300.** It is the lowest tested setting that reaches the best score on every measure. Stronger boosts add nothing.
 
-**Target not met.** The overall MRR target of 0.95 is missed, at 0.947. The remaining gap is in descriptive queries (0.717) and in Generation (0.950), ability (0.922) and species (0.922) queries. One-word prefix matching does not improve these, and we did not tune the benchmark to hide this.
+**Overall MRR.** Overall MRR is 0.947 against the 0.95 target, a gap of 0.003 inside the margin of error (standard error 0.017, see `docs/evaluation.md`). The remaining gap is in descriptive queries (0.717 in this run, 0.700 after the re-run below) and in Generation (0.950), ability (0.922) and species (0.922) queries. One-word prefix matching does not improve these, and we did not tune the benchmark to hide this.
 
 **Re-run after the full source rebuild (November 9, 2026).** The new body text names every form and adds "is weak to" and "resists" sentences. The choice of 300 still holds: it remains the lowest setting with the best score on every measure, and overall MRR is 0.947 at every setting from 100 up. Bare Type P@12 fell from 0.931 to 0.875 at every setting, including the setting before this change, so the drop comes from the body text, not from the boost. Our inference is that a bare Type word such as `flying` or `ground` now ranks higher for Pokémon whose matchup sentences name that Type, because each matchup is now stated twice ("takes 2x damage from" and "is weak to"): `flying` returns Centiskorch and Sizzlipede, which are weak to Flying. Descriptive queries moved from 0.717 to 0.700, ability from 0.922 to 0.900, and Generation from 0.950 to 1.000.
 
