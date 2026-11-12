@@ -178,7 +178,7 @@ The performance gain is limited to crawling. Avoiding link traversal means the c
 - [Add a Web source](https://docs.coveo.com/en/malf0160/): starting URLs are subject to the source's filters.
 - [Sitemap source web scraping](https://docs.coveo.com/en/mahe0350/): Sitemap sources do not support sub-items.
 
-The conclusions about complexity, the small crawl performance gain and the absence of any effect on search latency are our reasoning. The Coveo documentation does not compare the two source types on these points.
+The conclusions about complexity, the small crawl performance gain and the absence of any effect on search latency are our reasoning. The Coveo documentation does not compare the two source types on these points. It does state, in [Add a Sitemap source](https://docs.coveo.com/en/1967/), that a Sitemap source "offers better performance than the Web source", and that it can "perform refresh updates, which the Web source doesn't support": an item is refreshed only when its sitemap date is more recent than the last refresh.
 
 ### Test source configuration
 
@@ -360,13 +360,13 @@ The application is a React and TypeScript page built with the official Atomic Re
 
 ## Limiting the application to the full source
 
-The single-Pokémon test source stays in the organization for testing configuration changes, so the index holds 1,029 items and Charizard exists twice. A dedicated query pipeline, `pokebowl-search`, receives queries from any search hub containing `pokebowl-`, and a filter rule on that pipeline limits them to `pokemondb-pokemon`. The default pipeline has no condition and no filter rule.
+The single-Pokémon test source stays in the organization for testing configuration changes, so the index holds 1,029 items and Charizard exists twice. A dedicated query pipeline, `pokebowl-search`, receives queries from the `pokebowl-search` search hub (condition `$searchHub is "pokebowl-search"`), and a filter rule on that pipeline limits them to `pokemondb-pokemon`. The default pipeline has no condition and no filter rule.
 
 **Decision: use a dedicated pipeline with a filter that includes the full source.** The rejected alternatives were:
 
 - Deleting the test source, which removes our safe place to test configuration.
 - Filtering in the application, which would not apply to requests made outside it.
-- A filter rule on the default pipeline, which we applied first and then replaced. Its search hub condition would not have covered the separate eval search hub, and rules and models on the default pipeline apply broadly.
+- A filter rule on the default pipeline, which we applied first and then replaced. Rules and models on the default pipeline apply to every query that has no other route, so a dedicated pipeline keeps this application's rules and models separate.
 
 **Decision: do not create a Coveo project for now.** Projects group related resources and do not change search behavior, so one is not needed for the application to work. One can be added later without changing the configuration.
 
@@ -501,7 +501,7 @@ Latency was measured from a developer machine, not a hosted site, and the differ
 
 **Why 300.** It is the lowest tested setting that reaches the best score on every measure. Stronger boosts add nothing.
 
-**Target not met.** The overall MRR target of 0.95 is missed, at 0.947. The remaining gap is in descriptive queries (0.717) and in Generation (0.950), ability (0.922) and species (0.922) queries. One-word prefix matching does not improve these, and we did not tune the benchmark to hide this.
+**Overall MRR.** Overall MRR is 0.947 against the 0.95 target, a gap of 0.003 inside the margin of error (standard error 0.017, see `docs/evaluation.md`). The remaining gap is in descriptive queries (0.717 in this run, 0.700 after the re-run below) and in Generation (0.950), ability (0.922) and species (0.922) queries. One-word prefix matching does not improve these, and we did not tune the benchmark to hide this.
 
 **Re-run after the full source rebuild (November 9, 2026).** The new body text names every form and adds "is weak to" and "resists" sentences. The choice of 300 still holds: it remains the lowest setting with the best score on every measure, and overall MRR is 0.947 at every setting from 100 up. Bare Type P@12 fell from 0.931 to 0.875 at every setting, including the setting before this change, so the drop comes from the body text, not from the boost. Our inference is that a bare Type word such as `flying` or `ground` now ranks higher for Pokémon whose matchup sentences name that Type, because each matchup is now stated twice ("takes 2x damage from" and "is weak to"): `flying` returns Centiskorch and Sizzlipede, which are weak to Flying. Descriptive queries moved from 0.717 to 0.700, ability from 0.922 to 0.900, and Generation from 0.950 to 1.000.
 
@@ -801,3 +801,56 @@ The largest packages in the entry chunk by gzip share are `@coveo/atomic` (21%),
 **Decision: keep the inline card stylesheet as it is.** Atomic draws result cards inside Shadow DOM, so the cards need their own copy of our stylesheet, which is imported with `?inline` and shared by all cards. That copy is 43 kB raw and 8.6 kB gzipped, 1.9% of the entry chunk. A card-only stylesheet would save at most a few kilobytes gzipped, under 1% of the JavaScript, and would add a second Tailwind build to keep in sync. The page is already visible in under 300 ms on this machine, so the saving would not be measurable. Atomic itself carries 30 inline stylesheets, 120 kB raw and 16 kB gzipped.
 
 We make no bundle change. A smaller entry chunk would need code splitting around Atomic, which is Coveo's package and not ours to restructure.
+
+## Query and answer usage
+
+Coveo licenses search by usage, so each user action has a cost. This section records how Coveo counts usage, what each action in the application uses, and how usage could be reduced. It is a record for discussion; nothing here was changed in the application.
+
+### How Coveo counts usage
+
+**What Coveo states:**
+
+- **Queries per month (QPM)** counts Search API requests that retrieve results: submitting a search, selecting a tab or toggling facet values, changing the sort, and changing the page or page size. Getting query suggestions, opening a Quick view, searching inside a facet search box and clicking a result are not counted ([About queries](https://docs.coveo.com/en/l25h0358/), [Monitor search consumption](https://docs.coveo.com/en/1855/)).
+- **Generative queries per month (GQPM)** counts every search sent to an RGA model "whether or not an answer is generated". Applying filters to a search that already has an answer sends a new, counted request ([Review your license and usage](https://docs.coveo.com/en/q2ik0227/)). One RGA unit includes 100,000 generative queries per month ([Product entitlements](https://docs.coveo.com/en/l2590456/)).
+- **Coveo's query cache does not reduce QPM.** Cache hits "still count as queries" ([QueryParamOverride](https://docs.coveo.com/en/1491/)).
+
+### What each action uses
+
+From the application code, against the rules above. Rows marked * are our inference: Coveo's documentation does not name that case.
+
+| User action | QPM | GQPM | Why |
+|---|---|---|---|
+| Open the search page (empty search) | 1 | 0 | The RGA model association has the condition "Query is not empty" |
+| Type in the search box | 0 | 0 | Query suggestions are not counted, and the search box does not search as the user types |
+| Search for a word or question | 1 | 1 | Every text search reaches the RGA model, including names such as `pika` and nonsense, where no answer comes back |
+| Search for a Pokédex number such as `150` | 1 | 0 | The request hook clears the text query and adds an exact number match |
+| Toggle a filter while a text query is set | 1 | 1 | Coveo states filters on an answered search send a new request |
+| Change the sort, page or page size while a text query is set | 1 | 1* | The search request goes through the same pipeline and RGA association |
+| Open a detail page | 1 | 0 | The exact-name lookup has no text query (see below) |
+| Pokédex entries on the detail page | 0 | 0 | Read through Quick view |
+| Pick a question in "Ask about this Pokémon" | 1 | 1 | One search per picked question; nothing is sent until a question is picked |
+
+**The detail page lookup.** A result card links to `/?pokemon=<name>`, which loads the page again, so nothing from the search page carries over. The detail page builds a second Headless engine with analytics turned off, and sends one search with an empty `q` and `aq: @pokemon_name=="<name>"`, with any quotes removed from the name. It requests every detail field, checks that the returned name matches exactly, and reads the Pokédex entries through Quick view. This keeps detail links shareable and keeps page loads out of search analytics. Skipping the lookup when arriving from a result card was considered and rejected: the search page fetches only the card fields, and opening a detail page is a full page load, so it would need every detail field on every result and an in-app transition to save 1 query per detail view.
+
+**Evals use quota too.** The evals query the application's search hub, so each relevance and answer run counts toward QPM and GQPM (our inference from the rules above).
+
+### How to measure usage
+
+- **License & Usage page** in the Administration Console: this month's usage for each entitlement, and a history chart that can be grouped by search hub and exported to CSV ([Review your license and usage](https://docs.coveo.com/en/q2ik0227/)).
+- **Consumption dashboard**, opened from the QPM card: query totals by search hub and downloadable query logs ([Monitor search consumption](https://docs.coveo.com/en/1855/)).
+- **Coveo Analytics:** search, click and answer events for real users, to estimate usage per session. One search event can mean several queries.
+- **Not built:** a browser script that runs a user journey with analytics blocked and counts Search API requests and answer streams per step, to measure queries per visit.
+
+### Ways to reduce usage
+
+Already in place: no search-as-you-type, the RGA condition that skips empty searches, number lookups without a text query, Pokédex entries through Quick view, and answers on the detail page only when a question is picked.
+
+Possible changes, not made:
+
+- **Skip RGA for one-word searches.** Name searches use a generative query and get no answer. A model association condition can match the query with a regular expression ([Query pipeline language](https://docs.coveo.com/en/1449/)), so RGA could require more than one word. A one-word question would then get no answer.
+- **A cache on our side, behind a backend.** Because Coveo cache hits still count, savings need a cache before Coveo, for example for the search page's first load and the most frequent searches. A backend is also where per-user search tokens would be issued.
+- **Cached answers for frequent questions,** cleared whenever the RGA model rebuilds.
+- **A separate eval search hub without an RGA association,** so retrieval evals do not use GQPM. This needs a second API key, because the browser key enforces the application's search hub.
+- **No new answer on sort or page changes,** since the question is unchanged. This needs custom Headless code in place of Atomic's default behavior.
+- **An alert on usage,** from the License & Usage export.
+- **Rejected: the `staticQuery` parameter.** Coveo states it does not count toward QPM, but ties it to persistent queries, which are deprecated, and it can return outdated results ([QueryParamOverride](https://docs.coveo.com/en/1491/)).

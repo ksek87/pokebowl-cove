@@ -144,6 +144,7 @@ Considered and dropped, because neither the assessment nor the demo needs them. 
 | Screen reader and non-Chromium browser testing | Production practice |
 | The small layout shift on load (0.033, within its 0.05 target) and a separate card stylesheet | Gains too small to matter |
 | The header logo label and the duplicate icon file | Not visible in the demo |
+| Reducing query and generative query usage (skip RGA for one-word searches, a cache before Coveo, a separate eval search hub) | No real traffic or cost pressure. Options and per-action counts are recorded in `docs/architecture.md`, Query and answer usage |
 | Showing feedback buttons while a long answer is collapsed | Atomic has no option for it; raising `max-collapsed-height` would only collapse fewer answers |
 
 ### Talking points for the panel
@@ -174,6 +175,7 @@ Confirm each Coveo capability against current Coveo documentation before present
 - **Manage configuration as code.** The Coveo CLI exports the organization configuration, so changes are reviewed and promoted between a test and a production organization.
 - **Keep content fresh and structured.** Schedule recrawls as pokemondb.net changes, or move to the Push API with structured data, which would also remove the table-parsing risk behind the answer fix.
 - **Secure access per user.** Use search tokens issued by a backend instead of a shared search-only API key once there are signed-in users.
+- **Watch usage and cost.** Each search uses a query, and each text search also uses a generative query, even without an answer. Track both on the License & Usage page by search hub, and reduce them where it pays off (see `docs/architecture.md`, Query and answer usage).
 - **Extend to agents.** Passage Retrieval or Coveo's Hosted MCP Server could ground an AI assistant in the same index (see `docs/passage-retrieval.md`).
 
 ---
@@ -436,9 +438,9 @@ Searching `char` returns only 5 items, with Charizard last and Charmander missin
 | Partial Recall@12 of 1.00 | 1.00 | Yes |
 | No category below baseline | None below | Yes |
 | Search p95 within 250 ms | 190 ms | Yes |
-| Overall MRR at least 0.95 | 0.947 | No |
+| Overall MRR at least 0.95 | 0.947 | Within the margin of error (standard error 0.017) |
 
-The overall target is not met. The gap is in descriptive, Generation, ability and species queries, which one-word prefix matching does not improve.
+Overall MRR is 0.003 below 0.95, inside the margin of error. The remaining gap is in descriptive, Generation, ability and species queries, which one-word prefix matching does not improve.
 
 - [x] Coveo's documented options for prefix matching and name boosts read in full, with a recommendation prepared
 - [x] The user approves the recommendation
