@@ -6,7 +6,7 @@ Build a Pokémon search application on the Coveo platform. The content comes fro
 
 The finished work is presented to a panel of Coveo experts in a 45-minute session that covers what we built, how Coveo is configured, why we made our choices and what the solution is worth to a real enterprise customer.
 
-**Target completion:** Friday, November 13, 2026.
+**Submission:** Thursday, November 12, 2026. Panel presentation: Monday, November 16, 2026.
 
 ## Status against the assessment requirements
 

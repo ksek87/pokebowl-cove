@@ -60,4 +60,6 @@ coveo org:resources:pull --no-git
 - **API keys.** They are not a supported snapshot resource ([Manage resource snapshots](https://docs.coveo.com/en/3239/)). `api-keys.json` remains the record.
 - **Secrets.** Snapshots do not carry sensitive information such as source credentials ([Manage organization snapshots](https://docs.coveo.com/en/mape0408/)). We checked the export: no parameter is marked sensitive, and it contains no key or token values. Our sources crawl a public site and have no credentials.
 
+**Checked against our records on 2026-11-12:** the 16 Pokémon fields and their options match `fields.json`. The web scraping configuration is identical to `web-scraping.json`. The full source matches `full-source.json`: sitemap address, URL rule, 2,000 ms between requests, JavaScript off, the extension set to skip on error, and `performFieldMappingUsingAllOrigins`. The `pokebowl-search` pipeline, its search hub condition and its filter rule match `query-pipeline.json`.
+
 The pull leaves the snapshot in the organization. Coveo keeps up to 20 snapshots and deletes each one 6 months after it is created ([Manage resource snapshots](https://docs.coveo.com/en/3239/)).

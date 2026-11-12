@@ -103,6 +103,7 @@ flowchart TD
 | Application content | Dedicated `pokebowl-search` pipeline filters to the full source, and the test source is kept | [Limiting the application to the full source](#limiting-the-application-to-the-full-source) |
 | Hosting | Vercel | [Hosting](#hosting) |
 | Repeated platform work | Coveo APIs in place of repeated console steps | [Use of Coveo APIs](#use-of-coveo-apis) |
+| Configuration record | Copies of each applied setting in `configs/coveo/`, plus a Coveo CLI export of the live organization | [Use of Coveo APIs](#use-of-coveo-apis) |
 | Eval reference data | Sampled from pokemondb.net, with difficult cases verified by hand | [Eval reference data](#eval-reference-data) |
 | Search behavior | Number lookups, Pokédex order on the home page, Best match as the default label, collapsed facets | [Search behavior](#search-behavior) |
 | Page sizes | Atomic's `atomic-results-per-page` | [Visual direction](#visual-direction) |
