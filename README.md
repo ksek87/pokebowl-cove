@@ -36,7 +36,7 @@ The assessment set four tiers of work: essential, intermediate, advanced and a b
 | Advanced | Preload a Query Suggestions model for type-ahead | Default queries file [`configs/coveo/query-suggestions-default-queries.csv`](configs/coveo/query-suggestions-default-queries.csv) ([Query Suggestions](docs/architecture.md#query-suggestions)) |
 | Advanced | Pokémon detail page | [`src/search/PokemonDetailPage.tsx`](src/search/PokemonDetailPage.tsx) ([Pokémon detail page](docs/architecture.md#pokémon-detail-page)) |
 | Advanced | Technical deep dive and enterprise customer presentations | Presented to the panel. The production evaluation approach is in [docs/evaluation.md](docs/evaluation.md) |
-| Bonus | Understand Passage Retrieval and hold a point of view on it | [Passage Retrieval point of view](docs/passage-retrieval.md) |
+| Bonus | Understand Passage Retrieval and hold a point of view on it | Presented to the panel |
 
 The final Coveo configuration, exported with the Coveo CLI, is in [`configs/coveo/export/`](configs/coveo/export/).
 
