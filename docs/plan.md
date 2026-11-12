@@ -6,7 +6,7 @@ Build a Pokémon search application on the Coveo platform. The content comes fro
 
 The finished work is presented to a panel of Coveo experts in a 45-minute session that covers what we built, how Coveo is configured, why we made our choices and what the solution is worth to a real enterprise customer.
 
-**Target completion:** Friday, November 13, 2026.
+**Submission:** Thursday, November 12, 2026. Panel presentation: Monday, November 16, 2026.
 
 ## Status against the assessment requirements
 
@@ -26,8 +26,8 @@ The assessment defines four tiers of required work and a panel presentation. A t
 | Advanced | Generative answers with Relevance Generative Answering | Built and live. The body text fix for answers that mixed Pokémon forms is merged (PR #14) and the full source is rebuilt. A custom prompt instruction for answer style (version 3) and evolution sentences are live since 2026-11-10. Answer evals: 38 of 45, with the open failures documented | PC-61, PC-62, PC-63, PC-44 |
 | Advanced | Preload a Query Suggestions model for type-ahead | Done: model active and the ranked default queries are live. After the rebuild, Pokémon names lead the suggestions | PC-50, PC-51 |
 | Advanced | Pokémon detail page | Done, live on the hosted site | PC-70 |
-| Advanced | Technical deep dive presentation | Not started | PC-100 |
-| Advanced | Enterprise customer value presentation | Not started | PC-102 |
+| Advanced | Technical deep dive presentation | Deck, speaker notes and demo plan ready; rehearsal remains | PC-100 |
+| Advanced | Enterprise customer value presentation | Ready in the deck | PC-102 |
 | Bonus | Passage Retrieval: at minimum, understand it and hold a point of view | Done: point of view written (`docs/passage-retrieval.md`). Building with it is optional | PC-80 to PC-83 |
 
 Evals, performance baselines and interface polish are additions we chose and are not assessment requirements. They support the presentation.
@@ -99,14 +99,15 @@ Answers gave Mega Charizard X's 110.5 kg as Charizard's weight, because each for
 
 ### 3. Wrap-up
 
-- [ ] User looks through the live site at the usual window widths (PC-78)
+- [x] User looks through the live site at the usual window widths (PC-78; done 2026-11-12, screenshots skipped by the user)
+- [ ] Optional, only if time allows before submission: phone layouts (user, 2026-11-11). Not a presentation topic
 - [x] Final documentation and README (PC-91, 2026-11-10)
-- [ ] Technical deep dive and demo script, using the talking points below (PC-100)
-- [ ] Production evaluation approach (PC-101)
+- [x] Technical deep dive and demo script, using the talking points below (PC-100; deck and demo plan done 2026-11-12)
+- [x] Production evaluation approach (PC-101; in the deck, 2026-11-12)
 - [ ] Demo rehearsed
 - [x] ~~Performance re-measured on a quiet network~~ Dropped by the user on 2026-11-10: the 2026-11-09 runs were already made on a quiet network. Every p50 matched the baseline; the p95 misses stay documented (see `docs/architecture.md`, Performance)
-- [ ] Business case, started only after the technical work (Epic 11)
-- [ ] Coveo configuration exported with the Coveo CLI, at the very end (PC-90)
+- [x] Business case, started only after the technical work (Epic 11; in the deck, 2026-11-12)
+- [x] Coveo configuration exported with the Coveo CLI, at the very end (PC-90; 2026-11-12, `configs/coveo/export/`)
 - [ ] Materials submitted, then the repository shared (PC-103, PC-31)
 
 ### Decisions made
@@ -573,7 +574,7 @@ Owner: Agent · Depends on: PC-75, PC-62, PC-70
 
 Owner: Both · Depends on: PC-76, PC-77
 
-- [ ] Reviewed in a real browser by the user, with screenshots at each width
+- [x] Reviewed in a real browser by the user (2026-11-12; screenshots skipped by the user)
 - [x] Keyboard use, focus states, colour contrast and image alt text checked (automated, on the hosted site at 1100, 1440, 1920 and 2560 px; no defects found)
 - [x] Page load is measured against PC-43 so polish does not harm performance (hosted measurement, PC-43)
 - [x] User decided the open interface questions (see Decisions made under Remaining work)
@@ -625,15 +626,15 @@ This is the minimum outcome for the bonus.
 
 Owner: Both · Depends on: PC-14, PC-61
 
-- [ ] Configuration exported to the repository with the Coveo CLI
-- [ ] No secrets appear in the export
+- [x] Configuration exported to the repository with the Coveo CLI (2026-11-12, `configs/coveo/export/`)
+- [x] No secrets appear in the export (no sensitive parameters, keys or tokens; API keys and the Semantic Encoder and RGA models are not snapshot resources, see `configs/coveo/README.md`)
 
 ### PC-91: Finish the documentation
 
 Owner: Agent · Depends on: PC-90
 
-- [ ] `docs/architecture.md` reflects the final configuration and decisions
-- [ ] README explains how to set up, run, test and evaluate the project
+- [x] `docs/architecture.md` reflects the final configuration and decisions
+- [x] README explains how to set up, run, test and evaluate the project
 
 ---
 
@@ -645,15 +646,15 @@ Owner: Agent · Depends on: PC-90
 
 Owner: Both · Depends on: PC-44, PC-91
 
-- [ ] Covers what we built, the Coveo configuration, architecture choices and lessons learned
-- [ ] Includes eval results
+- [x] Covers what we built, the Coveo configuration, architecture choices and lessons learned
+- [x] Includes eval results
 - [ ] Demo has been rehearsed
 
 ### PC-101: Prepare the production evaluation approach
 
 Owner: Both
 
-- [ ] Explains evals over time, end-user feedback, sampling and A/B testing, using Coveo's tools where possible. Notes and sources: `docs/evaluation.md`
+- [x] Explains evals over time, end-user feedback, sampling and A/B testing, using Coveo's tools where possible. Notes and sources: `docs/evaluation.md`
 
 ### PC-103: Submit the presentation materials
 
@@ -665,14 +666,14 @@ Owner: You · Depends on: PC-100, PC-101, PC-102
 
 ## Epic 11: Business case
 
-**Not a priority yet.** All business case and enterprise customer work belongs here and starts only after the application and technical work are done.
+**Done in the presentation deck (2026-11-12).** All business case and enterprise customer work belongs here and starts only after the application and technical work are done.
 
 ### PC-102: Develop the customer business case
 
 Owner: You, supported by Agent
 
-- [ ] Enterprise customer chosen from past or present experience
-- [ ] Solution and value proposition prepared for that customer
+- [x] Enterprise customer chosen from past or present experience
+- [x] Solution and value proposition prepared for that customer
 
 ---
 

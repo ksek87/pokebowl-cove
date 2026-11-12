@@ -19,6 +19,8 @@ Copies of the configuration applied in the Coveo Administration Console. The con
 | `api-keys.json` | Settings of the browser search key, without its value | Our record of the console settings, not a Coveo import format |
 | `test-source.json` | Settings of the single-Pokémon test source | Our record of the console settings, not a Coveo import format |
 
+| `export/` | Snapshot of the live organization, pulled with the Coveo CLI on 2026-11-12 (see below) | Coveo CLI project: `.coveo/config.json` and one JSON file per resource type in `resources/`. Generated, do not edit by hand |
+
 These files record the intended settings and do not prove what is live in Coveo. After applying a setting, confirm it in the console or through a query. The first full crawl ran without `performFieldMappingUsingAllOrigins` and without the Facet option on `pokemon_generation`, although both were recorded here.
 
 The reasons behind these settings are recorded in [docs/architecture.md](../../docs/architecture.md).
@@ -36,3 +38,28 @@ node --env-file=.env scripts/generate-default-queries.ts
 ```
 
 The script reads every item once and then runs each query other than names against the `pokebowl-search` pipeline. It drops any query with no matching result in the top results. All of its requests set `analytics.capture` to `false`, so they do not reach the analytics that train models. The file must stay within Coveo's limit of 5,000 queries per language, and the script fails if it does not.
+
+## Organization export
+
+`export/` is the final configuration as it is live in Coveo. It was pulled on 2026-11-12 with Coveo CLI 3.3.1 on Node 24:
+
+```sh
+npm install -g @coveo/cli@3.3.1
+coveo auth:login -r us -o <organization ID>
+cd configs/coveo/export
+coveo org:resources:pull --no-git
+```
+
+`pull` creates a resource snapshot in the organization and writes it to the current folder ([Manage organization snapshots](https://docs.coveo.com/en/mape0408/)). Use 3.3.1 or later on Node 24: its release notes fix an expired-token error right after login on Node 24. To apply the export to another organization, run `coveo org:resources:preview` and then `coveo org:resources:push -o <destination organization ID>` from `export/`.
+
+**What it contains:** the two sources with their settings, the `pre-reconstruct-body` extension, 90 fields and 112 mappings, the `default` and `pokebowl-search` query pipelines, the search hub condition and filter rule, the Query Suggestions model and its association, and the analytics tracking ID. The exported extension code matches `extensions/reconstruct_body.py` (the live copy has one extra blank line at the end).
+
+**What it does not contain:**
+
+- **The Semantic Encoder and RGA models, and their associations.** Snapshots support only Automatic Relevance Tuning, Query Suggestions and Content Recommendation models ([Manage resource snapshots](https://docs.coveo.com/en/3239/)). `ml-models.json` and the `rga-prompt-instruction*.txt` files remain the record for these two models. The condition RGA's association uses, `when not ( $query isEmpty )`, is in the export, because conditions are a supported resource.
+- **API keys.** They are not a supported snapshot resource ([Manage resource snapshots](https://docs.coveo.com/en/3239/)). `api-keys.json` remains the record.
+- **Secrets.** Snapshots do not carry sensitive information such as source credentials ([Manage organization snapshots](https://docs.coveo.com/en/mape0408/)). We checked the export: no parameter is marked sensitive, and it contains no key or token values. Our sources crawl a public site and have no credentials.
+
+**Checked against our records on 2026-11-12:** the 16 Pokémon fields and their options match `fields.json`. The web scraping configuration is identical to `web-scraping.json`. The full source matches `full-source.json`: sitemap address, URL rule, 2,000 ms between requests, JavaScript off, the extension set to skip on error, and `performFieldMappingUsingAllOrigins`. The `pokebowl-search` pipeline, its search hub condition and its filter rule match `query-pipeline.json`.
+
+The pull leaves the snapshot in the organization. Coveo keeps up to 20 snapshots and deletes each one 6 months after it is created ([Manage resource snapshots](https://docs.coveo.com/en/3239/)).

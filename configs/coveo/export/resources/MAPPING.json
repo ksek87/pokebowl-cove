@@ -1,0 +1,1801 @@
+{
+	"metadata": {
+		"schemaVersion": "v1"
+	},
+	"resources": {
+		"MAPPING": [
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[author:crawler]"
+							],
+							"field": "{{ FIELD.author_zqrj0X }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_author_Rule:_%[author:crawler]_3Ackas"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[author:crawler]"
+							],
+							"field": "{{ FIELD.author_zqrj0X }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_author_Rule:_%[author:crawler]_P2xoA4"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[authorloginname]"
+							],
+							"field": "{{ FIELD.authorloginname_lo3BzJ }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_authorloginname_Rule:_%[authorloginname]_AqimLS"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[authorloginname]"
+							],
+							"field": "{{ FIELD.authorloginname_lo3BzJ }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_authorloginname_Rule:_%[authorloginname]_hNK1GH"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[bcc]"
+							],
+							"field": "{{ FIELD.bcc_QNxar1 }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_bcc_Rule:_%[bcc]_2qa37v"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[bcc]"
+							],
+							"field": "{{ FIELD.bcc_QNxar1 }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_bcc_Rule:_%[bcc]_NUaFlK"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[cc]"
+							],
+							"field": "{{ FIELD.cc_pqAnyt }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_cc_Rule:_%[cc]_Py7SWI"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[cc]"
+							],
+							"field": "{{ FIELD.cc_pqAnyt }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_cc_Rule:_%[cc]_QClqEO"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[clickableuri]"
+							],
+							"field": "{{ FIELD.clickableuri_Vgw4pg }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_clickableuri_Rule:_%[clickableuri]_6maj3R"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[clickableuri]"
+							],
+							"field": "{{ FIELD.clickableuri_Vgw4pg }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_clickableuri_Rule:_%[clickableuri]_lhfRPu"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[company]"
+							],
+							"field": "{{ FIELD.company_I09oIm }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_company_Rule:_%[company]_6TBmjW"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[company]"
+							],
+							"field": "{{ FIELD.company_I09oIm }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_company_Rule:_%[company]_PmFYfF"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[o]"
+							],
+							"field": "{{ FIELD.company_I09oIm }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_company_Rule:_%[o]_5OmULN"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[o]"
+							],
+							"field": "{{ FIELD.company_I09oIm }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_company_Rule:_%[o]_5lGqNs"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[connectortype]"
+							],
+							"field": "{{ FIELD.connectortype_Q9m33C }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_connectortype_Rule:_%[connectortype]_aoxx8G"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[connectortype]"
+							],
+							"field": "{{ FIELD.connectortype_Q9m33C }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_connectortype_Rule:_%[connectortype]_tfTvTN"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[date]"
+							],
+							"field": "{{ FIELD.date_22ZmUU }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_date_Rule:_%[date]_dhiRuM"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[date]"
+							],
+							"field": "{{ FIELD.date_22ZmUU }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_date_Rule:_%[date]_hW7boc"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[datebucket]"
+							],
+							"field": "{{ FIELD.datebucket_6EfkCx }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_datebucket_Rule:_%[datebucket]_bSF0kY"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[datebucket]"
+							],
+							"field": "{{ FIELD.datebucket_6EfkCx }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_datebucket_Rule:_%[datebucket]_o5LEmd"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[documenttype]"
+							],
+							"field": "{{ FIELD.documenttype_fNiFCv }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_documenttype_Rule:_%[documenttype]_20HKlL"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[documenttype]"
+							],
+							"field": "{{ FIELD.documenttype_fNiFCv }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_documenttype_Rule:_%[documenttype]_T9pi2n"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[fax]"
+							],
+							"field": "{{ FIELD.fax_EplDSj }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_fax_Rule:_%[fax]_0IfIjI"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[fax]"
+							],
+							"field": "{{ FIELD.fax_EplDSj }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_fax_Rule:_%[fax]_qWkCdJ"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[fileextension]"
+							],
+							"field": "{{ FIELD.fileextension_vtwvb3 }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_fileextension_Rule:_%[fileextension]_Nj628w"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[fileextension]"
+							],
+							"field": "{{ FIELD.fileextension_vtwvb3 }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_fileextension_Rule:_%[fileextension]_ioxluU"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[filename]"
+							],
+							"field": "{{ FIELD.filename_RgLrEW }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_filename_Rule:_%[filename]_4e2bZd"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[filename]"
+							],
+							"field": "{{ FIELD.filename_RgLrEW }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_filename_Rule:_%[filename]_qONAjT"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[filetype]"
+							],
+							"field": "{{ FIELD.filetype_9Pc1X9 }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_filetype_Rule:_%[filetype]_10A4ps"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[filetype]"
+							],
+							"field": "{{ FIELD.filetype_9Pc1X9 }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_filetype_Rule:_%[filetype]_ack8fB"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[firstname]"
+							],
+							"field": "{{ FIELD.firstname_o67wWf }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_firstname_Rule:_%[firstname]_elWznB"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[firstname]"
+							],
+							"field": "{{ FIELD.firstname_o67wWf }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_firstname_Rule:_%[firstname]_odHh9J"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[folders]"
+							],
+							"field": "{{ FIELD.folders_2lu6IA }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_folders_Rule:_%[folders]_5YT5DY"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[folders]"
+							],
+							"field": "{{ FIELD.folders_2lu6IA }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_folders_Rule:_%[folders]_gtqtsM"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[coveo_foldingchild]"
+							],
+							"field": "{{ FIELD.foldingchild_39xxzE }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_foldingchild_Rule:_%[coveo_foldingchild]_UkMyle"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[coveo_foldingchild]"
+							],
+							"field": "{{ FIELD.foldingchild_39xxzE }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_foldingchild_Rule:_%[coveo_foldingchild]_VVObvh"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[coveo_foldingcollection]"
+							],
+							"field": "{{ FIELD.foldingcollection_6DatYB }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_foldingcollection_Rule:_%[coveo_foldingcollection]_5c4S8N"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[coveo_foldingcollection]"
+							],
+							"field": "{{ FIELD.foldingcollection_6DatYB }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_foldingcollection_Rule:_%[coveo_foldingcollection]_M8N7O4"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[coveo_foldingparent]"
+							],
+							"field": "{{ FIELD.foldingparent_qlfxiQ }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_foldingparent_Rule:_%[coveo_foldingparent]_9iYHD3"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[coveo_foldingparent]"
+							],
+							"field": "{{ FIELD.foldingparent_qlfxiQ }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_foldingparent_Rule:_%[coveo_foldingparent]_v04wIX"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[from]"
+							],
+							"field": "{{ FIELD.from_M6cw0e }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_from_Rule:_%[from]_ZCfpg7"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[from]"
+							],
+							"field": "{{ FIELD.from_M6cw0e }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_from_Rule:_%[from]_x65jlo"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[fullname]"
+							],
+							"field": "{{ FIELD.fullname_U3m22L }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_fullname_Rule:_%[fullname]_YebHCN"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[fullname]"
+							],
+							"field": "{{ FIELD.fullname_U3m22L }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_fullname_Rule:_%[fullname]_dqZcrN"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[homephone]"
+							],
+							"field": "{{ FIELD.homephone_MZLzcu }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_homephone_Rule:_%[homephone]_BQn5c9"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[homephone]"
+							],
+							"field": "{{ FIELD.homephone_MZLzcu }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_homephone_Rule:_%[homephone]_HHCJum"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[language]"
+							],
+							"field": "{{ FIELD.language_Uf4NpD }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_language_Rule:_%[language]_Xejh9N"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[language]"
+							],
+							"field": "{{ FIELD.language_Uf4NpD }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_language_Rule:_%[language]_XtBFcL"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[lastname]"
+							],
+							"field": "{{ FIELD.lastname_JfHWEo }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_lastname_Rule:_%[lastname]_MnIIdo"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[lastname]"
+							],
+							"field": "{{ FIELD.lastname_JfHWEo }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_lastname_Rule:_%[lastname]_y7PbRT"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[location]"
+							],
+							"field": "{{ FIELD.location_92ZmtX }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_location_Rule:_%[location]_W1MdBg"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[location]"
+							],
+							"field": "{{ FIELD.location_92ZmtX }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_location_Rule:_%[location]_WL45My"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[manager]"
+							],
+							"field": "{{ FIELD.manager_kgVqym }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_manager_Rule:_%[manager]_4zro5f"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[manager]"
+							],
+							"field": "{{ FIELD.manager_kgVqym }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_manager_Rule:_%[manager]_f0iNIr"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[middlename]"
+							],
+							"field": "{{ FIELD.middlename_wr4gQw }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_middlename_Rule:_%[middlename]_aIY6l4"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[middlename]"
+							],
+							"field": "{{ FIELD.middlename_wr4gQw }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_middlename_Rule:_%[middlename]_xMI6Wx"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[cellphone]"
+							],
+							"field": "{{ FIELD.mobilephone_vi4sJL }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_mobilephone_Rule:_%[cellphone]_9HFpJL"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[cellphone]"
+							],
+							"field": "{{ FIELD.mobilephone_vi4sJL }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_mobilephone_Rule:_%[cellphone]_P48ntf"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[mobile]"
+							],
+							"field": "{{ FIELD.mobilephone_vi4sJL }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_mobilephone_Rule:_%[mobile]_LIFntK"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[mobile]"
+							],
+							"field": "{{ FIELD.mobilephone_vi4sJL }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_mobilephone_Rule:_%[mobile]_sw5Dju"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[mobilephone]"
+							],
+							"field": "{{ FIELD.mobilephone_vi4sJL }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_mobilephone_Rule:_%[mobilephone]_3EHD8T"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[mobilephone]"
+							],
+							"field": "{{ FIELD.mobilephone_vi4sJL }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_mobilephone_Rule:_%[mobilephone]_ysI9Pn"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[mobileuri]"
+							],
+							"field": "{{ FIELD.mobileuri_VeSPwM }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_mobileuri_Rule:_%[mobileuri]_6FA2T7"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[mobileuri]"
+							],
+							"field": "{{ FIELD.mobileuri_VeSPwM }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_mobileuri_Rule:_%[mobileuri]_gelmRC"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[month]"
+							],
+							"field": "{{ FIELD.month_RqyxOo }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_month_Rule:_%[month]_5cQqdb"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[month]"
+							],
+							"field": "{{ FIELD.month_RqyxOo }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_month_Rule:_%[month]_CTqg7o"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[office]"
+							],
+							"field": "{{ FIELD.office_F2LTMC }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_office_Rule:_%[office]_B4Kyhh"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[office]"
+							],
+							"field": "{{ FIELD.office_F2LTMC }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_office_Rule:_%[office]_XGkgft"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[parents]"
+							],
+							"field": "{{ FIELD.parents_ZRcSGm }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_parents_Rule:_%[parents]_MVmkRk"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[parents]"
+							],
+							"field": "{{ FIELD.parents_ZRcSGm }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_parents_Rule:_%[parents]_cUBtiG"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[permanentid]"
+							],
+							"field": "{{ FIELD.permanentid_vaf1dJ }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_permanentid_Rule:_%[permanentid]_I0fAvY"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[permanentid]"
+							],
+							"field": "{{ FIELD.permanentid_vaf1dJ }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_permanentid_Rule:_%[permanentid]_MKFRtz"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[pokemon_generation]"
+							],
+							"field": "{{ FIELD.pokemon_generation_tFQvTZ }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_pokemon_generation_Rule:_%[pokemon_generation]_GY54op"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[pokemon_generation]"
+							],
+							"field": "{{ FIELD.pokemon_generation_tFQvTZ }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_pokemon_generation_Rule:_%[pokemon_generation]_k1qHvr"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[pokemon_image]"
+							],
+							"field": "{{ FIELD.pokemon_image_RYz9xu }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_pokemon_image_Rule:_%[pokemon_image]_B0EYwE"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[pokemon_image]"
+							],
+							"field": "{{ FIELD.pokemon_image_RYz9xu }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_pokemon_image_Rule:_%[pokemon_image]_iSWFzF"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[pokemon_name]"
+							],
+							"field": "{{ FIELD.pokemon_name_8Yeasb }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_pokemon_name_Rule:_%[pokemon_name]_AhMPw7"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[pokemon_name]"
+							],
+							"field": "{{ FIELD.pokemon_name_8Yeasb }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_pokemon_name_Rule:_%[pokemon_name]_y0dtQY"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[pokemon_type]"
+							],
+							"field": "{{ FIELD.pokemon_type_Xshw9V }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_pokemon_type_Rule:_%[pokemon_type]_9w0idh"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[pokemon_type]"
+							],
+							"field": "{{ FIELD.pokemon_type_Xshw9V }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_pokemon_type_Rule:_%[pokemon_type]_w02HBV"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[printableuri]"
+							],
+							"field": "{{ FIELD.printableuri_grGs94 }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_printableuri_Rule:_%[printableuri]_1Xg4bn"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[printableuri]"
+							],
+							"field": "{{ FIELD.printableuri_grGs94 }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_printableuri_Rule:_%[printableuri]_7cpabT"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[coveo_externalurl]"
+							],
+							"field": "{{ FIELD.relatedlink_rI20Wr }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_relatedlink_Rule:_%[coveo_externalurl]_3cjWIF"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[coveo_externalurl]"
+							],
+							"field": "{{ FIELD.relatedlink_rI20Wr }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_relatedlink_Rule:_%[coveo_externalurl]_qHXEVb"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[site]"
+							],
+							"field": "{{ FIELD.site_ki0uxp }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_site_Rule:_%[site]_7UfejB"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[site]"
+							],
+							"field": "{{ FIELD.site_ki0uxp }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_site_Rule:_%[site]_t5Qc5Z"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[changefreq]"
+							],
+							"field": "{{ FIELD.sitemapchangefrequency_iZGRah }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_sitemapchangefrequency_Rule:_%[changefreq]_4QIkAb"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[changefreq]"
+							],
+							"field": "{{ FIELD.sitemapchangefrequency_iZGRah }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_sitemapchangefrequency_Rule:_%[changefreq]_GeEufp"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[lastmod]"
+							],
+							"field": "{{ FIELD.sitemaplastmodified_InzfON }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_sitemaplastmodified_Rule:_%[lastmod]_oNWK3w"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[lastmod]"
+							],
+							"field": "{{ FIELD.sitemaplastmodified_InzfON }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_sitemaplastmodified_Rule:_%[lastmod]_xZ4Yv7"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[coveo_parentsitemapurl]"
+							],
+							"field": "{{ FIELD.sitemapparenturl_wZ6XAv }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_sitemapparenturl_Rule:_%[coveo_parentsitemapurl]_JVO7JY"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[coveo_parentsitemapurl]"
+							],
+							"field": "{{ FIELD.sitemapparenturl_wZ6XAv }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_sitemapparenturl_Rule:_%[coveo_parentsitemapurl]_a8lQpB"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[priority]"
+							],
+							"field": "{{ FIELD.sitemappriority_IBBGtv }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_sitemappriority_Rule:_%[priority]_AnApU6"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[priority]"
+							],
+							"field": "{{ FIELD.sitemappriority_IBBGtv }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_sitemappriority_Rule:_%[priority]_SMosz7"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[size]"
+							],
+							"field": "{{ FIELD.size_LXIKQE }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_size_Rule:_%[size]_3e6F6k"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[size]"
+							],
+							"field": "{{ FIELD.size_LXIKQE }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_size_Rule:_%[size]_BoJXWs"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[sourcetype]"
+							],
+							"field": "{{ FIELD.sourcetype_Mzl8Ns }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_sourcetype_Rule:_%[sourcetype]_i9ZOYg"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[sourcetype]"
+							],
+							"field": "{{ FIELD.sourcetype_Mzl8Ns }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_sourcetype_Rule:_%[sourcetype]_qg7dvN"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[subject]"
+							],
+							"field": "{{ FIELD.subject_SJLNGg }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_subject_Rule:_%[subject]_PMvwgw"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[subject]"
+							],
+							"field": "{{ FIELD.subject_SJLNGg }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_subject_Rule:_%[subject]_p4GeeA"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[title:crawler]"
+							],
+							"field": "{{ FIELD.title_ELq4Zs }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_title_Rule:_%[title:crawler]_6d8yzp"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[title:crawler]"
+							],
+							"field": "{{ FIELD.title_ELq4Zs }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_title_Rule:_%[title:crawler]_gAjFDq"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[to]"
+							],
+							"field": "{{ FIELD.to_bLxAmY }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_to_Rule:_%[to]_KaQvN2"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[to]"
+							],
+							"field": "{{ FIELD.to_bLxAmY }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_to_Rule:_%[to]_PJySYf"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[workemail]"
+							],
+							"field": "{{ FIELD.workemail_bgxV8j }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_workemail_Rule:_%[workemail]_cpZOEa"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[workemail]"
+							],
+							"field": "{{ FIELD.workemail_bgxV8j }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_workemail_Rule:_%[workemail]_nhdAXH"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[workphone]"
+							],
+							"field": "{{ FIELD.workphone_tBGMM6 }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_workphone_Rule:_%[workphone]_THIdL7"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[workphone]"
+							],
+							"field": "{{ FIELD.workphone_tBGMM6 }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_workphone_Rule:_%[workphone]_YebMNQ"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[worktitle]"
+							],
+							"field": "{{ FIELD.worktitle_RQK3LT }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_worktitle_Rule:_%[worktitle]_09MoNA"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[worktitle]"
+							],
+							"field": "{{ FIELD.worktitle_RQK3LT }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_worktitle_Rule:_%[worktitle]_gikopa"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[year]"
+							],
+							"field": "{{ FIELD.year_387VQ9 }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-pokemon_kNbCdK }}"
+				},
+				"resourceName": "Field:_year_Rule:_%[year]_75yzA4"
+			},
+			{
+				"model": {
+					"rules": [
+						{
+							"content": [
+								"%[year]"
+							],
+							"field": "{{ FIELD.year_387VQ9 }}"
+						}
+					]
+				},
+				"parents": {
+					"sourceId": "{{ SOURCE.pokemondb-test-charizard_FgxC9w }}"
+				},
+				"resourceName": "Field:_year_Rule:_%[year]_ki3lfi"
+			}
+		]
+	}
+}

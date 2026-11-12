@@ -103,6 +103,7 @@ flowchart TD
 | Application content | Dedicated `pokebowl-search` pipeline filters to the full source, and the test source is kept | [Limiting the application to the full source](#limiting-the-application-to-the-full-source) |
 | Hosting | Vercel | [Hosting](#hosting) |
 | Repeated platform work | Coveo APIs in place of repeated console steps | [Use of Coveo APIs](#use-of-coveo-apis) |
+| Configuration record | Copies of each applied setting in `configs/coveo/`, plus a Coveo CLI export of the live organization | [Use of Coveo APIs](#use-of-coveo-apis) |
 | Eval reference data | Sampled from pokemondb.net, with difficult cases verified by hand | [Eval reference data](#eval-reference-data) |
 | Search behavior | Number lookups, Pokédex order on the home page, Best match as the default label, collapsed facets | [Search behavior](#search-behavior) |
 | Page sizes | Atomic's `atomic-results-per-page` | [Visual direction](#visual-direction) |
@@ -224,6 +225,7 @@ When a platform task would repeat the same manual step, we use a Coveo API inste
 |---|---|---|---|
 | Create 12 detail-page fields | Field API, [create a batch of fields](https://docs.coveo.com/en/144/), run through Coveo's interactive API explorer while signed in | The detail page needs more data than the search page, and the same options applied to 12 fields would have been slow and error-prone to enter by hand | [`fields-batch-create.json`](../configs/coveo/fields-batch-create.json) |
 | Upload Query Suggestions default queries | Machine Learning API, [Advanced Model Configurations](https://docs.coveo.com/en/qa5b0256/), `PUT configs/{configurationType}` with `DEFAULT_QUERIES` and `en`, run through Coveo's interactive API explorer while signed in | Coveo offers this configuration only through the API | [`query-suggestions-default-queries.csv`](../configs/coveo/query-suggestions-default-queries.csv) |
+| Export the final organization configuration | Coveo CLI 3.3.1, `coveo org:resources:pull`, which creates a resource snapshot and saves it as JSON ([Manage organization snapshots](https://docs.coveo.com/en/mape0408/)). Signed in with `coveo auth:login`, so no admin key was needed | Gives an exact, reviewable copy of what is live, in the format Coveo can push to another organization | [`export/`](../configs/coveo/export/) (output, not a request body) |
 
 The first four fields (`pokemon_name`, `pokemon_type`, `pokemon_generation` and `pokemon_image`) were created in the console.
 

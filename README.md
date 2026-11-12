@@ -30,7 +30,7 @@ A Pokémon search application built on the [Coveo](https://www.coveo.com/) platf
 | Machine learning | A Semantic Encoder for retrieval by meaning, Relevance Generative Answering (RGA) for cited answers with a custom prompt instruction, and Query Suggestions started from a default queries file built from index values |
 | Interface | Coveo Atomic React, with Tailwind and shadcn/ui for our components, hosted on Vercel |
 
-The [architecture document](docs/architecture.md) has the diagram, each decision with the Coveo documentation behind it, and the alternatives we rejected. Every Coveo setting we applied is recorded in [configs/coveo](configs/coveo/).
+The [architecture document](docs/architecture.md) has the diagram, each decision with the Coveo documentation behind it, and the alternatives we rejected. Every Coveo setting we applied is recorded in [configs/coveo](configs/coveo/), along with an export of the live organization made with the Coveo CLI ([configs/coveo/export](configs/coveo/export/)).
 
 ## Features
 

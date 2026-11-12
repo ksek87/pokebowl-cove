@@ -1,0 +1,42 @@
+{
+	"metadata": {
+		"schemaVersion": "v1"
+	},
+	"resources": {
+		"QUERY_PIPELINE": [
+			{
+				"model": {
+					"condition": {},
+					"name": "default",
+					"splitTestEnabled": false
+				},
+				"parents": {},
+				"resourceName": "default_93xDxV"
+			},
+			{
+				"model": {
+					"condition": {
+						"definition": "when $searchHub is \"pokebowl-search\"",
+						"description": "",
+						"detailed": {
+							"condition": {
+								"left": {
+									"object": "searchHub"
+								},
+								"operator": "is",
+								"right": "pokebowl-search"
+							}
+						},
+						"id": "{{ QUERY_PIPELINE_CONDITION.when_searchHub_is_pokebowl-search_vJjwNH }}"
+					},
+					"description": "Queries from the Pokémon search app and its evals.",
+					"name": "pokebowl-search",
+					"splitTestEnabled": false,
+					"useCase": "website"
+				},
+				"parents": {},
+				"resourceName": "pokebowl-search_TZ4C04"
+			}
+		]
+	}
+}
