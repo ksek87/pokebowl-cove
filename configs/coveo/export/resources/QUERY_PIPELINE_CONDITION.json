@@ -1,0 +1,25 @@
+{
+	"metadata": {
+		"schemaVersion": "v1"
+	},
+	"resources": {
+		"QUERY_PIPELINE_CONDITION": [
+			{
+				"model": {
+					"definition": "when not ( $query isEmpty )",
+					"description": ""
+				},
+				"parents": {},
+				"resourceName": "when_not_(_query_isEmpty_)_Afr7A8"
+			},
+			{
+				"model": {
+					"definition": "when $searchHub is \"pokebowl-search\"",
+					"description": ""
+				},
+				"parents": {},
+				"resourceName": "when_searchHub_is_pokebowl-search_vJjwNH"
+			}
+		]
+	}
+}

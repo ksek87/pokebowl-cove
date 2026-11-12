@@ -1,0 +1,29 @@
+{
+	"metadata": {
+		"schemaVersion": "v1"
+	},
+	"resources": {
+		"ML_MODEL_ASSOCIATION": [
+			{
+				"model": {
+					"cacheMaximumAge": "PT10S",
+					"customQueryParameters": {
+						"enableTermExpansion": false
+					},
+					"enableWordCompletion": false,
+					"exclusive": false,
+					"intelligentTermDetection": false,
+					"matchAdvancedExpression": false,
+					"matchBasicExpression": false,
+					"maxRecommendations": 10,
+					"modelId": "{{ ML_MODEL.pokebowl-query-suggestions_EIWj1U }}",
+					"useAdvancedConfiguration": false
+				},
+				"parents": {
+					"queryPipelineId": "{{ QUERY_PIPELINE.pokebowl-search_TZ4C04 }}"
+				},
+				"resourceName": "pokebowl-query-suggestions_OAaTJR"
+			}
+		]
+	}
+}

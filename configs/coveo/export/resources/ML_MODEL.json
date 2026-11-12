@@ -1,0 +1,25 @@
+{
+	"metadata": {
+		"schemaVersion": "v1"
+	},
+	"resources": {
+		"ML_MODEL": [
+			{
+				"model": {
+					"commandLineParameters": [],
+					"engineId": "querysuggest",
+					"exportOffset": "PT0S",
+					"exportPeriod": "P1M",
+					"extraConfig": {},
+					"intervalTime": 1,
+					"intervalUnit": "DAY",
+					"modelActivenessState": "ACTIVE",
+					"modelDisplayName": "pokebowl-query-suggestions",
+					"startTime": 1794186180000
+				},
+				"parents": {},
+				"resourceName": "pokebowl-query-suggestions_EIWj1U"
+			}
+		]
+	}
+}

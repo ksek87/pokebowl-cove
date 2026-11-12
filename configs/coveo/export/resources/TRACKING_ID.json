@@ -1,0 +1,17 @@
+{
+	"metadata": {
+		"schemaVersion": "v1"
+	},
+	"resources": {
+		"TRACKING_ID": [
+			{
+				"model": {
+					"displayName": "Default",
+					"trackingId": "default"
+				},
+				"parents": {},
+				"resourceName": "Default_VQbInS"
+			}
+		]
+	}
+}

@@ -224,6 +224,7 @@ When a platform task would repeat the same manual step, we use a Coveo API inste
 |---|---|---|---|
 | Create 12 detail-page fields | Field API, [create a batch of fields](https://docs.coveo.com/en/144/), run through Coveo's interactive API explorer while signed in | The detail page needs more data than the search page, and the same options applied to 12 fields would have been slow and error-prone to enter by hand | [`fields-batch-create.json`](../configs/coveo/fields-batch-create.json) |
 | Upload Query Suggestions default queries | Machine Learning API, [Advanced Model Configurations](https://docs.coveo.com/en/qa5b0256/), `PUT configs/{configurationType}` with `DEFAULT_QUERIES` and `en`, run through Coveo's interactive API explorer while signed in | Coveo offers this configuration only through the API | [`query-suggestions-default-queries.csv`](../configs/coveo/query-suggestions-default-queries.csv) |
+| Export the final organization configuration | Coveo CLI 3.3.1, `coveo org:resources:pull`, which creates a resource snapshot and saves it as JSON ([Manage organization snapshots](https://docs.coveo.com/en/mape0408/)). Signed in with `coveo auth:login`, so no admin key was needed | Gives an exact, reviewable copy of what is live, in the format Coveo can push to another organization | [`export/`](../configs/coveo/export/) (output, not a request body) |
 
 The first four fields (`pokemon_name`, `pokemon_type`, `pokemon_generation` and `pokemon_image`) were created in the console.
 

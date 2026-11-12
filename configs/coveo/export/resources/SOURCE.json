@@ -1,0 +1,1830 @@
+{
+	"metadata": {
+		"schemaVersion": "v1"
+	},
+	"resources": {
+		"SOURCE": [
+			{
+				"model": {
+					"additionalInfos": {
+						"CustomParameterKeys": [],
+						"OCR_FILE_TYPES": []
+					},
+					"configuration": {
+						"addressPatterns": [
+							{
+								"allowed": false,
+								"expression": "^(?!https://pokemondb\\.net/static/sitemaps/pokemondb\\.xml$|https://pokemondb\\.net/pokedex/(?!all$|national$|shiny$)[a-z0-9-]+$).*$",
+								"patternType": "RegEx"
+							},
+							{
+								"allowed": true,
+								"expression": "*",
+								"patternType": "Wildcard"
+							}
+						],
+						"dataFiles": {},
+						"documentConfig": {
+							"documentProcessorConfig": {
+								"extensionSettings": {
+									"byContentTypes": [
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												"binarydata"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												"application/coveo-exchange-urn:content-classes:message",
+												"application/coveo-exchange-urn:content-classes:note",
+												"application/coveo-exchange-urn:content-classes:activity",
+												"application/coveo-exchange-urn:content-classes:appointment",
+												"application/coveo-exchange-urn:content-classes:calendarmessage",
+												"application/coveo-exchange-urn:content-classes:document",
+												"application/coveo-exchange-urn:content-classes:dsn",
+												"application/coveo-exchange-urn:content-classes:freebusy",
+												"application/coveo-exchange-urn:content-classes:group",
+												"application/coveo-exchange-urn:content-classes:mdn",
+												"application/coveo-exchange-urn:content-classes:object",
+												"application/coveo-exchange-urn:content-classes:person",
+												"application/coveo-exchange-urn:content-classes:recallmessage",
+												"application/coveo-exchange-urn:content-classes:recallreport",
+												"application/coveo-exchange-urn:content-classes:task",
+												"application/coveo-exchange-rssfeed",
+												"application/coveo-exchange-urn:content-classes:contentclassdef",
+												"application/coveo-exchange-urn:content-classes:organization",
+												"application/coveo-exchange-urn:content-classes:propertydef",
+												"application/coveo-exchange-urn:content-classes:reportmessage",
+												"application/coveo-exchange-activedirperson",
+												"application/coveo-exchange-officecom"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": true,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												"text/html"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": true,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												"text/xml"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": true,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												"message/rfc822"
+											]
+										}
+									],
+									"byExtensions": [
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".html",
+												".htm",
+												".shtml",
+												".shtm",
+												".asp",
+												".aspx",
+												".cgi",
+												".php"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".js",
+												".jsl",
+												".jsp",
+												".oleFile",
+												".vdp",
+												".vdproj",
+												".vjsprojdata",
+												".vjp",
+												".fphtml",
+												".ppthtml",
+												".pothtml",
+												".dochtml",
+												".dothtml",
+												".xlshtml",
+												".lib"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".bat",
+												".vbs",
+												".ascx",
+												".ini",
+												".sln",
+												".nfo",
+												".inf",
+												".wtx",
+												".scp",
+												".exc",
+												".dic",
+												".config",
+												".sdl",
+												".wsdl",
+												".cmd",
+												".wsf",
+												".csv",
+												".xsd",
+												".hta",
+												".col"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".doc",
+												".dot",
+												".docx",
+												".docm",
+												".dotx",
+												".one",
+												".dotm"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".xls",
+												".xlm",
+												".xlsx",
+												".xlsm",
+												".xltx",
+												".xltm",
+												".xlam"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".ppt",
+												".pot",
+												".pps",
+												".pptx",
+												".pptm",
+												".potx",
+												".potm",
+												".ppsx",
+												".ppsm",
+												".ppam"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Reference",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".mpp"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".mdb"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".pub"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "Image",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".jpg",
+												".jpeg",
+												".jpe",
+												".bmp",
+												".gif",
+												".pcx",
+												".tif",
+												".tiff",
+												".jfif",
+												".wpg",
+												".tub",
+												".tga",
+												".sgi",
+												".rle",
+												".rgba",
+												".rgb",
+												".raw",
+												".ras",
+												".psp",
+												".psd",
+												".ppm",
+												".pic",
+												".pgm",
+												".pgl",
+												".pfr",
+												".pct",
+												".pbm",
+												".mac",
+												".lbm",
+												".kdc",
+												".img",
+												".iff",
+												".hpg",
+												".hgl",
+												".gem",
+												".fpx",
+												".dxf",
+												".drw",
+												".dcx",
+												".cut",
+												".cmx",
+												".cdr",
+												".bw",
+												".dib",
+												".pdc",
+												".png",
+												".ai",
+												".wmf"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".pdf"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".txt",
+												".log"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".rtf"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".vsd"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".wp",
+												".wpf",
+												".wpd"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Reference",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".xml"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".7z"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".zip",
+												".jar"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".aif",
+												".aiff",
+												".aifc",
+												".snd",
+												".au",
+												".cda",
+												".rmi",
+												".mid",
+												".midi",
+												".mp1",
+												".mp3",
+												".mpga",
+												".wav",
+												".wma",
+												".asf"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".wm",
+												".wmv",
+												".mpv2",
+												".mpg",
+												".mpeg",
+												".mpa",
+												".mp2",
+												".mp2v",
+												".m1v",
+												".qt",
+												".rm",
+												".rnx",
+												".rec",
+												".avi",
+												".mov",
+												".mp4"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".wri"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".swf",
+												".spl"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".chm",
+												".hlp"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".ncs"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": true,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".email",
+												".eml",
+												".ews",
+												".mime",
+												".mht",
+												".mhtml"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".exe",
+												".dll"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".xsl",
+												".xslt"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".msg",
+												".oft"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".msi",
+												".pkg",
+												".tar.gz",
+												".tar.br",
+												".tar.bz",
+												".tar.lpaq",
+												".tar.xz",
+												".tar.zst"
+											]
+										}
+									],
+									"noExtension": {
+										"action": "Retrieve",
+										"actionOnError": "Ignore",
+										"convertDirectlyToHtml": false,
+										"converter": "Detect",
+										"generateThumbnail": true,
+										"indexContainer": true,
+										"useContentType": true,
+										"useExternalHTMLGenerator": false
+									},
+									"other": {
+										"action": "Retrieve",
+										"actionOnError": "Ignore",
+										"convertDirectlyToHtml": false,
+										"converter": "Detect",
+										"generateThumbnail": true,
+										"indexContainer": true,
+										"useContentType": true,
+										"useExternalHTMLGenerator": false
+									}
+								}
+							}
+						},
+						"parameters": {
+							"AllowAutoRedirect": {
+								"sensitive": false,
+								"value": "true"
+							},
+							"EnableJavaScript": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"EnableJavaScriptRenderingOptimizations": {
+								"sensitive": false,
+								"value": "true"
+							},
+							"ForceBasicAuthorizationHeader": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"HtmlXPathSelectorExpression": {
+								"sensitive": false,
+								"value": ""
+							},
+							"IgnoreUrlFragment": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"IncludeShadowDom": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"IndexHtmlMetadata": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"IndexJsonLdMetadata": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"JavaScriptLoadingDelayInMilliseconds": {
+								"sensitive": false,
+								"value": "0"
+							},
+							"NumberOfRetries": {
+								"sensitive": false,
+								"value": "3"
+							},
+							"ParseSitemapAlternateLinks": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"ParseSitemapInStrictMode": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"RequestsIntervalInMs": {
+								"sensitive": false,
+								"value": "2000"
+							},
+							"ScrapingConfiguration": {
+								"sensitive": false,
+								"value": "[{\"name\":\"pokemon-pages\",\"for\":{\"urls\":[\".*\"]},\"exclude\":[{\"type\":\"CSS\",\"path\":\"header\"},{\"type\":\"CSS\",\"path\":\"footer\"},{\"type\":\"CSS\",\"path\":\"nav\"},{\"type\":\"CSS\",\"path\":\"ul.list-nav\"},{\"type\":\"CSS\",\"path\":\"a[href='#main']\"},{\"type\":\"XPATH\",\"path\":\"//*[@id='dex-moves']/following-sibling::*\"}],\"metadata\":{\"pokemon_name\":{\"type\":\"XPATH\",\"path\":\"//h1/text()\"},\"pokemon_type\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Type']/following-sibling::td/a/text()\"},\"pokemon_generation\":{\"type\":\"XPATH\",\"path\":\"//p[contains(., 'introduced in')]/abbr[1]/text()\"},\"pokemon_image\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//img/@src\"},\"pokemon_number\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[contains(normalize-space(),'National')]/following-sibling::td/strong/text()\"},\"pokemon_species\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Species']/following-sibling::td/text()\"},\"pokemon_height\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Height']/following-sibling::td/text()\"},\"pokemon_weight\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Weight']/following-sibling::td/text()\"},\"pokemon_abilities\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Abilities']/following-sibling::td//a/text()\"},\"pokemon_hp\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='HP']/following-sibling::td[1]//text()\"},\"pokemon_attack\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Attack']/following-sibling::td[1]//text()\"},\"pokemon_defense\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Defense']/following-sibling::td[1]//text()\"},\"pokemon_sp_atk\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Sp. Atk']/following-sibling::td[1]//text()\"},\"pokemon_sp_def\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Sp. Def']/following-sibling::td[1]//text()\"},\"pokemon_speed\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Speed']/following-sibling::td[1]//text()\"},\"pokemon_total\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Total']/following-sibling::td[1]//text()\"}}}]"
+							},
+							"ScrapingMatchingStrategy": {
+								"sensitive": false,
+								"value": "MultiMatch"
+							},
+							"SkipOnSitemapError": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"SkipOnSitemapIndexExpansionError": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"UseCookies": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"UseProxy": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"UserAgent": {
+								"sensitive": false,
+								"value": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) (compatible; Coveobot/2.0;+http://www.coveo.com/bot.html)"
+							},
+							"WebDriverCustomWindowSizeOption": {
+								"sensitive": false,
+								"value": ""
+							}
+						},
+						"permissions": [
+							{
+								"name": "Source Specified Permissions",
+								"permissionSets": [
+									{
+										"allowedPermissions": [
+											{
+												"identity": "*@*",
+												"identityType": "Group",
+												"securityProvider": "Email Security Provider"
+											}
+										],
+										"deniedPermissions": [],
+										"name": "Shared"
+									}
+								]
+							}
+						],
+						"securityProviders": {},
+						"sourceSecurityOption": "Specified",
+						"startingAddresses": [
+							"https://pokemondb.net/static/sitemaps/pokemondb.xml"
+						],
+						"userIdentities": {}
+					},
+					"crawlerInstanceType": "Connector.Sitemap",
+					"logicalIndex": "default",
+					"name": "pokemondb-pokemon",
+					"onPremisesEnabled": false,
+					"performFieldMappingUsingAllOrigins": true,
+					"postConversionExtensions": [],
+					"preConversionExtensions": [
+						{
+							"actionOnError": "SKIP_EXTENSION",
+							"condition": "",
+							"extensionId": "{{ EXTENSION.pre-reconstruct-body_1oFfAl }}",
+							"parameters": {},
+							"versionId": ""
+						}
+					],
+					"pushEnabled": false,
+					"securityProviders": [],
+					"sourceType": "SITEMAP",
+					"streamEnabled": false
+				},
+				"parents": {},
+				"resourceName": "pokemondb-pokemon_kNbCdK"
+			},
+			{
+				"model": {
+					"additionalInfos": {
+						"CustomParameterKeys": [],
+						"OCR_FILE_TYPES": []
+					},
+					"configuration": {
+						"addressPatterns": [
+							{
+								"allowed": false,
+								"expression": "^(?!https://pokemondb\\.net/static/sitemaps/pokemondb\\.xml$|https://pokemondb\\.net/pokedex/charizard$).*$",
+								"patternType": "RegEx"
+							},
+							{
+								"allowed": true,
+								"expression": "*",
+								"patternType": "Wildcard"
+							}
+						],
+						"documentConfig": {
+							"documentProcessorConfig": {
+								"extensionSettings": {
+									"byContentTypes": [
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												"binarydata"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												"application/coveo-exchange-urn:content-classes:message",
+												"application/coveo-exchange-urn:content-classes:note",
+												"application/coveo-exchange-urn:content-classes:activity",
+												"application/coveo-exchange-urn:content-classes:appointment",
+												"application/coveo-exchange-urn:content-classes:calendarmessage",
+												"application/coveo-exchange-urn:content-classes:document",
+												"application/coveo-exchange-urn:content-classes:dsn",
+												"application/coveo-exchange-urn:content-classes:freebusy",
+												"application/coveo-exchange-urn:content-classes:group",
+												"application/coveo-exchange-urn:content-classes:mdn",
+												"application/coveo-exchange-urn:content-classes:object",
+												"application/coveo-exchange-urn:content-classes:person",
+												"application/coveo-exchange-urn:content-classes:recallmessage",
+												"application/coveo-exchange-urn:content-classes:recallreport",
+												"application/coveo-exchange-urn:content-classes:task",
+												"application/coveo-exchange-rssfeed",
+												"application/coveo-exchange-urn:content-classes:contentclassdef",
+												"application/coveo-exchange-urn:content-classes:organization",
+												"application/coveo-exchange-urn:content-classes:propertydef",
+												"application/coveo-exchange-urn:content-classes:reportmessage",
+												"application/coveo-exchange-activedirperson",
+												"application/coveo-exchange-officecom"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": true,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												"text/html"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": true,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												"text/xml"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": true,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												"message/rfc822"
+											]
+										}
+									],
+									"byExtensions": [
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".html",
+												".htm",
+												".shtml",
+												".shtm",
+												".asp",
+												".aspx",
+												".cgi",
+												".php"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".js",
+												".jsl",
+												".jsp",
+												".oleFile",
+												".vdp",
+												".vdproj",
+												".vjsprojdata",
+												".vjp",
+												".fphtml",
+												".ppthtml",
+												".pothtml",
+												".dochtml",
+												".dothtml",
+												".xlshtml",
+												".lib"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".bat",
+												".vbs",
+												".ascx",
+												".ini",
+												".sln",
+												".nfo",
+												".inf",
+												".wtx",
+												".scp",
+												".exc",
+												".dic",
+												".config",
+												".sdl",
+												".wsdl",
+												".cmd",
+												".wsf",
+												".csv",
+												".xsd",
+												".hta",
+												".col"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".doc",
+												".dot",
+												".docx",
+												".docm",
+												".dotx",
+												".one",
+												".dotm"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".xls",
+												".xlm",
+												".xlsx",
+												".xlsm",
+												".xltx",
+												".xltm",
+												".xlam"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".ppt",
+												".pot",
+												".pps",
+												".pptx",
+												".pptm",
+												".potx",
+												".potm",
+												".ppsx",
+												".ppsm",
+												".ppam"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Reference",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".mpp"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".mdb"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".pub"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "Image",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".jpg",
+												".jpeg",
+												".jpe",
+												".bmp",
+												".gif",
+												".pcx",
+												".tif",
+												".tiff",
+												".jfif",
+												".wpg",
+												".tub",
+												".tga",
+												".sgi",
+												".rle",
+												".rgba",
+												".rgb",
+												".raw",
+												".ras",
+												".psp",
+												".psd",
+												".ppm",
+												".pic",
+												".pgm",
+												".pgl",
+												".pfr",
+												".pct",
+												".pbm",
+												".mac",
+												".lbm",
+												".kdc",
+												".img",
+												".iff",
+												".hpg",
+												".hgl",
+												".gem",
+												".fpx",
+												".dxf",
+												".drw",
+												".dcx",
+												".cut",
+												".cmx",
+												".cdr",
+												".bw",
+												".dib",
+												".pdc",
+												".png",
+												".ai",
+												".wmf"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".pdf"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".txt",
+												".log"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".rtf"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".vsd"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".wp",
+												".wpf",
+												".wpd"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Reference",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".xml"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".7z"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".zip",
+												".jar"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".aif",
+												".aiff",
+												".aifc",
+												".snd",
+												".au",
+												".cda",
+												".rmi",
+												".mid",
+												".midi",
+												".mp1",
+												".mp3",
+												".mpga",
+												".wav",
+												".wma",
+												".asf"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".wm",
+												".wmv",
+												".mpv2",
+												".mpg",
+												".mpeg",
+												".mpa",
+												".mp2",
+												".mp2v",
+												".m1v",
+												".qt",
+												".rm",
+												".rnx",
+												".rec",
+												".avi",
+												".mov",
+												".mp4"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".wri"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".swf",
+												".spl"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".chm",
+												".hlp"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".ncs"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": true,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".email",
+												".eml",
+												".ews",
+												".mime",
+												".mht",
+												".mhtml"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".exe",
+												".dll"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".xsl",
+												".xslt"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Ignore",
+												"actionOnError": "Ignore",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".msg",
+												".oft"
+											]
+										},
+										{
+											"extensionSetting": {
+												"action": "Retrieve",
+												"actionOnError": "Reference",
+												"convertDirectlyToHtml": false,
+												"converter": "Detect",
+												"fileTypeValue": "",
+												"generateThumbnail": true,
+												"indexContainer": true,
+												"useContentType": false,
+												"useExternalHTMLGenerator": false
+											},
+											"extensions": [
+												".msi",
+												".pkg",
+												".tar.gz",
+												".tar.br",
+												".tar.bz",
+												".tar.lpaq",
+												".tar.xz",
+												".tar.zst"
+											]
+										}
+									],
+									"noExtension": {
+										"action": "Retrieve",
+										"actionOnError": "Ignore",
+										"convertDirectlyToHtml": false,
+										"converter": "Detect",
+										"generateThumbnail": true,
+										"indexContainer": true,
+										"useContentType": true,
+										"useExternalHTMLGenerator": false
+									},
+									"other": {
+										"action": "Retrieve",
+										"actionOnError": "Ignore",
+										"convertDirectlyToHtml": false,
+										"converter": "Detect",
+										"generateThumbnail": true,
+										"indexContainer": true,
+										"useContentType": true,
+										"useExternalHTMLGenerator": false
+									}
+								}
+							}
+						},
+						"parameters": {
+							"AllowAutoRedirect": {
+								"sensitive": false,
+								"value": "true"
+							},
+							"EnableJavaScript": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"EnableJavaScriptRenderingOptimizations": {
+								"sensitive": false,
+								"value": "true"
+							},
+							"ForceBasicAuthorizationHeader": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"HtmlXPathSelectorExpression": {
+								"sensitive": false,
+								"value": ""
+							},
+							"IgnoreUrlFragment": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"IncludeShadowDom": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"IndexHtmlMetadata": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"IndexJsonLdMetadata": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"JavaScriptLoadingDelayInMilliseconds": {
+								"sensitive": false,
+								"value": "0"
+							},
+							"NumberOfRetries": {
+								"sensitive": false,
+								"value": "3"
+							},
+							"ParseSitemapAlternateLinks": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"ParseSitemapInStrictMode": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"RequestsIntervalInMs": {
+								"sensitive": false,
+								"value": "2000"
+							},
+							"ScrapingConfiguration": {
+								"sensitive": false,
+								"value": "[{\"name\":\"pokemon-pages\",\"for\":{\"urls\":[\".*\"]},\"exclude\":[{\"type\":\"CSS\",\"path\":\"header\"},{\"type\":\"CSS\",\"path\":\"footer\"},{\"type\":\"CSS\",\"path\":\"nav\"},{\"type\":\"CSS\",\"path\":\"ul.list-nav\"},{\"type\":\"CSS\",\"path\":\"a[href='#main']\"},{\"type\":\"XPATH\",\"path\":\"//*[@id='dex-moves']/following-sibling::*\"}],\"metadata\":{\"pokemon_name\":{\"type\":\"XPATH\",\"path\":\"//h1/text()\"},\"pokemon_type\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Type']/following-sibling::td/a/text()\"},\"pokemon_generation\":{\"type\":\"XPATH\",\"path\":\"//p[contains(., 'introduced in')]/abbr[1]/text()\"},\"pokemon_image\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//img/@src\"},\"pokemon_number\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[contains(normalize-space(),'National')]/following-sibling::td/strong/text()\"},\"pokemon_species\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Species']/following-sibling::td/text()\"},\"pokemon_height\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Height']/following-sibling::td/text()\"},\"pokemon_weight\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Weight']/following-sibling::td/text()\"},\"pokemon_abilities\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Abilities']/following-sibling::td//a/text()\"},\"pokemon_hp\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='HP']/following-sibling::td[1]//text()\"},\"pokemon_attack\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Attack']/following-sibling::td[1]//text()\"},\"pokemon_defense\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Defense']/following-sibling::td[1]//text()\"},\"pokemon_sp_atk\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Sp. Atk']/following-sibling::td[1]//text()\"},\"pokemon_sp_def\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Sp. Def']/following-sibling::td[1]//text()\"},\"pokemon_speed\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Speed']/following-sibling::td[1]//text()\"},\"pokemon_total\":{\"type\":\"XPATH\",\"path\":\"(//div[contains(@class,'tabset-basics')]//div[contains(concat(' ',normalize-space(@class),' '),' sv-tabs-panel ')])[1]//th[normalize-space()='Total']/following-sibling::td[1]//text()\"}}}]"
+							},
+							"ScrapingMatchingStrategy": {
+								"sensitive": false,
+								"value": "MultiMatch"
+							},
+							"SkipOnSitemapError": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"SkipOnSitemapIndexExpansionError": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"UseCookies": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"UseProxy": {
+								"sensitive": false,
+								"value": "false"
+							},
+							"UserAgent": {
+								"sensitive": false,
+								"value": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) (compatible; Coveobot/2.0;+http://www.coveo.com/bot.html)"
+							},
+							"WebDriverCustomWindowSizeOption": {
+								"sensitive": false,
+								"value": ""
+							}
+						},
+						"permissions": [
+							{
+								"name": "Source Specified Permissions",
+								"permissionSets": [
+									{
+										"allowedPermissions": [
+											{
+												"identity": "*@*",
+												"identityType": "Group",
+												"securityProvider": "Email Security Provider"
+											}
+										],
+										"deniedPermissions": [],
+										"name": "Shared"
+									}
+								]
+							}
+						],
+						"securityProviders": {},
+						"sourceSecurityOption": "Specified",
+						"startingAddresses": [
+							"https://pokemondb.net/static/sitemaps/pokemondb.xml"
+						],
+						"userIdentities": {}
+					},
+					"crawlerInstanceType": "Connector.Sitemap",
+					"logicalIndex": "default",
+					"name": "pokemondb-test-charizard",
+					"onPremisesEnabled": false,
+					"performFieldMappingUsingAllOrigins": true,
+					"postConversionExtensions": [],
+					"preConversionExtensions": [
+						{
+							"actionOnError": "SKIP_EXTENSION",
+							"condition": "",
+							"extensionId": "{{ EXTENSION.pre-reconstruct-body_1oFfAl }}",
+							"parameters": {},
+							"versionId": ""
+						}
+					],
+					"pushEnabled": false,
+					"securityProviders": [],
+					"sourceType": "SITEMAP",
+					"streamEnabled": false
+				},
+				"parents": {},
+				"resourceName": "pokemondb-test-charizard_FgxC9w"
+			}
+		]
+	}
+}

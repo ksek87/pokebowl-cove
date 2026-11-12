@@ -1,0 +1,56 @@
+{
+	"metadata": {
+		"schemaVersion": "v1"
+	},
+	"resources": {
+		"FILTER": [
+			{
+				"model": {
+					"childrenCount": 0,
+					"condition": {
+						"definition": "when $searchHub is \"pokebowl-search\"",
+						"description": "",
+						"detailed": {
+							"condition": {
+								"left": {
+									"object": "searchHub"
+								},
+								"operator": "is",
+								"right": "pokebowl-search"
+							}
+						},
+						"id": "{{ QUERY_PIPELINE_CONDITION.when_searchHub_is_pokebowl-search_vJjwNH }}"
+					},
+					"definition": "filter cq `@source==pokemondb-pokemon`",
+					"description": "Limit the Pokémon search app to the full source",
+					"detailed": {
+						"expressions": [
+							"@source==pokemondb-pokemon"
+						]
+					},
+					"feature": "filter",
+					"parent": {
+						"definition": "when $searchHub is \"pokebowl-search\"",
+						"description": "",
+						"detailed": {
+							"condition": {
+								"left": {
+									"object": "searchHub"
+								},
+								"operator": "is",
+								"right": "pokebowl-search"
+							}
+						},
+						"id": "{{ QUERY_PIPELINE_CONDITION.when_searchHub_is_pokebowl-search_vJjwNH }}"
+					},
+					"position": 1,
+					"ready": false
+				},
+				"parents": {
+					"queryPipelineId": "{{ QUERY_PIPELINE.pokebowl-search_TZ4C04 }}"
+				},
+				"resourceName": "filter_cq_`@source==pokemondb-pokemon`_Mh5aSc"
+			}
+		]
+	}
+}
